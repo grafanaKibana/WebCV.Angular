@@ -9,11 +9,17 @@ import { animate, style, transition, trigger, group } from '@angular/animations'
   animations: [
     trigger('slideInOut', [
       transition('void => *', [
-        style({ opacity: 0 }),
-        animate('300ms ease-in', style({ opacity: 1 }))
+        style({ height: 0, opacity: 0, overflow: 'hidden' }),
+        group([
+          animate('100ms ease-in', style({ height: '*' })),
+          animate('300ms ease-in', style({ opacity: 1 }))
+        ])
       ]),
       transition('* => void', [
-        animate('200ms ease-out', style({ opacity: 0 }))
+        group([
+          animate('100ms ease-out', style({ height: 0, overflow: 'hidden' })),
+          animate('200ms ease-out', style({ opacity: 0 }))
+        ])
       ])
     ])
   ]
@@ -126,6 +132,25 @@ export class ExperienceSectionComponent implements OnInit {
       this.allToggles[index] = !this.allToggles[index]
     }
 
+  }
+
+  public getShortMonth(month: string): string {
+    const monthMap: { [key: string]: string } = {
+      'January': 'Jan',
+      'February': 'Feb',
+      'March': 'Mar',
+      'April': 'Apr',
+      'May': 'May',
+      'June': 'Jun',
+      'July': 'Jul',
+      'August': 'Aug',
+      'September': 'Sep',
+      'October': 'Oct',
+      'November': 'Nov',
+      'December': 'Dec'
+    };
+    
+    return monthMap[month] || month;
   }
 
   calculateDuration(startMonth: string, startYear: string, endMonth: string | null, endYear: string | null): string {
