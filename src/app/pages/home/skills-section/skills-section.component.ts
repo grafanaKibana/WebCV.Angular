@@ -12,7 +12,7 @@ export class SkillsSectionComponent implements OnInit {
   skills: Map<string, Array<SkillModel>> = new Map([
     ['Languages', [
       {
-        technology: '.NET (C#)',
+        technology: '.NET / C#',
         level: 3
       },
       {

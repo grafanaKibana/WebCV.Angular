@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ExperienceModel } from '../interfaces/experienceModel';
-import { animate, style, transition, trigger } from '@angular/animations';
+import { animate, style, transition, trigger, group } from '@angular/animations';
 
 @Component({
   selector: 'app-experience-section',
@@ -8,14 +8,12 @@ import { animate, style, transition, trigger } from '@angular/animations';
   styleUrls: ['./experience-section.component.scss'],
   animations: [
     trigger('slideInOut', [
-      transition(':enter', [
-        style({height: '0px', opacity: '0'}),
-        animate('.4s ease-out', style({height: '*'})),
-        animate('.25s linear', style({opacity: '1'})),
+      transition('void => *', [
+        style({ opacity: 0 }),
+        animate('300ms ease-in', style({ opacity: 1 }))
       ]),
-      transition(':leave', [
-        animate('.25s linear', style({opacity: '0'})),
-        animate('.4s ease-in', style({height: '0px'})),
+      transition('* => void', [
+        animate('200ms ease-out', style({ opacity: 0 }))
       ])
     ])
   ]
@@ -135,13 +133,13 @@ export class ExperienceSectionComponent implements OnInit {
       'January', 'February', 'March', 'April', 'May', 'June',
       'July', 'August', 'September', 'October', 'November', 'December'
     ];
-    
+
     const startMonthIndex = months.indexOf(startMonth);
     const startYearNum = parseInt(startYear);
-    
+
     let endMonthIndex: number;
     let endYearNum: number;
-    
+
     if (endMonth && endYear) {
       endMonthIndex = months.indexOf(endMonth);
       endYearNum = parseInt(endYear);
@@ -151,27 +149,27 @@ export class ExperienceSectionComponent implements OnInit {
       endMonthIndex = currentDate.getMonth();
       endYearNum = currentDate.getFullYear();
     }
-    
+
     // Calculate total months between dates
     let totalMonths = (endYearNum - startYearNum) * 12 + (endMonthIndex - startMonthIndex);
-    
+
     // Convert to years and months
     const years = Math.floor(totalMonths / 12);
     const remainingMonths = totalMonths % 12;
-    
+
     // Format the result
     let result = '';
     if (years > 0) {
       result += `${years} ${years === 1 ? 'year' : 'years'}`;
     }
-    
+
     if (remainingMonths > 0) {
       if (result.length > 0) {
         result += ' ';
       }
       result += `${remainingMonths} ${remainingMonths === 1 ? 'month' : 'months'}`;
     }
-    
+
     return result;
   }
 }

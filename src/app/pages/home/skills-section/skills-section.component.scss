@@ -61,11 +61,11 @@ section {
           text-transform: uppercase;
           text-align: right;
 
-          &::before {
+          /* &::before {
             margin: 0 rem(4px);
             color: var(--color-dark-paragraph);
             content: '•';
-          }
+          } */
         }
 
         .progress-bar {

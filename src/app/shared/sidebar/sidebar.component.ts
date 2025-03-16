@@ -10,7 +10,7 @@ export class SidebarComponent implements OnInit {
   sidebarInfo = {
     firstName: 'Nikita',
     lastName: 'Reshetnik',
-    positionTitle: 'Junior .NET Developer',
+    positionTitle: 'AI Engineer + .NET Developer',
     city: 'Kyiv',
     country: 'Ukraine',
     email: 'reshetnik.nikita@gmail.com',
@@ -19,9 +19,9 @@ export class SidebarComponent implements OnInit {
   }
 
   links = {
-    gitHubLink: 'https://github.com/aldecode',
-    linkedInLink: 'https://www.linkedin.com/in/nikita-reshetnik-8232181b0/',
-    repositoryLink: 'https://github.com/aldecode/WebCV.Angular',
+    gitHubLink: 'https://github.com/grafanaKibana',
+    linkedInLink: 'https://www.linkedin.com/in/nikitareshetnik/',
+    repositoryLink: 'https://github.com/grafanaKibana/WebCV.Angular',
   }
 
   constructor() { }

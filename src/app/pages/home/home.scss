@@ -3,20 +3,17 @@
 section {
     .section-item {
     border-left: rem(2px) solid var(--color-dark-separator);
-    padding: rem(6px) rem(16px);
+    padding: rem(6px) 0 rem(6px) rem(16px) ;
     position: relative;
     cursor: pointer;
 
     i {
       opacity: 0;
       text-align: center;
-      margin: auto rem(24px) auto 0;
-
 
       @media only screen and (max-width: $large) {
         opacity: 0.3;
         font-size: 12px;
-        margin: auto 0 auto 0;
       }
     }
 
@@ -61,16 +58,39 @@ section {
 
     &-head {
       display: flex;
-      width: 100%;
+      align-items: center;
+      
+      .section-item-toggler {
+        width: auto;
+        flex-shrink: 0;
+        margin-left: rem(10px);
+        height: 100%;
+        display: flex;
+        align-items: center;
+      }
+    }
+    
+    &-date-container {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: flex-end;
+      text-align: right;
+      margin-left: auto;
     }
 
     &-date {
       &::before {
         color: var(--color-dark-paragraph);
         margin: 0 rem(4px);
-        content: '|';
         text-shadow: none;
       }
+    }
+  
+    &-duration {
+      color: var(--color-dark-paragraph);
+      font-size: rem(12px);
+      padding-bottom: rem(3px);
     }
 
     &-content {
@@ -89,7 +109,7 @@ section {
       justify-content: center;
       align-items: center;
       display: inline-flex;
-      margin-left: auto
+      margin-left: auto;
     }
   }
 }
