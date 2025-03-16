@@ -1,4 +1,4 @@
-export interface SkillsModel {
+export interface SkillModel {
   technology: string,
   level: number
 }

@@ -1,17 +1,20 @@
 <section>
   <div class="skill-wrapper">
-    <div *ngFor="let div of [].constructor(skills.length * 2 - 1); let i = index" [class.skill-group]="i % 2 == 0">
-      <ng-container *ngIf="i % 2 == 0">
-        <div *ngFor="let skill of skills[i - (i / 2)]" class="skill-group-item dark-block">
-          <h4>{{skill.technology}}</h4>
+    <ng-container *ngFor="let skillGroup of skills | keyvalue: originalOrder; let i = index; let last = last">
+      <!-- Skill group -->
+      <div class="skill-group">
+        <h3>{{skillGroup.key}}</h3>
+        <div *ngFor="let skill of skillGroup.value" class="skill-group-item dark-block">
+          <div class="skill-title">
+            <h4>{{skill.technology}}</h4>
+          </div>
           <span class="skill-group-item-level">{{getSkillLevelName(skill.level)}}</span>
           <div class="progress-bar">
             <span *ngFor="let level of [].constructor(skill.level)" class="active" role="progressbar"></span>
             <span *ngFor="let level of [].constructor(3 - skill.level)" class="inactive" role="progressbar"></span>
           </div>
         </div>
-      </ng-container>
-      <app-vertical-separator *ngIf="i % 2 != 0" ></app-vertical-separator>
-    </div>
+      </div>
+    </ng-container>
   </div>
 </section>

@@ -24,62 +24,79 @@ export class ExperienceSectionComponent implements OnInit {
 
   experienceList: Array<ExperienceModel> = [
     {
-      positionTitle: 'Junior .NET Developer',
+      positionTitle: 'AI Integration Engineer',
       company: 'ELEKS',
-      startMonth: 'May',
-      startYear: '2022',
+      startMonth: 'November',
+      startYear: '2024',
       endMonth: '',
       endYear: '',
       description: {
         responsibilities: [
-          'Implementing new features in API',
-          'Writing Unit and Integration tests',
-          'Finding and fixing bugs',
-          'Investigation logs and finding the causes of Warnings and Errors',
-          'Creating wiki pages about the investigation',
+          'Designed and delivered LLM-based microservice for an enterprise-grade time management legal platform, significantly enhancing capabilities for law firms and professional services.',
+          'Led a new cross-functional team, organizing Agile ceremonies and maintaining clear communication with QA, MLOps, Data Science, DevOps, and Product stakeholders.',
+          'Introduced internal documentation and wikis, including a newcomer dashboard, ensuring knowledge sharing and efficient onboarding.'
         ],
-        aboutProject: '',
-        toolsAndTechnologies: '.NET 6, ASP.NET Web API, MediatR, nUnit, Microservices, MS SQL Server, AWS, Jenkins, Kibana, Grafana, Git/GitLab'
+        aboutProject: 'Enterprise time-management platform used by major law firms to streamline billing and analytics.',
+        toolsAndTechnologies: ''
       }
     },
     {
-      positionTitle: 'Trainee .NET Developer',
+      positionTitle: 'Software Engineer',
       company: 'ELEKS',
       startMonth: 'December',
-      startYear: '2021',
-      endMonth: 'May',
-      endYear: '2022',
+      startYear: '2023',
+      endMonth: 'December',
+      endYear: '2024',
       description: {
         responsibilities: [
-          'Implementing new features in API',
-          'Writing Unit and Integration tests',
-          'Finding and fixing bugs',
-          'Investigation logs and finding the causes of Warnings and Errors',
-          'Creating wiki pages about the investigation',
-          'Testing the finished functionality'
+          'Delivered numerous end-to-end features and bug fixes spanning RESTful microservices, a monolithic application, plugin packages, and the desktop client.',
+          'Developed and optimized complex SQL queries for efficient data retrieval, manipulation, and reporting. Collaborated with database engineers to refine query execution plans and improve overall database performance.',
+          'Conducted in-depth code reviews and proactively refactored legacy code, enhancing maintainability and aligning with modern .NET standards.',
+          'Took an active role in agile processes such as planning, daily stand-ups, and retrospectives. Led these activities on rotational basics.',
+          'Collaborated with QA and DevOps teams on release processes, swiftly resolving deployment issues and ensuring smooth rollouts.'
         ],
-        aboutProject: '',
-        toolsAndTechnologies: '.NET 6, ASP.NET Web API, MediatR, nUnit, Microservices, MS SQL Server, AWS, Jenkins, Kibana, Grafana, Git/GitLab'
+        aboutProject: 'Enterprise time-management platform used by major law firms to streamline billing and analytics.',
+        toolsAndTechnologies: ''
       }
     },
     {
-      positionTitle: 'Intern .NET Developer',
+      positionTitle: 'Junior Software Engineer',
       company: 'ELEKS',
       startMonth: 'September',
       startYear: '2021',
-      endMonth: 'November',
-      endYear: '2021',
+      endMonth: 'December',
+      endYear: '2023',
       description: {
         responsibilities: [
-          'Attended lectures about .NET and related topics.',
-          'Created my own WebAPI pet-project from scratch.'
+          'Delivered features and bug fixes across RESTful API microservices, a monolithic app, plug-in packages, ensuring seamless integration of system components with each other.',
+          'Conducted code reviews, providing feedback on peers\' pull requests and engaging in pair programming for complex tasks.',
+          'Contributed to the technical support tickets, investigated and resolved client-specific issues requiring technical and domain knowledge.',
+          'Created and maintained dev wikis covering environment setup, app installation, and API documentation to ease onboarding for future newcomers. Curated a shared SQL query library to streamline team investigations and data generation.'
         ],
-        aboutProject: 'AutoHubAPI - Web API that provides monolithic multi-layered architecture Back-End functionality for used cars auction application. The main purpose of this API was to be a playground for me to learn and practice new knowledge.',
-        toolsAndTechnologies: '.NET 6 & C# 10, ASP.NET Web API, EF Core, JWT, Identity, xUnit, FluentAssertions, AutoFixture, Moq, AutoMapper, FluentValidation, BCrypt, Swagger + SwaggerUI, Swashbuckle'
+        aboutProject: 'Enterprise time-management platform used by major law firms to streamline billing and analytics.',
+        toolsAndTechnologies: ''
       }
     },
     {
-      positionTitle: 'Intern .NET Developer',
+      positionTitle: 'Trainee Software Engineer',
+      company: 'ELEKS',
+      startMonth: 'September',
+      startYear: '2021',
+      endMonth: 'December',
+      endYear: '2023',
+      description: {
+        responsibilities: [
+          'Delivered basic yet critical RESTful API tasks and small bug fixes under supervision, ensuring smooth integration with other team components.',
+          'Collaborated with senior developers to adopt modern .NET practices and understand project architecture.',
+          'Quickly ramped up on the time-management/legal domain, taking on small API tasks and bug fixes.',
+          'Created and updated dev wikis covering environment setup and project guidelines, easing onboarding for future newcomers.',
+        ],
+        aboutProject: 'Enterprise time-management platform used by major law firms to streamline billing and analytics.',
+        toolsAndTechnologies: ''
+      }
+    },
+    {
+      positionTitle: 'Software Engineering Intern',
       company: 'Sigma Software',
       startMonth: 'March',
       startYear: '2021',
@@ -87,13 +104,12 @@ export class ExperienceSectionComponent implements OnInit {
       endYear: '2021',
       description: {
         responsibilities: [
-          'Designed project via UML diagrams (Use Case, Class Diagram, DB Diagram, etc.)',
-          'Developed common functionality (controllers, services, etc.)',
-          'Wrote unit-tests',
-          'Created UI for the whole website via Figma and implemented that via HTML + CSS (Bootstrap 5, Vanilla)'
+          'Developed a full-stack car rental application in a team of intern developers, utilizing UML diagrams for front-end and back-end design.',
+          'Designed the front-end using Figma mockups, implementing a responsive and user-friendly interface.',
+          'Achieved 80%+ unit/integration test coverage on the Back-End, ensuring code reliability and maintainability.'
         ],
-        aboutProject: 'A training full-stack web application that provides car rental service using React as a front-end, & monolithic three-layer architecture ASP.NET Web API as Back-end. The main purpose of this app was to learn the developing process, gain knowledge in developing the back-end on ASP.NET, and practice developing React front-end.',
-        toolsAndTechnologies: 'C# 9.0, ASP.NET 5, Web API, MS SQL, Azure, Azure DevOps, HTML, CSS, Bootstrap, React, Git/GitHub, Rider, WebStorm DataGrip, Swagger'
+        aboutProject: 'Full-stack car rental application, aiming to gain hands-on experience in building an enterprise-level application from scratch.',
+        toolsAndTechnologies: ''
       }
     }
   ]
@@ -112,5 +128,50 @@ export class ExperienceSectionComponent implements OnInit {
       this.allToggles[index] = !this.allToggles[index]
     }
 
+  }
+
+  calculateDuration(startMonth: string, startYear: string, endMonth: string | null, endYear: string | null): string {
+    const months = [
+      'January', 'February', 'March', 'April', 'May', 'June',
+      'July', 'August', 'September', 'October', 'November', 'December'
+    ];
+    
+    const startMonthIndex = months.indexOf(startMonth);
+    const startYearNum = parseInt(startYear);
+    
+    let endMonthIndex: number;
+    let endYearNum: number;
+    
+    if (endMonth && endYear) {
+      endMonthIndex = months.indexOf(endMonth);
+      endYearNum = parseInt(endYear);
+    } else {
+      // If no end date (current job), use current date
+      const currentDate = new Date();
+      endMonthIndex = currentDate.getMonth();
+      endYearNum = currentDate.getFullYear();
+    }
+    
+    // Calculate total months between dates
+    let totalMonths = (endYearNum - startYearNum) * 12 + (endMonthIndex - startMonthIndex);
+    
+    // Convert to years and months
+    const years = Math.floor(totalMonths / 12);
+    const remainingMonths = totalMonths % 12;
+    
+    // Format the result
+    let result = '';
+    if (years > 0) {
+      result += `${years} ${years === 1 ? 'year' : 'years'}`;
+    }
+    
+    if (remainingMonths > 0) {
+      if (result.length > 0) {
+        result += ' ';
+      }
+      result += `${remainingMonths} ${remainingMonths === 1 ? 'month' : 'months'}`;
+    }
+    
+    return result;
   }
 }

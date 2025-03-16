@@ -5,25 +5,26 @@
       <div>
         <h3 class="section-item-title">{{experience.positionTitle}}</h3>
         <span>{{experience.company}}</span>
+      </div>
+      <div class="section-item-date-container">
         <span class="section-item-date">{{experience.startMonth}} {{experience.startYear}} - {{experience.endMonth && experience.endYear ? experience.endMonth + ' ' + experience.endYear : 'Present'}}</span>
+        <span class="section-item-duration">{{calculateDuration(experience.startMonth, experience.startYear, experience.endMonth, experience.endYear)}}</span>
       </div>
       <div class="section-item-toggler">
         <i class="fa-angle-down fa-solid"></i>
       </div>
     </div>
     <div *ngIf="allToggles[i]" class="section-item-content" [@slideInOut] = "allToggles[i]">
-
-      <h5 *ngIf="experience.description.responsibilities">Responsibilities:</h5>
-      <ul *ngIf="experience.description.responsibilities">
-        <li *ngFor="let reponsibility of experience.description.responsibilities"><p>{{reponsibility}}</p></li>
-      </ul>
-
       <h5 *ngIf="experience.description.aboutProject">About project:</h5>
       <p *ngIf="experience.description.aboutProject">{{experience.description.aboutProject}}</p>
 
+      <h5 *ngIf="experience.description.responsibilities">Responsibilities:</h5>
+      <ul *ngIf="experience.description.responsibilities">
+        <li *ngFor="let responsibility of experience.description.responsibilities"><p>{{responsibility}}</p></li>
+      </ul>
+
       <h5 *ngIf="experience.description.toolsAndTechnologies">Tools & Technologies:</h5>
       <p *ngIf="experience.description.toolsAndTechnologies">{{experience.description.toolsAndTechnologies}}</p>
-
     </div>
   </div>
 </section>

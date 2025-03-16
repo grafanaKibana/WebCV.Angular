@@ -18,21 +18,20 @@ section {
 
   .skill-wrapper {
     display: flex;
+    flex-wrap: wrap;
     gap: rem(12px);
 
-    & > div {
-      &:nth-child(even) {
-        margin: rem(24px) auto;
-      }
-    }
-
+  
     @media only screen and (max-width: $medium) {
       display: flex;
-      flex-wrap: wrap;
     }
 
     .skill-group {
-      width: 100%;
+      width: calc(50% - rem(6px));
+
+      @media only screen and (max-width: $medium) {
+        width: 100%;
+      }
 
       @media only screen and (max-width: $small) {
         width: 100%;
@@ -43,9 +42,16 @@ section {
         padding: rem(10px) rem(18px);
         border-radius: var(--radius-14);
         @extend .box-shadow-8;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
 
-        h4 {
-          display: inline;
+        .skill-title {
+          h4 {
+            display: inline;
+            margin: 0;
+          }
         }
 
         &-level {
@@ -53,11 +59,12 @@ section {
           font-weight: 500;
           font-size: rem(12px);
           text-transform: uppercase;
+          text-align: right;
 
           &::before {
             margin: 0 rem(4px);
             color: var(--color-dark-paragraph);
-            content: '|';
+            content: '•';
           }
         }
 
@@ -68,6 +75,7 @@ section {
           position: relative;
           width: 100%;
           gap: rem(10px);
+          margin-top: rem(8px);
 
           span {
             margin: rem(3px) 0;

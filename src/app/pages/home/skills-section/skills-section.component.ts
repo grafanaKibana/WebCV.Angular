@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { SkillsModel } from '../interfaces/skillsModel';
+import { SkillModel } from '../interfaces/skillModel';
+import { KeyValue } from '@angular/common';
 
 @Component({
   selector: 'app-skills-section',
@@ -8,82 +9,88 @@ import { SkillsModel } from '../interfaces/skillsModel';
 })
 export class SkillsSectionComponent implements OnInit {
 
-  skills: Array<Array<SkillsModel>> = [
-    [
+  skills: Map<string, Array<SkillModel>> = new Map([
+    ['Languages', [
       {
-        technology: 'C#',
+        technology: '.NET (C#)',
         level: 3
       },
       {
-        technology: '.NET Core',
-        level: 3
-      },
-      {
-        technology: 'ASP.NET Core',
-        level: 3
-      },
-      {
-        technology: 'EF Core',
+        technology: 'T-SQL',
         level: 2
       },
       {
-        technology: 'SQL',
+        technology: 'Python',
+        level: 1
+      }
+    ]],
+    ['Data Storage', [
+      {
+        technology: 'MS SQL Server',
         level: 2
       },
       {
-        technology: 'Unit-Testing',
+        technology: 'ElasticSearch',
+        level: 1
+      }
+    ]],
+    ['Technologies', [
+      {
+        technology: 'ASP.NET Web API',
+        level: 3
+      },
+      {
+        technology: 'Entity Framework',
         level: 2
       }
-    ],
-    [
+    ]],
+    ['Cloud', [
       {
-        technology: 'HTML',
+        technology: 'Azure',
+        level: 2
+      },
+      {
+        technology: 'AWS',
+        level: 1
+      }
+    ]],
+    ['AI', [
+      {
+        technology: 'Semantic Kernel + OpenAI',
         level: 3
       },
       {
-        technology: 'CSS/SCSS',
+        technology: 'Prompt Engineering',
+        level: 1
+      }
+    ]],
+    ['Other', [
+      {
+        technology: 'Grafana',
         level: 2
       },
-      {
-        technology: 'TypeScript',
-        level: 1
-      },
-      {
-        technology: 'Angular',
-        level: 1
-      },
-      {
-        technology: 'Figma',
-        level: 2
-      },
-    ],
-    [
       {
         technology: 'Kibana',
-        level: 3
+        level: 2
       },
       {
-        technology: 'Git',
-        level: 2
+        technology: 'ArgoCD',
+        level: 1
       },
       {
         technology: 'Jenkins',
         level: 2
       },
       {
-        technology: 'AWS',
-        level: 1
-      },
-      {
-        technology: 'Azure',
-        level: 1
+        technology: 'Git',
+        level: 2
       },
       {
         technology: 'UML',
         level: 1
-      },
-    ],
-  ]
+      }
+    ]]
+  ]);
 
   constructor() { }
 
@@ -101,5 +108,10 @@ export class SkillsSectionComponent implements OnInit {
       default:
         return 'Unknown'
     }
+  }
+
+  // Add this method to preserve original order
+  originalOrder = (a: KeyValue<string, any>, b: KeyValue<string, any>): number => {
+    return 0; // returning 0 will keep the original order
   }
 }
