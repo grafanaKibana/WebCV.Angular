@@ -5,7 +5,7 @@ section {
   padding: 0;
   box-shadow: none;
 
-  @media only screen and (max-width: $large-xl) {
+  @include respond-laptop {
     padding: rem(10px);
   }
 
@@ -21,19 +21,18 @@ section {
     flex-wrap: wrap;
     gap: rem(12px);
 
-  
-    @media only screen and (max-width: $medium) {
+    @include respond-tablet-sm {
       display: flex;
     }
 
     .skill-group {
       width: calc(50% - rem(6px));
 
-      @media only screen and (max-width: $medium) {
+      @include respond-tablet-sm {
         width: 100%;
       }
 
-      @media only screen and (max-width: $small) {
+      @include respond-mobile {
         width: 100%;
       }
 

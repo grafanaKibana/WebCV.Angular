@@ -4,22 +4,22 @@ h1 {
   margin-left: rem(16px);
 }
 
-.grid-wrapper{
+.grid-wrapper {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-gap: rem(15px);
 
-  @media only screen and (max-width: $large-xl) {
+  @include respond-laptop {
     grid-template-columns: repeat(3, 1fr);
     grid-gap: rem(8px);
   }
 
-  @media only screen and (max-width: $large) {
+  @include respond-tablet {
     grid-template-columns: repeat(2, 1fr);
     grid-gap: rem(5px);
   }
 
-  @media only screen and (max-width: $medium) {
+  @include respond-tablet-sm {
     grid-template-columns: 1fr;
     grid-gap: rem(5px);
   }

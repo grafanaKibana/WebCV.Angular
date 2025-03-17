@@ -6,15 +6,15 @@
   margin: rem(32px) 25%;
   color: var(--color-dark-paragraph);
 
-  @media only screen and (max-width: $large-xxl) {
+  @include respond-desktop {
     margin: rem(32px) 15%;
   }
 
-  @media only screen and (max-width: $large) {
+  @include respond-tablet {
     margin: rem(24px) 5%;
   }
 
-  /*@media only screen and (max-width: $medium) {
+  /*@include respond-tablet-sm {
     margin: 0;
     border-radius: 0;
   }*/

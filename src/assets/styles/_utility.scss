@@ -87,3 +87,123 @@
     0 20px 30px rgba(0, 0, 0, 0.06),
     0 0 40px rgba(0, 0, 0, 0.04);
 }
+
+// Responsive utilities
+.container {
+  @include container-width();
+  
+  &-fluid {
+    width: 100%;
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  &-wide {
+    @include container-width($breakpoint-wide);
+  }
+
+  &-narrow {
+    @include container-width($breakpoint-laptop);
+  }
+}
+
+// Responsive display utilities
+@each $breakpoint, $width in (
+  'wide': $breakpoint-wide,
+  'desktop': $breakpoint-desktop,
+  'laptop': $breakpoint-laptop,
+  'tablet': $breakpoint-tablet,
+  'tablet-sm': $breakpoint-tablet-sm,
+  'mobile': $breakpoint-mobile,
+  'mobile-sm': $breakpoint-mobile-sm
+) {
+  .hide-on-#{$breakpoint} {
+    @include hide-on($width);
+  }
+
+  .show-on-#{$breakpoint} {
+    @include show-on($width);
+  }
+}
+
+// Responsive flexbox
+.flex-responsive {
+  display: flex;
+  
+  @include respond-tablet-sm {
+    flex-direction: column;
+  }
+
+  &-reverse {
+    display: flex;
+    
+    @include respond-tablet-sm {
+      flex-direction: column-reverse;
+    }
+  }
+}
+
+// Responsive gaps
+.gap {
+  &-responsive {
+    gap: 2rem;
+    
+    @include respond-tablet {
+      gap: 1.5rem;
+    }
+    
+    @include respond-mobile {
+      gap: 1rem;
+    }
+  }
+}
+
+// Responsive spacing
+@each $space in (1, 2, 3, 4, 5) {
+  $value: $space * 0.25rem;
+  
+  .m-responsive-#{$space} {
+    margin: $value * 4;
+    
+    @include respond-tablet {
+      margin: $value * 3;
+    }
+    
+    @include respond-mobile {
+      margin: $value * 2;
+    }
+  }
+  
+  .p-responsive-#{$space} {
+    padding: $value * 4;
+    
+    @include respond-tablet {
+      padding: $value * 3;
+    }
+    
+    @include respond-mobile {
+      padding: $value * 2;
+    }
+  }
+}
+
+// Responsive text alignment
+.text {
+  &-center-mobile {
+    @include respond-mobile {
+      text-align: center;
+    }
+  }
+  
+  &-left-mobile {
+    @include respond-mobile {
+      text-align: left;
+    }
+  }
+  
+  &-right-mobile {
+    @include respond-mobile {
+      text-align: right;
+    }
+  }
+}

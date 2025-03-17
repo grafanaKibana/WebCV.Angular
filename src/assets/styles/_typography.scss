@@ -39,7 +39,7 @@ h2 {
   font-size: rem(24px);
   margin-top: rem(0px);
 
-  @media only screen and (max-width: $small) {
+  @include respond-mobile {
     font-size: rem(22px);
   }
 }
@@ -48,7 +48,7 @@ h3 {
   font-size: rem(18px);
   margin-bottom: rem(8px);
 
-  @media only screen and (max-width: $small) {
+  @include respond-mobile {
     font-size: rem(16px);
   }
 }
@@ -58,7 +58,7 @@ h4 {
   margin-bottom: rem(13px);
   font-weight: 500;
 
-  @media only screen and (max-width: $small) {
+  @include respond-mobile {
     font-size: rem(14px);
   }
 }
@@ -68,7 +68,7 @@ h5 {
   font-weight: 500;
   margin: 6px 0;
 
-  @media only screen and (max-width: $small) {
+  @include respond-mobile {
     font-size: rem(12px);
   }
 }
@@ -76,7 +76,7 @@ h5 {
 h6 {
   font-size: rem(12px);
 
-  @media only screen and (max-width: $small) {
+  @include respond-mobile {
     font-size: rem(10px);
   }
 }

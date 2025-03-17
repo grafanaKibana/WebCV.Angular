@@ -6,7 +6,7 @@ div {
   height: 1px;
   width: auto;
 
-  @media only screen and (max-width: $medium) {
+  @include respond-tablet-sm {
     margin: 0;
   }
 }

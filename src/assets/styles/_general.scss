@@ -13,15 +13,14 @@ body {
 
 section {
   padding: rem(26px);
-
   margin-bottom: rem(18px);
   @extend .box-shadow-16;
 
-  @media only screen and (max-width: $medium) {
+  @include respond-tablet-sm {
     margin-bottom: rem(14px);
   }
 
-  @media only screen and (max-width: $small) {
+  @include respond-mobile {
     padding: rem(16px);
     margin-bottom: rem(12px);
   }

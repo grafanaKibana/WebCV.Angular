@@ -4,7 +4,8 @@
   display: grid;
   grid-template-columns: 27.5% auto;
   grid-gap: rem(18px);
-  @media only screen and (max-width: $large-xl) {
+  
+  @include respond-laptop {
     grid-template-columns: 100%;
     grid-gap: rem(8px);
   }

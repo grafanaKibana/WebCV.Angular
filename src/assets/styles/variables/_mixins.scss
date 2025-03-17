@@ -75,3 +75,79 @@
   }
 
 }
+
+// Responsive mixins - desktop first approach
+@mixin respond-wide {
+  @media only screen and (max-width: $breakpoint-wide) {
+    @content;
+  }
+}
+
+@mixin respond-desktop {
+  @media only screen and (max-width: $breakpoint-desktop) {
+    @content;
+  }
+}
+
+@mixin respond-laptop {
+  @media only screen and (max-width: $breakpoint-laptop) {
+    @content;
+  }
+}
+
+@mixin respond-tablet {
+  @media only screen and (max-width: $breakpoint-tablet) {
+    @content;
+  }
+}
+
+@mixin respond-tablet-sm {
+  @media only screen and (max-width: $breakpoint-tablet-sm) {
+    @content;
+  }
+}
+
+@mixin respond-mobile {
+  @media only screen and (max-width: $breakpoint-mobile) {
+    @content;
+  }
+}
+
+@mixin respond-mobile-sm {
+  @media only screen and (max-width: $breakpoint-mobile-sm) {
+    @content;
+  }
+}
+
+// Custom breakpoint
+@mixin respond-to($breakpoint) {
+  @media only screen and (max-width: $breakpoint) {
+    @content;
+  }
+}
+
+// Hide element at specific breakpoint
+@mixin hide-on($breakpoint) {
+  @include respond-to($breakpoint) {
+    display: none !important;
+  }
+}
+
+// Show element at specific breakpoint
+@mixin show-on($breakpoint) {
+  display: none !important;
+  
+  @include respond-to($breakpoint) {
+    display: block !important;
+  }
+}
+
+// Container width helper
+@mixin container-width($max-width: $breakpoint-desktop, $padding: 20px) {
+  width: 100%;
+  max-width: $max-width;
+  padding-left: $padding;
+  padding-right: $padding;
+  margin-left: auto;
+  margin-right: auto;
+}

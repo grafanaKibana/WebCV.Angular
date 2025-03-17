@@ -9,18 +9,17 @@ footer {
   margin-top: rem(26px);
   padding: rem(18px);
 
-  @media only screen and (max-width: $large) {
+  @include respond-tablet {
     padding: rem(14px);
   }
 
-  @media only screen and (max-width: $medium) {
+  @include respond-tablet-sm {
     margin-top: rem(18px);
   }
 
-  @media only screen and (max-width: $small) {
+  @include respond-mobile {
     padding: rem(16px);
   }
-
 
   h2 {
     text-align: center;
@@ -35,7 +34,7 @@ footer {
       "M M"
       "B B";
 
-    @media only screen and (max-width: $medium) {
+    @include respond-tablet-sm {
       gap: rem(16px);
       grid-template-areas:
       "N N"
@@ -53,7 +52,7 @@ footer {
       padding: rem(12px);
       outline: none;
 
-      @media only screen and (max-width: $medium) {
+      @include respond-tablet-sm {
         border-radius: var(--radius-12);
       }
     }

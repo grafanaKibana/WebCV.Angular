@@ -9,7 +9,7 @@ aside {
     display: none;
   }
 
-  @media only screen and (max-width: $large-xl) {
+  @include respond-laptop {
     display: grid;
     grid-template-columns: 28% 1px auto;
     text-align: start;
@@ -25,7 +25,7 @@ aside {
     }
   }
 
-  @media only screen and (max-width: $medium) {
+  @include respond-tablet-sm {
     grid-template-columns: 100%;
     margin-bottom: rem(16px);
 
@@ -37,7 +37,7 @@ aside {
     }
   }
 
-  @media only screen and (max-width: $small) {
+  @include respond-mobile {
     padding: rem(10px);
   }
 
@@ -49,12 +49,12 @@ aside {
       border-radius: var(--radius-20);
       margin: 0 1vw;
 
-      @media only screen and (max-width: $medium) {
+      @include respond-tablet-sm {
         margin: 0 10vw;
         padding: 32px;
       }
 
-      @media only screen and (max-width: $small) {
+      @include respond-mobile {
         margin: 0;
       }
 
@@ -70,24 +70,25 @@ aside {
       margin: rem(16px) rem(0);
       position: relative;
 
-      @media only screen and (max-width: $large-xxl) {
+      @include respond-desktop {
         margin-bottom: rem(12px);
         margin-left: 0;
       }
 
-      @media only screen and (max-width: $large-xl) {
+      @include respond-laptop {
         margin-bottom: rem(14px);
         margin-left: 0;
       }
 
-      @media only screen and (max-width: $large) {
+      @include respond-tablet {
         margin-bottom: rem(12px);
       }
 
-      @media only screen and (max-width: $medium) {
+      @include respond-tablet-sm {
         margin-bottom: rem(10px);
       }
-      @media only screen and (max-width: $small) {
+      
+      @include respond-mobile {
         margin-bottom: rem(10px);
       }
     }
@@ -150,11 +151,11 @@ aside {
             margin: 0 auto;
           }
 
-          @media only screen and (max-width: $large-xxl) {
+          @include respond-desktop {
             display: none;
           }
 
-          @media only screen and (max-width: $large-xl) {
+          @include respond-laptop {
             display: inline-flex;
           }
         }

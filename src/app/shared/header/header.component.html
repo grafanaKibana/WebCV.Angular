@@ -12,11 +12,15 @@
       <i class="fa-solid fa-rss"></i>
       <span>Blog</span>
     </li>
-    <app-header-color-scheme-selector></app-header-color-scheme-selector>
-    <li class="download-button {{isDownloadCVDone ? null : 'soon'}}" >
-      <i class="fa-solid fa-angles-down"></i>
-      <span>Download CV</span>
-    </li>
+    <div class="right-menu-items">
+      <li (click)="setRandomTheme()" class="theme-button">
+        <span>Theme</span>
+      </li>
+      <li class="download-button {{isDownloadCVDone ? null : 'soon'}}" >
+        <i class="fa-solid fa-angles-down"></i>
+        <span>Download CV</span>
+      </li>
+    </div>
   </ul>
 </header>
 

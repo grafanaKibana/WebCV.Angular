@@ -12,7 +12,7 @@ header {
   backdrop-filter: blur(20px) saturate(0.5);
   -webkit-backdrop-filter: blur(20px) saturate(0.5);
 
-  @media only screen and (max-width: $medium) {
+  @include respond-tablet-sm {
     border-radius: var(--radius-16);
   }
 
@@ -26,10 +26,18 @@ header {
     font-weight: 500;
     width: 100%;
 
-    @media only screen and (max-width: $medium) {
+    @include respond-tablet-sm {
       justify-content: space-evenly;
       padding: rem(8px) rem(10px);
+    }
 
+    .right-menu-items {
+      display: flex;
+      margin-left: auto;
+      
+      @include respond-tablet-sm {
+        margin-left: 0;
+      }
     }
 
     li {
@@ -57,7 +65,6 @@ header {
             border-radius: 4px;
             border: 1px solid var(--color-dark-neon-glow);
           }
-
         }
       }
 
@@ -79,11 +86,10 @@ header {
         margin-right: 0.5rem;
       }
 
-
-      @media only screen and (max-width: $medium) {
+      @include respond-tablet-sm {
         padding: rem(12px) 10%;
 
-        span{
+        span {
           display: none;
         }
 
@@ -96,55 +102,17 @@ header {
             text-shadow: 0 0 10px var(--color-dark-neon-glow);
           }
 
-          @media only screen and (max-width: $medium) {
+          @include respond-tablet-sm {
             font-size: 4vw;
           }
         }
-
-        @media only screen and (max-width: $medium) {
-          padding: rem(12px) 9%;
-        }
-
-        .btn-icon {
-          padding: 0;
-          display: flex;
-          align-items: center;
-          font-weight: 500;
-          border: none;
-          float: right;
-          border-radius: var(--radius-12);
-          background: none;
-
-          &:hover {
-            cursor: pointer;
-          }
-        }
       }
-
     }
 
     .download-button {
-      margin-left: auto;
-
       i {
         display: block;
       }
-
-      @media only screen and (max-width: $medium) {
-        margin-left: unset;
-      }
     }
-  }
-}
-
-app-header-color-scheme-selector {
-  margin-left: auto;
-}
-
-.download-button {
-  margin-left: 0 !important;
-
-  @media only screen and (max-width: $medium) {
-    margin-left: unset;
   }
 }

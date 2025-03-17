@@ -8,17 +8,17 @@
   position: relative;
   z-index: 1;
 
-  @media only screen and (max-width: $large-xxl){
+  @include respond-desktop {
     margin: rem(36px) rem(75px) 0;
   }
 
-  @media only screen and (max-width: $large) {
+  @include respond-tablet {
     margin: 0;
     padding: rem(16px) rem(16px) 0;
     border-radius: 0 0 var(--radius-32) var(--radius-32) !important;
   }
 
-  @media only screen and (max-width: $medium) {
+  @include respond-tablet-sm {
     margin: 0;
     padding: rem(10px) rem(10px) 0;
   }
@@ -35,7 +35,7 @@
   padding: rem(18px);
   flex: 1;
 
-  @media only screen and (max-width: $large) {
+  @include respond-tablet {
     padding: rem(14px);
   }
 }
