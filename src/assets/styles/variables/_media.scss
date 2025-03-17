@@ -10,11 +10,3 @@ $breakpoint-tablet-sm: 768px; // Tablets portrait
 $breakpoint-mobile: 576px;    // Mobile landscape
 $breakpoint-mobile-sm: 375px; // Mobile portrait
 
-// Legacy variables (for backward compatibility)
-$small-sm: $breakpoint-mobile-sm;
-$small: $breakpoint-mobile;
-$medium: $breakpoint-tablet-sm;
-$large: $breakpoint-tablet;
-$large-xl: $breakpoint-laptop;
-$large-xxl: $breakpoint-desktop;
-$large-xxxl: $breakpoint-wide;

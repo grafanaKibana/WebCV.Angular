@@ -58,22 +58,30 @@ section {
 
     &-head {
       display: flex;
-      align-items: center;
+      align-items: stretch;
+      min-height: rem(50px);
+
+      > div {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
 
       .section-item-toggler {
         width: auto;
         flex-shrink: 0;
         margin-left: rem(10px);
-        height: 100%;
+        height: auto;
         display: flex;
         align-items: center;
+        justify-content: center;
       }
     }
 
     &-date-container {
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
+      justify-content: center;
       align-items: flex-end;
       text-align: right;
       margin-left: auto;
@@ -90,7 +98,6 @@ section {
     &-duration {
       color: var(--color-dark-paragraph);
       font-size: rem(12px);
-      padding-bottom: rem(3px);
     }
 
     &-content {

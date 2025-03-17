@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ProjectModel } from '../interfaces/projectModel';
 
 @Component({
@@ -6,7 +6,7 @@ import { ProjectModel } from '../interfaces/projectModel';
   templateUrl: './portfolio-page.component.html',
   styleUrls: ['./portfolio-page.component.scss']
 })
-export class PortfolioPageComponent implements OnInit {
+export class PortfolioPageComponent {
   projectsList: Array<ProjectModel> = [
     {
       id: 1,
@@ -37,8 +37,4 @@ export class PortfolioPageComponent implements OnInit {
       imagePath: "assets/images/projectLogos/project-2-logo.png"
     }
   ]
-
-  constructor() { }
-
-  ngOnInit(): void { }
 }

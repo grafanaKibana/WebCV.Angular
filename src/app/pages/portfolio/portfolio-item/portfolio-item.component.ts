@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { ProjectModel } from '../interfaces/projectModel';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { ModalDialogComponent } from '../../../shared/modal-dialog/modal-dialog.component';
@@ -8,12 +8,10 @@ import { ModalDialogComponent } from '../../../shared/modal-dialog/modal-dialog.
   templateUrl: './portfolio-item.component.html',
   styleUrls: ['./portfolio-item.component.scss']
 })
-export class PortfolioItemComponent implements OnInit {
+export class PortfolioItemComponent {
   @Input() project!: ProjectModel;
 
   constructor(private dialog: MatDialog) { }
-
-  ngOnInit(): void {  }
 
   openProjectDetails(project: ProjectModel) {
     const dialogConfig = new MatDialogConfig();

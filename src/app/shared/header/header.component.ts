@@ -6,15 +6,12 @@ import { WebGLGradientService } from '../../services/webgl-gradient.service';
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent {
   isPortfolioDone: boolean = true;
   isBlogDone: boolean = true;
   isDownloadCVDone = false;
 
   constructor(private webglGradientService: WebGLGradientService) { }
-
-  ngOnInit(): void {
-  }
 
   /**
    * Apply a random theme to all gradient containers
@@ -22,7 +19,7 @@ export class HeaderComponent implements OnInit {
   setRandomTheme(): void {
     // Find all WebGL background containers in the document
     const containers = document.querySelectorAll('[data-gradient-id]');
-    
+
     // Remove and reapply gradients with a random theme
     containers.forEach(container => {
       this.webglGradientService.removeGradient(container as HTMLElement);

@@ -5,8 +5,7 @@ import { Component, OnInit } from '@angular/core';
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.scss']
 })
-export class SidebarComponent implements OnInit {
-
+export class SidebarComponent {
   sidebarInfo = {
     firstName: 'Nikita',
     lastName: 'Reshetnik',
@@ -23,11 +22,5 @@ export class SidebarComponent implements OnInit {
     linkedInLink: 'https://www.linkedin.com/in/nikitareshetnik/',
     repositoryLink: 'https://github.com/grafanaKibana/WebCV.Angular',
   }
-
-  constructor() { }
-
-  ngOnInit(): void {
-  }
-
 }
 

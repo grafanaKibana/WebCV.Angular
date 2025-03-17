@@ -1,19 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-footer',
   templateUrl: './footer.component.html',
   styleUrls: ['./footer.component.scss']
 })
-export class FooterComponent implements OnInit {
+export class FooterComponent {
   public currentDate = new Date().getUTCFullYear()
 
-  constructor() { }
-
-  ngOnInit(): void {
-  }
-
-  sendEmail(userName: string, userEmail: string, userMessage: string){
-
+  sendEmail(userName: string, userEmail: string, userMessage: string): void {
+    console.warn('You has been nayoban :(')
   }
 }

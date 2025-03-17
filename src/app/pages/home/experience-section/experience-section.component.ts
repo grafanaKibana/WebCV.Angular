@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ExperienceModel } from '../interfaces/experienceModel';
 import { animate, style, transition, trigger, group } from '@angular/animations';
 
@@ -24,8 +24,7 @@ import { animate, style, transition, trigger, group } from '@angular/animations'
     ])
   ]
 })
-export class ExperienceSectionComponent implements OnInit {
-
+export class ExperienceSectionComponent {
   experienceList: Array<ExperienceModel> = [
     {
       positionTitle: 'AI Integration Engineer',
@@ -119,11 +118,7 @@ export class ExperienceSectionComponent implements OnInit {
   ]
   allToggles: Array<boolean> = new Array(this.experienceList.length).fill(false)
 
-  constructor() { }
-
-  ngOnInit(): void {  }
-
-  public toggleShow(index: number): void {
+  toggleShow(index: number): void {
     if (!this.allToggles[index]) {
       this.allToggles = this.allToggles.map(_ => false)
       this.allToggles[index] = !this.allToggles[index]
@@ -134,7 +129,8 @@ export class ExperienceSectionComponent implements OnInit {
 
   }
 
-  public getShortMonth(month: string): string {
+  // TODO move it to pipe or find library that does the same
+  getShortMonth(month: string): string {
     const monthMap: { [key: string]: string } = {
       'January': 'Jan',
       'February': 'Feb',
@@ -149,10 +145,11 @@ export class ExperienceSectionComponent implements OnInit {
       'November': 'Nov',
       'December': 'Dec'
     };
-    
+
     return monthMap[month] || month;
   }
 
+  // TODO use library
   calculateDuration(startMonth: string, startYear: string, endMonth: string | null, endYear: string | null): string {
     const months = [
       'January', 'February', 'March', 'April', 'May', 'June',

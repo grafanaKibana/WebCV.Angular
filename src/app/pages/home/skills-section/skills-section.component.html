@@ -1,10 +1,10 @@
 <section>
   <div class="skill-wrapper">
-    <ng-container *ngFor="let skillGroup of skills | keyvalue: originalOrder; let i = index; let last = last">
+    <ng-container *ngFor="let skillGroup of skills">
       <!-- Skill group -->
       <div class="skill-group">
-        <h3>{{skillGroup.key}}</h3>
-        <div *ngFor="let skill of skillGroup.value" class="skill-group-item dark-block">
+        <h3>{{skillGroup.name}}</h3>
+        <div *ngFor="let skill of skillGroup.skills" class="skill-group-item dark-block">
           <div class="skill-title">
             <h4>{{skill.technology}}</h4>
           </div>
