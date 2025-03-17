@@ -58,14 +58,7 @@ section {
 
     &-head {
       display: flex;
-      align-items: stretch;
-      min-height: rem(50px);
-
-      > div {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-      }
+      align-items: center;
 
       .section-item-toggler {
         width: auto;
