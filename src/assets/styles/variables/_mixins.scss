@@ -48,7 +48,7 @@
   @if (unitless($context)) {
     $context: $context * 1px;
   }
-  @return $pixels / $context * 1rem;
+  @return calc($pixels / $context) * 1rem;
 }
 
 @keyframes pulse {

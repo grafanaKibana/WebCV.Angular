@@ -5,6 +5,8 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  position: relative;
+  z-index: 1;
 
   @media only screen and (max-width: $large-xxl){
     margin: rem(36px) rem(75px) 0;
@@ -24,6 +26,8 @@
 
 .main-container {
   @extend .container-shadow;
+  position: relative;
+  z-index: 1;
   border-radius: var(--radius-20);
   background-color: var(--color-dark-wrapper-background);
   backdrop-filter: blur(20px) saturate(0.5);

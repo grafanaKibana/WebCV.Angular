@@ -2,6 +2,8 @@
 
 header {
   @extend .container-shadow;
+  position: relative;
+  z-index: 2;
   display: flex;
   align-items: center;
   margin-bottom: rem(18px);
@@ -49,7 +51,7 @@ header {
             text-transform: uppercase;
             font-weight: 400;
             font-size: 11px;
-            padding: 0 4px;
+            padding: 2px 4px;
             margin: auto auto auto rem(6px);
             background-color: rgba(0, 187, 255, 0.3);
             border-radius: 4px;
@@ -132,5 +134,17 @@ header {
         margin-left: unset;
       }
     }
+  }
+}
+
+app-header-color-scheme-selector {
+  margin-left: auto;
+}
+
+.download-button {
+  margin-left: 0 !important;
+
+  @media only screen and (max-width: $medium) {
+    margin-left: unset;
   }
 }

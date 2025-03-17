@@ -1,11 +1,12 @@
-<!-- Dynamic animated mesh gradient background with dark green theme and parallax -->
-<app-background 
-  [baseColor]="'#123524'" 
-  [numGradients]="5" 
-  [animate]="true"
-  [speed]="0.75"
-  [parallax]="true">
-</app-background>
+<!-- High-performance WebGL mesh gradient background with Stripe-like implementation -->
+<app-webgl-background 
+  [speed]="0.5"
+  [amplitude]="0.2"
+  [darkerTop]="true"
+  [parallax]="true"
+  [parallaxIntensity]="0.5">
+  <!-- Color scheme is not explicitly set, so a random one will be chosen on load -->
+</app-webgl-background>
 
 <div class="wrapper">
   <app-header></app-header>
@@ -14,4 +15,3 @@
   </div>
   <app-footer></app-footer>
 </div>
-

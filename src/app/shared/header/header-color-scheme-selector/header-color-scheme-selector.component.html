@@ -1,0 +1,37 @@
+<li class="theme-button" (click)="toggleDropdown($event)">
+  <span>Theme</span>
+</li>
+
+<!-- Theme Dropdown -->
+<div class="theme-dropdown" *ngIf="isDropdownOpen" (click)="$event.stopPropagation()">
+  <div class="dropdown-title">Select Theme</div>
+  
+  <div class="color-schemes">
+    <!-- Random Option -->
+    <div 
+      class="color-scheme-option" 
+      [class.active]="selectedThemeName === null"
+      (click)="selectColorScheme(null, $event)"
+    >
+      <div class="scheme-preview random"></div>
+      <span class="scheme-label">Random</span>
+    </div>
+    
+    <!-- Color Scheme Options -->
+    <div 
+      *ngFor="let themeName of schemeNames"
+      class="color-scheme-option"
+      [class.active]="selectedThemeName === themeName"
+      (click)="selectColorScheme(themeName, $event)"
+    >
+      <div class="scheme-preview">
+        <div 
+          *ngFor="let color of colorSchemes.get(themeName)"
+          class="color-swatch"
+          [style.backgroundColor]="getRgbString(color)"
+        ></div>
+      </div>
+      <span class="scheme-label">{{ themeName }}</span>
+    </div>
+  </div>
+</div> 

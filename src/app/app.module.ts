@@ -8,14 +8,11 @@ import { HomeModule } from './pages/home/home.module';
 import { PortfolioModule } from './pages/portfolio/portfolio.module';
 import { BlogModule } from './pages/blog/blog.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MeshGradientDirective } from './directives/mesh-gradient.directive';
-import { BackgroundComponent } from './shared/background/background.component';
+import { WebGLBackgroundModule } from './shared/webgl-background/webgl-background.module';
 
 @NgModule({
   declarations: [
     AppComponent,
-    MeshGradientDirective,
-    BackgroundComponent,
   ],
   imports: [
     BrowserModule,
@@ -25,7 +22,8 @@ import { BackgroundComponent } from './shared/background/background.component';
     HomeModule,
     PortfolioModule,
     BlogModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    WebGLBackgroundModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -4,7 +4,7 @@ import { AppRoutingModule } from '../app-routing.module';
 import { FormsModule } from '@angular/forms';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
-import { HeaderComponent } from './header/header.component';
+import { HeaderModule } from './header/header.module';
 import { FooterComponent } from './footer/footer.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { HorizontalSeparatorComponent } from './horizontal-separator/horizontal-separator.component';
@@ -15,7 +15,6 @@ import { MatButtonModule } from '@angular/material/button';
 
 @NgModule({
   declarations: [
-    HeaderComponent,
     FooterComponent,
     SidebarComponent,
     HorizontalSeparatorComponent,
@@ -25,12 +24,13 @@ import { MatButtonModule } from '@angular/material/button';
   exports: [
     CommonModule,
     FormsModule,
-    HeaderComponent,
+    HeaderModule,
     FooterComponent,
     SidebarComponent,
+    HorizontalSeparatorComponent,
     VerticalSeparatorComponent,
     MatDialogModule,
-    ModalDialogComponent
+    ModalDialogComponent,
   ],
   imports: [
     CommonModule,
@@ -39,6 +39,7 @@ import { MatButtonModule } from '@angular/material/button';
     FormsModule,
     MatDialogModule,
     MatButtonModule,
+    HeaderModule,
   ]
 })
 export class SharedModule {
