@@ -59,7 +59,7 @@ section {
     &-head {
       display: flex;
       align-items: center;
-      
+
       .section-item-toggler {
         width: auto;
         flex-shrink: 0;
@@ -69,7 +69,7 @@ section {
         align-items: center;
       }
     }
-    
+
     &-date-container {
       display: flex;
       flex-direction: column;
@@ -86,7 +86,7 @@ section {
         text-shadow: none;
       }
     }
-  
+
     &-duration {
       color: var(--color-dark-paragraph);
       font-size: rem(12px);
