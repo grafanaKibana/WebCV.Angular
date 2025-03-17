@@ -3,8 +3,8 @@
 footer {
   @extend .container-shadow;
   background-color: var(--color-dark-wrapper-background);
-  backdrop-filter: blur(20px) saturate(0);
-  -webkit-backdrop-filter: blur(20px) saturate(0);
+  backdrop-filter: blur(20px) saturate(0.5);
+  -webkit-backdrop-filter: blur(20px) saturate(0.5);
   border-radius: var(--radius-20) var(--radius-20) 0 0;
   margin-top: rem(26px);
   padding: rem(18px);

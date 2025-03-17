@@ -8,8 +8,8 @@ import { WebGLGradientService } from '../../services/webgl-gradient.service';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class WebGLBackgroundComponent implements OnInit, OnDestroy {
-  @Input() speed = 0.5; // Animation speed
-  @Input() amplitude = 0.2; // Wave amplitude (intensity)
+  @Input() speed = 0.3; // Animation speed
+  @Input() amplitude = 0.7; // Wave amplitude (intensity)
   @Input() darkerTop = false; // Enable darker top effect
   @Input() colors?: number[][]; // Custom colors array
   @Input() themeName?: string; // Name of predefined color scheme

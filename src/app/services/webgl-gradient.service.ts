@@ -10,7 +10,7 @@ import { Injectable, NgZone } from '@angular/core';
 })
 export class WebGLGradientService {
   private gradients: Map<string, GradientInstance> = new Map();
-  
+
   // Define color schemes as a Map with theme names as keys
   private colorSchemesMap = new Map<string, number[][]>([
     ['Green Teal', [
@@ -19,7 +19,7 @@ export class WebGLGradientService {
       [32, 105, 96],    // Teal
       [48, 77, 109],    // Blue-green
     ]],
-    ['Purple Sunset', [
+    ['Calm White', [
       [195, 228, 255],  // Light blue (#c3e4ff)
       [110, 195, 244],  // Sky blue (#6ec3f4)
       [234, 226, 255],  // Pale lavender (#eae2ff)
@@ -37,11 +37,11 @@ export class WebGLGradientService {
       [233, 215, 85],   // Yellow
       [85, 105, 45],    // Olive green
     ]],
-    ['Midnight', [
-      [13, 15, 30],     // Almost black
-      [43, 45, 66],     // Dark slate
-      [85, 91, 110],    // Medium slate
-      [138, 143, 173],  // Light slate
+    ['Mint Fresh', [
+      [83, 223, 131],   // Bright green (#53DF83)
+      [71, 210, 233],   // Cyan blue (#47D2E9)
+      [63, 63, 63],     // Dark gray (#3F3F3F)
+      [238, 238, 238],  // Light gray (#EEEEEE)
     ]]
   ]);
 
@@ -128,7 +128,7 @@ export class WebGLGradientService {
         // Check if WebGL is supported
         const testCanvas = document.createElement('canvas');
         const testContext = testCanvas.getContext('webgl');
-        
+
         if (!testContext) {
           // WebGL not supported, apply CSS fallback
           this.applyCssFallback(container, options.colors || this.config.defaultColors);
@@ -140,7 +140,7 @@ export class WebGLGradientService {
         // 2. If a theme name is provided, use that scheme
         // 3. Otherwise use a random color scheme
         let colors: number[][];
-        
+
         if (options.colors) {
           // Use explicitly provided colors
           colors = options.colors;
@@ -178,13 +178,13 @@ export class WebGLGradientService {
    */
   private applyCssFallback(container: HTMLElement, colors: number[][]): void {
     // Convert RGB arrays to CSS colors
-    const cssColors = colors.map(rgb => 
+    const cssColors = colors.map(rgb =>
       `rgb(${rgb[0]}, ${rgb[1]}, ${rgb[2]})`
     );
-    
+
     // Apply a simple linear gradient as fallback
     container.style.background = `linear-gradient(135deg, ${cssColors.join(', ')})`;
-    
+
     // Add some subtle animation with CSS
     const keyframes = `
       @keyframes gradientShift {
@@ -193,7 +193,7 @@ export class WebGLGradientService {
         100% { background-position: 0% 50%; }
       }
     `;
-    
+
     // Add keyframes to document if not already present
     if (!document.getElementById('gradient-keyframes')) {
       const style = document.createElement('style');
@@ -201,7 +201,7 @@ export class WebGLGradientService {
       style.innerHTML = keyframes;
       document.head.appendChild(style);
     }
-    
+
     // Apply animation
     container.style.backgroundSize = '400% 400%';
     container.style.animation = 'gradientShift 15s ease infinite';
@@ -282,7 +282,7 @@ class GradientInstance {
     options.element.appendChild(this.canvas);
 
     this.gl = this.canvas.getContext('webgl') as WebGLRenderingContext;
-    
+
     if (!this.gl) {
       console.error('WebGL not supported');
       return;
@@ -311,12 +311,12 @@ class GradientInstance {
       // Use passive event listener for better performance
       window.addEventListener('scroll', this.handleScroll.bind(this), { passive: true });
       this.scrollListenerAdded = true;
-      
+
       // Initial scroll position
       this.scrollY = window.scrollY || window.pageYOffset;
     }
   }
-  
+
   /**
    * Handle scroll events for parallax effect
    */
@@ -361,63 +361,63 @@ class GradientInstance {
       float snoise(vec3 v) {
         const vec2 C = vec2(1.0/6.0, 1.0/3.0);
         const vec4 D = vec4(0.0, 0.5, 1.0, 2.0);
-        
+
         // First corner
         vec3 i  = floor(v + dot(v, C.yyy));
         vec3 x0 = v - i + dot(i, C.xxx);
-        
+
         // Other corners
         vec3 g = step(x0.yzx, x0.xyz);
         vec3 l = 1.0 - g;
         vec3 i1 = min(g.xyz, l.zxy);
         vec3 i2 = max(g.xyz, l.zxy);
-        
+
         vec3 x1 = x0 - i1 + C.xxx;
         vec3 x2 = x0 - i2 + C.yyy;
         vec3 x3 = x0 - D.yyy;
-        
+
         // Permutations
         i = mod(i, 289.0);
         vec4 p = permute(permute(permute(
                   i.z + vec4(0.0, i1.z, i2.z, 1.0))
                 + i.y + vec4(0.0, i1.y, i2.y, 1.0))
                 + i.x + vec4(0.0, i1.x, i2.x, 1.0));
-                
+
         // Gradients
         float n_ = 1.0/7.0;
         vec3 ns = n_ * D.wyz - D.xzx;
-        
+
         vec4 j = p - 49.0 * floor(p * ns.z * ns.z);
-        
+
         vec4 x_ = floor(j * ns.z);
         vec4 y_ = floor(j - 7.0 * x_);
-        
+
         vec4 x = x_ *ns.x + ns.yyyy;
         vec4 y = y_ *ns.x + ns.yyyy;
         vec4 h = 1.0 - abs(x) - abs(y);
-        
+
         vec4 b0 = vec4(x.xy, y.xy);
         vec4 b1 = vec4(x.zw, y.zw);
-        
+
         vec4 s0 = floor(b0)*2.0 + 1.0;
         vec4 s1 = floor(b1)*2.0 + 1.0;
         vec4 sh = -step(h, vec4(0.0));
-        
+
         vec4 a0 = b0.xzyw + s0.xzyw*sh.xxyy;
         vec4 a1 = b1.xzyw + s1.xzyw*sh.zzww;
-        
+
         vec3 p0 = vec3(a0.xy, h.x);
         vec3 p1 = vec3(a0.zw, h.y);
         vec3 p2 = vec3(a1.xy, h.z);
         vec3 p3 = vec3(a1.zw, h.w);
-        
+
         // Normalise gradients
         vec4 norm = taylorInvSqrt(vec4(dot(p0, p0), dot(p1, p1), dot(p2, p2), dot(p3, p3)));
         p0 *= norm.x;
         p1 *= norm.y;
         p2 *= norm.z;
         p3 *= norm.w;
-        
+
         // Mix final noise value
         vec4 m = max(0.6 - vec4(dot(x0, x0), dot(x1, x1), dot(x2, x2), dot(x3, x3)), 0.0);
         m = m * m;
@@ -427,41 +427,41 @@ class GradientInstance {
       void main() {
         // Normalized pixel coordinates
         vec2 uv = vUv;
-        
+
         // Apply parallax effect if enabled
         if (u_parallax_enabled > 0.5) {
           uv.y += u_scroll_offset;
         }
-        
+
         // Time-based animation
         float time = u_time * 0.15;
-        
+
         // Create multiple noise layers for more organic look
-        float noise1 = snoise(vec3(uv * 1.5, time * 0.5)) * u_amplitude;
-        float noise2 = snoise(vec3(uv * 3.0, time * 0.7)) * u_amplitude * 0.6;
-        float noise3 = snoise(vec3(uv * 6.0, time * 0.2)) * u_amplitude * 0.3;
-        
+        float noise1 = snoise(vec3(uv * 0.8, time * 0.3)) * u_amplitude * 1.5; // Larger primary shapes
+        float noise2 = snoise(vec3(uv * 1.5, time * 0.4)) * u_amplitude * 0.7; // Medium details
+        float noise3 = snoise(vec3(uv * 3.0, time * 0.5)) * u_amplitude * 0.3; // Smaller details
+
         // Combined noise
         float noiseValue = noise1 + noise2 + noise3;
-        
+
         // Map noise to color index (0-1 range)
         float colorPosition = (noiseValue + 1.0) * 0.5;
-        
+
         // Blend between colors based on noise value
         vec3 color = u_colors[0];
-        
+
         // Smooth color transitions
         for (int i = 1; i < 4; i++) {
           float blend = smoothstep(float(i-1) / 3.0, float(i) / 3.0, colorPosition);
           color = mix(color, u_colors[i], blend);
         }
-        
+
         // Apply darker top if enabled
         if (u_darker_top > 0.5) {
           float darkness = 1.0 - uv.y * 0.5;
           color *= darkness;
         }
-        
+
         // Output final color
         gl_FragColor = vec4(color, 1.0);
       }
@@ -470,10 +470,10 @@ class GradientInstance {
     // Create and compile shaders
     const vertexShader = this.gl.createShader(this.gl.VERTEX_SHADER);
     if (!vertexShader) throw new Error('Could not create vertex shader');
-    
+
     this.gl.shaderSource(vertexShader, vertexShaderSource);
     this.gl.compileShader(vertexShader);
-    
+
     if (!this.gl.getShaderParameter(vertexShader, this.gl.COMPILE_STATUS)) {
       console.error('Vertex shader compilation error:', this.gl.getShaderInfoLog(vertexShader));
       this.gl.deleteShader(vertexShader);
@@ -482,10 +482,10 @@ class GradientInstance {
 
     const fragmentShader = this.gl.createShader(this.gl.FRAGMENT_SHADER);
     if (!fragmentShader) throw new Error('Could not create fragment shader');
-    
+
     this.gl.shaderSource(fragmentShader, fragmentShaderSource);
     this.gl.compileShader(fragmentShader);
-    
+
     if (!this.gl.getShaderParameter(fragmentShader, this.gl.COMPILE_STATUS)) {
       console.error('Fragment shader compilation error:', this.gl.getShaderInfoLog(fragmentShader));
       this.gl.deleteShader(fragmentShader);
@@ -497,7 +497,7 @@ class GradientInstance {
     this.gl.attachShader(this.program, vertexShader);
     this.gl.attachShader(this.program, fragmentShader);
     this.gl.linkProgram(this.program);
-    
+
     if (!this.gl.getProgramParameter(this.program, this.gl.LINK_STATUS)) {
       console.error('Program linking error:', this.gl.getProgramInfoLog(this.program));
       return;
@@ -540,7 +540,7 @@ class GradientInstance {
 
   private setColors(): void {
     this.gl.useProgram(this.program);
-    
+
     // Set color uniforms
     for (let i = 0; i < 4; i++) {
       const color = i < this.config.colors.length ? this.config.colors[i] : [0, 0, 0];
@@ -551,38 +551,38 @@ class GradientInstance {
   private resize(): void {
     const parent = this.canvas.parentElement;
     if (!parent) return;
-    
+
     this.width = parent.offsetWidth;
     this.height = parent.offsetHeight;
-    
+
     this.canvas.width = this.width;
     this.canvas.height = this.height;
-    
+
     this.gl.viewport(0, 0, this.width, this.height);
-    
+
     this.gl.useProgram(this.program);
     this.gl.uniform2f(this.uniforms.u_resolution, this.width, this.height);
   }
 
   private shouldSkipFrame(): boolean {
-    return !document.body.contains(this.canvas) || 
-           !this.playing || 
+    return !document.body.contains(this.canvas) ||
+           !this.playing ||
            (this.frame % 2 === 0); // Skip every other frame for performance
   }
 
   private render(time: number): void {
     if (!this.playing) return;
-    
+
     // Clear canvas
     this.gl.clearColor(0, 0, 0, 0);
     this.gl.clear(this.gl.COLOR_BUFFER_BIT);
-    
+
     // Use program and set uniforms
     this.gl.useProgram(this.program);
     this.gl.uniform1f(this.uniforms.u_time, time * 0.001 * this.config.speed);
     this.gl.uniform1f(this.uniforms.u_amplitude, this.amplitudeValue);
     this.gl.uniform1f(this.uniforms.u_darker_top, this.darkerTop ? 1.0 : 0.0);
-    
+
     // Apply parallax if enabled
     if (this.parallax) {
       // Calculate document dimensions for scroll normalization
@@ -594,11 +594,11 @@ class GradientInstance {
         document.documentElement.scrollHeight,
         document.documentElement.offsetHeight
       );
-      
+
       // Normalize scroll position (0 to 1)
       const maxScroll = documentHeight - viewportHeight;
       const scrollProgress = maxScroll > 0 ? this.scrollY / maxScroll : 0;
-      
+
       // Apply parallax effect - smaller value for slower scroll
       this.gl.uniform1f(this.uniforms.u_scroll_offset, scrollProgress * this.parallaxIntensity * -0.2);
       this.gl.uniform1f(this.uniforms.u_parallax_enabled, 1.0);
@@ -606,7 +606,7 @@ class GradientInstance {
       this.gl.uniform1f(this.uniforms.u_scroll_offset, 0.0);
       this.gl.uniform1f(this.uniforms.u_parallax_enabled, 0.0);
     }
-    
+
     // Draw the quad
     this.gl.drawArrays(this.gl.TRIANGLE_STRIP, 0, 4);
   }
@@ -616,15 +616,15 @@ class GradientInstance {
     const animateFrame = (time: number) => {
       // Increment frame counter (used for skipping frames)
       this.frame += 1;
-      
+
       // Skip rendering if needed
       if (!this.shouldSkipFrame()) {
         this.render(time);
       }
-      
+
       this.animationFrameId = requestAnimationFrame(animateFrame);
     };
-    
+
     this.animationFrameId = requestAnimationFrame(animateFrame);
   }
 
@@ -640,7 +640,7 @@ class GradientInstance {
 
     // Remove event listeners
     window.removeEventListener('resize', this.resize.bind(this));
-    
+
     if (this.scrollListenerAdded) {
       window.removeEventListener('scroll', this.handleScroll.bind(this));
       this.scrollListenerAdded = false;
@@ -651,4 +651,4 @@ class GradientInstance {
       this.canvas.parentElement.removeChild(this.canvas);
     }
   }
-} 
+}

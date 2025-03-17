@@ -9,8 +9,8 @@ header {
   margin-bottom: rem(18px);
   background-color: var(--color-dark-wrapper-background);
   border-radius: var(--radius-20);
-  backdrop-filter: blur(20px) saturate(0);
-  -webkit-backdrop-filter: blur(20px) saturate(0);
+  backdrop-filter: blur(20px) saturate(0.5);
+  -webkit-backdrop-filter: blur(20px) saturate(0.5);
 
   @media only screen and (max-width: $medium) {
     border-radius: var(--radius-16);
