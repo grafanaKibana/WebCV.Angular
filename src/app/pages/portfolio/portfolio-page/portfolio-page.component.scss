@@ -1,26 +1,26 @@
 @import '../../../../assets/styles/utility';
 
 h1 {
-  margin-left: rem(16px);
+  margin-left: var(--spacing-4);
 }
 
 .grid-wrapper {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  grid-gap: rem(15px);
+  grid-gap: var(--spacing-4);
 
   @include respond-laptop {
     grid-template-columns: repeat(3, 1fr);
-    grid-gap: rem(8px);
+    grid-gap: var(--spacing-2);
   }
 
   @include respond-tablet {
     grid-template-columns: repeat(2, 1fr);
-    grid-gap: rem(5px);
+    grid-gap: var(--spacing-2);
   }
 
   @include respond-tablet-sm {
     grid-template-columns: 1fr;
-    grid-gap: rem(5px);
+    grid-gap: var(--spacing-2);
   }
 }

@@ -6,6 +6,6 @@ div {
   width: 1px;
 
   @include respond-mobile {
-    margin: 0 rem(6px);
+    margin: 0 var(--spacing-1);
   }
 }

@@ -18,23 +18,23 @@ body {
 }
 
 section {
-  padding: rem(26px);
-  margin-bottom: rem(18px);
+  padding: var(--spacing-6);
+  margin-bottom: var(--spacing-4);
   @extend .box-shadow-16;
 
   @include respond-tablet {
-    padding: rem(20px);
-    margin-bottom: rem(16px);
+    padding: var(--spacing-5);
+    margin-bottom: var(--spacing-4);
   }
 
   @include respond-tablet-sm {
-    padding: rem(18px);
-    margin-bottom: rem(14px);
+    padding: var(--spacing-4);
+    margin-bottom: var(--spacing-3);
   }
 
   @include respond-mobile {
-    padding: rem(14px);
-    margin-bottom: rem(10px);
+    padding: var(--spacing-3);
+    margin-bottom: var(--spacing-2);
   }
 }
 

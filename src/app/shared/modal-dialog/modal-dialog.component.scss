@@ -3,15 +3,15 @@
 ::ng-deep .mat-dialog-container {
   background-color: var(--color-dark-opaque-background);
   border-radius: var(--radius-20);
-  margin: rem(32px) 25%;
+  margin: var(--spacing-8) 25%;
   color: var(--color-dark-paragraph);
 
   @include respond-desktop {
-    margin: rem(32px) 15%;
+    margin: var(--spacing-8) 15%;
   }
 
   @include respond-tablet {
-    margin: rem(24px) 5%;
+    margin: var(--spacing-6) 5%;
   }
 
   /*@include respond-tablet-sm {
@@ -31,7 +31,7 @@
 
 .modal-header {
   display: flex;
-  margin: 0 0 rem(16px);
+  margin: 0 0 var(--spacing-4);
 
   h3 {
     margin: 0;
@@ -53,12 +53,12 @@
     &:hover {
       @extend .text-glow-12;
       background-color: rgba(0, 0, 0, 0.25);
-      transition: all .05s linear;
+      transition: all var(--transition-fast) var(--transition-easing);
       cursor: pointer;
     }
 
     i {
-      margin: rem(8px);
+      margin: var(--spacing-2);
 
       &:before {
         width: rem(16px);
@@ -76,10 +76,10 @@
   }
 
   .technology-wrapper {
-    margin: rem(8px) 0;
+    margin: var(--spacing-2) 0;
     justify-content: space-between;
     display: flex;
-    gap: rem(18px);
+    gap: var(--spacing-4);
 
     .technology-badge {
       @extend .box-shadow-8;
@@ -92,7 +92,7 @@
       vertical-align: baseline;
       border-radius: var(--radius-8);
       background-color: var(--color-dark-wrapper-background);
-      padding: rem(6px) rem(10px);
+      padding: var(--spacing-1) var(--spacing-2);
     }
   }
 

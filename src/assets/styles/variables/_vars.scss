@@ -13,8 +13,8 @@ $baseSystemFontSize: 16px;
   --color-dark-block-background: rgba(0, 0, 0, 0.25);
   --color-dark-wrapper-background: rgba(0, 0, 0, 0.75);
   --color-dark-opaque-background: rgba(40, 40, 40, 0.98);
-  --color-dark-heading: #FCFCFC;;
-  --color-dark-paragraph: #D6D6D6;
+  --color-dark-heading: #FCFCFC;
+  --color-dark-paragraph: #E0E0E0;
   --color-dark-accent: rgba(164, 229, 250, 0.8);
   --color-dark-neon-glow: rgb(0, 187, 255);
   --color-dark-gray-glow: rgba(255, 255, 255, 0.2);
@@ -22,13 +22,38 @@ $baseSystemFontSize: 16px;
   --color-dark-separator: rgba(255, 255, 255, 0.125);
   --color-dark-error: #B84C4C;
 
-  // Radius
-  --radius-128: 128px;
-  --radius-32: 32px;
-  --radius-20: 20px;
-  --radius-18: 18px;
-  --radius-16: 16px;
-  --radius-14: 14px;
-  --radius-12: 12px;
+  // Spacing Scale (4px base unit)
+  --spacing-1: 4px;
+  --spacing-2: 8px;
+  --spacing-3: 12px;
+  --spacing-4: 16px;
+  --spacing-5: 20px;
+  --spacing-6: 24px;
+  --spacing-8: 32px;
+  --spacing-10: 40px;
+  --spacing-12: 48px;
+  --spacing-16: 64px;
+
+  // Common spacing variables
+  --spacing-xs: var(--spacing-1);
+  --spacing-sm: var(--spacing-2);
+  --spacing-md: var(--spacing-4);
+  --spacing-lg: var(--spacing-6);
+  --spacing-xl: var(--spacing-8);
+  --spacing-2xl: var(--spacing-12);
+  --spacing-3xl: var(--spacing-16);
+
+  // Transition Timing
+  --transition-fast: 0.15s;
+  --transition-normal: 0.25s;
+  --transition-slow: 0.4s;
+  --transition-easing: ease-out;
+
+  // Border Radius (consolidated set)
+  --radius-4: 4px;
   --radius-8: 8px;
+  --radius-12: 12px;
+  --radius-16: 16px;
+  --radius-20: 20px;
+  --radius-32: 32px;
 }

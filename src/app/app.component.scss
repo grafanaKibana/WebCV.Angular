@@ -1,7 +1,7 @@
 @import '../assets/styles/utility';
 
 .wrapper {
-  margin: rem(36px) rem(190px) 0;
+  margin: var(--spacing-8) rem(190px) 0;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -9,23 +9,23 @@
   z-index: 1;
 
   @include respond-desktop {
-    margin: rem(36px) rem(75px) 0;
+    margin: var(--spacing-8) rem(75px) 0;
   }
 
   @include respond-tablet {
     margin: 0;
-    padding: rem(16px) rem(16px) 0;
+    padding: var(--spacing-4) var(--spacing-4) 0;
     border-radius: 0 0 var(--radius-32) var(--radius-32) !important;
   }
 
   @include respond-tablet-sm {
     margin: 0;
-    padding: rem(10px) rem(10px) 0;
+    padding: var(--spacing-2) var(--spacing-2) 0;
   }
 
   @include respond-mobile {
     margin: 0;
-    padding: rem(8px) rem(8px) 0;
+    padding: var(--spacing-2) var(--spacing-2) 0;
   }
 }
 
@@ -37,15 +37,15 @@
   background-color: var(--color-dark-wrapper-background);
   backdrop-filter: blur(20px) saturate(0.5);
   -webkit-backdrop-filter: blur(20px) saturate(0.5);
-  padding: rem(18px);
+  padding: var(--spacing-4);
   flex: 1;
 
   @include respond-tablet {
-    padding: rem(14px);
+    padding: var(--spacing-3);
   }
 
   @include respond-mobile {
-    padding: rem(10px);
+    padding: var(--spacing-2);
     border-radius: var(--radius-16);
   }
 }

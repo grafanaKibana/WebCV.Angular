@@ -65,17 +65,25 @@
 }
 
 .box-shadow {
-  &-4{
-    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  &-4 {
+    box-shadow: 
+      0 2px 4px 0 rgba(0, 0, 0, 0.12), 
+      0 1px 2px 0 rgba(0, 0, 0, 0.08);
   }
-  &-8{
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  &-8 {
+    box-shadow: 
+      0 4px 6px -1px rgba(0, 0, 0, 0.12), 
+      0 2px 4px -1px rgba(0, 0, 0, 0.08);
   }
-  &-12{
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  &-12 {
+    box-shadow: 
+      0 10px 15px -3px rgba(0, 0, 0, 0.12), 
+      0 4px 6px -2px rgba(0, 0, 0, 0.08);
   }
-  &-16{
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  &-16 {
+    box-shadow: 
+      0 20px 25px -5px rgba(0, 0, 0, 0.12), 
+      0 10px 10px -5px rgba(0, 0, 0, 0.08);
   }
 }
 
@@ -94,8 +102,8 @@
   
   &-fluid {
     width: 100%;
-    padding-left: 20px;
-    padding-right: 20px;
+    padding-left: var(--spacing-5);
+    padding-right: var(--spacing-5);
   }
 
   &-wide {
@@ -146,43 +154,48 @@
 // Responsive gaps
 .gap {
   &-responsive {
-    gap: 2rem;
+    gap: var(--spacing-8);
     
     @include respond-tablet {
-      gap: 1.5rem;
+      gap: var(--spacing-6);
     }
     
     @include respond-mobile {
-      gap: 1rem;
+      gap: var(--spacing-4);
     }
   }
 }
 
-// Responsive spacing
-@each $space in (1, 2, 3, 4, 5) {
-  $value: $space * 0.25rem;
-  
-  .m-responsive-#{$space} {
-    margin: $value * 4;
+// Responsive spacing utilities using spacing scale
+@each $size, $value in (
+  'xs': var(--spacing-1),
+  'sm': var(--spacing-2),
+  'md': var(--spacing-4),
+  'lg': var(--spacing-6),
+  'xl': var(--spacing-8),
+  '2xl': var(--spacing-12)
+) {
+  .m-responsive-#{$size} {
+    margin: $value;
     
     @include respond-tablet {
-      margin: $value * 3;
+      margin: calc(#{$value} * 0.75);
     }
     
     @include respond-mobile {
-      margin: $value * 2;
+      margin: calc(#{$value} * 0.5);
     }
   }
   
-  .p-responsive-#{$space} {
-    padding: $value * 4;
+  .p-responsive-#{$size} {
+    padding: $value;
     
     @include respond-tablet {
-      padding: $value * 3;
+      padding: calc(#{$value} * 0.75);
     }
     
     @include respond-mobile {
-      padding: $value * 2;
+      padding: calc(#{$value} * 0.5);
     }
   }
 }
