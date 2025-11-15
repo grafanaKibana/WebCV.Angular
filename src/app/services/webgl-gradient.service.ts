@@ -306,7 +306,7 @@ class GradientInstance {
     this.darkerTop = this.config.darkerTop;
     this.parallax = this.config.parallax;
     this.parallaxIntensity = this.config.parallaxIntensity;
-    
+
     // Initialize color interpolation
     this.currentColors = JSON.parse(JSON.stringify(this.config.colors));
     this.targetColors = JSON.parse(JSON.stringify(this.config.colors));
@@ -477,7 +477,7 @@ class GradientInstance {
 
         // Time-based animation with subtle variation
         float time = u_time * 0.22; // Increased from 0.15 for more noticeable movement
-        
+
         // Add subtle pulsing effect for more "alive" feeling
         float pulse = sin(u_time * 0.08) * 0.05 + 1.0; // Very subtle breathing effect
 
@@ -507,6 +507,9 @@ class GradientInstance {
           float darkness = 1.0 - uv.y * 0.5;
           color *= darkness;
         }
+
+        // Increase brightness by 10%
+        color *= 1.15;
 
         // Output final color
         gl_FragColor = vec4(color, 1.0);
@@ -613,7 +616,7 @@ class GradientInstance {
 
     const elapsed = currentTime - this.transitionStartTime;
     const progress = Math.min(elapsed / this.transitionDuration, 1.0);
-    
+
     // Use ease-in-out easing function
     const easedProgress = progress < 0.5
       ? 2 * progress * progress
@@ -623,7 +626,7 @@ class GradientInstance {
     for (let i = 0; i < 4; i++) {
       const startColor = this.currentColors[i] || [0, 0, 0];
       const endColor = this.targetColors[i] || [0, 0, 0];
-      
+
       this.currentColors[i] = [
         startColor[0] + (endColor[0] - startColor[0]) * easedProgress,
         startColor[1] + (endColor[1] - startColor[1]) * easedProgress,
