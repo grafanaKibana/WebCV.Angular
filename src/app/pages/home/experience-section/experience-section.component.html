@@ -14,7 +14,7 @@
         <i class="fa-angle-down fa-solid"></i>
       </div>
     </div>
-    <div *ngIf="allToggles[i]" class="section-item-content" [@slideInOut] = "allToggles[i]">
+    <div class="section-item-content" [@slideInOut]="allToggles[i].toString()">
       <h5 *ngIf="experience.description.aboutProject">About project:</h5>
       <p *ngIf="experience.description.aboutProject">{{experience.description.aboutProject}}</p>
 

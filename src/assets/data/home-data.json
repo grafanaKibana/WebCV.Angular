@@ -145,7 +145,7 @@
         },
         {
           "technology": "ElasticSearch",
-          "level": 1
+          "level": 2
         }
       ]
     },
@@ -184,7 +184,28 @@
         },
         {
           "technology": "Prompt Engineering",
-          "level": 1
+          "level": 2
+        },
+        {
+          "technology": "Azure AI Services",
+          "level": 2
+        }
+      ]
+    },
+    {
+      "name": "CI / CD",
+      "skills": [
+        {
+          "technology": "Jenkins",
+          "level": 2
+        },
+        {
+          "technology": "Azure DevOps",
+          "level": 2
+        },
+        {
+          "technology": "GitHub Actions",
+          "level": 2
         }
       ]
     },
@@ -197,15 +218,11 @@
         },
         {
           "technology": "Kibana",
-          "level": 2
+          "level": 1
         },
         {
           "technology": "ArgoCD",
           "level": 1
-        },
-        {
-          "technology": "Jenkins",
-          "level": 2
         },
         {
           "technology": "Git",

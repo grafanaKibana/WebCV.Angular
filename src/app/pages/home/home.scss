@@ -94,15 +94,39 @@ section {
     }
 
     &-content {
-      //overflow: hidden;
+      overflow: hidden;
       color: var(--color-dark-paragraph);
-      margin-top: rem(5px);
+      margin-top: rem(8px);
       margin-bottom: 0;
+      padding-top: rem(8px);
       padding-right: rem(30px);
+      padding-bottom: rem(8px);
+      box-sizing: border-box;
+      transform: translateZ(0);
+      backface-visibility: hidden;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      contain: layout style paint;
+      isolation: isolate;
 
       p {
         cursor: text;
+        margin: 0 0 rem(8px) 0;
+
+        &:last-child {
+          margin-bottom: 0;
+        }
       }
+
+      h5 {
+        margin: rem(12px) 0 rem(6px) 0;
+        font-weight: 600;
+
+        &:first-child {
+          margin-top: 0;
+        }
+      }
+
     }
 
     &-toggler {

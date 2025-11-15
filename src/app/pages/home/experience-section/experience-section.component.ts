@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ExperienceModel } from '../interfaces/experienceModel';
 import { HomeDataService } from '../../../services/home-data.service';
-import { animate, style, transition, trigger, group } from '@angular/animations';
+import { animate, style, transition, trigger, state } from '@angular/animations';
 
 @Component({
   selector: 'app-experience-section',
@@ -9,18 +9,32 @@ import { animate, style, transition, trigger, group } from '@angular/animations'
   styleUrls: ['./experience-section.component.scss'],
   animations: [
     trigger('slideInOut', [
-      transition('void => *', [
-        style({ height: 0, opacity: 0, overflow: 'hidden' }),
-        group([
-          animate('100ms ease-in', style({ height: '*' })),
-          animate('300ms ease-in', style({ opacity: 1 }))
-        ])
+      state('false', style({
+        height: '0',
+        opacity: 0,
+        overflow: 'hidden',
+        marginTop: '0',
+        paddingTop: '0',
+        paddingBottom: '0',
+        transform: 'translateZ(0)',
+        willChange: 'height, opacity, margin-top, padding-top, padding-bottom'
+      })),
+      state('true', style({
+        height: '*',
+        opacity: 1,
+        overflow: 'visible',
+        transform: 'translateZ(0)',
+        willChange: 'auto'
+      })),
+      transition('false => true', [
+        animate('350ms cubic-bezier(0.4, 0.0, 0.2, 1)')
       ]),
-      transition('* => void', [
-        group([
-          animate('100ms ease-out', style({ height: 0, overflow: 'hidden' })),
-          animate('200ms ease-out', style({ opacity: 0 }))
-        ])
+      transition('true => false', [
+        style({ 
+          overflow: 'hidden',
+          willChange: 'height, opacity, margin-top, padding-top, padding-bottom'
+        }),
+        animate('300ms cubic-bezier(0.4, 0.0, 0.2, 1)')
       ])
     ])
   ]

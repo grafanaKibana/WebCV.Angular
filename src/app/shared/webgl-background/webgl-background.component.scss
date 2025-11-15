@@ -15,4 +15,12 @@
   // Ensure smooth rendering
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  
+  // Smooth background color transition (for CSS fallback)
+  transition: background 0.5s ease-in-out;
+  
+  // Canvas is always visible - color transitions happen in WebGL shader
+  canvas {
+    opacity: 1;
+  }
 } 

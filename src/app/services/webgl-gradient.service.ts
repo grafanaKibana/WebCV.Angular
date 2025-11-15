@@ -12,43 +12,62 @@ export class WebGLGradientService {
   private gradients: Map<string, GradientInstance> = new Map();
 
   // Define color schemes as a Map with theme names as keys
+  // Curated to perfectly complement the dark theme and cyan accent colors
   private colorSchemesMap = new Map<string, number[][]>([
-    ['Green Teal', [
-      [62, 81, 63],     // Dark green (matches #123524 theme)
-      [99, 150, 112],   // Medium green
-      [32, 105, 96],    // Teal
-      [48, 77, 109],    // Blue-green
-    ]],
-    ['Calm White', [
-      [195, 228, 255],  // Light blue (#c3e4ff)
-      [110, 195, 244],  // Sky blue (#6ec3f4)
-      [234, 226, 255],  // Pale lavender (#eae2ff)
-      [185, 190, 255],  // Periwinkle (#b9beff)
-    ]],
     ['Ocean Blue', [
       [19, 41, 75],     // Dark navy
       [34, 87, 126],    // Navy blue
       [56, 149, 211],   // Medium blue
       [88, 204, 237],   // Light blue
     ]],
-    ['Autumn', [
-      [145, 62, 33],    // Rust
-      [224, 128, 68],   // Orange
-      [233, 215, 85],   // Yellow
-      [85, 105, 45],    // Olive green
+    ['Neon Cyan', [
+      [0, 20, 40],      // Deep midnight blue
+      [0, 50, 80],      // Dark cyan-blue
+      [0, 150, 200],    // Bright cyan
+      [0, 187, 255],    // Neon cyan (matches accent)
     ]],
-    ['Mint Fresh', [
-      [83, 223, 131],   // Bright green (#53DF83)
-      [71, 210, 233],   // Cyan blue (#47D2E9)
-      [63, 63, 63],     // Dark gray (#3F3F3F)
-      [238, 238, 238],  // Light gray (#EEEEEE)
+    ['Deep Purple', [
+      [20, 15, 35],     // Deep violet-black
+      [45, 30, 70],     // Rich purple
+      [90, 60, 140],    // Vibrant purple
+      [140, 100, 200],  // Light lavender
+    ]],
+    ['Amber Glow', [
+      [40, 25, 15],     // Deep brown-orange
+      [80, 50, 25],     // Dark amber
+      [200, 120, 50],   // Warm amber
+      [255, 180, 100],  // Golden amber
+    ]],
+    ['Emerald Forest', [
+      [15, 30, 20],     // Deep forest green
+      [25, 60, 40],     // Dark emerald
+      [40, 120, 80],    // Rich emerald
+      [80, 200, 140],   // Bright mint
+    ]],
+    ['Magenta Dream', [
+      [35, 15, 30],     // Deep magenta-black
+      [70, 25, 60],     // Dark magenta
+      [150, 50, 130],   // Vibrant magenta
+      [220, 100, 200],  // Soft pink-magenta
+    ]],
+    ['Slate Storm', [
+      [20, 25, 30],     // Charcoal
+      [40, 50, 60],     // Dark slate
+      [80, 100, 120],   // Medium slate
+      [140, 160, 180],  // Light slate blue
+    ]],
+    ['Sunset Horizon', [
+      [30, 20, 35],     // Deep purple-pink
+      [80, 40, 60],     // Dark rose
+      [180, 80, 100],   // Coral pink
+      [255, 150, 120],  // Peach
     ]]
   ]);
 
   private config = {
-    defaultColors: this.colorSchemesMap.get('Green Teal')!, // Use Green Teal as default
-    defaultSpeed: 0.5,
-    defaultAmplitude: 0.2,
+    defaultColors: this.colorSchemesMap.get('Neon Cyan')!, // Use Neon Cyan as default (matches accent)
+    defaultSpeed: 0.5,      // Increased for more movement
+    defaultAmplitude: 0.25, // Slightly increased for more visible variation
     parallaxIntensity: 0.5, // Default parallax intensity
   };
 
@@ -219,6 +238,19 @@ export class WebGLGradientService {
   }
 
   /**
+   * Transition existing gradient to new colors smoothly
+   */
+  transitionGradientColors(container: HTMLElement, newColors: number[][]): void {
+    const id = container.getAttribute('data-gradient-id');
+    if (id && this.gradients.has(id)) {
+      const gradient = this.gradients.get(id);
+      if (gradient) {
+        gradient.transitionToColors(newColors);
+      }
+    }
+  }
+
+  /**
    * Remove all gradients and clean up
    */
   destroyAll(): void {
@@ -248,6 +280,12 @@ class GradientInstance {
   private parallaxIntensity: number = 0.5;
   private scrollY: number = 0;
   private scrollListenerAdded: boolean = false;
+  // Color interpolation properties
+  private currentColors: number[][] = [];
+  private targetColors: number[][] = [];
+  private transitionStartTime: number = 0;
+  private isTransitioning: boolean = false;
+  private transitionDuration: number = 500; // 0.5s in milliseconds
 
   constructor(options: {
     element: HTMLElement;
@@ -268,6 +306,10 @@ class GradientInstance {
     this.darkerTop = this.config.darkerTop;
     this.parallax = this.config.parallax;
     this.parallaxIntensity = this.config.parallaxIntensity;
+    
+    // Initialize color interpolation
+    this.currentColors = JSON.parse(JSON.stringify(this.config.colors));
+    this.targetColors = JSON.parse(JSON.stringify(this.config.colors));
 
     // Setup canvas and context
     this.canvas = document.createElement('canvas');
@@ -433,16 +475,20 @@ class GradientInstance {
           uv.y += u_scroll_offset;
         }
 
-        // Time-based animation
-        float time = u_time * 0.15;
+        // Time-based animation with subtle variation
+        float time = u_time * 0.22; // Increased from 0.15 for more noticeable movement
+        
+        // Add subtle pulsing effect for more "alive" feeling
+        float pulse = sin(u_time * 0.08) * 0.05 + 1.0; // Very subtle breathing effect
 
-        // Create multiple noise layers for more organic look
-        float noise1 = snoise(vec3(uv * 0.8, time * 0.3)) * u_amplitude * 1.5; // Larger primary shapes
-        float noise2 = snoise(vec3(uv * 1.5, time * 0.4)) * u_amplitude * 0.7; // Medium details
-        float noise3 = snoise(vec3(uv * 3.0, time * 0.5)) * u_amplitude * 0.3; // Smaller details
+        // Create multiple noise layers with varied speeds for organic, flowing movement
+        float noise1 = snoise(vec3(uv * 0.75, time * 0.35)) * u_amplitude * 1.6 * pulse; // Larger primary shapes
+        float noise2 = snoise(vec3(uv * 1.4, time * 0.5)) * u_amplitude * 0.8; // Medium details
+        float noise3 = snoise(vec3(uv * 2.8, time * 0.65)) * u_amplitude * 0.35; // Smaller details
+        float noise4 = snoise(vec3(uv * 4.5, time * 0.8)) * u_amplitude * 0.15; // Fine texture layer
 
-        // Combined noise
-        float noiseValue = noise1 + noise2 + noise3;
+        // Combined noise with all layers for richer, more dynamic appearance
+        float noiseValue = noise1 + noise2 + noise3 + noise4;
 
         // Map noise to color index (0-1 range)
         float colorPosition = (noiseValue + 1.0) * 0.5;
@@ -541,10 +587,57 @@ class GradientInstance {
   private setColors(): void {
     this.gl.useProgram(this.program);
 
-    // Set color uniforms
+    // Set color uniforms using current interpolated colors
     for (let i = 0; i < 4; i++) {
-      const color = i < this.config.colors.length ? this.config.colors[i] : [0, 0, 0];
+      const color = i < this.currentColors.length ? this.currentColors[i] : [0, 0, 0];
       this.gl.uniform3fv(this.uniforms.u_colors[i], new Float32Array(color));
+    }
+  }
+
+  /**
+   * Smoothly transition to new colors
+   */
+  transitionToColors(newColors: number[][]): void {
+    // Convert to normalized colors (0-1 range)
+    this.targetColors = newColors.map(color => color.map(c => c / 255));
+    // Use requestAnimationFrame time format (DOMHighResTimeStamp)
+    this.transitionStartTime = performance.now();
+    this.isTransitioning = true;
+  }
+
+  /**
+   * Update color interpolation
+   */
+  private updateColorTransition(currentTime: number): void {
+    if (!this.isTransitioning) return;
+
+    const elapsed = currentTime - this.transitionStartTime;
+    const progress = Math.min(elapsed / this.transitionDuration, 1.0);
+    
+    // Use ease-in-out easing function
+    const easedProgress = progress < 0.5
+      ? 2 * progress * progress
+      : 1 - Math.pow(-2 * progress + 2, 2) / 2;
+
+    // Interpolate each color
+    for (let i = 0; i < 4; i++) {
+      const startColor = this.currentColors[i] || [0, 0, 0];
+      const endColor = this.targetColors[i] || [0, 0, 0];
+      
+      this.currentColors[i] = [
+        startColor[0] + (endColor[0] - startColor[0]) * easedProgress,
+        startColor[1] + (endColor[1] - startColor[1]) * easedProgress,
+        startColor[2] + (endColor[2] - startColor[2]) * easedProgress
+      ];
+    }
+
+    // Update colors in shader
+    this.setColors();
+
+    // Check if transition is complete
+    if (progress >= 1.0) {
+      this.isTransitioning = false;
+      this.currentColors = JSON.parse(JSON.stringify(this.targetColors));
     }
   }
 
@@ -566,12 +659,17 @@ class GradientInstance {
 
   private shouldSkipFrame(): boolean {
     return !document.body.contains(this.canvas) ||
-           !this.playing ||
-           (this.frame % 2 === 0); // Skip every other frame for performance
+           !this.playing;
+           // Removed frame skipping for smoother, more fluid animation
   }
 
   private render(time: number): void {
     if (!this.playing) return;
+
+    // Update color transition if in progress (time is in milliseconds from performance.now())
+    if (this.isTransitioning) {
+      this.updateColorTransition(time);
+    }
 
     // Clear canvas
     this.gl.clearColor(0, 0, 0, 0);

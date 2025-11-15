@@ -6,9 +6,9 @@ import { BlogPageComponent } from './pages/blog/blog-page/blog-page.component';
 import { PortfolioPageComponent } from './pages/portfolio/portfolio-page/portfolio-page.component';
 
 const routes: Routes = [
-  { path: '', component: HomePageComponent },
-  { path: 'portfolio', component: PortfolioPageComponent },
-  { path: 'blog', component: BlogPageComponent }
+  { path: '', component: HomePageComponent, data: { animation: 'HomePage' } },
+  { path: 'portfolio', component: PortfolioPageComponent, data: { animation: 'PortfolioPage' } },
+  { path: 'blog', component: BlogPageComponent, data: { animation: 'BlogPage' } }
 ]
 
 

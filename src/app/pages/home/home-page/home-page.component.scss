@@ -7,6 +7,14 @@
   
   @include respond-laptop {
     grid-template-columns: 100%;
+    grid-gap: rem(12px);
+  }
+
+  @include respond-tablet-sm {
+    grid-gap: rem(10px);
+  }
+
+  @include respond-mobile {
     grid-gap: rem(8px);
   }
 }

@@ -6,9 +6,15 @@
 @import 'variables/mixins';
 @import 'variables/vars';
 
+html {
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
 body {
   background-color: black;
   margin: 0;
+  overflow-x: hidden;
 }
 
 section {
@@ -16,13 +22,19 @@ section {
   margin-bottom: rem(18px);
   @extend .box-shadow-16;
 
+  @include respond-tablet {
+    padding: rem(20px);
+    margin-bottom: rem(16px);
+  }
+
   @include respond-tablet-sm {
+    padding: rem(18px);
     margin-bottom: rem(14px);
   }
 
   @include respond-mobile {
-    padding: rem(16px);
-    margin-bottom: rem(12px);
+    padding: rem(14px);
+    margin-bottom: rem(10px);
   }
 }
 

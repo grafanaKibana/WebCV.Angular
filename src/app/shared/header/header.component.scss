@@ -16,6 +16,11 @@ header {
     border-radius: var(--radius-16);
   }
 
+  @include respond-mobile {
+    border-radius: var(--radius-12);
+    margin-bottom: rem(12px);
+  }
+
   ul {
     display: flex;
     justify-content: flex-start;

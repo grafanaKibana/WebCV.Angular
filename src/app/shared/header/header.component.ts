@@ -31,16 +31,27 @@ export class HeaderComponent implements OnInit {
   }
 
   /**
-   * Apply a random theme to all gradient containers
+   * Apply a random theme to all gradient containers with smooth transition
    */
   setRandomTheme(): void {
     // Find all WebGL background containers in the document
     const containers = document.querySelectorAll('[data-gradient-id]');
 
-    // Remove and reapply gradients with a random theme
+    // Get random color scheme
+    const randomColors = this.webglGradientService.getRandomColorScheme();
+
+    // Transition existing gradients to new colors smoothly
     containers.forEach(container => {
-      this.webglGradientService.removeGradient(container as HTMLElement);
-      this.webglGradientService.applyGradient(container as HTMLElement);
+      const element = container as HTMLElement;
+      const id = element.getAttribute('data-gradient-id');
+      
+      if (id) {
+        // If gradient exists, transition smoothly
+        this.webglGradientService.transitionGradientColors(element, randomColors);
+      } else {
+        // If no gradient exists, create new one
+        this.webglGradientService.applyGradient(element);
+      }
     });
   }
 }

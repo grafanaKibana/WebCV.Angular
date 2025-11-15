@@ -8,8 +8,8 @@ import { WebGLGradientService } from '../../services/webgl-gradient.service';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class WebGLBackgroundComponent implements OnInit, OnDestroy {
-  speed = 0.3;             // Animation speed
-  amplitude = 0.7;         // Wave amplitude (intensity)
+  speed = 0.5;             // Animation speed (increased for more movement)
+  amplitude = 0.85;        // Wave amplitude (increased for more visible variation)
   darkerTop = false;       // Enable darker top effect
   themeName?: string;      // Name of predefined color scheme
   parallax = true;         // Enable parallax scrolling effect

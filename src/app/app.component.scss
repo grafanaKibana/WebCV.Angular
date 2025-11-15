@@ -22,6 +22,11 @@
     margin: 0;
     padding: rem(10px) rem(10px) 0;
   }
+
+  @include respond-mobile {
+    margin: 0;
+    padding: rem(8px) rem(8px) 0;
+  }
 }
 
 .main-container {
@@ -38,4 +43,14 @@
   @include respond-tablet {
     padding: rem(14px);
   }
+
+  @include respond-mobile {
+    padding: rem(10px);
+    border-radius: var(--radius-16);
+  }
+}
+
+.route-container {
+  position: relative;
+  min-height: 100%;
 }

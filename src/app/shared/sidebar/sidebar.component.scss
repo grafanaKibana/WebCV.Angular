@@ -39,6 +39,8 @@ aside {
 
   @include respond-mobile {
     padding: rem(10px);
+    position: relative;
+    margin-bottom: rem(12px);
   }
 
   .aside-heading {
