@@ -19,7 +19,7 @@ export class BlogPageComponent implements OnInit {
       imagePath: ""
     },
     {
-      id: 1,
+      id: 2,
       headline: "How to design dbContext",
       summary: "This article will show you easy and fast example how to design your code-first dbContext in Entity Framework CoreThis article will show you easy and fast example how to desing yout code-first dbContext in Entity Framework CoreThis article will show you easy and fast example how to desing yout code-first dbContext in Entity Framework CoreThis article will show you easy and fast example how to desing yout code-first dbContext in Entity Framework CoreThis article will show you easy and fast example how to desing yout code-first dbContext in Entity Framework CoreThis article will show you easy and fast example how to desing yout code-first dbContext in Entity Framework CoreThis article will show you easy and fast example how to desing yout code-first dbContext in Entity Framework CoreThis article will show you easy and fast example how to desing yout code-first dbContext in Entity Framework Core",
       content: "Some text",

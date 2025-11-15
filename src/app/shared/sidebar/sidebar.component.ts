@@ -1,26 +1,46 @@
 import { Component, OnInit } from '@angular/core';
+import { HomeDataService, SidebarInfo } from '../../services/home-data.service';
 
 @Component({
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.scss']
 })
-export class SidebarComponent {
-  sidebarInfo = {
-    firstName: 'Nikita',
-    lastName: 'Reshetnik',
-    positionTitle: 'AI Engineer + .NET Developer',
-    city: 'Kyiv',
-    country: 'Ukraine',
-    email: 'reshetnik.nikita@gmail.com',
-    phone: '+38(068)752-14-48',
-    telegram: '@reshetnigram',
-  }
+export class SidebarComponent implements OnInit {
+  sidebarInfo: SidebarInfo = {
+    firstName: '',
+    lastName: '',
+    positionTitle: '',
+    city: '',
+    country: '',
+    email: '',
+    phone: '',
+    telegram: '',
+    links: {
+      gitHubLink: '',
+      linkedInLink: '',
+      repositoryLink: ''
+    }
+  };
 
   links = {
-    gitHubLink: 'https://github.com/grafanaKibana',
-    linkedInLink: 'https://www.linkedin.com/in/nikitareshetnik/',
-    repositoryLink: 'https://github.com/grafanaKibana/WebCV.Angular',
+    gitHubLink: '',
+    linkedInLink: '',
+    repositoryLink: ''
+  };
+
+  constructor(private homeDataService: HomeDataService) {}
+
+  ngOnInit(): void {
+    this.homeDataService.getSidebarInfo().subscribe({
+      next: (data: SidebarInfo) => {
+        this.sidebarInfo = data;
+        this.links = data.links;
+      },
+      error: (error) => {
+        console.error('Error loading sidebar data:', error);
+      }
+    });
   }
 }
 
