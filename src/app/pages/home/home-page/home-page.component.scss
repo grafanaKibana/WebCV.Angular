@@ -8,7 +8,7 @@
   @include respond-desktop {
     grid-template-columns: 360px 1fr;
   }
-
+  
   @include respond-laptop {
     grid-template-columns: 100%;
     grid-gap: var(--spacing-3);
