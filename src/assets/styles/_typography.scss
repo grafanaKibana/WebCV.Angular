@@ -9,6 +9,14 @@ body, button {
   font-size: var(--font-base-size);
   line-height: 1.6;
   font-weight: 300;
+
+  @include respond-tablet {
+    font-size: rem(15px);
+  }
+
+  @include respond-mobile {
+    font-size: rem(14px);
+  }
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -16,6 +24,10 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: 600;
   line-height: 1.25;
   margin-top: 0;
+
+  @include respond-tablet {
+    font-weight: 500;
+  }
 }
 
 h1 {
@@ -23,9 +35,19 @@ h1 {
   margin-bottom: rem(24px);
   position: relative;
 
-  @include respond-mobile {
-    font-size: rem(28px);
+  @include respond-tablet {
+    font-size: rem(32px);
+    margin-bottom: rem(22px);
+  }
+
+  @include respond-tablet-sm {
+    font-size: rem(30px);
     margin-bottom: rem(20px);
+  }
+
+  @include respond-mobile {
+    font-size: rem(26px);
+    margin-bottom: rem(18px);
   }
 
   &::before {
@@ -44,9 +66,19 @@ h2 {
   font-size: rem(28px);
   margin-bottom: rem(20px);
 
+  @include respond-tablet {
+    font-size: rem(26px);
+    margin-bottom: rem(18px);
+  }
+
+  @include respond-tablet-sm {
+    font-size: rem(24px);
+    margin-bottom: rem(16px);
+  }
+
   @include respond-mobile {
     font-size: rem(22px);
-    margin-bottom: rem(16px);
+    margin-bottom: rem(14px);
   }
 }
 
@@ -54,9 +86,19 @@ h3 {
   font-size: rem(20px);
   margin-bottom: rem(16px);
 
-  @include respond-mobile {
+  @include respond-tablet {
+    font-size: rem(19px);
+    margin-bottom: rem(14px);
+  }
+
+  @include respond-tablet-sm {
     font-size: rem(18px);
     margin-bottom: rem(12px);
+  }
+
+  @include respond-mobile {
+    font-size: rem(17px);
+    margin-bottom: rem(10px);
   }
 }
 
@@ -66,9 +108,20 @@ h4 {
   font-weight: 500;
   line-height: 1.3;
 
-  @include respond-mobile {
+  @include respond-tablet {
+    font-size: rem(17px);
+    margin-bottom: rem(11px);
+    font-weight: 400;
+  }
+
+  @include respond-tablet-sm {
     font-size: rem(16px);
     margin-bottom: rem(10px);
+  }
+
+  @include respond-mobile {
+    font-size: rem(15px);
+    margin-bottom: rem(9px);
   }
 }
 
@@ -78,8 +131,19 @@ h5 {
   margin-bottom: rem(8px);
   line-height: 1.4;
 
-  @include respond-mobile {
+  @include respond-tablet {
+    font-size: rem(15px);
+    margin-bottom: rem(7px);
+    font-weight: 400;
+  }
+
+  @include respond-tablet-sm {
     font-size: rem(14px);
+    margin-bottom: rem(6px);
+  }
+
+  @include respond-mobile {
+    font-size: rem(13px);
     margin-bottom: rem(6px);
   }
 }
@@ -88,6 +152,16 @@ h6 {
   font-size: rem(14px);
   margin-bottom: rem(8px);
   line-height: 1.4;
+
+  @include respond-tablet {
+    font-size: rem(13px);
+    margin-bottom: rem(7px);
+  }
+
+  @include respond-tablet-sm {
+    font-size: rem(12px);
+    margin-bottom: rem(6px);
+  }
 
   @include respond-mobile {
     font-size: rem(12px);
@@ -99,12 +173,28 @@ p {
   font-size: rem(15px);
   margin: 0;
   line-height: 1.6;
+
+  @include respond-tablet {
+    font-size: rem(14px);
+  }
+
+  @include respond-mobile {
+    font-size: rem(13px);
+  }
 }
 
 span {
   font-size: rem(15px);
   font-weight: 400;
   line-height: inherit;
+
+  @include respond-tablet {
+    font-size: rem(14px);
+  }
+
+  @include respond-mobile {
+    font-size: rem(13px);
+  }
 }
 
 i {
@@ -116,4 +206,12 @@ input, textarea {
   color: var(--color-dark-paragraph);
   font-family: var(--font-family);
   line-height: 1.5;
+
+  @include respond-tablet {
+    font-size: rem(14px);
+  }
+
+  @include respond-mobile {
+    font-size: rem(13px);
+  }
 }

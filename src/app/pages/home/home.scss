@@ -54,6 +54,10 @@ section {
       font-weight: 500;
       color: var(--color-dark-paragraph);
       text-transform: uppercase;
+
+      @include respond-tablet {
+        font-weight: 400;
+      }
     }
 
     &-head {
@@ -121,6 +125,10 @@ section {
       h5 {
         margin: var(--spacing-3) 0 var(--spacing-1) 0;
         font-weight: 600;
+
+        @include respond-tablet {
+          font-weight: 500;
+        }
 
         &:first-child {
           margin-top: 0;
