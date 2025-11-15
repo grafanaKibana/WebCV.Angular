@@ -144,9 +144,18 @@ export class WebGLGradientService {
     // Run outside Angular zone for better performance
     this.ngZone.runOutsideAngular(() => {
       try {
-        // Check if WebGL is supported
+        // Check if WebGL is supported with Safari-compatible context options
         const testCanvas = document.createElement('canvas');
-        const testContext = testCanvas.getContext('webgl');
+        const contextOptions = {
+          alpha: true,
+          premultipliedAlpha: false,
+          antialias: true,
+          depth: false,
+          stencil: false,
+          preserveDrawingBuffer: false
+        };
+        const testContext = testCanvas.getContext('webgl', contextOptions) || 
+                           testCanvas.getContext('experimental-webgl', contextOptions);
 
         if (!testContext) {
           // WebGL not supported, apply CSS fallback
@@ -313,22 +322,48 @@ class GradientInstance {
 
     // Setup canvas and context
     this.canvas = document.createElement('canvas');
-    this.canvas.width = this.width = options.element.offsetWidth;
-    this.canvas.height = this.height = options.element.offsetHeight;
     this.canvas.style.position = 'absolute';
     this.canvas.style.width = '100%';
     this.canvas.style.height = '100%';
     this.canvas.style.top = '0';
     this.canvas.style.left = '0';
     this.canvas.style.zIndex = '-1';
+    
+    // Append canvas to DOM FIRST (Safari needs this for proper sizing)
     options.element.appendChild(this.canvas);
+    
+    // NOW set canvas dimensions after it's in the DOM (critical for Safari)
+    this.width = options.element.offsetWidth || options.element.clientWidth || window.innerWidth;
+    this.height = options.element.offsetHeight || options.element.clientHeight || window.innerHeight;
+    
+    // Set actual canvas buffer size (Safari needs explicit values)
+    this.canvas.width = this.width;
+    this.canvas.height = this.height;
 
-    this.gl = this.canvas.getContext('webgl') as WebGLRenderingContext;
+    // Try to get WebGL context with Safari-compatible options
+    const contextOptions = {
+      alpha: true,
+      premultipliedAlpha: false,
+      antialias: true,
+      depth: false,
+      stencil: false,
+      preserveDrawingBuffer: false
+    };
+    
+    this.gl = (this.canvas.getContext('webgl', contextOptions) || 
+               this.canvas.getContext('experimental-webgl', contextOptions)) as WebGLRenderingContext;
 
     if (!this.gl) {
       console.error('WebGL not supported');
       return;
     }
+
+    // Enable alpha blending for Safari compatibility
+    this.gl.enable(this.gl.BLEND);
+    this.gl.blendFunc(this.gl.SRC_ALPHA, this.gl.ONE_MINUS_SRC_ALPHA);
+    
+    // Clear to transparent black
+    this.gl.clearColor(0, 0, 0, 0);
 
     // Setup scroll listener for parallax if enabled
     if (this.parallax) {
@@ -339,10 +374,24 @@ class GradientInstance {
     this.initializeShaders();
     this.resize();
     this.setColors();
+    
+    // Safari-specific: Force initial render before starting animation
+    // This ensures the canvas is properly initialized
+    this.gl.viewport(0, 0, this.width, this.height);
+    this.gl.clear(this.gl.COLOR_BUFFER_BIT);
+    
+    // Start animation
     this.animate();
 
     // Add resize listener
     window.addEventListener('resize', this.resize.bind(this));
+    
+    // Safari-specific: Trigger a resize after a short delay to ensure proper initialization
+    setTimeout(() => {
+      if (this.canvas && this.gl && this.playing) {
+        this.resize();
+      }
+    }, 100);
   }
 
   /**
@@ -648,8 +697,22 @@ class GradientInstance {
     const parent = this.canvas.parentElement;
     if (!parent) return;
 
-    this.width = parent.offsetWidth;
-    this.height = parent.offsetHeight;
+    // Get dimensions with fallbacks for Safari
+    const newWidth = parent.offsetWidth || parent.clientWidth || window.innerWidth;
+    const newHeight = parent.offsetHeight || parent.clientHeight || window.innerHeight;
+    
+    // Safari fix: Don't resize if dimensions are zero or invalid
+    if (newWidth <= 0 || newHeight <= 0) {
+      return;
+    }
+    
+    // Only resize if dimensions actually changed (optimization)
+    if (this.width === newWidth && this.height === newHeight) {
+      return;
+    }
+
+    this.width = newWidth;
+    this.height = newHeight;
 
     this.canvas.width = this.width;
     this.canvas.height = this.height;

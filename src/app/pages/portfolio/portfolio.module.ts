@@ -14,7 +14,6 @@ import { PortfolioItemComponent } from './portfolio-item/portfolio-item.componen
   imports: [
     CommonModule,
     SharedModule,
-  ],
-  entryComponents: [ModalDialogComponent]
+  ]
 })
 export class PortfolioModule { }

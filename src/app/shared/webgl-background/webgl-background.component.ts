@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ElementRef, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, AfterViewInit, OnDestroy, ElementRef, ChangeDetectionStrategy } from '@angular/core';
 import { WebGLGradientService } from '../../services/webgl-gradient.service';
 
 @Component({
@@ -7,7 +7,7 @@ import { WebGLGradientService } from '../../services/webgl-gradient.service';
   styleUrls: ['./webgl-background.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class WebGLBackgroundComponent implements OnInit, OnDestroy {
+export class WebGLBackgroundComponent implements OnInit, AfterViewInit, OnDestroy {
   speed = 0.5;             // Animation speed (increased for more movement)
   amplitude = 0.85;        // Wave amplitude (increased for more visible variation)
   darkerTop = false;       // Enable darker top effect
@@ -21,7 +21,15 @@ export class WebGLBackgroundComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.initGradient();
+    // Empty - initialization moved to AfterViewInit for Safari compatibility
+  }
+  
+  ngAfterViewInit(): void {
+    // Safari-specific: Use setTimeout to ensure DOM is fully rendered
+    // This fixes the "black background until inspector opened" issue
+    setTimeout(() => {
+      this.initGradient();
+    }, 0);
   }
 
   ngOnDestroy(): void {

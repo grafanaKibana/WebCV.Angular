@@ -10,7 +10,8 @@
 					"strict": true
 				},
 				"@schematics/angular:component": {
-					"style": "scss"
+					"style": "scss",
+					"standalone": false
 				}
 			},
 			"root": "",
@@ -106,6 +107,5 @@
 				}
 			}
 		}
-	},
-	"defaultProject": "webcv-angular"
+	}
 }
