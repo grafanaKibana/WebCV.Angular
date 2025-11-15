@@ -1,7 +1,15 @@
 @import '../../../assets/styles/utility';
 
 ::ng-deep .mat-dialog-container {
-  background-color: var(--color-dark-opaque-background);
+  background: linear-gradient(135deg, 
+    rgba(35, 40, 45, 0.95) 0%, 
+    rgba(30, 35, 40, 0.95) 50%, 
+    rgba(25, 30, 35, 0.92) 100%);
+  backdrop-filter: blur(20px) saturate(1.2);
+  -webkit-backdrop-filter: blur(20px) saturate(1.2);
+  box-shadow: 
+    0 8px 32px 0 rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.05);
   border-radius: var(--radius-20);
   margin: var(--spacing-8) 25%;
   color: var(--color-dark-paragraph);
@@ -21,8 +29,9 @@
 }
 
 ::ng-deep .cdk-overlay-dark-backdrop {
-  backdrop-filter: blur(12px);
-  background: rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  background: rgba(5, 10, 15, 0.25);
 }
 
 ::ng-deep .cdk-overlay-pane {
@@ -52,7 +61,7 @@
 
     &:hover {
       @extend .text-glow-12;
-      background-color: rgba(0, 0, 0, 0.25);
+      background: rgba(15, 20, 25, 0.3);
       transition: all var(--transition-fast) var(--transition-easing);
       cursor: pointer;
     }
@@ -91,8 +100,26 @@
       line-height: 1;
       vertical-align: baseline;
       border-radius: var(--radius-8);
-      background-color: var(--color-dark-wrapper-background);
+      background: rgba(15, 20, 25, 0.3);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
       padding: var(--spacing-1) var(--spacing-2);
+      position: relative;
+      
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        border-radius: inherit;
+        background: linear-gradient(135deg, 
+          var(--reflection-color) 0%, 
+          var(--reflection-color-subtle) 40%, 
+          transparent 70%);
+        pointer-events: none;
+      }
     }
   }
 

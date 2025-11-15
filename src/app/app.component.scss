@@ -31,12 +31,9 @@
 
 .main-container {
   @extend .container-shadow;
-  position: relative;
+  @extend .container-glass;
   z-index: 1;
   border-radius: var(--radius-20);
-  background-color: var(--color-dark-wrapper-background);
-  backdrop-filter: blur(20px) saturate(0.5);
-  -webkit-backdrop-filter: blur(20px) saturate(0.5);
   padding: var(--spacing-4);
   flex: 1;
 

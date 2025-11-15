@@ -1,5 +1,6 @@
 import { Component, OnInit, AfterViewInit, OnDestroy, ElementRef, ChangeDetectionStrategy } from '@angular/core';
 import { WebGLGradientService } from '../../services/webgl-gradient.service';
+import { DynamicReflectionService } from '../../services/dynamic-reflection.service';
 
 @Component({
   selector: 'app-webgl-background',
@@ -17,7 +18,8 @@ export class WebGLBackgroundComponent implements OnInit, AfterViewInit, OnDestro
 
   constructor(
     private elementRef: ElementRef,
-    private webglGradientService: WebGLGradientService
+    private webglGradientService: WebGLGradientService,
+    private dynamicReflectionService: DynamicReflectionService
   ) {}
 
   ngOnInit(): void {
@@ -37,6 +39,7 @@ export class WebGLBackgroundComponent implements OnInit, AfterViewInit, OnDestro
     if (container) {
       this.webglGradientService.removeGradient(container);
     }
+    this.dynamicReflectionService.destroy();
   }
 
   /**
@@ -78,6 +81,14 @@ export class WebGLBackgroundComponent implements OnInit, AfterViewInit, OnDestro
         parallax: this.parallax,
         parallaxIntensity: this.parallaxIntensity
       });
+
+      // Initialize dynamic reflections after gradient is set up
+      setTimeout(() => {
+        const canvas = container.querySelector('canvas');
+        if (canvas) {
+          this.dynamicReflectionService.initDynamicReflections(canvas);
+        }
+      }, 100);
     }
   }
 }

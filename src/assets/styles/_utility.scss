@@ -3,27 +3,78 @@
 @import 'variables/vars';
 
 .dark-block {
-  background-color: var(--color-dark-block-background);
+  background: rgba(15, 20, 25, 0.2);
   border-radius: var(--radius-20);
+  backdrop-filter: blur(12px) saturate(1.1);
+  -webkit-backdrop-filter: blur(12px) saturate(1.1);
+  box-shadow:
+    0 8px 32px 0 rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.05);
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: inherit;
+    background: linear-gradient(135deg,
+      var(--reflection-color) 0%,
+      var(--reflection-color-subtle) 20%,
+      rgba(var(--reflection-r), var(--reflection-g), var(--reflection-b), 0.04) 45%,
+      rgba(var(--reflection-r), var(--reflection-g), var(--reflection-b), 0.02) 65%,
+      transparent 85%);
+    pointer-events: none;
+    contain: layout style paint;
+  }
+}
+
+.container-glass {
+  background: rgba(10, 15, 20, 0.65);
+  backdrop-filter: blur(24px) saturate(1.2);
+  -webkit-backdrop-filter: blur(24px) saturate(1.2);
+  box-shadow:
+    0 8px 32px 0 rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.03);
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: inherit;
+    background: linear-gradient(135deg,
+      var(--reflection-color-subtle) 0%,
+      rgba(var(--reflection-r), var(--reflection-g), var(--reflection-b), 0.04) 30%,
+      rgba(var(--reflection-r), var(--reflection-g), var(--reflection-b), 0.02) 55%,
+      transparent 80%);
+    pointer-events: none;
+    contain: layout style paint;
+  }
 }
 
 .dark-shadow {
-  box-shadow: 
-    0 2px 4px 0 rgba(0, 0, 0, 0.2), 
-    0 1px 5px 0 rgba(0, 0, 0, 0.1), 
+  box-shadow:
+    0 2px 4px 0 rgba(0, 0, 0, 0.2),
+    0 1px 5px 0 rgba(0, 0, 0, 0.1),
     inset 0 1px 0 0 rgba(255, 255, 255, 0.05);
-  
+
   &-soft {
-    box-shadow: 
-      0 1px 3px 0 rgba(0, 0, 0, 0.1), 
-      0 1px 2px 0 rgba(0, 0, 0, 0.06), 
+    box-shadow:
+      0 1px 3px 0 rgba(0, 0, 0, 0.1),
+      0 1px 2px 0 rgba(0, 0, 0, 0.06),
       inset 0 1px 0 0 rgba(255, 255, 255, 0.03);
   }
-  
+
   &-intense {
-    box-shadow: 
-      0 4px 6px -1px rgba(0, 0, 0, 0.2), 
-      0 2px 4px -1px rgba(0, 0, 0, 0.1), 
+    box-shadow:
+      0 4px 6px -1px rgba(0, 0, 0, 0.2),
+      0 2px 4px -1px rgba(0, 0, 0, 0.1),
       inset 0 1px 0 0 rgba(255, 255, 255, 0.05);
   }
 }
@@ -66,23 +117,23 @@
 
 .box-shadow {
   &-4 {
-    box-shadow: 
-      0 2px 4px 0 rgba(0, 0, 0, 0.12), 
+    box-shadow:
+      0 2px 4px 0 rgba(0, 0, 0, 0.12),
       0 1px 2px 0 rgba(0, 0, 0, 0.08);
   }
   &-8 {
-    box-shadow: 
-      0 4px 6px -1px rgba(0, 0, 0, 0.12), 
+    box-shadow:
+      0 4px 6px -1px rgba(0, 0, 0, 0.12),
       0 2px 4px -1px rgba(0, 0, 0, 0.08);
   }
   &-12 {
-    box-shadow: 
-      0 10px 15px -3px rgba(0, 0, 0, 0.12), 
+    box-shadow:
+      0 10px 15px -3px rgba(0, 0, 0, 0.12),
       0 4px 6px -2px rgba(0, 0, 0, 0.08);
   }
   &-16 {
-    box-shadow: 
-      0 20px 25px -5px rgba(0, 0, 0, 0.12), 
+    box-shadow:
+      0 20px 25px -5px rgba(0, 0, 0, 0.12),
       0 10px 10px -5px rgba(0, 0, 0, 0.08);
   }
 }
@@ -99,7 +150,7 @@
 // Responsive utilities
 .container {
   @include container-width();
-  
+
   &-fluid {
     width: 100%;
     padding-left: var(--spacing-5);
@@ -137,14 +188,14 @@
 // Responsive flexbox
 .flex-responsive {
   display: flex;
-  
+
   @include respond-tablet-sm {
     flex-direction: column;
   }
 
   &-reverse {
     display: flex;
-    
+
     @include respond-tablet-sm {
       flex-direction: column-reverse;
     }
@@ -155,11 +206,11 @@
 .gap {
   &-responsive {
     gap: var(--spacing-8);
-    
+
     @include respond-tablet {
       gap: var(--spacing-6);
     }
-    
+
     @include respond-mobile {
       gap: var(--spacing-4);
     }
@@ -177,23 +228,23 @@
 ) {
   .m-responsive-#{$size} {
     margin: $value;
-    
+
     @include respond-tablet {
       margin: calc(#{$value} * 0.75);
     }
-    
+
     @include respond-mobile {
       margin: calc(#{$value} * 0.5);
     }
   }
-  
+
   .p-responsive-#{$size} {
     padding: $value;
-    
+
     @include respond-tablet {
       padding: calc(#{$value} * 0.75);
     }
-    
+
     @include respond-mobile {
       padding: calc(#{$value} * 0.5);
     }
@@ -207,13 +258,13 @@
       text-align: center;
     }
   }
-  
+
   &-left-mobile {
     @include respond-mobile {
       text-align: left;
     }
   }
-  
+
   &-right-mobile {
     @include respond-mobile {
       text-align: right;

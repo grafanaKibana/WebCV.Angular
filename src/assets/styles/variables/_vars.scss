@@ -2,6 +2,25 @@
 
 $baseSystemFontSize: 16px;
 
+// Register CSS custom properties for smooth transitions
+@property --reflection-r {
+  syntax: '<number>';
+  initial-value: 0;
+  inherits: true;
+}
+
+@property --reflection-g {
+  syntax: '<number>';
+  initial-value: 0;
+  inherits: true;
+}
+
+@property --reflection-b {
+  syntax: '<number>';
+  initial-value: 0;
+  inherits: true;
+}
+
 :root {
   // Font settings
   --font-family: 'Poppins', sans-serif;
@@ -10,9 +29,9 @@ $baseSystemFontSize: 16px;
   --font-mobile-size: 11px;
 
   // Color Dark Theme
-  --color-dark-block-background: rgba(0, 0, 0, 0.25);
-  --color-dark-wrapper-background: rgba(0, 0, 0, 0.75);
-  --color-dark-opaque-background: rgba(40, 40, 40, 0.98);
+  --color-dark-block-background: rgba(15, 20, 25, 0.35);
+  --color-dark-wrapper-background: rgba(10, 15, 20, 0.65);
+  --color-dark-opaque-background: rgba(30, 35, 40, 0.95);
   --color-dark-heading: #FCFCFC;
   --color-dark-paragraph: #E0E0E0;
   --color-dark-accent: rgba(164, 229, 250, 0.8);
@@ -21,6 +40,11 @@ $baseSystemFontSize: 16px;
   --color-dark-border: rgba(255, 255, 255, 0.125);
   --color-dark-separator: rgba(255, 255, 255, 0.125);
   --color-dark-error: #B84C4C;
+
+  // Smooth transitions for dynamic reflection colors
+  transition: --reflection-color 1s ease-out,
+              --reflection-color-subtle 1s ease-out,
+              --reflection-color-strong 1s ease-out;
 
   // Spacing Scale (4px base unit)
   --spacing-1: 4px;
@@ -56,4 +80,20 @@ $baseSystemFontSize: 16px;
   --radius-16: 16px;
   --radius-20: 20px;
   --radius-32: 32px;
+
+  // Frosted Glass Reflections (blue-tinted to match background)
+  // Individual RGB values for smooth transitions
+  --reflection-r: 0;
+  --reflection-g: 0;
+  --reflection-b: 0;
+
+  // Composed colors using RGB values
+  --reflection-color: rgba(var(--reflection-r), var(--reflection-g), var(--reflection-b), 0.10);
+  --reflection-color-subtle: rgba(var(--reflection-r), var(--reflection-g), var(--reflection-b), 0.08);
+  --reflection-color-strong: rgba(var(--reflection-r), var(--reflection-g), var(--reflection-b), 0.15);
+
+  // Smooth transitions for RGB values
+  transition: --reflection-r 1s cubic-bezier(0.4, 0.0, 0.2, 1),
+              --reflection-g 1s cubic-bezier(0.4, 0.0, 0.2, 1),
+              --reflection-b 1s cubic-bezier(0.4, 0.0, 0.2, 1);
 }
