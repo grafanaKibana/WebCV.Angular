@@ -94,34 +94,17 @@ $baseSystemFontSize: 16px;
   --radius-32: 32px;
 
   // Frosted Glass Reflections (blue-tinted to match background)
-  // Individual RGB values for smooth transitions (dynamically updated by reflection service)
+  // Individual RGB values for smooth transitions
   --reflection-r: 0;
   --reflection-g: 0;
   --reflection-b: 0;
   --reflection-angle: 135deg;
   --reflection-brightness: 0.5;
 
-  // Reflection opacity values (configured in webgl-config.ts, initialized by AppComponent)
-  // These can be overridden via JavaScript if needed for runtime changes
-  --reflection-opacity-base: 0.10;
-  --reflection-opacity-subtle: 0.08;
-  --reflection-opacity-strong: 0.15;
-
-  // Reflection gradient stops (configured in webgl-config.ts, initialized by AppComponent)
-  // Controls where reflection fades in/out along the gradient
-  --reflection-gradient-start: 0%;
-  --reflection-gradient-subtle: 20%;
-  --reflection-gradient-mid: 45%;
-  --reflection-gradient-end: 65%;
-  --reflection-gradient-transparent: 85%;
-
-  // Reflection transition duration (configured in webgl-config.ts)
-  --reflection-transition-duration: 0.6s;
-
-  // Composed colors using RGB values and configurable opacity
-  --reflection-color: rgba(var(--reflection-r), var(--reflection-g), var(--reflection-b), var(--reflection-opacity-base));
-  --reflection-color-subtle: rgba(var(--reflection-r), var(--reflection-g), var(--reflection-b), var(--reflection-opacity-subtle));
-  --reflection-color-strong: rgba(var(--reflection-r), var(--reflection-g), var(--reflection-b), var(--reflection-opacity-strong));
+  // Composed colors using RGB values
+  --reflection-color: rgba(var(--reflection-r), var(--reflection-g), var(--reflection-b), 0.10);
+  --reflection-color-subtle: rgba(var(--reflection-r), var(--reflection-g), var(--reflection-b), 0.08);
+  --reflection-color-strong: rgba(var(--reflection-r), var(--reflection-g), var(--reflection-b), 0.15);
 
   // Smooth transitions for RGB values and angle
   transition: --reflection-r 1s cubic-bezier(0.4, 0.0, 0.2, 1),

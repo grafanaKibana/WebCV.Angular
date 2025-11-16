@@ -1,5 +1,11 @@
 import { Injectable, NgZone } from '@angular/core';
-import { webglConfig } from '../config/webgl-config';
+import {
+  webglConfig,
+  getColorScheme,
+  getDefaultColorScheme,
+  getThemeNames,
+  getRandomColorScheme
+} from '../config/webgl.config';
 
 /**
  * WebGL Gradient Service
@@ -12,34 +18,20 @@ import { webglConfig } from '../config/webgl-config';
 export class WebGLGradientService {
   private gradients: Map<string, GradientInstance> = new Map();
 
-  // Load color schemes from centralized configuration
-  private colorSchemesMap = new Map<string, number[][]>(
-    webglConfig.background.colorSchemes.map(scheme => [scheme.name, scheme.colors])
-  );
-
-  private config = {
-    defaultColors: webglConfig.background.colorSchemes.find(
-      s => s.name === webglConfig.background.defaultTheme
-    )?.colors || webglConfig.background.colorSchemes[0].colors,
-    defaultSpeed: webglConfig.background.speed,
-    defaultAmplitude: webglConfig.background.amplitude,
-    parallaxIntensity: webglConfig.background.parallaxIntensity,
-  };
-
   constructor(private ngZone: NgZone) {}
 
   /**
    * Get theme names for all color schemes
    */
   getThemeNames(): string[] {
-    return Array.from(this.colorSchemesMap.keys());
+    return getThemeNames();
   }
 
   /**
    * Get a specific color scheme by theme name
    */
   getColorScheme(themeName: string): number[][] {
-    return this.colorSchemesMap.get(themeName) || this.config.defaultColors;
+    return getColorScheme(themeName) || getDefaultColorScheme();
   }
 
   /**
@@ -48,18 +40,17 @@ export class WebGLGradientService {
   getColorSchemeByIndex(index: number): number[][] {
     const themeNames = this.getThemeNames();
     if (index >= 0 && index < themeNames.length) {
-      return this.colorSchemesMap.get(themeNames[index])!;
+      const scheme = getColorScheme(themeNames[index]);
+      return scheme || getDefaultColorScheme();
     }
-    return this.config.defaultColors;
+    return getDefaultColorScheme();
   }
 
   /**
    * Get a random color scheme
    */
   getRandomColorScheme(): number[][] {
-    const themeNames = this.getThemeNames();
-    const randomIndex = Math.floor(Math.random() * themeNames.length);
-    return this.colorSchemesMap.get(themeNames[randomIndex])!;
+    return getRandomColorScheme();
   }
 
   /**
@@ -116,14 +107,14 @@ export class WebGLGradientService {
 
         if (!testContext) {
           // WebGL not supported, apply CSS fallback
-          this.applyCssFallback(container, options.colors || this.config.defaultColors);
+          this.applyCssFallback(container, options.colors || getDefaultColorScheme());
           return;
         }
 
         // Determine which colors to use:
         // 1. Explicitly provided colors take precedence
         // 2. If a theme name is provided, use that scheme
-        // 3. Otherwise use a random color scheme
+        // 3. Otherwise use random or default based on config
         let colors: number[][];
 
         if (options.colors) {
@@ -133,19 +124,19 @@ export class WebGLGradientService {
           // Use the specified theme
           colors = this.getColorScheme(options.themeName);
         } else {
-          // Use a random color scheme
-          colors = this.getRandomColorScheme();
+          // Use default theme
+          colors = getDefaultColorScheme();
         }
 
         // Initialize gradient with configuration
         const gradient = new GradientInstance({
           element: container,
           colors: colors,
-          speed: options.speed !== undefined ? options.speed : this.config.defaultSpeed,
-          amplitude: options.amplitude !== undefined ? options.amplitude : this.config.defaultAmplitude,
-          darkerTop: options.darkerTop || false,
-          parallax: options.parallax !== undefined ? options.parallax : false,
-          parallaxIntensity: options.parallaxIntensity !== undefined ? options.parallaxIntensity : this.config.parallaxIntensity,
+          speed: options.speed !== undefined ? options.speed : webglConfig.background.speed,
+          amplitude: options.amplitude !== undefined ? options.amplitude : webglConfig.background.amplitude,
+          darkerTop: options.darkerTop !== undefined ? options.darkerTop : webglConfig.background.darkerTop,
+          parallax: options.parallax !== undefined ? options.parallax : webglConfig.background.parallax,
+          parallaxIntensity: options.parallaxIntensity !== undefined ? options.parallaxIntensity : webglConfig.background.parallaxIntensity,
           onColorsUpdate: options.onColorsUpdate,
           onBrightnessUpdate: options.onBrightnessUpdate
         });
@@ -155,7 +146,7 @@ export class WebGLGradientService {
       } catch (error) {
         console.error('Error initializing WebGL gradient:', error);
         // Apply CSS fallback in case of errors
-        this.applyCssFallback(container, options.colors || this.config.defaultColors);
+        this.applyCssFallback(container, options.colors || getDefaultColorScheme());
       }
     });
   }
@@ -258,7 +249,6 @@ class GradientInstance {
   private onBrightnessUpdate?: (angle: number, brightness: number) => void;
   private lastEmittedColors: number[][] = [];
   private colorEmitThrottle: number = 0;
-  private readonly COLOR_EMIT_INTERVAL = 150; // ms between color updates (~6-7 fps for smooth reflections)
 
   constructor(options: {
     element: HTMLElement;
@@ -682,8 +672,8 @@ class GradientInstance {
    * Colors are emitted continuously during animation for dynamic reflections
    */
   private emitColorsIfChanged(currentTime: number): void {
-    // Throttle emissions to avoid excessive updates (150ms = ~6-7 updates per second)
-    if (currentTime - this.colorEmitThrottle < this.COLOR_EMIT_INTERVAL) {
+    // Throttle emissions to avoid excessive updates
+    if (currentTime - this.colorEmitThrottle < webglConfig.reflection.updateThrottle) {
       return;
     }
 
@@ -726,6 +716,7 @@ class GradientInstance {
     
     // Create organic circular motion with multiple frequencies (like noise layers)
     // These frequencies match the noise layers in the fragment shader
+    // Values tuned to create smooth, natural movement
     const slowWave = Math.sin(timeInSeconds * 0.22) * 0.5;     // Primary slow movement
     const mediumWave = Math.cos(timeInSeconds * 0.35) * 0.3;   // Medium variation
     const fastWave = Math.sin(timeInSeconds * 0.5) * 0.2;      // Fast detail
@@ -752,6 +743,7 @@ class GradientInstance {
     
     // Add base rotation so the default rest position varies with color scheme brightness
     // Brighter schemes tend toward bottom-right (lighter feel)
+    // Base rotation: 45° (bottom-right), range: 90° variation
     const baseRotation = 45 + (baseBrightness * 90);
     angle = (angle + baseRotation) % 360;
     

@@ -185,6 +185,7 @@ export const webglConfig = {
      * - 1.0: Strong parallax, pronounced depth effect
      */
     parallaxIntensity: 0.5,
+
   } as BackgroundConfig,
 
   reflection: {
@@ -273,6 +274,31 @@ export const webglConfig = {
      * - 200: Less frequent updates, lower CPU usage
      */
     updateThrottle: 100,
+
   } as ReflectionConfig,
+
 } as const;
+
+// Helper functions for backward compatibility and convenience
+export function getColorScheme(themeName: string): number[][] | undefined {
+  const scheme = webglConfig.background.colorSchemes.find(s => s.name === themeName);
+  return scheme?.colors;
+}
+
+export function getDefaultColorScheme(): number[][] {
+  const scheme = webglConfig.background.colorSchemes.find(
+    s => s.name === webglConfig.background.defaultTheme
+  );
+  return scheme?.colors || webglConfig.background.colorSchemes[0].colors;
+}
+
+export function getThemeNames(): string[] {
+  return webglConfig.background.colorSchemes.map(s => s.name);
+}
+
+export function getRandomColorScheme(): number[][] {
+  const schemes = webglConfig.background.colorSchemes;
+  const randomIndex = Math.floor(Math.random() * schemes.length);
+  return schemes[randomIndex].colors;
+}
 

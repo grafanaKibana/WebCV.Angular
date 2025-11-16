@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { webglConfig } from '../config/webgl-config';
+import { webglConfig } from '../config/webgl.config';
 
 /**
  * Service to create dynamic reflections that match and animate with the WebGL background
@@ -11,7 +11,6 @@ import { webglConfig } from '../config/webgl-config';
 export class DynamicReflectionService {
   private lastColorUpdateTime: number = 0;
   private lastAngleUpdateTime: number = 0;
-  private readonly UPDATE_THROTTLE = webglConfig.reflection.updateThrottle;
 
   /**
    * Update reflection colors based on gradient colors
@@ -20,7 +19,7 @@ export class DynamicReflectionService {
   updateReflectionColors(colors: number[][]): void {
     // Throttle updates to avoid excessive CSS recalculations
     const now = performance.now();
-    if (now - this.lastColorUpdateTime < this.UPDATE_THROTTLE) {
+    if (now - this.lastColorUpdateTime < webglConfig.reflection.updateThrottle) {
       return;
     }
     this.lastColorUpdateTime = now;
@@ -31,10 +30,9 @@ export class DynamicReflectionService {
     const avgColor = this.calculateAverageColor(colors);
     
     // Create lighter versions for reflections using configured lighten factor
-    const lightenFactor = webglConfig.reflection.lightenFactor;
-    const reflectionR = Math.min(255, Math.floor(avgColor[0] * lightenFactor));
-    const reflectionG = Math.min(255, Math.floor(avgColor[1] * lightenFactor));
-    const reflectionB = Math.min(255, Math.floor(avgColor[2] * lightenFactor));
+    const reflectionR = Math.min(255, Math.floor(avgColor[0] * webglConfig.reflection.lightenFactor));
+    const reflectionG = Math.min(255, Math.floor(avgColor[1] * webglConfig.reflection.lightenFactor));
+    const reflectionB = Math.min(255, Math.floor(avgColor[2] * webglConfig.reflection.lightenFactor));
 
     // Batch CSS variable updates for optimal performance
     // Using requestAnimationFrame ensures updates happen during repaint cycle
@@ -57,7 +55,7 @@ export class DynamicReflectionService {
   updateReflectionAngle(angle: number, brightness: number): void {
     // Throttle updates separately from color updates
     const now = performance.now();
-    if (now - this.lastAngleUpdateTime < this.UPDATE_THROTTLE) {
+    if (now - this.lastAngleUpdateTime < webglConfig.reflection.updateThrottle) {
       return;
     }
     this.lastAngleUpdateTime = now;
