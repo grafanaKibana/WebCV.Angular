@@ -1,6 +1,7 @@
 import { Component, OnInit, AfterViewInit, OnDestroy, ElementRef, ChangeDetectionStrategy } from '@angular/core';
 import { WebGLGradientService } from '../../services/webgl-gradient.service';
 import { DynamicReflectionService } from '../../services/dynamic-reflection.service';
+import { webglConfig } from '../../config/webgl-config';
 
 @Component({
   selector: 'app-webgl-background',
@@ -9,12 +10,12 @@ import { DynamicReflectionService } from '../../services/dynamic-reflection.serv
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class WebGLBackgroundComponent implements OnInit, AfterViewInit, OnDestroy {
-  speed = 0.5;             // Animation speed (increased for more movement)
-  amplitude = 0.85;        // Wave amplitude (increased for more visible variation)
-  darkerTop = false;       // Enable darker top effect
-  themeName?: string;      // Name of predefined color scheme
-  parallax = true;         // Enable parallax scrolling effect
-  parallaxIntensity = 0.5; // Parallax intensity (0-1)
+  speed = webglConfig.background.speed;
+  amplitude = webglConfig.background.amplitude;
+  darkerTop = webglConfig.background.darkerTop;
+  themeName?: string = webglConfig.background.defaultTheme;
+  parallax = webglConfig.background.parallax;
+  parallaxIntensity = webglConfig.background.parallaxIntensity;
 
   constructor(
     private elementRef: ElementRef,
@@ -79,16 +80,16 @@ export class WebGLBackgroundComponent implements OnInit, AfterViewInit, OnDestro
         darkerTop: this.darkerTop,
         themeName: this.themeName,
         parallax: this.parallax,
-        parallaxIntensity: this.parallaxIntensity
-      });
-
-      // Initialize dynamic reflections after gradient is set up
-      setTimeout(() => {
-        const canvas = container.querySelector('canvas');
-        if (canvas) {
-          this.dynamicReflectionService.initDynamicReflections(canvas);
+        parallaxIntensity: this.parallaxIntensity,
+        onColorsUpdate: (colors: number[][]) => {
+          // Pass colors directly to reflection service for optimal performance
+          this.dynamicReflectionService.updateReflectionColors(colors);
+        },
+        onBrightnessUpdate: (angle: number, brightness: number) => {
+          // Update reflection angle based on where bright colors are positioned
+          this.dynamicReflectionService.updateReflectionAngle(angle, brightness);
         }
-      }, 100);
+      });
     }
   }
 }

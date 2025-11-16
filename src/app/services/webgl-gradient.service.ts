@@ -1,4 +1,5 @@
 import { Injectable, NgZone } from '@angular/core';
+import { webglConfig } from '../config/webgl-config';
 
 /**
  * WebGL Gradient Service
@@ -11,64 +12,18 @@ import { Injectable, NgZone } from '@angular/core';
 export class WebGLGradientService {
   private gradients: Map<string, GradientInstance> = new Map();
 
-  // Define color schemes as a Map with theme names as keys
-  // Curated to perfectly complement the dark theme and cyan accent colors
-  private colorSchemesMap = new Map<string, number[][]>([
-    ['Ocean Blue', [
-      [19, 41, 75],     // Dark navy
-      [34, 87, 126],    // Navy blue
-      [56, 149, 211],   // Medium blue
-      [88, 204, 237],   // Light blue
-    ]],
-    ['Neon Cyan', [
-      [0, 20, 40],      // Deep midnight blue
-      [0, 50, 80],      // Dark cyan-blue
-      [0, 150, 200],    // Bright cyan
-      [0, 187, 255],    // Neon cyan (matches accent)
-    ]],
-    ['Deep Purple', [
-      [20, 15, 35],     // Deep violet-black
-      [45, 30, 70],     // Rich purple
-      [90, 60, 140],    // Vibrant purple
-      [140, 100, 200],  // Light lavender
-    ]],
-    ['Amber Glow', [
-      [40, 25, 15],     // Deep brown-orange
-      [80, 50, 25],     // Dark amber
-      [200, 120, 50],   // Warm amber
-      [255, 180, 100],  // Golden amber
-    ]],
-    ['Emerald Forest', [
-      [15, 30, 20],     // Deep forest green
-      [25, 60, 40],     // Dark emerald
-      [40, 120, 80],    // Rich emerald
-      [80, 200, 140],   // Bright mint
-    ]],
-    ['Magenta Dream', [
-      [35, 15, 30],     // Deep magenta-black
-      [70, 25, 60],     // Dark magenta
-      [150, 50, 130],   // Vibrant magenta
-      [220, 100, 200],  // Soft pink-magenta
-    ]],
-    ['Slate Storm', [
-      [20, 25, 30],     // Charcoal
-      [40, 50, 60],     // Dark slate
-      [80, 100, 120],   // Medium slate
-      [140, 160, 180],  // Light slate blue
-    ]],
-    ['Sunset Horizon', [
-      [30, 20, 35],     // Deep purple-pink
-      [80, 40, 60],     // Dark rose
-      [180, 80, 100],   // Coral pink
-      [255, 150, 120],  // Peach
-    ]]
-  ]);
+  // Load color schemes from centralized configuration
+  private colorSchemesMap = new Map<string, number[][]>(
+    webglConfig.background.colorSchemes.map(scheme => [scheme.name, scheme.colors])
+  );
 
   private config = {
-    defaultColors: this.colorSchemesMap.get('Neon Cyan')!, // Use Neon Cyan as default (matches accent)
-    defaultSpeed: 0.5,      // Increased for more movement
-    defaultAmplitude: 0.25, // Slightly increased for more visible variation
-    parallaxIntensity: 0.5, // Default parallax intensity
+    defaultColors: webglConfig.background.colorSchemes.find(
+      s => s.name === webglConfig.background.defaultTheme
+    )?.colors || webglConfig.background.colorSchemes[0].colors,
+    defaultSpeed: webglConfig.background.speed,
+    defaultAmplitude: webglConfig.background.amplitude,
+    parallaxIntensity: webglConfig.background.parallaxIntensity,
   };
 
   constructor(private ngZone: NgZone) {}
@@ -135,6 +90,8 @@ export class WebGLGradientService {
       darkerTop?: boolean;
       parallax?: boolean;
       parallaxIntensity?: number;
+      onColorsUpdate?: (colors: number[][]) => void;
+      onBrightnessUpdate?: (angle: number, brightness: number) => void;
     } = {}
   ): void {
     // Generate a unique ID for this gradient instance
@@ -188,7 +145,9 @@ export class WebGLGradientService {
           amplitude: options.amplitude !== undefined ? options.amplitude : this.config.defaultAmplitude,
           darkerTop: options.darkerTop || false,
           parallax: options.parallax !== undefined ? options.parallax : false,
-          parallaxIntensity: options.parallaxIntensity !== undefined ? options.parallaxIntensity : this.config.parallaxIntensity
+          parallaxIntensity: options.parallaxIntensity !== undefined ? options.parallaxIntensity : this.config.parallaxIntensity,
+          onColorsUpdate: options.onColorsUpdate,
+          onBrightnessUpdate: options.onBrightnessUpdate
         });
 
         // Store reference to the gradient instance
@@ -295,6 +254,11 @@ class GradientInstance {
   private transitionStartTime: number = 0;
   private isTransitioning: boolean = false;
   private transitionDuration: number = 500; // 0.5s in milliseconds
+  private onColorsUpdate?: (colors: number[][]) => void;
+  private onBrightnessUpdate?: (angle: number, brightness: number) => void;
+  private lastEmittedColors: number[][] = [];
+  private colorEmitThrottle: number = 0;
+  private readonly COLOR_EMIT_INTERVAL = 150; // ms between color updates (~6-7 fps for smooth reflections)
 
   constructor(options: {
     element: HTMLElement;
@@ -304,6 +268,8 @@ class GradientInstance {
     darkerTop: boolean;
     parallax: boolean;
     parallaxIntensity: number;
+    onColorsUpdate?: (colors: number[][]) => void;
+    onBrightnessUpdate?: (angle: number, brightness: number) => void;
   }) {
     this.config = {
       ...options,
@@ -315,10 +281,13 @@ class GradientInstance {
     this.darkerTop = this.config.darkerTop;
     this.parallax = this.config.parallax;
     this.parallaxIntensity = this.config.parallaxIntensity;
+    this.onColorsUpdate = options.onColorsUpdate;
+    this.onBrightnessUpdate = options.onBrightnessUpdate;
 
     // Initialize color interpolation
     this.currentColors = JSON.parse(JSON.stringify(this.config.colors));
     this.targetColors = JSON.parse(JSON.stringify(this.config.colors));
+    this.lastEmittedColors = JSON.parse(JSON.stringify(this.config.colors));
 
     // Setup canvas and context
     this.canvas = document.createElement('canvas');
@@ -419,7 +388,7 @@ class GradientInstance {
   private initializeShaders(): void {
     // Vertex shader program
     const vertexShaderSource = `
-      precision mediump float;
+      precision highp float;
       attribute vec2 position;
       varying vec2 vUv;
       void main() {
@@ -430,7 +399,7 @@ class GradientInstance {
 
     // Fragment shader program for smooth gradient blending
     const fragmentShaderSource = `
-      precision mediump float;
+      precision highp float;
       uniform vec3 u_colors[4];
       uniform vec2 u_resolution;
       uniform float u_time;
@@ -515,6 +484,15 @@ class GradientInstance {
         return 42.0 * dot(m*m, vec4(dot(p0, x0), dot(p1, x1), dot(p2, x2), dot(p3, x3)));
       }
 
+      // High-quality dithering to eliminate color banding
+      // Uses triangular probability distribution for smooth dither
+      float dither(vec2 fragCoord) {
+        // Generate pseudo-random value from screen position
+        float noise = fract(sin(dot(fragCoord, vec2(12.9898, 78.233))) * 43758.5453);
+        // Convert to triangular distribution (-1 to 1) for better visual quality
+        return (noise * 2.0 - 1.0) / 255.0;
+      }
+
       void main() {
         // Normalized pixel coordinates
         vec2 uv = vUv;
@@ -559,6 +537,12 @@ class GradientInstance {
 
         // Increase brightness by 10%
         color *= 1.15;
+
+        // Apply dithering to eliminate color banding
+        // Convert UV to screen coordinates for dither pattern
+        vec2 screenCoord = vUv * u_resolution;
+        float ditherValue = dither(screenCoord);
+        color += vec3(ditherValue);
 
         // Output final color
         gl_FragColor = vec4(color, 1.0);
@@ -693,6 +677,103 @@ class GradientInstance {
     }
   }
 
+  /**
+   * Emit current colors to callback at regular intervals
+   * Colors are emitted continuously during animation for dynamic reflections
+   */
+  private emitColorsIfChanged(currentTime: number): void {
+    // Throttle emissions to avoid excessive updates (150ms = ~6-7 updates per second)
+    if (currentTime - this.colorEmitThrottle < this.COLOR_EMIT_INTERVAL) {
+      return;
+    }
+
+    // Convert normalized colors (0-1) back to RGB (0-255) for emission
+    if (this.onColorsUpdate) {
+      const rgbColors = this.currentColors.map(color => 
+        color.map(c => Math.round(c * 255))
+      );
+      this.onColorsUpdate(rgbColors);
+    }
+
+    // Calculate and emit brightness distribution for dynamic reflection angle
+    if (this.onBrightnessUpdate) {
+      const { angle, brightness } = this.calculateBrightnessDistribution(currentTime);
+      this.onBrightnessUpdate(angle, brightness);
+    }
+    
+    this.lastEmittedColors = JSON.parse(JSON.stringify(this.currentColors));
+    this.colorEmitThrottle = currentTime;
+  }
+
+  /**
+   * Calculate brightness distribution to determine reflection direction
+   * Simulates the movement of bright areas in the noise-animated gradient
+   * @param time Current time in milliseconds from performance.now()
+   */
+  private calculateBrightnessDistribution(time: number): { angle: number; brightness: number } {
+    // Calculate base luminance for the color scheme
+    let totalLuminance = 0;
+    for (let i = 0; i < 4; i++) {
+      const color = this.currentColors[i] || [0, 0, 0];
+      const luminance = 0.299 * color[0] + 0.587 * color[1] + 0.114 * color[2];
+      totalLuminance += luminance;
+    }
+    const baseBrightness = totalLuminance / 4;
+
+    // Simulate noise movement using time-based animation
+    // This mirrors the shader's noise animation pattern
+    const timeInSeconds = time * 0.001 * this.config.speed;
+    
+    // Create organic circular motion with multiple frequencies (like noise layers)
+    // These frequencies match the noise layers in the fragment shader
+    const slowWave = Math.sin(timeInSeconds * 0.22) * 0.5;     // Primary slow movement
+    const mediumWave = Math.cos(timeInSeconds * 0.35) * 0.3;   // Medium variation
+    const fastWave = Math.sin(timeInSeconds * 0.5) * 0.2;      // Fast detail
+    
+    // Combine waves to create natural, flowing movement
+    const x = slowWave + mediumWave * 0.5;
+    const y = mediumWave + fastWave * 0.5;
+    
+    // Add parallax influence if enabled (bright areas shift with scroll)
+    let scrollInfluence = 0;
+    if (this.parallax && this.scrollY !== undefined) {
+      const viewportHeight = window.innerHeight;
+      const documentHeight = Math.max(
+        document.body.scrollHeight,
+        document.documentElement.scrollHeight
+      );
+      const maxScroll = documentHeight - viewportHeight;
+      const scrollProgress = maxScroll > 0 ? this.scrollY / maxScroll : 0;
+      scrollInfluence = scrollProgress * this.parallaxIntensity * 0.3; // Subtle scroll influence
+    }
+    
+    // Calculate angle from movement vector (atan2 returns radians)
+    let angle = Math.atan2(y + scrollInfluence, x) * (180 / Math.PI);
+    
+    // Add base rotation so the default rest position varies with color scheme brightness
+    // Brighter schemes tend toward bottom-right (lighter feel)
+    const baseRotation = 45 + (baseBrightness * 90);
+    angle = (angle + baseRotation) % 360;
+    
+    // Ensure angle is positive
+    if (angle < 0) angle += 360;
+
+    // Animate brightness using pulse effect (matches shader's breathing effect)
+    // This simulates the expansion and contraction of bright areas in the gradient
+    const pulse = Math.sin(timeInSeconds * 0.08) * 0.05 + 1.0; // Subtle breathing (0.95 - 1.05)
+    
+    // Add noise-based brightness variation (simulates bright/dark patches moving)
+    const brightnessPulse = Math.sin(timeInSeconds * 0.3) * 0.15; // More pronounced variation
+    const brightnessDrift = Math.cos(timeInSeconds * 0.18) * 0.1; // Slower drift
+    
+    // Combine base brightness with animated variations
+    // Keep within reasonable bounds (0.2 - 0.8)
+    let animatedBrightness = baseBrightness * pulse + brightnessPulse + brightnessDrift;
+    animatedBrightness = Math.max(0.2, Math.min(0.8, animatedBrightness));
+
+    return { angle, brightness: animatedBrightness };
+  }
+
   private resize(): void {
     const parent = this.canvas.parentElement;
     if (!parent) return;
@@ -736,6 +817,9 @@ class GradientInstance {
     if (this.isTransitioning) {
       this.updateColorTransition(time);
     }
+
+    // Emit colors and brightness distribution to callbacks (throttled)
+    this.emitColorsIfChanged(time);
 
     // Clear canvas
     this.gl.clearColor(0, 0, 0, 0);
