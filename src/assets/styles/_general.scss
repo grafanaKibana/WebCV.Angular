@@ -6,23 +6,35 @@
 @import 'variables/mixins';
 @import 'variables/vars';
 
+html {
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
 body {
   background-color: black;
   margin: 0;
+  overflow-x: hidden;
 }
 
 section {
-  padding: rem(26px);
-  margin-bottom: rem(18px);
+  padding: var(--spacing-6);
+  margin-bottom: var(--spacing-4);
   @extend .box-shadow-16;
 
+  @include respond-tablet {
+    padding: var(--spacing-5);
+    margin-bottom: var(--spacing-4);
+  }
+
   @include respond-tablet-sm {
-    margin-bottom: rem(14px);
+    padding: var(--spacing-4);
+    margin-bottom: var(--spacing-3);
   }
 
   @include respond-mobile {
-    padding: rem(16px);
-    margin-bottom: rem(12px);
+    padding: var(--spacing-3);
+    margin-bottom: var(--spacing-2);
   }
 }
 

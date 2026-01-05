@@ -1,29 +1,57 @@
 import { Component, OnInit } from '@angular/core';
 import { WebGLGradientService } from '../../services/webgl-gradient.service';
+import { HomeDataService } from '../../services/home-data.service';
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
 })
-export class HeaderComponent {
-  isPortfolioDone: boolean = true;
-  isBlogDone: boolean = true;
-  isDownloadCVDone = false;
+export class HeaderComponent implements OnInit {
+  isPortfolioDone: boolean = false;
+  isBlogDone: boolean = false;
+  isDownloadCVDone: boolean = false;
 
-  constructor(private webglGradientService: WebGLGradientService) { }
+  constructor(
+    private webglGradientService: WebGLGradientService,
+    private homeDataService: HomeDataService
+  ) {}
+
+  ngOnInit(): void {
+    this.homeDataService.getHeaderConfig().subscribe({
+      next: (config) => {
+        this.isPortfolioDone = config.isPortfolioDone;
+        this.isBlogDone = config.isBlogDone;
+        this.isDownloadCVDone = config.isDownloadCVDone;
+      },
+      error: (error) => {
+        console.error('Error loading header config:', error);
+      }
+    });
+  }
 
   /**
-   * Apply a random theme to all gradient containers
+   * Apply a random theme to all gradient containers with smooth transition
    */
   setRandomTheme(): void {
     // Find all WebGL background containers in the document
     const containers = document.querySelectorAll('[data-gradient-id]');
 
-    // Remove and reapply gradients with a random theme
+    // Get random color scheme
+    const randomColors = this.webglGradientService.getRandomColorScheme();
+
+    // Transition existing gradients to new colors smoothly
     containers.forEach(container => {
-      this.webglGradientService.removeGradient(container as HTMLElement);
-      this.webglGradientService.applyGradient(container as HTMLElement);
+      const element = container as HTMLElement;
+      const id = element.getAttribute('data-gradient-id');
+      
+      if (id) {
+        // If gradient exists, transition smoothly
+        this.webglGradientService.transitionGradientColors(element, randomColors);
+      } else {
+        // If no gradient exists, create new one
+        this.webglGradientService.applyGradient(element);
+      }
     });
   }
 }

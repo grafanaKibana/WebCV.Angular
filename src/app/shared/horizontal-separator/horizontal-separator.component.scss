@@ -1,8 +1,8 @@
-@import './src/assets/styles/utility';
+@import '../../../assets/styles/utility';
 
 div {
   background: var(--color-dark-separator);
-  margin: rem(26px) rem(26px);
+  margin: var(--spacing-6) var(--spacing-6);
   height: 1px;
   width: auto;
 

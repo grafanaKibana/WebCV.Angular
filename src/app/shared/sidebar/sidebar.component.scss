@@ -1,21 +1,33 @@
-@import './src/assets/styles/utility';
+@import '../../../assets/styles/utility';
 
 aside {
   z-index: 10;
   position: sticky;
-  padding: rem(18px);
+  top: var(--spacing-8);
+  padding: var(--spacing-4);
+  width: 100%;
+  max-width: 380px;
+  height: fit-content;
+  box-sizing: border-box;
 
   app-vertical-separator {
     display: none;
   }
 
+  @include respond-desktop {
+    max-width: 360px;
+  }
+
   @include respond-laptop {
+    position: relative;
+    top: 0;
+    max-width: 100%;
     display: grid;
-    grid-template-columns: 28% 1px auto;
+    grid-template-columns: 300px 1px 1fr;
     text-align: start;
-    grid-gap: rem(26px);
-    padding: rem(26px);
-    margin-bottom: rem(30px);
+    grid-gap: var(--spacing-6);
+    padding: var(--spacing-6);
+    margin-bottom: var(--spacing-2);
 
     app-horizontal-separator {
       display: none;
@@ -27,7 +39,7 @@ aside {
 
   @include respond-tablet-sm {
     grid-template-columns: 100%;
-    margin-bottom: rem(16px);
+    margin-bottom: var(--spacing-2);
 
     app-horizontal-separator {
       display: block;
@@ -38,28 +50,38 @@ aside {
   }
 
   @include respond-mobile {
-    padding: rem(10px);
+    padding: var(--spacing-2);
+    position: relative;
+    margin-bottom: var(--spacing-2);
   }
 
   .aside-heading {
     text-align: center;
 
     .img-wrapper {
-      padding: 20px;
+      padding: var(--spacing-5);
       border-radius: var(--radius-20);
-      margin: 0 1vw;
+      margin: 0 auto;
+      max-width: 200px;
+
+      @include respond-laptop {
+        max-width: 180px;
+      }
 
       @include respond-tablet-sm {
-        margin: 0 10vw;
-        padding: 32px;
+        margin: 0 auto;
+        padding: var(--spacing-8);
+        max-width: 250px;
       }
 
       @include respond-mobile {
-        margin: 0;
+        margin: 0 auto;
+        padding: var(--spacing-4);
+        max-width: 200px;
       }
 
       img {
-        overflow: hidden;
+        display: block;
         width: 100%;
       }
     }
@@ -67,29 +89,21 @@ aside {
     h2 {
       @extend .text-glow-16;
       font-weight: 500;
-      margin: rem(16px) rem(0);
+      margin: var(--spacing-4) 0;
       position: relative;
 
-      @include respond-desktop {
-        margin-bottom: rem(12px);
-        margin-left: 0;
-      }
-
       @include respond-laptop {
-        margin-bottom: rem(14px);
-        margin-left: 0;
-      }
-
-      @include respond-tablet {
-        margin-bottom: rem(12px);
+        margin-bottom: var(--spacing-3);
+        text-align: center;
       }
 
       @include respond-tablet-sm {
-        margin-bottom: rem(10px);
+        margin-bottom: var(--spacing-2);
+        text-align: center;
       }
-      
+
       @include respond-mobile {
-        margin-bottom: rem(10px);
+        margin-bottom: var(--spacing-2);
       }
     }
 
@@ -99,16 +113,23 @@ aside {
       margin: 0 auto;
       padding: 0.6em 1.2em;
       width: max-content;
+      max-width: 100%;
       color: var(--color-dark-heading);
       text-align: center;
       vertical-align: baseline;
       border-radius: var(--radius-8);
       font-weight: 300;
       line-height: 1;
+      box-sizing: border-box;
 
       // Empty badges collapse automatically
       &:empty {
         display: none;
+      }
+
+      @include respond-mobile {
+        font-size: 13px;
+        padding: 0.5em 1em;
       }
     }
   }
@@ -117,11 +138,15 @@ aside {
     ul {
       list-style: none;
       padding: 0;
+      width: 100%;
+      box-sizing: border-box;
 
       li {
-        margin-bottom: rem(16px);
+        margin-bottom: var(--spacing-4);
         display: flex;
         align-items: stretch;
+        width: 100%;
+        box-sizing: border-box;
 
         div > .overhead {
           font-size: rem(12px);
@@ -135,24 +160,23 @@ aside {
 
         div > .list-content {
           font-size: rem(15px);
+          word-wrap: break-word;
+          overflow-wrap: break-word;
         }
 
         .icon-box {
           @extend .box-shadow-8;
-          display: inline-flex;
+          display: none;
           align-items: center;
           justify-content: center;
-          margin-right: rem(16px);
+          margin-right: var(--spacing-4);
           border-radius: var(--radius-12);
           min-width: rem(48px);
+          flex-shrink: 0;
 
           i {
             text-align: center;
             margin: 0 auto;
-          }
-
-          @include respond-desktop {
-            display: none;
           }
 
           @include respond-laptop {
@@ -164,19 +188,27 @@ aside {
 
     .ju-social {
       text-align: center;
-      margin-top: rem(18px);
+      margin-top: var(--spacing-4);
+
+      @include respond-laptop {
+        text-align: left;
+      }
+
+      @include respond-tablet-sm {
+        text-align: center;
+      }
 
       a {
         color: var(--color-dark-paragraph);
         font-size: rem(20px);
         -webkit-text-fill-color: inherit;
         text-decoration: none;
-        margin: 0 rem(10px);
-        transition: all .05s ease-out;
+        margin: 0 var(--spacing-2);
+        transition: all var(--transition-fast) var(--transition-easing);
 
         &:hover {
           color: var(--color-dark-heading);
-          @extend .text-glow-8
+          @extend .text-glow-8;
         }
       }
     }

@@ -1,0 +1,244 @@
+{
+  "sidebar": {
+    "firstName": "Nikita",
+    "lastName": "Reshetnik",
+    "positionTitle": ".NET / AI Engineer",
+    "city": "Kyiv",
+    "country": "Ukraine",
+    "email": "reshetnik.nikita@gmail.com",
+    "phone": "+38(068)752-14-48",
+    "telegram": "@reshetnigram",
+    "links": {
+      "gitHubLink": "https://github.com/grafanaKibana",
+      "linkedInLink": "https://www.linkedin.com/in/nikitareshetnik/",
+      "repositoryLink": "https://github.com/grafanaKibana/WebCV.Angular"
+    }
+  },
+  "aboutMe": {
+    "content": "Hi, I'm Nikita — a .NET and AI Engineer with 3+ years of experience delivering enterprise-grade software. I build scalable RESTful microservices, monolithic systems, and LLM-powered AI features across the .NET ecosystem.\n\nMy background includes hands-on work with MS SQL Server, ElasticSearch, Azure cloud services, and CI/CD pipelines. I’ve also led a cross-functional team delivering AI-driven capabilities for a large enterprise platform, focusing on reliability, performance, and end-to-end delivery."
+  },
+  "education": [
+    {
+      "educationalInstitution": "State University of Information and Communication Technologies",
+      "degree": "Bachelor",
+      "speciality": "Software Engineering",
+      "startYear": "2019",
+      "endYear": "2023",
+      "description": "In the course, I got educational experience of developing C# applications, аlso designing it from UML diagrams, UX / UI, front-end development, to back-end development using a database, design patterns, and a lot more."
+    }
+  ],
+  "experience": [
+    {
+      "positionTitle": "AI Engineer",
+      "company": "ELEKS",
+      "startMonth": "November",
+      "startYear": "2024",
+      "endMonth": "",
+      "endYear": "",
+      "description": {
+        "responsibilities": [
+          "Designed and delivered LLM-based microservice for an enterprise-grade time management legal platform, significantly enhancing capabilities for law firms and professional services.",
+          "Led a new cross-functional team, organizing Agile ceremonies and maintaining clear communication with QA, MLOps, Data Science, DevOps, and Product stakeholders.",
+          "Introduced internal documentation and wikis, including a newcomer dashboard, ensuring knowledge sharing and efficient onboarding."
+        ],
+        "aboutProject": "Enterprise time-management platform used by major law firms to streamline billing and analytics.",
+        "toolsAndTechnologies": ""
+      }
+    },
+    {
+      "positionTitle": "Software Engineer",
+      "company": "ELEKS",
+      "startMonth": "December",
+      "startYear": "2023",
+      "endMonth": "December",
+      "endYear": "2024",
+      "description": {
+        "responsibilities": [
+          "Delivered numerous end-to-end features and bug fixes spanning RESTful microservices, a monolithic application, plugin packages, and the desktop client.",
+          "Developed and optimized complex SQL queries for efficient data retrieval, manipulation, and reporting. Collaborated with database engineers to refine query execution plans and improve overall database performance.",
+          "Conducted in-depth code reviews and proactively refactored legacy code, enhancing maintainability and aligning with modern .NET standards.",
+          "Took an active role in agile processes such as planning, daily stand-ups, and retrospectives. Led these activities on rotational basics.",
+          "Collaborated with QA and DevOps teams on release processes, swiftly resolving deployment issues and ensuring smooth rollouts."
+        ],
+        "aboutProject": "Enterprise time-management platform used by major law firms to streamline billing and analytics.",
+        "toolsAndTechnologies": ""
+      }
+    },
+    {
+      "positionTitle": "Junior Software Engineer",
+      "company": "ELEKS",
+      "startMonth": "September",
+      "startYear": "2021",
+      "endMonth": "December",
+      "endYear": "2023",
+      "description": {
+        "responsibilities": [
+          "Delivered features and bug fixes across RESTful API microservices, a monolithic app, plug-in packages, ensuring seamless integration of system components with each other.",
+          "Conducted code reviews, providing feedback on peers' pull requests and engaging in pair programming for complex tasks.",
+          "Contributed to the technical support tickets, investigated and resolved client-specific issues requiring technical and domain knowledge.",
+          "Created and maintained dev wikis covering environment setup, app installation, and API documentation to ease onboarding for future newcomers. Curated a shared SQL query library to streamline team investigations and data generation."
+        ],
+        "aboutProject": "Enterprise time-management platform used by major law firms to streamline billing and analytics.",
+        "toolsAndTechnologies": ""
+      }
+    },
+    {
+      "positionTitle": "Trainee Software Engineer",
+      "company": "ELEKS",
+      "startMonth": "September",
+      "startYear": "2021",
+      "endMonth": "December",
+      "endYear": "2023",
+      "description": {
+        "responsibilities": [
+          "Delivered basic yet critical RESTful API tasks and small bug fixes under supervision, ensuring smooth integration with other team components.",
+          "Collaborated with senior developers to adopt modern .NET practices and understand project architecture.",
+          "Quickly ramped up on the time-management/legal domain, taking on small API tasks and bug fixes.",
+          "Created and updated dev wikis covering environment setup and project guidelines, easing onboarding for future newcomers."
+        ],
+        "aboutProject": "Enterprise time-management platform used by major law firms to streamline billing and analytics.",
+        "toolsAndTechnologies": ""
+      }
+    },
+    {
+      "positionTitle": "Software Engineering Intern",
+      "company": "Sigma Software",
+      "startMonth": "March",
+      "startYear": "2021",
+      "endMonth": "April",
+      "endYear": "2021",
+      "description": {
+        "responsibilities": [
+          "Developed a full-stack car rental application in a team of intern developers, utilizing UML diagrams for front-end and back-end design.",
+          "Designed the front-end using Figma mockups, implementing a responsive and user-friendly interface.",
+          "Achieved 80%+ unit/integration test coverage on the Back-End, ensuring code reliability and maintainability."
+        ],
+        "aboutProject": "Full-stack car rental application, aiming to gain hands-on experience in building an enterprise-level application from scratch.",
+        "toolsAndTechnologies": ""
+      }
+    }
+  ],
+  "skills": [
+    {
+      "name": "Languages",
+      "skills": [
+        {
+          "technology": ".NET / C#",
+          "level": 3
+        },
+        {
+          "technology": "T-SQL",
+          "level": 2
+        },
+        {
+          "technology": "Python",
+          "level": 1
+        }
+      ]
+    },
+    {
+      "name": "Data Storage",
+      "skills": [
+        {
+          "technology": "MS SQL Server",
+          "level": 2
+        },
+        {
+          "technology": "ElasticSearch",
+          "level": 2
+        }
+      ]
+    },
+    {
+      "name": "Technologies",
+      "skills": [
+        {
+          "technology": "ASP.NET Web API",
+          "level": 3
+        },
+        {
+          "technology": "Entity Framework",
+          "level": 2
+        }
+      ]
+    },
+    {
+      "name": "Cloud",
+      "skills": [
+        {
+          "technology": "Azure",
+          "level": 2
+        },
+        {
+          "technology": "AWS",
+          "level": 1
+        }
+      ]
+    },
+    {
+      "name": "AI",
+      "skills": [
+        {
+          "technology": "Semantic Kernel + OpenAI",
+          "level": 3
+        },
+        {
+          "technology": "Prompt Engineering",
+          "level": 2
+        },
+        {
+          "technology": "Azure AI Services",
+          "level": 2
+        }
+      ]
+    },
+    {
+      "name": "CI / CD",
+      "skills": [
+        {
+          "technology": "Jenkins",
+          "level": 2
+        },
+        {
+          "technology": "Azure DevOps",
+          "level": 2
+        },
+        {
+          "technology": "GitHub Actions",
+          "level": 2
+        }
+      ]
+    },
+    {
+      "name": "Other",
+      "skills": [
+        {
+          "technology": "Grafana",
+          "level": 2
+        },
+        {
+          "technology": "Kibana",
+          "level": 1
+        },
+        {
+          "technology": "ArgoCD",
+          "level": 1
+        },
+        {
+          "technology": "Git",
+          "level": 2
+        },
+        {
+          "technology": "UML",
+          "level": 1
+        }
+      ]
+    }
+  ],
+  "header": {
+    "isPortfolioDone": false,
+    "isBlogDone": false,
+    "isDownloadCVDone": false
+  }
+}
+

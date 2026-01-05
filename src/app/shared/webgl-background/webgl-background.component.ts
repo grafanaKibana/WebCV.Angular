@@ -1,5 +1,6 @@
-import { Component, OnInit, OnDestroy, ElementRef, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, AfterViewInit, OnDestroy, ElementRef, ChangeDetectionStrategy } from '@angular/core';
 import { WebGLGradientService } from '../../services/webgl-gradient.service';
+import { DynamicReflectionService } from '../../services/dynamic-reflection.service';
 
 @Component({
   selector: 'app-webgl-background',
@@ -7,9 +8,9 @@ import { WebGLGradientService } from '../../services/webgl-gradient.service';
   styleUrls: ['./webgl-background.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class WebGLBackgroundComponent implements OnInit, OnDestroy {
-  speed = 0.3;             // Animation speed
-  amplitude = 0.7;         // Wave amplitude (intensity)
+export class WebGLBackgroundComponent implements OnInit, AfterViewInit, OnDestroy {
+  speed = 0.5;             // Animation speed (increased for more movement)
+  amplitude = 0.85;        // Wave amplitude (increased for more visible variation)
   darkerTop = false;       // Enable darker top effect
   themeName?: string;      // Name of predefined color scheme
   parallax = true;         // Enable parallax scrolling effect
@@ -17,11 +18,20 @@ export class WebGLBackgroundComponent implements OnInit, OnDestroy {
 
   constructor(
     private elementRef: ElementRef,
-    private webglGradientService: WebGLGradientService
+    private webglGradientService: WebGLGradientService,
+    private dynamicReflectionService: DynamicReflectionService
   ) {}
 
   ngOnInit(): void {
-    this.initGradient();
+    // Empty - initialization moved to AfterViewInit for Safari compatibility
+  }
+  
+  ngAfterViewInit(): void {
+    // Safari-specific: Use setTimeout to ensure DOM is fully rendered
+    // This fixes the "black background until inspector opened" issue
+    setTimeout(() => {
+      this.initGradient();
+    }, 0);
   }
 
   ngOnDestroy(): void {
@@ -29,6 +39,7 @@ export class WebGLBackgroundComponent implements OnInit, OnDestroy {
     if (container) {
       this.webglGradientService.removeGradient(container);
     }
+    this.dynamicReflectionService.destroy();
   }
 
   /**
@@ -68,7 +79,15 @@ export class WebGLBackgroundComponent implements OnInit, OnDestroy {
         darkerTop: this.darkerTop,
         themeName: this.themeName,
         parallax: this.parallax,
-        parallaxIntensity: this.parallaxIntensity
+        parallaxIntensity: this.parallaxIntensity,
+        onColorsUpdate: (colors: number[][]) => {
+          // Pass colors directly to reflection service for optimal performance
+          this.dynamicReflectionService.updateReflectionColors(colors);
+        },
+        onBrightnessUpdate: (angle: number, brightness: number) => {
+          // Update reflection angle based on where bright colors are positioned
+          this.dynamicReflectionService.updateReflectionAngle(angle, brightness);
+        }
       });
     }
   }

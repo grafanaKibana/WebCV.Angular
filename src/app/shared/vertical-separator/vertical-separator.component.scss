@@ -1,4 +1,4 @@
-@import './src/assets/styles/utility';
+@import '../../../assets/styles/utility';
 
 div {
   background: var(--color-dark-separator);
@@ -6,6 +6,6 @@ div {
   width: 1px;
 
   @include respond-mobile {
-    margin: 0 rem(6px);
+    margin: 0 var(--spacing-1);
   }
 }

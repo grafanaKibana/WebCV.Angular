@@ -7,5 +7,8 @@
         <span>{{education.degree}} degree of {{education.speciality}}</span>
       </div>
     </div>
+    <div *ngIf="education.description" class="section-item-content">
+      <p style="white-space: pre-line;">{{education.description}}</p>
+    </div>
   </div>
 </section>

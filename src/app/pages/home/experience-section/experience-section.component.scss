@@ -1,7 +1,25 @@
 @import "../home";
 
-ul {
-  list-style: '- ';
-  padding-inline-start: 10px;
-  margin-top: 0;
+.section-item-content {
+  ul {
+    list-style: '- ';
+    padding-inline-start: rem(20px);
+    margin: rem(6px) 0 rem(12px) 0;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    li {
+      margin-bottom: rem(4px);
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+
+      p {
+        margin: 0;
+      }
+    }
+  }
 }

@@ -1,26 +1,28 @@
-@import './src/assets/styles/utility';
+@import '../../../assets/styles/utility';
 
 header {
   @extend .container-shadow;
-  position: relative;
+  @extend .container-glass;
   z-index: 2;
   display: flex;
   align-items: center;
-  margin-bottom: rem(18px);
-  background-color: var(--color-dark-wrapper-background);
+  margin-bottom: var(--spacing-4);
   border-radius: var(--radius-20);
-  backdrop-filter: blur(20px) saturate(0.5);
-  -webkit-backdrop-filter: blur(20px) saturate(0.5);
 
   @include respond-tablet-sm {
     border-radius: var(--radius-16);
+  }
+
+  @include respond-mobile {
+    border-radius: var(--radius-12);
+    margin-bottom: var(--spacing-3);
   }
 
   ul {
     display: flex;
     justify-content: flex-start;
     height: auto;
-    padding: rem(12px) rem(14px);
+    padding: var(--spacing-3) var(--spacing-3);
     margin: 0;
     list-style-type: none;
     font-weight: 500;
@@ -28,15 +30,16 @@ header {
 
     @include respond-tablet-sm {
       justify-content: space-evenly;
-      padding: rem(8px) rem(10px);
+      padding: var(--spacing-2) var(--spacing-2);
     }
 
     .right-menu-items {
       display: flex;
       margin-left: auto;
-      
+
       @include respond-tablet-sm {
         margin-left: 0;
+        display: contents;
       }
     }
 
@@ -49,36 +52,59 @@ header {
       text-decoration: none;
 
       &.soon {
+        color: color-mix(in srgb, var(--color-dark-heading) 40%, transparent);
+
         span {
-          color: var(--color-dark-paragraph);
+          color: color-mix(in srgb, var(--color-dark-heading) 40%, transparent);
           text-decoration: line-through;
 
           &:after {
             content: 'soon';
             display: inline-block;
+            vertical-align: middle;
             text-transform: uppercase;
             font-weight: 400;
-            font-size: 11px;
+            font-size: 9px;
             padding: 2px 4px;
-            margin: auto auto auto rem(6px);
+            margin-left: rem(6px);
             background-color: rgba(0, 187, 255, 0.3);
-            border-radius: 4px;
+            border-radius: var(--radius-8);
             border: 1px solid var(--color-dark-neon-glow);
+          }
+        }
+
+        &:hover {
+          background-color: transparent;
+          box-shadow: none;
+          text-shadow: none;
+          cursor: pointer;
+        }
+
+        &:active {
+          background-color: transparent;
+          box-shadow: none;
+        }
+
+        i {
+          color: color-mix(in srgb, var(--color-dark-heading) 40%, transparent);
+
+          &:hover {
+            text-shadow: none;
           }
         }
       }
 
-      &:hover {
+      &:hover:not(.soon) {
         @extend .box-shadow-16;
         @extend .text-glow-12;
-        background-color: rgba(0, 0, 0, 0.25);
-        transition: all .05s linear;
+        background: rgba(15, 20, 25, 0.3);
+        transition: all var(--transition-fast) var(--transition-easing);
         cursor: pointer;
       }
 
-      &:active {
+      &:active:not(.soon) {
         @extend .box-shadow-16;
-        transition: all .05s ease-in;
+        transition: all var(--transition-fast) ease-in;
       }
 
       i {
@@ -87,7 +113,10 @@ header {
       }
 
       @include respond-tablet-sm {
-        padding: rem(12px) 10%;
+        padding: var(--spacing-3);
+        flex: 1;
+        justify-content: center;
+        min-width: 0;
 
         span {
           display: none;
@@ -97,21 +126,34 @@ header {
           display: block;
           margin-right: 0;
           font-size: rem(20px);
-
-          &:hover {
-            text-shadow: 0 0 10px var(--color-dark-neon-glow);
-          }
-
-          @include respond-tablet-sm {
-            font-size: 4vw;
-          }
+          text-align: center;
         }
+
+        &:not(.soon) i:hover {
+          text-shadow: 0 0 10px var(--color-dark-neon-glow);
+        }
+      }
+    }
+
+    .theme-button {
+      @include respond-tablet-sm {
+        flex: 1;
+        justify-content: center;
+        padding: var(--spacing-3);
+        min-width: 0;
       }
     }
 
     .download-button {
       i {
         display: block;
+      }
+
+      @include respond-tablet-sm {
+        flex: 1;
+        justify-content: center;
+        padding: var(--spacing-3);
+        min-width: 0;
       }
     }
   }

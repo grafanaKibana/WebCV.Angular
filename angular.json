@@ -10,7 +10,8 @@
 					"strict": true
 				},
 				"@schematics/angular:component": {
-					"style": "scss"
+					"style": "scss",
+					"standalone": false
 				}
 			},
 			"root": "",
@@ -18,12 +19,14 @@
 			"prefix": "app",
 			"architect": {
 				"build": {
-					"builder": "@angular-devkit/build-angular:browser",
+					"builder": "@angular-devkit/build-angular:application",
 					"options": {
 						"outputPath": "dist/webcv-angular",
 						"index": "src/index.html",
-						"main": "src/main.ts",
-						"polyfills": "src/polyfills.ts",
+						"browser": "src/main.ts",
+						"polyfills": [
+							"src/polyfills.ts"
+						],
 						"tsConfig": "tsconfig.app.json",
 						"assets": [
 							"src/favicon.ico",
@@ -40,13 +43,18 @@
 							"budgets": [
 								{
 									"type": "initial",
-									"maximumWarning": "500kb",
-									"maximumError": "1mb"
+									"maximumWarning": "1mb",
+									"maximumError": "2mb"
 								},
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "6kb",
-                  "maximumError": "12kb"
+                  "maximumWarning": "12kb",
+                  "maximumError": "24kb"
+							},
+							{
+								"type": "any",
+								"maximumWarning": "500kb",
+								"maximumError": "1mb"
                 }
 							],
 							"fileReplacements": [
@@ -57,14 +65,12 @@
 							],
 							"outputHashing": "all"
 						},
-						"development": {
-							"buildOptimizer": false,
-							"optimization": false,
-							"vendorChunk": true,
-							"extractLicenses": false,
-							"sourceMap": true,
-							"namedChunks": true
-						}
+					"development": {
+						"optimization": false,
+						"extractLicenses": false,
+						"sourceMap": true,
+						"namedChunks": true
+					}
 					},
 					"defaultConfiguration": "production"
 				},
@@ -72,10 +78,10 @@
 					"builder": "@angular-devkit/build-angular:dev-server",
 					"configurations": {
 						"production": {
-							"browserTarget": "webcv-angular:build:production"
+							"buildTarget": "webcv-angular:build:production"
 						},
 						"development": {
-							"browserTarget": "webcv-angular:build:development"
+							"buildTarget": "webcv-angular:build:development"
 						}
 					},
 					"defaultConfiguration": "development"
@@ -83,7 +89,7 @@
 				"extract-i18n": {
 					"builder": "@angular-devkit/build-angular:extract-i18n",
 					"options": {
-						"browserTarget": "webcv-angular:build"
+						"buildTarget": "webcv-angular:build"
 					}
 				},
 				"test": {
@@ -106,6 +112,8 @@
 				}
 			}
 		}
-	},
-	"defaultProject": "webcv-angular"
+  },
+  "cli": {
+    "analytics": false
+  }
 }

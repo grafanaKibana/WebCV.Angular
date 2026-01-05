@@ -1,4 +1,11 @@
 import { Injectable, NgZone } from '@angular/core';
+import {
+  webglConfig,
+  getColorScheme,
+  getDefaultColorScheme,
+  getThemeNames,
+  getRandomColorScheme
+} from '../config/webgl.config';
 
 /**
  * WebGL Gradient Service
@@ -11,61 +18,20 @@ import { Injectable, NgZone } from '@angular/core';
 export class WebGLGradientService {
   private gradients: Map<string, GradientInstance> = new Map();
 
-  // Define color schemes as a Map with theme names as keys
-  private colorSchemesMap = new Map<string, number[][]>([
-    ['Green Teal', [
-      [62, 81, 63],     // Dark green (matches #123524 theme)
-      [99, 150, 112],   // Medium green
-      [32, 105, 96],    // Teal
-      [48, 77, 109],    // Blue-green
-    ]],
-    ['Calm White', [
-      [195, 228, 255],  // Light blue (#c3e4ff)
-      [110, 195, 244],  // Sky blue (#6ec3f4)
-      [234, 226, 255],  // Pale lavender (#eae2ff)
-      [185, 190, 255],  // Periwinkle (#b9beff)
-    ]],
-    ['Ocean Blue', [
-      [19, 41, 75],     // Dark navy
-      [34, 87, 126],    // Navy blue
-      [56, 149, 211],   // Medium blue
-      [88, 204, 237],   // Light blue
-    ]],
-    ['Autumn', [
-      [145, 62, 33],    // Rust
-      [224, 128, 68],   // Orange
-      [233, 215, 85],   // Yellow
-      [85, 105, 45],    // Olive green
-    ]],
-    ['Mint Fresh', [
-      [83, 223, 131],   // Bright green (#53DF83)
-      [71, 210, 233],   // Cyan blue (#47D2E9)
-      [63, 63, 63],     // Dark gray (#3F3F3F)
-      [238, 238, 238],  // Light gray (#EEEEEE)
-    ]]
-  ]);
-
-  private config = {
-    defaultColors: this.colorSchemesMap.get('Green Teal')!, // Use Green Teal as default
-    defaultSpeed: 0.5,
-    defaultAmplitude: 0.2,
-    parallaxIntensity: 0.5, // Default parallax intensity
-  };
-
   constructor(private ngZone: NgZone) {}
 
   /**
    * Get theme names for all color schemes
    */
   getThemeNames(): string[] {
-    return Array.from(this.colorSchemesMap.keys());
+    return getThemeNames();
   }
 
   /**
    * Get a specific color scheme by theme name
    */
   getColorScheme(themeName: string): number[][] {
-    return this.colorSchemesMap.get(themeName) || this.config.defaultColors;
+    return getColorScheme(themeName) || getDefaultColorScheme();
   }
 
   /**
@@ -74,18 +40,17 @@ export class WebGLGradientService {
   getColorSchemeByIndex(index: number): number[][] {
     const themeNames = this.getThemeNames();
     if (index >= 0 && index < themeNames.length) {
-      return this.colorSchemesMap.get(themeNames[index])!;
+      const scheme = getColorScheme(themeNames[index]);
+      return scheme || getDefaultColorScheme();
     }
-    return this.config.defaultColors;
+    return getDefaultColorScheme();
   }
 
   /**
    * Get a random color scheme
    */
   getRandomColorScheme(): number[][] {
-    const themeNames = this.getThemeNames();
-    const randomIndex = Math.floor(Math.random() * themeNames.length);
-    return this.colorSchemesMap.get(themeNames[randomIndex])!;
+    return getRandomColorScheme();
   }
 
   /**
@@ -116,6 +81,8 @@ export class WebGLGradientService {
       darkerTop?: boolean;
       parallax?: boolean;
       parallaxIntensity?: number;
+      onColorsUpdate?: (colors: number[][]) => void;
+      onBrightnessUpdate?: (angle: number, brightness: number) => void;
     } = {}
   ): void {
     // Generate a unique ID for this gradient instance
@@ -125,20 +92,29 @@ export class WebGLGradientService {
     // Run outside Angular zone for better performance
     this.ngZone.runOutsideAngular(() => {
       try {
-        // Check if WebGL is supported
+        // Check if WebGL is supported with Safari-compatible context options
         const testCanvas = document.createElement('canvas');
-        const testContext = testCanvas.getContext('webgl');
+        const contextOptions = {
+          alpha: true,
+          premultipliedAlpha: false,
+          antialias: true,
+          depth: false,
+          stencil: false,
+          preserveDrawingBuffer: false
+        };
+        const testContext = testCanvas.getContext('webgl', contextOptions) || 
+                           testCanvas.getContext('experimental-webgl', contextOptions);
 
         if (!testContext) {
           // WebGL not supported, apply CSS fallback
-          this.applyCssFallback(container, options.colors || this.config.defaultColors);
+          this.applyCssFallback(container, options.colors || getDefaultColorScheme());
           return;
         }
 
         // Determine which colors to use:
         // 1. Explicitly provided colors take precedence
         // 2. If a theme name is provided, use that scheme
-        // 3. Otherwise use a random color scheme
+        // 3. Otherwise use random or default based on config
         let colors: number[][];
 
         if (options.colors) {
@@ -148,19 +124,21 @@ export class WebGLGradientService {
           // Use the specified theme
           colors = this.getColorScheme(options.themeName);
         } else {
-          // Use a random color scheme
-          colors = this.getRandomColorScheme();
+          // Use default theme
+          colors = getDefaultColorScheme();
         }
 
         // Initialize gradient with configuration
         const gradient = new GradientInstance({
           element: container,
           colors: colors,
-          speed: options.speed !== undefined ? options.speed : this.config.defaultSpeed,
-          amplitude: options.amplitude !== undefined ? options.amplitude : this.config.defaultAmplitude,
-          darkerTop: options.darkerTop || false,
-          parallax: options.parallax !== undefined ? options.parallax : false,
-          parallaxIntensity: options.parallaxIntensity !== undefined ? options.parallaxIntensity : this.config.parallaxIntensity
+          speed: options.speed !== undefined ? options.speed : webglConfig.background.speed,
+          amplitude: options.amplitude !== undefined ? options.amplitude : webglConfig.background.amplitude,
+          darkerTop: options.darkerTop !== undefined ? options.darkerTop : webglConfig.background.darkerTop,
+          parallax: options.parallax !== undefined ? options.parallax : webglConfig.background.parallax,
+          parallaxIntensity: options.parallaxIntensity !== undefined ? options.parallaxIntensity : webglConfig.background.parallaxIntensity,
+          onColorsUpdate: options.onColorsUpdate,
+          onBrightnessUpdate: options.onBrightnessUpdate
         });
 
         // Store reference to the gradient instance
@@ -168,7 +146,7 @@ export class WebGLGradientService {
       } catch (error) {
         console.error('Error initializing WebGL gradient:', error);
         // Apply CSS fallback in case of errors
-        this.applyCssFallback(container, options.colors || this.config.defaultColors);
+        this.applyCssFallback(container, options.colors || getDefaultColorScheme());
       }
     });
   }
@@ -219,6 +197,19 @@ export class WebGLGradientService {
   }
 
   /**
+   * Transition existing gradient to new colors smoothly
+   */
+  transitionGradientColors(container: HTMLElement, newColors: number[][]): void {
+    const id = container.getAttribute('data-gradient-id');
+    if (id && this.gradients.has(id)) {
+      const gradient = this.gradients.get(id);
+      if (gradient) {
+        gradient.transitionToColors(newColors);
+      }
+    }
+  }
+
+  /**
    * Remove all gradients and clean up
    */
   destroyAll(): void {
@@ -248,6 +239,16 @@ class GradientInstance {
   private parallaxIntensity: number = 0.5;
   private scrollY: number = 0;
   private scrollListenerAdded: boolean = false;
+  // Color interpolation properties
+  private currentColors: number[][] = [];
+  private targetColors: number[][] = [];
+  private transitionStartTime: number = 0;
+  private isTransitioning: boolean = false;
+  private transitionDuration: number = 500; // 0.5s in milliseconds
+  private onColorsUpdate?: (colors: number[][]) => void;
+  private onBrightnessUpdate?: (angle: number, brightness: number) => void;
+  private lastEmittedColors: number[][] = [];
+  private colorEmitThrottle: number = 0;
 
   constructor(options: {
     element: HTMLElement;
@@ -257,6 +258,8 @@ class GradientInstance {
     darkerTop: boolean;
     parallax: boolean;
     parallaxIntensity: number;
+    onColorsUpdate?: (colors: number[][]) => void;
+    onBrightnessUpdate?: (angle: number, brightness: number) => void;
   }) {
     this.config = {
       ...options,
@@ -268,25 +271,58 @@ class GradientInstance {
     this.darkerTop = this.config.darkerTop;
     this.parallax = this.config.parallax;
     this.parallaxIntensity = this.config.parallaxIntensity;
+    this.onColorsUpdate = options.onColorsUpdate;
+    this.onBrightnessUpdate = options.onBrightnessUpdate;
+
+    // Initialize color interpolation
+    this.currentColors = JSON.parse(JSON.stringify(this.config.colors));
+    this.targetColors = JSON.parse(JSON.stringify(this.config.colors));
+    this.lastEmittedColors = JSON.parse(JSON.stringify(this.config.colors));
 
     // Setup canvas and context
     this.canvas = document.createElement('canvas');
-    this.canvas.width = this.width = options.element.offsetWidth;
-    this.canvas.height = this.height = options.element.offsetHeight;
     this.canvas.style.position = 'absolute';
     this.canvas.style.width = '100%';
     this.canvas.style.height = '100%';
     this.canvas.style.top = '0';
     this.canvas.style.left = '0';
     this.canvas.style.zIndex = '-1';
+    
+    // Append canvas to DOM FIRST (Safari needs this for proper sizing)
     options.element.appendChild(this.canvas);
+    
+    // NOW set canvas dimensions after it's in the DOM (critical for Safari)
+    this.width = options.element.offsetWidth || options.element.clientWidth || window.innerWidth;
+    this.height = options.element.offsetHeight || options.element.clientHeight || window.innerHeight;
+    
+    // Set actual canvas buffer size (Safari needs explicit values)
+    this.canvas.width = this.width;
+    this.canvas.height = this.height;
 
-    this.gl = this.canvas.getContext('webgl') as WebGLRenderingContext;
+    // Try to get WebGL context with Safari-compatible options
+    const contextOptions = {
+      alpha: true,
+      premultipliedAlpha: false,
+      antialias: true,
+      depth: false,
+      stencil: false,
+      preserveDrawingBuffer: false
+    };
+    
+    this.gl = (this.canvas.getContext('webgl', contextOptions) || 
+               this.canvas.getContext('experimental-webgl', contextOptions)) as WebGLRenderingContext;
 
     if (!this.gl) {
       console.error('WebGL not supported');
       return;
     }
+
+    // Enable alpha blending for Safari compatibility
+    this.gl.enable(this.gl.BLEND);
+    this.gl.blendFunc(this.gl.SRC_ALPHA, this.gl.ONE_MINUS_SRC_ALPHA);
+    
+    // Clear to transparent black
+    this.gl.clearColor(0, 0, 0, 0);
 
     // Setup scroll listener for parallax if enabled
     if (this.parallax) {
@@ -297,10 +333,24 @@ class GradientInstance {
     this.initializeShaders();
     this.resize();
     this.setColors();
+    
+    // Safari-specific: Force initial render before starting animation
+    // This ensures the canvas is properly initialized
+    this.gl.viewport(0, 0, this.width, this.height);
+    this.gl.clear(this.gl.COLOR_BUFFER_BIT);
+    
+    // Start animation
     this.animate();
 
     // Add resize listener
     window.addEventListener('resize', this.resize.bind(this));
+    
+    // Safari-specific: Trigger a resize after a short delay to ensure proper initialization
+    setTimeout(() => {
+      if (this.canvas && this.gl && this.playing) {
+        this.resize();
+      }
+    }, 100);
   }
 
   /**
@@ -328,7 +378,7 @@ class GradientInstance {
   private initializeShaders(): void {
     // Vertex shader program
     const vertexShaderSource = `
-      precision mediump float;
+      precision highp float;
       attribute vec2 position;
       varying vec2 vUv;
       void main() {
@@ -339,7 +389,7 @@ class GradientInstance {
 
     // Fragment shader program for smooth gradient blending
     const fragmentShaderSource = `
-      precision mediump float;
+      precision highp float;
       uniform vec3 u_colors[4];
       uniform vec2 u_resolution;
       uniform float u_time;
@@ -424,6 +474,15 @@ class GradientInstance {
         return 42.0 * dot(m*m, vec4(dot(p0, x0), dot(p1, x1), dot(p2, x2), dot(p3, x3)));
       }
 
+      // High-quality dithering to eliminate color banding
+      // Uses triangular probability distribution for smooth dither
+      float dither(vec2 fragCoord) {
+        // Generate pseudo-random value from screen position
+        float noise = fract(sin(dot(fragCoord, vec2(12.9898, 78.233))) * 43758.5453);
+        // Convert to triangular distribution (-1 to 1) for better visual quality
+        return (noise * 2.0 - 1.0) / 255.0;
+      }
+
       void main() {
         // Normalized pixel coordinates
         vec2 uv = vUv;
@@ -433,16 +492,20 @@ class GradientInstance {
           uv.y += u_scroll_offset;
         }
 
-        // Time-based animation
-        float time = u_time * 0.15;
+        // Time-based animation with subtle variation
+        float time = u_time * 0.22; // Increased from 0.15 for more noticeable movement
 
-        // Create multiple noise layers for more organic look
-        float noise1 = snoise(vec3(uv * 0.8, time * 0.3)) * u_amplitude * 1.5; // Larger primary shapes
-        float noise2 = snoise(vec3(uv * 1.5, time * 0.4)) * u_amplitude * 0.7; // Medium details
-        float noise3 = snoise(vec3(uv * 3.0, time * 0.5)) * u_amplitude * 0.3; // Smaller details
+        // Add subtle pulsing effect for more "alive" feeling
+        float pulse = sin(u_time * 0.08) * 0.05 + 1.0; // Very subtle breathing effect
 
-        // Combined noise
-        float noiseValue = noise1 + noise2 + noise3;
+        // Create multiple noise layers with varied speeds for organic, flowing movement
+        float noise1 = snoise(vec3(uv * 0.75, time * 0.35)) * u_amplitude * 1.6 * pulse; // Larger primary shapes
+        float noise2 = snoise(vec3(uv * 1.4, time * 0.5)) * u_amplitude * 0.8; // Medium details
+        float noise3 = snoise(vec3(uv * 2.8, time * 0.65)) * u_amplitude * 0.35; // Smaller details
+        float noise4 = snoise(vec3(uv * 4.5, time * 0.8)) * u_amplitude * 0.15; // Fine texture layer
+
+        // Combined noise with all layers for richer, more dynamic appearance
+        float noiseValue = noise1 + noise2 + noise3 + noise4;
 
         // Map noise to color index (0-1 range)
         float colorPosition = (noiseValue + 1.0) * 0.5;
@@ -461,6 +524,15 @@ class GradientInstance {
           float darkness = 1.0 - uv.y * 0.5;
           color *= darkness;
         }
+
+        // Increase brightness by 10%
+        color *= 1.15;
+
+        // Apply dithering to eliminate color banding
+        // Convert UV to screen coordinates for dither pattern
+        vec2 screenCoord = vUv * u_resolution;
+        float ditherValue = dither(screenCoord);
+        color += vec3(ditherValue);
 
         // Output final color
         gl_FragColor = vec4(color, 1.0);
@@ -541,19 +613,179 @@ class GradientInstance {
   private setColors(): void {
     this.gl.useProgram(this.program);
 
-    // Set color uniforms
+    // Set color uniforms using current interpolated colors
     for (let i = 0; i < 4; i++) {
-      const color = i < this.config.colors.length ? this.config.colors[i] : [0, 0, 0];
+      const color = i < this.currentColors.length ? this.currentColors[i] : [0, 0, 0];
       this.gl.uniform3fv(this.uniforms.u_colors[i], new Float32Array(color));
     }
+  }
+
+  /**
+   * Smoothly transition to new colors
+   */
+  transitionToColors(newColors: number[][]): void {
+    // Convert to normalized colors (0-1 range)
+    this.targetColors = newColors.map(color => color.map(c => c / 255));
+    // Use requestAnimationFrame time format (DOMHighResTimeStamp)
+    this.transitionStartTime = performance.now();
+    this.isTransitioning = true;
+  }
+
+  /**
+   * Update color interpolation
+   */
+  private updateColorTransition(currentTime: number): void {
+    if (!this.isTransitioning) return;
+
+    const elapsed = currentTime - this.transitionStartTime;
+    const progress = Math.min(elapsed / this.transitionDuration, 1.0);
+
+    // Use ease-in-out easing function
+    const easedProgress = progress < 0.5
+      ? 2 * progress * progress
+      : 1 - Math.pow(-2 * progress + 2, 2) / 2;
+
+    // Interpolate each color
+    for (let i = 0; i < 4; i++) {
+      const startColor = this.currentColors[i] || [0, 0, 0];
+      const endColor = this.targetColors[i] || [0, 0, 0];
+
+      this.currentColors[i] = [
+        startColor[0] + (endColor[0] - startColor[0]) * easedProgress,
+        startColor[1] + (endColor[1] - startColor[1]) * easedProgress,
+        startColor[2] + (endColor[2] - startColor[2]) * easedProgress
+      ];
+    }
+
+    // Update colors in shader
+    this.setColors();
+
+    // Check if transition is complete
+    if (progress >= 1.0) {
+      this.isTransitioning = false;
+      this.currentColors = JSON.parse(JSON.stringify(this.targetColors));
+    }
+  }
+
+  /**
+   * Emit current colors to callback at regular intervals
+   * Colors are emitted continuously during animation for dynamic reflections
+   */
+  private emitColorsIfChanged(currentTime: number): void {
+    // Throttle emissions to avoid excessive updates
+    if (currentTime - this.colorEmitThrottle < webglConfig.reflection.updateThrottle) {
+      return;
+    }
+
+    // Convert normalized colors (0-1) back to RGB (0-255) for emission
+    if (this.onColorsUpdate) {
+      const rgbColors = this.currentColors.map(color => 
+        color.map(c => Math.round(c * 255))
+      );
+      this.onColorsUpdate(rgbColors);
+    }
+
+    // Calculate and emit brightness distribution for dynamic reflection angle
+    if (this.onBrightnessUpdate) {
+      const { angle, brightness } = this.calculateBrightnessDistribution(currentTime);
+      this.onBrightnessUpdate(angle, brightness);
+    }
+    
+    this.lastEmittedColors = JSON.parse(JSON.stringify(this.currentColors));
+    this.colorEmitThrottle = currentTime;
+  }
+
+  /**
+   * Calculate brightness distribution to determine reflection direction
+   * Simulates the movement of bright areas in the noise-animated gradient
+   * @param time Current time in milliseconds from performance.now()
+   */
+  private calculateBrightnessDistribution(time: number): { angle: number; brightness: number } {
+    // Calculate base luminance for the color scheme
+    let totalLuminance = 0;
+    for (let i = 0; i < 4; i++) {
+      const color = this.currentColors[i] || [0, 0, 0];
+      const luminance = 0.299 * color[0] + 0.587 * color[1] + 0.114 * color[2];
+      totalLuminance += luminance;
+    }
+    const baseBrightness = totalLuminance / 4;
+
+    // Simulate noise movement using time-based animation
+    // This mirrors the shader's noise animation pattern
+    const timeInSeconds = time * 0.001 * this.config.speed;
+    
+    // Create organic circular motion with multiple frequencies (like noise layers)
+    // These frequencies match the noise layers in the fragment shader
+    // Values tuned to create smooth, natural movement
+    const slowWave = Math.sin(timeInSeconds * 0.22) * 0.5;     // Primary slow movement
+    const mediumWave = Math.cos(timeInSeconds * 0.35) * 0.3;   // Medium variation
+    const fastWave = Math.sin(timeInSeconds * 0.5) * 0.2;      // Fast detail
+    
+    // Combine waves to create natural, flowing movement
+    const x = slowWave + mediumWave * 0.5;
+    const y = mediumWave + fastWave * 0.5;
+    
+    // Add parallax influence if enabled (bright areas shift with scroll)
+    let scrollInfluence = 0;
+    if (this.parallax && this.scrollY !== undefined) {
+      const viewportHeight = window.innerHeight;
+      const documentHeight = Math.max(
+        document.body.scrollHeight,
+        document.documentElement.scrollHeight
+      );
+      const maxScroll = documentHeight - viewportHeight;
+      const scrollProgress = maxScroll > 0 ? this.scrollY / maxScroll : 0;
+      scrollInfluence = scrollProgress * this.parallaxIntensity * 0.3; // Subtle scroll influence
+    }
+    
+    // Calculate angle from movement vector (atan2 returns radians)
+    let angle = Math.atan2(y + scrollInfluence, x) * (180 / Math.PI);
+    
+    // Add base rotation so the default rest position varies with color scheme brightness
+    // Brighter schemes tend toward bottom-right (lighter feel)
+    // Base rotation: 45° (bottom-right), range: 90° variation
+    const baseRotation = 45 + (baseBrightness * 90);
+    angle = (angle + baseRotation) % 360;
+    
+    // Ensure angle is positive
+    if (angle < 0) angle += 360;
+
+    // Animate brightness using pulse effect (matches shader's breathing effect)
+    // This simulates the expansion and contraction of bright areas in the gradient
+    const pulse = Math.sin(timeInSeconds * 0.08) * 0.05 + 1.0; // Subtle breathing (0.95 - 1.05)
+    
+    // Add noise-based brightness variation (simulates bright/dark patches moving)
+    const brightnessPulse = Math.sin(timeInSeconds * 0.3) * 0.15; // More pronounced variation
+    const brightnessDrift = Math.cos(timeInSeconds * 0.18) * 0.1; // Slower drift
+    
+    // Combine base brightness with animated variations
+    // Keep within reasonable bounds (0.2 - 0.8)
+    let animatedBrightness = baseBrightness * pulse + brightnessPulse + brightnessDrift;
+    animatedBrightness = Math.max(0.2, Math.min(0.8, animatedBrightness));
+
+    return { angle, brightness: animatedBrightness };
   }
 
   private resize(): void {
     const parent = this.canvas.parentElement;
     if (!parent) return;
 
-    this.width = parent.offsetWidth;
-    this.height = parent.offsetHeight;
+    // Get dimensions with fallbacks for Safari
+    const newWidth = parent.offsetWidth || parent.clientWidth || window.innerWidth;
+    const newHeight = parent.offsetHeight || parent.clientHeight || window.innerHeight;
+    
+    // Safari fix: Don't resize if dimensions are zero or invalid
+    if (newWidth <= 0 || newHeight <= 0) {
+      return;
+    }
+    
+    // Only resize if dimensions actually changed (optimization)
+    if (this.width === newWidth && this.height === newHeight) {
+      return;
+    }
+
+    this.width = newWidth;
+    this.height = newHeight;
 
     this.canvas.width = this.width;
     this.canvas.height = this.height;
@@ -566,12 +798,20 @@ class GradientInstance {
 
   private shouldSkipFrame(): boolean {
     return !document.body.contains(this.canvas) ||
-           !this.playing ||
-           (this.frame % 2 === 0); // Skip every other frame for performance
+           !this.playing;
+           // Removed frame skipping for smoother, more fluid animation
   }
 
   private render(time: number): void {
     if (!this.playing) return;
+
+    // Update color transition if in progress (time is in milliseconds from performance.now())
+    if (this.isTransitioning) {
+      this.updateColorTransition(time);
+    }
+
+    // Emit colors and brightness distribution to callbacks (throttled)
+    this.emitColorsIfChanged(time);
 
     // Clear canvas
     this.gl.clearColor(0, 0, 0, 0);

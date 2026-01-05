@@ -12,6 +12,8 @@ import { VerticalSeparatorComponent } from './vertical-separator/vertical-separa
 import { ModalDialogComponent } from './modal-dialog/modal-dialog.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
+import { MonthShortPipe } from './pipes/month-short.pipe';
+import { DurationPipe } from './pipes/duration.pipe';
 
 @NgModule({
   declarations: [
@@ -20,6 +22,8 @@ import { MatButtonModule } from '@angular/material/button';
     HorizontalSeparatorComponent,
     VerticalSeparatorComponent,
     ModalDialogComponent,
+    MonthShortPipe,
+    DurationPipe,
   ],
   exports: [
     CommonModule,
@@ -31,6 +35,8 @@ import { MatButtonModule } from '@angular/material/button';
     VerticalSeparatorComponent,
     MatDialogModule,
     ModalDialogComponent,
+    MonthShortPipe,
+    DurationPipe,
   ],
   imports: [
     CommonModule,

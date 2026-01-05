@@ -2,12 +2,24 @@
 
 .main {
   display: grid;
-  grid-template-columns: 27.5% auto;
-  grid-gap: rem(18px);
+  grid-template-columns: 380px 1fr;
+  grid-gap: var(--spacing-4);
+  
+  @include respond-desktop {
+    grid-template-columns: 360px 1fr;
+  }
   
   @include respond-laptop {
     grid-template-columns: 100%;
-    grid-gap: rem(8px);
+    grid-gap: var(--spacing-3);
+  }
+
+  @include respond-tablet-sm {
+    grid-gap: var(--spacing-2);
+  }
+
+  @include respond-mobile {
+    grid-gap: var(--spacing-2);
   }
 }
 
