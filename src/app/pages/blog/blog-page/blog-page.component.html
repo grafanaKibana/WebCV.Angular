@@ -1,3 +1,24 @@
 
-<h1>Blog</h1>
-<app-blog-item [article]="article" *ngFor="let article of articles"></app-blog-item>
+<section class="blog-intro">
+  <p class="blog-intro__eyebrow">Blog</p>
+  <h1 class="blog-intro__title">Notes from building software</h1>
+  <p class="blog-intro__lead">
+    Short, opinionated write-ups on .NET, architecture, and practical AI.
+  </p>
+</section>
+
+<section class="blog-grid">
+  <ng-container *ngIf="articles$ | async as articles; else emptyState">
+    <div class="blog-grid__list">
+      <app-blog-item
+        *ngFor="let article of articles; trackBy: trackById"
+        [article]="article">
+      </app-blog-item>
+    </div>
+  </ng-container>
+  <ng-template #emptyState>
+    <div class="blog-grid__empty">
+      No posts yet. Check back soon.
+    </div>
+  </ng-template>
+</section>

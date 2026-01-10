@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Router, NavigationEnd, ActivatedRoute, ChildrenOutletContexts } from '@angular/router';
+import { Router, NavigationEnd, ChildrenOutletContexts } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { trigger, transition, style, animate, query } from '@angular/animations';
 
@@ -10,16 +10,11 @@ import { trigger, transition, style, animate, query } from '@angular/animations'
   animations: [
     trigger('routeAnimations', [
       transition('* <=> *', [
-        query(':enter, :leave', [
+        query(':enter', [
           style({
-            position: 'absolute',
-            left: 0,
-            width: '100%',
             opacity: 0,
             transform: 'translateY(20px)'
-          })
-        ], { optional: true }),
-        query(':enter', [
+          }),
           animate('400ms cubic-bezier(0.4, 0.0, 0.2, 1)',
             style({ opacity: 1, transform: 'translateY(0)' })
           )
@@ -37,8 +32,12 @@ export class AppComponent {
   ) {
     // Scroll to top on route change
     this.router.events
-      .pipe(filter(event => event instanceof NavigationEnd))
-      .subscribe(() => {
+      .pipe(filter((event): event is NavigationEnd => event instanceof NavigationEnd))
+      .subscribe((event) => {
+        const fragment = this.router.parseUrl(event.urlAfterRedirects).fragment;
+        if (fragment) {
+          return;
+        }
         window.scrollTo({ top: 0, behavior: 'smooth' });
       });
   }

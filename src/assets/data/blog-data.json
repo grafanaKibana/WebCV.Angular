@@ -1,0 +1,190 @@
+{
+  "articles": [
+    {
+      "id": 1,
+      "headline": "ASP.NET Identity: practical authentication and authorization",
+      "summary": "A concise guide to shipping secure sign-in, roles, and policies without over-engineering your auth layer.",
+      "content": [
+        {
+          "type": "paragraph",
+          "text": "ASP.NET Identity is still the fastest way to get a secure auth surface shipped. When the business needs email/password, external login providers, and role-based access today, the built-in primitives reduce risk and let you focus on product."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Why Identity still works"
+        },
+        {
+          "type": "paragraph",
+          "text": "Identity gives you token hygiene, password hashing, and security stamps out of the box. The win is consistency: every project gets the same safe defaults."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Setup in 5 minutes"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Add Identity to the DI container and configure password rules.",
+            "Register cookie settings and lockout defaults.",
+            "Use policies instead of hard-coded role checks in controllers."
+          ]
+        },
+        {
+          "type": "code",
+          "language": "csharp",
+          "code": "builder.Services\n  .AddIdentity<ApplicationUser, IdentityRole>()\n  .AddEntityFrameworkStores<AppDbContext>()\n  .AddDefaultTokenProviders();\n\nbuilder.Services.AddAuthorization(options =>\n{\n  options.AddPolicy(\"AdminOnly\", policy =>\n    policy.RequireRole(\"Admin\"));\n});"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Common pitfalls"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Skipping email confirmation for privileged accounts.",
+            "Not rotating refresh tokens on sensitive actions.",
+            "Mixing policies and roles inconsistently."
+          ]
+        },
+        {
+          "type": "quote",
+          "text": "Security is not a feature you bolt on. It is a habit you repeat in every endpoint."
+        }
+      ],
+      "topics": [
+        ".NET",
+        "ASP.NET Core",
+        "Authentication",
+        "Authorization"
+      ],
+      "publishDate": "2024-06-12",
+      "imagePath": "https://picsum.photos/seed/identity-101/1200/630",
+      "author": {
+        "name": "Nikita Reshetnik",
+        "title": ".NET / AI Engineer",
+        "avatarUrl": "https://i.pravatar.cc/150?img=12"
+      }
+    },
+    {
+      "id": 2,
+      "headline": "Designing a DbContext that scales with your app",
+      "summary": "Keep your Entity Framework Core layer predictable, testable, and ready for growth with a few structural decisions.",
+      "content": [
+        {
+          "type": "paragraph",
+          "text": "A DbContext should reflect your domain boundaries, not every table in the database. The more intentional the shape, the easier it is to evolve your system."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Model boundaries first"
+        },
+        {
+          "type": "paragraph",
+          "text": "Group aggregates that change together. Map join tables through explicit entities if you need auditability or metadata."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "DbContext lifetime strategy"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Use scoped lifetime for web apps to keep tracking contained.",
+            "Use separate contexts for read models to avoid tracking overhead.",
+            "Avoid leaking DbContext outside the service layer."
+          ]
+        },
+        {
+          "type": "code",
+          "language": "csharp",
+          "code": "builder.Services.AddDbContext<AppDbContext>(options =>\n  options.UseSqlServer(connectionString)\n         .EnableSensitiveDataLogging(env.IsDevelopment()));"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Migration hygiene"
+        },
+        {
+          "type": "paragraph",
+          "text": "Name migrations descriptively and review SQL diffs. It is easier to keep data safe when migrations are treated as production artifacts."
+        }
+      ],
+      "topics": [
+        ".NET",
+        "Entity Framework Core",
+        "Architecture"
+      ],
+      "publishDate": "2024-05-22",
+      "imagePath": "https://picsum.photos/seed/dbcontext-architect/1200/630",
+      "author": {
+        "name": "Nikita Reshetnik",
+        "title": ".NET / AI Engineer",
+        "avatarUrl": "https://i.pravatar.cc/150?img=12"
+      }
+    },
+    {
+      "id": 3,
+      "headline": "Shipping Semantic Kernel features without surprises",
+      "summary": "A pragmatic checklist for putting AI workflows into production while keeping costs and latency under control.",
+      "content": [
+        {
+          "type": "paragraph",
+          "text": "When AI features go live, reliability matters more than raw capability. A stable prompt pipeline beats a brilliant demo every time."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Design for observability"
+        },
+        {
+          "type": "paragraph",
+          "text": "Log prompts, latency, and token usage per request. This makes regressions visible and keeps spend predictable."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Guardrails that actually work"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Validate inputs before hitting the model.",
+            "Add safety filters on the output for PII and policy violations.",
+            "Cache stable responses to reduce latency."
+          ]
+        },
+        {
+          "type": "code",
+          "language": "csharp",
+          "code": "var result = await kernel.InvokeAsync(function, new()\n{\n  [\"input\"] = prompt,\n  [\"tenantId\"] = tenantId\n});\n\nif (result.Metadata?.GetValueOrDefault(\"blocked\") == true)\n{\n  return Problem(\"Content blocked by safety policy\");\n}"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Latency budgets"
+        },
+        {
+          "type": "paragraph",
+          "text": "Aim for sub-2 second p95 by caching, chunking, and precomputing embeddings. The user experience should never stall on a cold model response."
+        }
+      ],
+      "topics": [
+        "AI",
+        "Semantic Kernel",
+        "Production"
+      ],
+      "publishDate": "2024-04-08",
+      "imagePath": "https://picsum.photos/seed/semantic-kernel/1200/630",
+      "author": {
+        "name": "Nikita Reshetnik",
+        "title": ".NET / AI Engineer",
+        "avatarUrl": "https://i.pravatar.cc/150?img=12"
+      }
+    }
+  ]
+}

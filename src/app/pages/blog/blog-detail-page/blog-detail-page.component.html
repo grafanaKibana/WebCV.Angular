@@ -1,0 +1,114 @@
+<ng-container *ngIf="article; else missingArticle">
+  <section class="blog-hero">
+    <div>
+      <a class="blog-back" routerLink="/blog">
+        <span>&larr;</span>
+        Back to blog
+      </a>
+      <h1 class="blog-hero__title">{{article.headline}}</h1>
+      <p class="blog-hero__summary">{{article.summary}}</p>
+
+      <div class="blog-hero__meta">
+        <div class="blog-author">
+          <img class="blog-author__avatar" [src]="article.author.avatarUrl" [alt]="article.author.name">
+          <div>
+            <p class="blog-author__name">{{article.author.name}}</p>
+            <p class="blog-author__title">{{article.author.title}}</p>
+          </div>
+        </div>
+
+        <div class="blog-meta">
+          <span class="blog-meta__item">
+            Published {{article.publishDate | date: 'd MMM yyyy'}}
+          </span>
+          <span class="blog-meta__item">
+            {{readingTimeMinutes}} min read
+          </span>
+        </div>
+
+        <div class="blog-topics">
+          <span class="blog-topic" *ngFor="let topic of article.topics">{{topic}}</span>
+        </div>
+
+        <div class="blog-share">
+          <span class="blog-share__label">Share</span>
+          <a
+            class="blog-share__link"
+            *ngFor="let share of shareLinks"
+            [href]="share.url"
+            target="_blank"
+            rel="noopener noreferrer">
+            <i [class]="share.iconClass"></i>
+            {{share.label}}
+          </a>
+          <button class="blog-share__button" type="button" (click)="copyLink()">
+            <i class="fa-solid fa-link"></i>
+            {{copyLabel}}
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="blog-hero__media">
+      <img class="blog-hero__image" [src]="article.imagePath" [alt]="article.headline">
+    </div>
+  </section>
+
+  <section class="blog-content">
+    <div class="blog-content__body">
+      <ng-container *ngFor="let block of contentBlocks">
+        <h2 *ngIf="block.type === 'heading' && block.level === 2" [id]="block.anchor">
+          {{block.text}}
+        </h2>
+        <h3 *ngIf="block.type === 'heading' && block.level === 3" [id]="block.anchor">
+          {{block.text}}
+        </h3>
+        <p *ngIf="block.type === 'paragraph'">{{block.text}}</p>
+        <ul *ngIf="block.type === 'list' && !block.ordered">
+          <li *ngFor="let item of block.items">{{item}}</li>
+        </ul>
+        <ol *ngIf="block.type === 'list' && block.ordered">
+          <li *ngFor="let item of block.items">{{item}}</li>
+        </ol>
+        <pre *ngIf="block.type === 'code'"><code>{{block.code}}</code></pre>
+        <blockquote *ngIf="block.type === 'quote'">{{block.text}}</blockquote>
+      </ng-container>
+    </div>
+
+    <aside class="blog-content__aside" *ngIf="tocItems.length">
+      <div class="blog-toc">
+        <p class="blog-toc__title">On this page</p>
+        <a
+          *ngFor="let item of tocItems"
+          class="blog-toc__link"
+          [class.blog-toc__link--sub]="item.level === 3"
+          [routerLink]="[]"
+          [fragment]="item.id">
+          {{item.text}}
+        </a>
+      </div>
+    </aside>
+  </section>
+
+  <section class="blog-author-card">
+    <img class="blog-author-card__avatar" [src]="article.author.avatarUrl" [alt]="article.author.name">
+    <div>
+      <p class="blog-author-card__name">{{article.author.name}}</p>
+      <p class="blog-author-card__title">{{article.author.title}}</p>
+    </div>
+  </section>
+</ng-container>
+
+<ng-template #missingArticle>
+  <section class="blog-intro">
+    <p class="blog-intro__eyebrow">Blog</p>
+    <h1 class="blog-intro__title">Article not found</h1>
+    <p class="blog-intro__lead">
+      The link might be outdated. Head back to the blog list to pick another post.
+    </p>
+    <a class="blog-back" routerLink="/blog">
+      <span>&larr;</span>
+      Back to blog
+    </a>
+  </section>
+</ng-template>

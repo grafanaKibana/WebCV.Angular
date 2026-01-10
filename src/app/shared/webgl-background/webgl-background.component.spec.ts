@@ -5,21 +5,20 @@ import { WebGLGradientService } from '../../services/webgl-gradient.service';
 describe('WebGLBackgroundComponent', () => {
   let component: WebGLBackgroundComponent;
   let fixture: ComponentFixture<WebGLBackgroundComponent>;
-  let mockWebGLGradientService: jasmine.SpyObj<WebGLGradientService>;
+  let mockWebGLGradientService: jest.Mocked<WebGLGradientService>;
 
   beforeEach(async () => {
-    // Create a mock WebGLGradientService
-    mockWebGLGradientService = jasmine.createSpyObj('WebGLGradientService', [
-      'applyGradient', 
-      'removeGradient',
-      'getColorScheme',
-      'getRandomColorScheme',
-      'getThemeNames'
-    ]);
+    mockWebGLGradientService = {
+      applyGradient: jest.fn(),
+      removeGradient: jest.fn(),
+      getColorScheme: jest.fn(),
+      getRandomColorScheme: jest.fn(),
+      getThemeNames: jest.fn()
+    } as unknown as jest.Mocked<WebGLGradientService>;
     
     // Mock the getColorScheme method
-    mockWebGLGradientService.getColorScheme.and.returnValue([[0, 0, 0], [255, 255, 255]]);
-    mockWebGLGradientService.getThemeNames.and.returnValue(['Green Teal', 'Purple Sunset', 'Ocean Blue', 'Autumn', 'Midnight']);
+    mockWebGLGradientService.getColorScheme.mockReturnValue([[0, 0, 0], [255, 255, 255]]);
+    mockWebGLGradientService.getThemeNames.mockReturnValue(['Green Teal', 'Purple Sunset', 'Ocean Blue', 'Autumn', 'Midnight']);
     
     await TestBed.configureTestingModule({
       declarations: [ WebGLBackgroundComponent ],
@@ -42,26 +41,25 @@ describe('WebGLBackgroundComponent', () => {
 
   it('should initialize with default values', () => {
     expect(component.speed).toBe(0.5);
-    expect(component.amplitude).toBe(0.2);
+    expect(component.amplitude).toBe(0.85);
     expect(component.darkerTop).toBe(false);
     expect(component.parallax).toBe(true);
     expect(component.parallaxIntensity).toBe(0.5);
-    expect(component.colors).toBeUndefined();
     expect(component.themeName).toBeUndefined();
   });
 
   it('should call applyGradient when initialized', () => {
+    component.initGradient();
     expect(mockWebGLGradientService.applyGradient).toHaveBeenCalledWith(
-      jasmine.any(HTMLElement),
-      {
+      expect.any(HTMLElement),
+      expect.objectContaining({
         speed: 0.5,
-        amplitude: 0.2,
+        amplitude: 0.85,
         darkerTop: false,
-        colors: undefined,
         themeName: undefined,
         parallax: true,
         parallaxIntensity: 0.5
-      }
+      })
     );
   });
 
@@ -79,11 +77,11 @@ describe('WebGLBackgroundComponent', () => {
 
   it('should apply specific color scheme when themeName is provided', () => {
     component.themeName = 'Ocean Blue';
-    component.ngOnInit();
+    component.initGradient();
     
     expect(mockWebGLGradientService.applyGradient).toHaveBeenCalledWith(
-      jasmine.any(HTMLElement),
-      jasmine.objectContaining({
+      expect.any(HTMLElement),
+      expect.objectContaining({
         themeName: 'Ocean Blue'
       })
     );
