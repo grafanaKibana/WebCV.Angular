@@ -1,7 +1,6 @@
 ---
 id: 1
 headline: "Prompting with a human-in-the-loop: Figma, Chrome DevTools, and MCPs"
-summary: "A practical loop for designing, testing, and refining prompts while shipping a web app."
 topics:
   - Prompting
   - UX

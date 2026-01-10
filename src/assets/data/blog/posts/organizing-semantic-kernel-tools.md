@@ -1,7 +1,6 @@
 ---
 id: 2
 headline: "Organizing Semantic Kernel tools and plugins without chaos"
-summary: "A clean structure for tools, plugins, and skills so your AI code stays discoverable and testable."
 topics:
   - Semantic Kernel
   - Architecture

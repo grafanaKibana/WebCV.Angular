@@ -22,8 +22,7 @@ describe('BlogItemComponent', () => {
     const article: ArticleModel = {
       id: 1,
       headline: 'Test article',
-      summary: 'Summary',
-      content: [],
+      content: '',
       topics: ['Test'],
       publishDate: new Date('2024-01-01'),
       imagePath: 'https://picsum.photos/seed/test/1200/630',

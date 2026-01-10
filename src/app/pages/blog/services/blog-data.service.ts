@@ -103,7 +103,6 @@ export class BlogDataService {
       return null;
     }
 
-    const summary = typeof metadata['summary'] === 'string' ? metadata['summary'].trim() : '';
     const publishDate = typeof metadata['publishDate'] === 'string'
       ? metadata['publishDate'].trim()
       : new Date().toISOString().slice(0, 10);
@@ -117,7 +116,6 @@ export class BlogDataService {
     return {
       id,
       headline,
-      summary,
       content,
       topics,
       publishDate,

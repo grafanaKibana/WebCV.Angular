@@ -1,7 +1,6 @@
 ---
 id: 3
 headline: "Quick intro to Microsoft.Extensions.AI.Evaluating"
-summary: "Evaluate prompts, build custom evaluators, and ship results into Azure DevOps with confidence."
 topics:
   - AI
   - Evaluation

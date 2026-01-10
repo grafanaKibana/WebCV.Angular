@@ -1,7 +1,6 @@
 ---
 id: 4
 headline: "Markdown feature showcase"
-summary: "A comprehensive post to validate full Markdown rendering and styling."
 topics:
   - Markdown
   - Testing

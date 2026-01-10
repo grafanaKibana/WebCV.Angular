@@ -2,12 +2,39 @@
   <section class="blog-hero">
     <div class="blog-hero__content">
       <div class="blog-hero__top">
-        <a class="blog-back" routerLink="/blog">
-          <span>&larr;</span>
-          Back to blog
-        </a>
+        <div class="blog-hero__top-row">
+          <a class="blog-back" routerLink="/blog">
+            <span>&larr;</span>
+            Back to blog
+          </a>
+          <div class="blog-share blog-share--icons">
+            <a
+              class="blog-share__link"
+              *ngFor="let share of shareLinks"
+              [href]="share.url"
+              [attr.aria-label]="share.label"
+              [attr.title]="share.label"
+              target="_blank"
+              rel="noopener noreferrer">
+              <i [class]="share.iconClass"></i>
+            </a>
+            <button
+              class="blog-share__button"
+              type="button"
+              [attr.aria-label]="copyLabel"
+              [attr.title]="copyLabel"
+              (click)="copyLink()">
+              <i class="fa-solid fa-link"></i>
+            </button>
+          </div>
+        </div>
+
+        <p class="blog-hero__eyebrow">Blog</p>
         <h1 class="blog-hero__title">{{article.headline}}</h1>
-        <p class="blog-hero__summary">{{article.summary}}</p>
+
+        <div class="blog-hero__topics blog-topics" *ngIf="article.topics.length">
+          <span class="blog-topic" *ngFor="let topic of article.topics">{{topic}}</span>
+        </div>
       </div>
 
       <div class="blog-hero__meta">
@@ -21,32 +48,11 @@
 
         <div class="blog-meta">
           <span class="blog-meta__item">
-            Published {{article.publishDate | date: 'd MMM yyyy'}}
+            {{article.publishDate | date: 'd MMM yyyy'}}
           </span>
           <span class="blog-meta__item">
             {{readingTimeMinutes}} min read
           </span>
-        </div>
-
-        <div class="blog-topics">
-          <span class="blog-topic" *ngFor="let topic of article.topics">{{topic}}</span>
-        </div>
-
-        <div class="blog-share">
-          <span class="blog-share__label">Share</span>
-          <a
-            class="blog-share__link"
-            *ngFor="let share of shareLinks"
-            [href]="share.url"
-            target="_blank"
-            rel="noopener noreferrer">
-            <i [class]="share.iconClass"></i>
-            {{share.label}}
-          </a>
-          <button class="blog-share__button" type="button" (click)="copyLink()">
-            <i class="fa-solid fa-link"></i>
-            {{copyLabel}}
-          </button>
         </div>
       </div>
     </div>
