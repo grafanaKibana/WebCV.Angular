@@ -4,7 +4,7 @@
   <app-header></app-header>
   <div class="main-container">
     <div class="route-container" [@routeAnimations]="getRouteAnimationData()">
-      <router-outlet></router-outlet>
+      <router-outlet (activate)="onRouteActivate()"></router-outlet>
     </div>
   </div>
   <app-footer></app-footer>

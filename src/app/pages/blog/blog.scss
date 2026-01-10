@@ -1,17 +1,22 @@
 @import '../../../assets/styles/utility';
 
 .blog-intro {
-  @extend .dark-block;
   padding: var(--spacing-6);
+  margin-bottom: var(--spacing-4);
+  box-shadow: none;
+  background: transparent;
+  border-radius: 0;
   display: grid;
   gap: var(--spacing-2);
 
   @include respond-tablet {
     padding: var(--spacing-5);
+    margin-bottom: var(--spacing-3);
   }
 
   @include respond-mobile {
     padding: var(--spacing-4);
+    margin-bottom: var(--spacing-3);
   }
 
   &__eyebrow {
@@ -130,6 +135,9 @@
     letter-spacing: 0.05em;
     color: var(--color-dark-paragraph);
     opacity: 0.7;
+    span {
+      font-size: inherit;
+    }
   }
 
   &:hover {

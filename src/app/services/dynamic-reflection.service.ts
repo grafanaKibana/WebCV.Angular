@@ -11,6 +11,9 @@ import { webglConfig } from '../config/webgl.config';
 export class DynamicReflectionService {
   private lastColorUpdateTime: number = 0;
   private lastAngleUpdateTime: number = 0;
+  private lastReflection?: { r: number; g: number; b: number };
+  private lastAngle?: number;
+  private lastBrightness?: number;
 
   /**
    * Update reflection colors based on gradient colors
@@ -34,16 +37,23 @@ export class DynamicReflectionService {
     const reflectionG = Math.min(255, Math.floor(avgColor[1] * webglConfig.reflection.lightenFactor));
     const reflectionB = Math.min(255, Math.floor(avgColor[2] * webglConfig.reflection.lightenFactor));
 
-    // Batch CSS variable updates for optimal performance
-    // Using requestAnimationFrame ensures updates happen during repaint cycle
+    if (
+      this.lastReflection &&
+      this.lastReflection.r === reflectionR &&
+      this.lastReflection.g === reflectionG &&
+      this.lastReflection.b === reflectionB
+    ) {
+      return;
+    }
+
+    this.lastReflection = { r: reflectionR, g: reflectionG, b: reflectionB };
+
+    // Batch CSS variable updates using requestAnimationFrame to align with paint cycle.
     requestAnimationFrame(() => {
       const root = document.documentElement;
-      // Batch all style updates together to minimize reflow/repaint
-      root.style.cssText += `
-        --reflection-r: ${reflectionR};
-        --reflection-g: ${reflectionG};
-        --reflection-b: ${reflectionB};
-      `;
+      root.style.setProperty('--reflection-r', reflectionR.toString());
+      root.style.setProperty('--reflection-g', reflectionG.toString());
+      root.style.setProperty('--reflection-b', reflectionB.toString());
     });
   }
 
@@ -60,12 +70,47 @@ export class DynamicReflectionService {
     }
     this.lastAngleUpdateTime = now;
 
+    const normalizedAngle = Math.round(angle);
+    const normalizedBrightness = Number(brightness.toFixed(2));
+
+    if (this.lastAngle === normalizedAngle && this.lastBrightness === normalizedBrightness) {
+      return;
+    }
+
+    this.lastAngle = normalizedAngle;
+    this.lastBrightness = normalizedBrightness;
+
     // Update CSS variable for gradient direction
     requestAnimationFrame(() => {
       const root = document.documentElement;
-      root.style.setProperty('--reflection-angle', `${Math.round(angle)}deg`);
-      root.style.setProperty('--reflection-brightness', brightness.toFixed(2));
+      root.style.setProperty('--reflection-angle', `${normalizedAngle}deg`);
+      root.style.setProperty('--reflection-brightness', normalizedBrightness.toString());
     });
+  }
+
+  /**
+   * Re-apply the last known reflection values, if available.
+   * Useful to avoid flashes when route content changes.
+   */
+  applyLastReflection(): void {
+    if (!this.lastReflection && this.lastAngle === undefined && this.lastBrightness === undefined) {
+      return;
+    }
+
+    const root = document.documentElement;
+    if (this.lastReflection) {
+      root.style.setProperty('--reflection-r', this.lastReflection.r.toString());
+      root.style.setProperty('--reflection-g', this.lastReflection.g.toString());
+      root.style.setProperty('--reflection-b', this.lastReflection.b.toString());
+    }
+
+    if (this.lastAngle !== undefined) {
+      root.style.setProperty('--reflection-angle', `${this.lastAngle}deg`);
+    }
+
+    if (this.lastBrightness !== undefined) {
+      root.style.setProperty('--reflection-brightness', this.lastBrightness.toString());
+    }
   }
 
   /**
@@ -112,6 +157,8 @@ export class DynamicReflectionService {
     root.style.removeProperty('--reflection-b');
     root.style.removeProperty('--reflection-angle');
     root.style.removeProperty('--reflection-brightness');
+    this.lastReflection = undefined;
+    this.lastAngle = undefined;
+    this.lastBrightness = undefined;
   }
 }
-
