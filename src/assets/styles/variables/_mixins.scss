@@ -51,6 +51,27 @@
   @return calc($pixels / $context) * 1rem;
 }
 
+@mixin interactive-glow($hover-bg: rgba(15, 20, 25, 0.3)) {
+  transition: all var(--transition-fast) var(--transition-easing);
+
+  &:hover {
+    @extend .box-shadow-16;
+    @extend .text-glow-12;
+    background: $hover-bg;
+    cursor: pointer;
+  }
+
+  &:active {
+    @extend .box-shadow-16;
+    transition: all var(--transition-fast) ease-in;
+  }
+
+  &:focus-visible {
+    outline: rem(2px) solid var(--color-dark-accent);
+    outline-offset: rem(2px);
+  }
+}
+
 @keyframes pulse {
   from {
     transform: scale(.95);

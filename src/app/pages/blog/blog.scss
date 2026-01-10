@@ -288,6 +288,7 @@
   &__link,
   &__button {
     @extend .dark-shadow-soft;
+    @include interactive-glow();
     border: rem(1px) solid var(--color-dark-border);
     background: rgba(15, 20, 25, 0.45);
     color: var(--color-dark-heading);
@@ -299,11 +300,6 @@
     display: inline-flex;
     align-items: center;
     gap: var(--spacing-1);
-
-    &:focus-visible {
-      outline: rem(2px) solid var(--color-dark-accent);
-      outline-offset: rem(2px);
-    }
   }
 }
 
@@ -714,6 +710,7 @@
     font-size: rem(14px);
     text-transform: uppercase;
     letter-spacing: 0.08em;
+    color: var(--color-dark-heading);
   }
 
   &__link {
@@ -721,6 +718,18 @@
     text-decoration: none;
     font-size: rem(13px);
     padding-left: 0;
+    transition: color var(--transition-fast) var(--transition-easing);
+
+    &:hover {
+      color: var(--color-dark-heading);
+      @extend .text-glow-4;
+    }
+
+    &:focus-visible {
+      color: var(--color-dark-heading);
+      outline: rem(2px) solid var(--color-dark-accent);
+      outline-offset: rem(2px);
+    }
   }
 
   &__link[data-level='1'] {

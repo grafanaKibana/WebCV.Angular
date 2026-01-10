@@ -94,17 +94,8 @@ header {
         }
       }
 
-      &:hover:not(.soon) {
-        @extend .box-shadow-16;
-        @extend .text-glow-12;
-        background: rgba(15, 20, 25, 0.3);
-        transition: all var(--transition-fast) var(--transition-easing);
-        cursor: pointer;
-      }
-
-      &:active:not(.soon) {
-        @extend .box-shadow-16;
-        transition: all var(--transition-fast) ease-in;
+      &:not(.soon) {
+        @include interactive-glow();
       }
 
       i {

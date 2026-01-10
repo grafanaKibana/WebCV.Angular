@@ -12,7 +12,7 @@ imagePath: "https://picsum.photos/seed/prompting-loop/1200/630"
 author:
   name: "Nikita Reshetnik"
   title: ".NET / AI Engineer"
-  avatarUrl: "https://i.pravatar.cc/150?img=12"
+  avatarUrl: "./assets/images/my-portrait.png"
 ---
 Great prompts are not written once. They are iterated in a tight loop with humans validating intent, UX, and edge cases before users ever see the output.
 

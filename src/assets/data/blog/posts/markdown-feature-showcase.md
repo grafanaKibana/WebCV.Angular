@@ -11,7 +11,7 @@ imagePath: "https://picsum.photos/seed/markdown-showcase/1200/630"
 author:
   name: "Nikita Reshetnik"
   title: ".NET / AI Engineer"
-  avatarUrl: "https://i.pravatar.cc/150?img=12"
+  avatarUrl: "./assets/images/my-portrait.png"
 ---
 This post exercises **bold**, *italic*, ***bold italic***, `inline code`, ~~strikethrough~~, and links like [Markdown Guide](https://www.markdownguide.org/) plus autolinks such as https://angular.dev/.
 

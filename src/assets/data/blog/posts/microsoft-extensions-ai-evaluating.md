@@ -11,7 +11,7 @@ imagePath: "https://picsum.photos/seed/ai-evaluating/1200/630"
 author:
   name: "Nikita Reshetnik"
   title: ".NET / AI Engineer"
-  avatarUrl: "https://i.pravatar.cc/150?img=12"
+  avatarUrl: "./assets/images/my-portrait.png"
 ---
 Microsoft.Extensions.AI.Evaluating helps you measure prompt quality like any other test suite. Start with a few scenarios, add evaluators, and publish results to your CI pipeline.
 
