@@ -28,6 +28,8 @@
     "@fortawesome/fontawesome-svg-core": "^6.7.2",
     "@fortawesome/free-solid-svg-icons": "^6.7.2",
     "caniuse-lite": "^1.0.30001754",
+    "highlight.js": "^11.11.1",
+    "marked": "^17.0.1",
     "nodemailer": "^6.10.1",
     "rxjs": "~7.8.2",
     "tslib": "^2.8.1",

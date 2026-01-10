@@ -1,19 +1,18 @@
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { DOCUMENT } from '@angular/common';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { Subject } from 'rxjs';
 import { switchMap, takeUntil } from 'rxjs/operators';
-import {
-  ArticleContentBlock,
-  ArticleHeadingBlock,
-  ArticleModel
-} from '../interfaces/articleModel';
+import { marked } from 'marked';
+import hljs from 'highlight.js/lib/common';
+import { ArticleModel } from '../interfaces/articleModel';
 import { BlogDataService } from '../services/blog-data.service';
 
 interface TocItem {
   id: string;
   text: string;
-  level: 2 | 3;
+  level: 1 | 2 | 3 | 4 | 5 | 6;
 }
 
 interface ShareLink {
@@ -29,7 +28,7 @@ interface ShareLink {
 })
 export class BlogDetailPageComponent implements OnInit, OnDestroy {
   article?: ArticleModel;
-  contentBlocks: ArticleContentBlock[] = [];
+  contentHtml: SafeHtml | null = null;
   tocItems: TocItem[] = [];
   readingTimeMinutes = 0;
   shareLinks: ShareLink[] = [];
@@ -41,6 +40,7 @@ export class BlogDetailPageComponent implements OnInit, OnDestroy {
   constructor(
     private route: ActivatedRoute,
     private blogDataService: BlogDataService,
+    private sanitizer: DomSanitizer,
     @Inject(DOCUMENT) private document: Document
   ) {}
 
@@ -53,15 +53,13 @@ export class BlogDetailPageComponent implements OnInit, OnDestroy {
       .subscribe(article => {
         this.article = article;
         if (!article) {
-          this.contentBlocks = [];
+          this.contentHtml = null;
           this.tocItems = [];
           this.shareLinks = [];
           return;
         }
 
-        this.contentBlocks = this.addAnchors(article.content);
-        this.tocItems = this.buildToc(this.contentBlocks);
-        this.readingTimeMinutes = this.estimateReadingTime(article.content);
+        this.renderMarkdown(article.content);
         this.currentUrl = this.document.location.href;
         this.shareLinks = this.buildShareLinks(article, this.currentUrl);
       });
@@ -90,53 +88,54 @@ export class BlogDetailPageComponent implements OnInit, OnDestroy {
       });
   }
 
-  private buildToc(blocks: ArticleContentBlock[]): TocItem[] {
-    return blocks
-      .filter((block): block is ArticleHeadingBlock => block.type === 'heading' && !!block.anchor)
-      .map(block => ({
-        id: block.anchor || '',
-        text: block.text,
-        level: block.level
-      }));
-  }
+  private renderMarkdown(markdown: string): void {
+    const tocItems: TocItem[] = [];
+    const slugCounts = new Map<string, number>();
+    const renderer = new marked.Renderer();
 
-  private addAnchors(blocks: ArticleContentBlock[]): ArticleContentBlock[] {
-    const anchors = new Map<string, number>();
-    return blocks.map(block => {
-      if (block.type !== 'heading') {
-        return block;
-      }
-
-      const base = this.slugify(block.text);
-      const count = (anchors.get(base) ?? 0) + 1;
-      anchors.set(base, count);
+    renderer.heading = (token) => {
+      const normalizedLevel = this.normalizeHeadingLevel(token.depth);
+      const base = this.slugify(token.text) || 'section';
+      const count = (slugCounts.get(base) ?? 0) + 1;
+      slugCounts.set(base, count);
       const anchor = count > 1 ? `${base}-${count}` : base;
-      return { ...block, anchor };
-    });
+      tocItems.push({
+        id: anchor,
+        text: token.text,
+        level: normalizedLevel
+      });
+      const inner = marked.Parser.parseInline(token.tokens, { renderer });
+      return `<h${normalizedLevel} id="${anchor}">${inner}</h${normalizedLevel}>`;
+    };
+
+    renderer.code = (token) => {
+      const language = (token.lang ?? '').trim().split(/\s+/)[0].toLowerCase();
+      const canHighlight = Boolean(language && hljs.getLanguage(language));
+      const highlighted = canHighlight
+        ? hljs.highlight(token.text, { language, ignoreIllegals: true }).value
+        : hljs.highlightAuto(token.text).value;
+      const className = canHighlight ? `language-${language}` : 'language-plaintext';
+      return `<pre><code class="hljs ${className}">${highlighted}</code></pre>`;
+    };
+
+    const html = marked(markdown, {
+      gfm: true,
+      breaks: false,
+      renderer
+    }) as string;
+
+    this.contentHtml = this.sanitizer.bypassSecurityTrustHtml(html);
+    this.tocItems = tocItems;
+    this.readingTimeMinutes = this.estimateReadingTimeFromText(this.stripHtml(html));
   }
 
-  private estimateReadingTime(blocks: ArticleContentBlock[]): number {
-    const words = blocks
-      .map(block => this.extractText(block))
-      .join(' ')
+  private estimateReadingTimeFromText(text: string): number {
+    const words = text
       .trim()
       .split(/\s+/)
       .filter(Boolean).length;
 
     return Math.max(1, Math.ceil(words / 200));
-  }
-
-  private extractText(block: ArticleContentBlock): string {
-    switch (block.type) {
-      case 'heading':
-      case 'paragraph':
-      case 'quote':
-        return block.text;
-      case 'list':
-        return block.items.join(' ');
-      default:
-        return '';
-    }
   }
 
   private buildShareLinks(article: ArticleModel, url: string): ShareLink[] {
@@ -156,10 +155,24 @@ export class BlogDetailPageComponent implements OnInit, OnDestroy {
     ];
   }
 
+  private normalizeHeadingLevel(level: number): 1 | 2 | 3 | 4 | 5 | 6 {
+    if (level <= 1) {
+      return 1;
+    }
+    if (level >= 6) {
+      return 6;
+    }
+    return level as 2 | 3 | 4 | 5 | 6;
+  }
+
   private slugify(value: string): string {
     return value
       .toLowerCase()
       .replace(/[^a-z0-9]+/g, '-')
       .replace(/(^-|-$)/g, '');
+  }
+
+  private stripHtml(value: string): string {
+    return value.replace(/<[^>]*>/g, ' ');
   }
 }

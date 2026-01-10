@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, convertToParamMap } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
+import { BrowserModule } from '@angular/platform-browser';
 import { of } from 'rxjs';
 import { BlogDetailPageComponent } from './blog-detail-page.component';
 import { BlogDataService } from '../services/blog-data.service';
@@ -12,7 +13,7 @@ describe('BlogDetailPageComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [BlogDetailPageComponent],
-      imports: [RouterTestingModule],
+      imports: [RouterTestingModule, BrowserModule],
       providers: [
         {
           provide: ActivatedRoute,
