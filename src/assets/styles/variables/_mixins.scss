@@ -72,6 +72,34 @@
   }
 }
 
+@mixin reflection-overlay(
+  $angle: 135deg,
+  $start: var(--reflection-color),
+  $mid: var(--reflection-color-subtle),
+  $end: transparent
+) {
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: inherit;
+    background: linear-gradient($angle, $start 0%, $mid 40%, $end 70%);
+    pointer-events: none;
+  }
+}
+
+@mixin glass-panel($background: rgba(15, 20, 25, 0.3), $blur: 8px) {
+  background: $background;
+  backdrop-filter: blur($blur);
+  -webkit-backdrop-filter: blur($blur);
+  @include reflection-overlay();
+}
+
 @keyframes pulse {
   from {
     transform: scale(.95);

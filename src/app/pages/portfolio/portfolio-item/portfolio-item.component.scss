@@ -69,22 +69,7 @@
     background: rgba(15, 20, 25, 0.25);
     @extend .box-shadow-16;
     transition: transform .6s ease-in-out;
-    position: relative;
-    
-    &::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      border-radius: inherit;
-      background: linear-gradient(135deg, 
-        var(--reflection-color) 0%, 
-        var(--reflection-color-subtle) 40%, 
-        transparent 70%);
-      pointer-events: none;
-    }
+    @include reflection-overlay();
 
     & > .img-wrap {
       img {

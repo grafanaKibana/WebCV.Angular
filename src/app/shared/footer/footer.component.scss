@@ -43,30 +43,12 @@ footer {
 
     .contact-form-item {
       @extend .box-shadow-16;
-      background: rgba(15, 20, 25, 0.3);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
       border: 0;
       border-radius: var(--radius-8);
       color: var(--color-dark-paragraph);
       padding: var(--spacing-3);
       outline: none;
-      position: relative;
-
-      &::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        border-radius: inherit;
-        background: linear-gradient(135deg, 
-          var(--reflection-color) 0%, 
-          var(--reflection-color-subtle) 40%, 
-          transparent 70%);
-        pointer-events: none;
-      }
+      @include glass-panel();
 
       @include respond-tablet-sm {
         border-radius: var(--radius-12);
@@ -89,18 +71,7 @@ footer {
       grid-area: B;
       margin-bottom: var(--spacing-16);
 
-      &:hover {
-        @extend .text-glow-12;
-        filter: brightness(1.5);
-        cursor: pointer;
-        transition: all var(--transition-fast) var(--transition-easing);
-      }
-
-      &:active {
-        @extend .text-glow-16;
-        font-weight: 400;
-        transition: all var(--transition-fast) ease-in;
-      }
+      @include interactive-glow();
     }
 
     input, textarea {

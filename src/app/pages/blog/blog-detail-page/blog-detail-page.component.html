@@ -1,12 +1,14 @@
 <ng-container *ngIf="article; else missingArticle">
   <section class="blog-hero">
-    <div>
-      <a class="blog-back" routerLink="/blog">
-        <span>&larr;</span>
-        Back to blog
-      </a>
-      <h1 class="blog-hero__title">{{article.headline}}</h1>
-      <p class="blog-hero__summary">{{article.summary}}</p>
+    <div class="blog-hero__content">
+      <div class="blog-hero__top">
+        <a class="blog-back" routerLink="/blog">
+          <span>&larr;</span>
+          Back to blog
+        </a>
+        <h1 class="blog-hero__title">{{article.headline}}</h1>
+        <p class="blog-hero__summary">{{article.summary}}</p>
+      </div>
 
       <div class="blog-hero__meta">
         <div class="blog-author">

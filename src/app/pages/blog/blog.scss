@@ -191,13 +191,25 @@
 
   &__summary {
     color: var(--color-dark-paragraph);
-    margin: var(--spacing-3) 0 0;
+    margin: 0;
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: var(--spacing-5);
+    min-height: 100%;
+  }
+
+  &__top {
+    display: grid;
+    gap: var(--spacing-3);
   }
 
   &__meta {
     display: grid;
     gap: var(--spacing-3);
-    margin-top: var(--spacing-4);
   }
 
   &__media {
@@ -404,103 +416,7 @@
   }
 
   .hljs {
-    display: block;
-    color: #D4D4D4;
     background: transparent;
-  }
-
-  .hljs-comment,
-  .hljs-quote {
-    color: #6A9955;
-    font-style: italic;
-  }
-
-  .hljs-keyword,
-  .hljs-selector-tag,
-  .hljs-type,
-  .hljs-title,
-  .hljs-title.function_,
-  .hljs-function,
-  .hljs-section,
-  .hljs-built_in,
-  .hljs-meta {
-    color: #569CD6;
-  }
-
-  .hljs-string,
-  .hljs-attr,
-  .hljs-attribute,
-  .hljs-symbol,
-  .hljs-addition {
-    color: #CE9178;
-  }
-
-  .hljs-number,
-  .hljs-literal,
-  .hljs-variable,
-  .hljs-template-variable {
-    color: #B5CEA8;
-  }
-
-  .hljs-tag,
-  .hljs-name,
-  .hljs-selector-id,
-  .hljs-selector-class {
-    color: #4EC9B0;
-  }
-
-  .hljs-deletion {
-    color: #F44747;
-  }
-
-  .hljs-title.class_,
-  .hljs-title.class_.inherited__ {
-    color: #4EC9B0;
-  }
-
-  .hljs-params {
-    color: #9CDCFE;
-  }
-
-  .hljs-property,
-  .hljs-bullet {
-    color: #9CDCFE;
-  }
-
-  .hljs-operator,
-  .hljs-punctuation {
-    color: #D4D4D4;
-  }
-
-  .hljs-regexp {
-    color: #D16969;
-  }
-
-  .hljs-subst {
-    color: #D4D4D4;
-  }
-
-  .hljs-template-tag {
-    color: #569CD6;
-  }
-
-  .hljs-doctag,
-  .hljs-section,
-  .hljs-selector-attr,
-  .hljs-selector-pseudo {
-    color: #D7BA7D;
-  }
-
-  .hljs-attribute {
-    color: #9CDCFE;
-  }
-
-  .hljs-emphasis {
-    font-style: italic;
-  }
-
-  .hljs-strong {
-    font-weight: 600;
   }
 
   code {

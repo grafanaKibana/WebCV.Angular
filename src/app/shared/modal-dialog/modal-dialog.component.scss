@@ -59,12 +59,7 @@
       outline: none;
     }
 
-    &:hover {
-      @extend .text-glow-12;
-      background: rgba(15, 20, 25, 0.3);
-      transition: all var(--transition-fast) var(--transition-easing);
-      cursor: pointer;
-    }
+    @include interactive-glow();
 
     i {
       margin: var(--spacing-2);
@@ -100,26 +95,8 @@
       line-height: 1;
       vertical-align: baseline;
       border-radius: var(--radius-8);
-      background: rgba(15, 20, 25, 0.3);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
       padding: var(--spacing-1) var(--spacing-2);
-      position: relative;
-      
-      &::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        border-radius: inherit;
-        background: linear-gradient(135deg, 
-          var(--reflection-color) 0%, 
-          var(--reflection-color-subtle) 40%, 
-          transparent 70%);
-        pointer-events: none;
-      }
+      @include glass-panel();
     }
   }
 
@@ -134,5 +111,4 @@
 */
   }
 }
-
 
