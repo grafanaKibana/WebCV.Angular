@@ -4,14 +4,17 @@
       <i class="fa-solid fa-house"></i>
       <span>Who am I?</span>
     </li>
-    <li routerLink="{{isPortfolioDone ? '/portfolio' : null}}" class="{{isPortfolioDone ? null : 'soon'}}">
-      <i class="fa-solid fa-briefcase"></i>
-      <span>Portfolio</span>
-    </li>
+
     <li routerLink="{{isBlogDone? '/blog' : null}}" class="{{isBlogDone ? null : 'soon'}}">
       <i class="fa-solid fa-rss"></i>
       <span>Blog</span>
     </li>
+
+    <li routerLink="{{isPortfolioDone ? '/portfolio' : null}}" class="{{isPortfolioDone ? null : 'soon'}}">
+      <i class="fa-solid fa-briefcase"></i>
+      <span>Portfolio</span>
+    </li>
+
     <div class="right-menu-items">
       <li (click)="setRandomTheme()" class="theme-button">
         <i class="fa-solid fa-palette"></i>
