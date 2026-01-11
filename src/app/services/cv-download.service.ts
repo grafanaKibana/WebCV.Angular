@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
-import { map, tap, catchError } from 'rxjs/operators';
+import { Observable, throwError, timer } from 'rxjs';
+import { map, tap, catchError, switchMap } from 'rxjs/operators';
 
 interface WorkflowRun {
   id: number;
@@ -34,8 +34,10 @@ export class CvDownloadService {
    * Downloads the CV PDF from the latest successful master workflow run
    * Uses nightly.link to download the artifact directly via iframe
    */
-  downloadCv(): Observable<void> {
-    return this.getLatestSuccessfulMasterRun().pipe(
+  downloadCv(simulatedDelayMs: number = 0): Observable<void> {
+    const delayMs = Math.max(0, simulatedDelayMs);
+    return timer(delayMs).pipe(
+      switchMap(() => this.getLatestSuccessfulMasterRun()),
       tap(run => {
         const downloadUrl = `https://nightly.link/${this.owner}/${this.repo}/actions/runs/${run.id}/${this.artifactName}.zip`;
         

@@ -17,11 +17,13 @@
         <i class="fa-solid fa-palette"></i>
         <span>Colors!</span>
       </li>
-      <li class="download-button {{isDownloadCVDone ? null : 'soon'}}" (click)="downloadCv()">
-        <i class="fa-solid {{isDownloading ? 'fa-spinner fa-spin' : 'fa-angles-down'}}"></i>
-        <span>{{isDownloading ? 'Downloading...' : 'Download CV'}}</span>
+      <li class="download-button {{isDownloadCVDone ? null : 'soon'}} {{isDownloading ? 'is-downloading' : ''}}" (click)="downloadCv()">
+        <div class="download-button-content" [class.is-hidden]="isDownloading">
+          <span>Download CV</span>
+          <i class="fa-solid fa-angles-down"></i>
+        </div>
+        <div class="download-progress progress-sweep" [class.is-active]="isDownloading" aria-hidden="true"></div>
       </li>
     </div>
   </ul>
 </header>
-

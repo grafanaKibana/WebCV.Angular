@@ -54,6 +54,17 @@ $baseSystemFontSize: 16px;
   --color-dark-separator: rgba(255, 255, 255, 0.125);
   --color-dark-error: #B84C4C;
 
+  // Progress (shared tokens)
+  --progress-height: 8px;
+  --progress-radius: 3px;
+  --progress-track-color: var(--color-dark-border);
+  --progress-fill-color: var(--color-dark-heading);
+  --progress-sweep-width: 60%;
+  --progress-sweep-duration: 1.35s;
+  --progress-glow-color: rgba(0, 187, 255, 0.6);
+  --progress-glow-blur: #{rem(8px)};
+  --progress-glow-spread: #{rem(10px)};
+
   // Smooth transitions for dynamic reflection colors
   transition: --reflection-color 1s ease-out,
               --reflection-color-subtle 1s ease-out,

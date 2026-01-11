@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { WebGLGradientService } from '../../services/webgl-gradient.service';
 import { HomeDataService } from '../../services/home-data.service';
 import { CvDownloadService } from '../../services/cv-download.service';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-header',
@@ -13,6 +14,7 @@ export class HeaderComponent implements OnInit {
   isBlogDone: boolean = false;
   isDownloadCVDone: boolean = false;
   isDownloading: boolean = false;
+  downloadDelayMs: number = environment.cvDownloadSimulatedDelayMs;
 
   constructor(
     private webglGradientService: WebGLGradientService,
@@ -47,7 +49,7 @@ export class HeaderComponent implements OnInit {
     containers.forEach(container => {
       const element = container as HTMLElement;
       const id = element.getAttribute('data-gradient-id');
-      
+
       if (id) {
         // If gradient exists, transition smoothly
         this.webglGradientService.transitionGradientColors(element, randomColors);
@@ -67,7 +69,7 @@ export class HeaderComponent implements OnInit {
     }
 
     this.isDownloading = true;
-    this.cvDownloadService.downloadCv().subscribe({
+    this.cvDownloadService.downloadCv(this.downloadDelayMs).subscribe({
       next: () => {
         this.isDownloading = false;
       },
