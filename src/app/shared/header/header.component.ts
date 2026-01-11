@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { WebGLGradientService } from '../../services/webgl-gradient.service';
 import { HomeDataService } from '../../services/home-data.service';
+import { CvDownloadService } from '../../services/cv-download.service';
 
 @Component({
   selector: 'app-header',
@@ -11,10 +12,12 @@ export class HeaderComponent implements OnInit {
   isPortfolioDone: boolean = false;
   isBlogDone: boolean = false;
   isDownloadCVDone: boolean = false;
+  isDownloading: boolean = false;
 
   constructor(
     private webglGradientService: WebGLGradientService,
-    private homeDataService: HomeDataService
+    private homeDataService: HomeDataService,
+    private cvDownloadService: CvDownloadService
   ) {}
 
   ngOnInit(): void {
@@ -51,6 +54,26 @@ export class HeaderComponent implements OnInit {
       } else {
         // If no gradient exists, create new one
         this.webglGradientService.applyGradient(element);
+      }
+    });
+  }
+
+  /**
+   * Downloads the CV PDF from the latest successful GitHub Actions workflow run
+   */
+  downloadCv(): void {
+    if (this.isDownloading || !this.isDownloadCVDone) {
+      return;
+    }
+
+    this.isDownloading = true;
+    this.cvDownloadService.downloadCv().subscribe({
+      next: () => {
+        this.isDownloading = false;
+      },
+      error: (error) => {
+        console.error('Error downloading CV:', error);
+        this.isDownloading = false;
       }
     });
   }

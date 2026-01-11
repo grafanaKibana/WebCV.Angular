@@ -238,7 +238,7 @@
   "header": {
     "isPortfolioDone": false,
     "isBlogDone": true,
-    "isDownloadCVDone": false
+    "isDownloadCVDone": true
   }
 }
 

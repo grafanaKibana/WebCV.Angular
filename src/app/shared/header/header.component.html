@@ -17,9 +17,9 @@
         <i class="fa-solid fa-palette"></i>
         <span>Colors!</span>
       </li>
-      <li class="download-button {{isDownloadCVDone ? null : 'soon'}}" >
-        <i class="fa-solid fa-angles-down"></i>
-        <span>Download CV</span>
+      <li class="download-button {{isDownloadCVDone ? null : 'soon'}}" (click)="downloadCv()">
+        <i class="fa-solid {{isDownloading ? 'fa-spinner fa-spin' : 'fa-angles-down'}}"></i>
+        <span>{{isDownloading ? 'Downloading...' : 'Download CV'}}</span>
       </li>
     </div>
   </ul>
