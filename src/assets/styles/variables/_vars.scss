@@ -33,6 +33,12 @@ $baseSystemFontSize: 16px;
   inherits: true;
 }
 
+@property --progress-sweep-t {
+  syntax: '<number>';
+  initial-value: 0;
+  inherits: true;
+}
+
 :root {
   // Font settings
   --font-family: 'Poppins', sans-serif;
@@ -59,8 +65,11 @@ $baseSystemFontSize: 16px;
   --progress-radius: 3px;
   --progress-track-color: var(--color-dark-border);
   --progress-fill-color: var(--color-dark-heading);
-  --progress-sweep-width: 60%;
+  --progress-sweep-width-frac: 0.5;
+  --progress-sweep-width: calc(100% * var(--progress-sweep-width-frac));
   --progress-sweep-height: 200%;
+  --progress-sweep-fade-exp: 0.7;
+  --progress-sweep-wrap-start-clip: 0.5;
   --progress-sweep-core-color: rgba(255, 255, 255, 0.95);
   --progress-sweep-core-stop: 20%;
   --progress-sweep-mid-stop: 50%;

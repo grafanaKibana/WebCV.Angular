@@ -312,34 +312,10 @@
   }
 }
 
-.progress-sweep {
-  position: relative;
-  height: var(--progress-height, #{rem(8px)});
-  border-radius: var(--progress-radius, #{rem(3px)});
-  background: var(--progress-track-color, var(--color-dark-border));
-  isolation: isolate;
-}
-
-.progress-sweep::before,
-.progress-sweep::after {
-  content: '';
-  position: absolute;
-  border-radius: inherit;
-  opacity: 0;
-  background-repeat: no-repeat;
-  background-position: calc(-1 * var(--progress-sweep-width, 60%)) 50%;
-  will-change: background-position, opacity, filter;
-  animation: progress-sweep var(--progress-sweep-duration, 1.35s) linear infinite;
-  animation-play-state: paused;
-  pointer-events: none;
-}
-
-.progress-sweep::before {
-  inset: 0;
-  z-index: 1;
+@mixin progress-sweep-core-bg {
   background-size:
-    var(--progress-sweep-width, 60%) var(--progress-sweep-height, 200%),
-    var(--progress-sweep-width, 60%) 100%;
+    100% var(--progress-sweep-height, 200%),
+    100% 100%;
   background-image:
     radial-gradient(
       ellipse at center,
@@ -378,12 +354,7 @@
   filter: blur(var(--progress-sweep-blur, #{rem(0.6px)}));
 }
 
-.progress-sweep::after {
-  inset: calc(-1 * var(--progress-glow-bleed, #{rem(4px)}));
-  z-index: 0;
-  border-radius: calc(
-    var(--progress-radius, #{rem(3px)}) + var(--progress-glow-bleed, #{rem(4px)})
-  );
+@mixin progress-sweep-glow-bg {
   background-size: var(--progress-sweep-width, 60%) var(--progress-glow-height, 220%);
   background-image: radial-gradient(
     ellipse at center,
@@ -400,6 +371,99 @@
   mix-blend-mode: screen;
 }
 
+.progress-sweep {
+  position: relative;
+  height: var(--progress-height, #{rem(8px)});
+  border-radius: var(--progress-radius, #{rem(3px)});
+  background: var(--progress-track-color, var(--color-dark-border));
+  isolation: isolate;
+  overflow: hidden;
+  --_progress-sweep-left: calc(100% * var(--progress-sweep-t, 0));
+  --_progress-sweep-clip-right: clamp(
+    0,
+    calc(
+      (var(--progress-sweep-t, 0) + var(--progress-sweep-width-frac, 0.6) - 1) /
+        var(--progress-sweep-width-frac, 0.6)
+    ),
+    1
+  );
+  --_progress-sweep-wrap-phase: clamp(
+    0,
+    calc(
+      (var(--_progress-sweep-clip-right) - var(--progress-sweep-wrap-start-clip, 0.5)) /
+        (1 - var(--progress-sweep-wrap-start-clip, 0.5))
+    ),
+    1
+  );
+  --_progress-sweep-wrap-left: calc(
+    -1 * var(--progress-sweep-width, 60%) +
+      (var(--progress-sweep-width, 60%) * var(--_progress-sweep-wrap-phase))
+  );
+}
+
+.progress-sweep::before,
+.progress-sweep::after,
+.progress-sweep__wrap::before,
+.progress-sweep__wrap::after {
+  content: '';
+  position: absolute;
+  border-radius: inherit;
+  opacity: 0;
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
+  will-change: left, opacity, filter;
+  pointer-events: none;
+}
+
+.progress-sweep::before {
+  top: 0;
+  bottom: 0;
+  width: var(--progress-sweep-width, 60%);
+  left: var(--_progress-sweep-left);
+  z-index: 1;
+  @include progress-sweep-core-bg;
+}
+
+.progress-sweep::after {
+  top: calc(-1 * var(--progress-glow-bleed, #{rem(4px)}));
+  bottom: calc(-1 * var(--progress-glow-bleed, #{rem(4px)}));
+  width: var(--progress-sweep-width, 60%);
+  left: var(--_progress-sweep-left);
+  z-index: 0;
+  border-radius: calc(
+    var(--progress-radius, #{rem(3px)}) + var(--progress-glow-bleed, #{rem(4px)})
+  );
+  @include progress-sweep-glow-bg;
+}
+
+.progress-sweep__wrap {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.progress-sweep__wrap::before {
+  top: 0;
+  bottom: 0;
+  width: var(--progress-sweep-width, 60%);
+  left: var(--_progress-sweep-wrap-left);
+  z-index: 1;
+  @include progress-sweep-core-bg;
+}
+
+.progress-sweep__wrap::after {
+  top: calc(-1 * var(--progress-glow-bleed, #{rem(4px)}));
+  bottom: calc(-1 * var(--progress-glow-bleed, #{rem(4px)}));
+  width: var(--progress-sweep-width, 60%);
+  left: var(--_progress-sweep-wrap-left);
+  z-index: 0;
+  border-radius: calc(
+    var(--progress-radius, #{rem(3px)}) + var(--progress-glow-bleed, #{rem(4px)})
+  );
+  @include progress-sweep-glow-bg;
+}
+
 .progress-sweep__glass {
   position: absolute;
   inset: 0;
@@ -412,14 +476,53 @@
   z-index: 2;
 }
 
-.progress-sweep.is-active::before {
-  animation-play-state: running;
-  opacity: 1;
+.progress-sweep.is-active {
+  animation: progress-sweep var(--progress-sweep-duration, 1.35s) linear infinite;
+  --_progress-sweep-alpha-main: clamp(0, calc(1 - var(--_progress-sweep-clip-right)), 1);
+  --_progress-sweep-alpha-wrap: var(--_progress-sweep-wrap-phase);
+}
+
+@supports (opacity: calc(1 - pow(0.1, 0.69897))) {
+  .progress-sweep.is-active {
+    --_progress-sweep-alpha-main: clamp(
+      0,
+      calc(
+        1 -
+          pow(
+            var(--_progress-sweep-clip-right),
+            var(--progress-sweep-fade-exp, 0.69897)
+          )
+      ),
+      1
+    );
+    --_progress-sweep-alpha-wrap: clamp(
+      0,
+      calc(
+        1 -
+          pow(
+            calc(1 - var(--_progress-sweep-wrap-phase)),
+            var(--progress-sweep-fade-exp, 0.69897)
+          )
+      ),
+      1
+    );
+  }
 }
 
 .progress-sweep.is-active::after {
-  animation-play-state: running;
-  opacity: 0.6;
+  opacity: calc(0.6 * var(--_progress-sweep-alpha-main, 1));
+}
+
+.progress-sweep.is-active::before {
+  opacity: var(--_progress-sweep-alpha-main, 1);
+}
+
+.progress-sweep.is-active .progress-sweep__wrap::after {
+  opacity: calc(0.6 * var(--_progress-sweep-alpha-wrap, 0));
+}
+
+.progress-sweep.is-active .progress-sweep__wrap::before {
+  opacity: var(--_progress-sweep-alpha-wrap, 0);
 }
 
 .progress-sweep.is-active .progress-sweep__glass {
@@ -427,23 +530,30 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .progress-sweep.is-active::before {
+  .progress-sweep.is-active {
     animation: none;
-    background-size: 120% 140%;
-    background-position: 50% 50%;
-    opacity: 0.4;
+    --progress-sweep-t: 0.5;
+    --_progress-sweep-alpha-main: 0.35;
+  }
+
+  .progress-sweep.is-active::before {
+    opacity: var(--_progress-sweep-alpha-main, 0.35);
   }
 
   .progress-sweep.is-active::after {
     display: none;
   }
+
+  .progress-sweep.is-active .progress-sweep__wrap {
+    display: none;
+  }
 }
 
 @keyframes progress-sweep {
-  0% {
-    background-position: calc(-1 * var(--progress-sweep-width, 60%)) 50%;
+  from {
+    --progress-sweep-t: 0;
   }
-  100% {
-    background-position: calc(100% + var(--progress-sweep-width, 60%)) 50%;
+  to {
+    --progress-sweep-t: 1;
   }
 }
