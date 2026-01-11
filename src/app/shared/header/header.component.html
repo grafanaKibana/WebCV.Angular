@@ -16,9 +16,8 @@
     </li>
 
     <div class="right-menu-items">
-      <li (click)="setRandomTheme()" class="theme-button">
-        <i class="fa-solid fa-palette"></i>
-        <span>Colors!</span>
+      <li (click)="setRandomTheme()" class="theme-button" aria-label="Change colors" title="Change colors">
+        <i class="fa-solid fa-palette" aria-hidden="true"></i>
       </li>
       <li class="download-button {{isDownloadCVDone ? null : 'soon'}} {{isDownloading ? 'is-downloading' : ''}}" (click)="downloadCv()">
         <div class="download-button-content" [class.is-hidden]="isDownloading">

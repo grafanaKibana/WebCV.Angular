@@ -127,6 +127,17 @@ header {
     }
 
     .theme-button {
+      i {
+        display: block;
+        margin-right: 0;
+        font-size: rem(20px);
+        text-align: center;
+      }
+
+      &:hover i {
+        text-shadow: 0 0 12px var(--color-dark-neon-glow), 0 0 6px rgba(0, 187, 255, 0.3);
+      }
+
       @include respond-tablet-sm {
         flex: 1;
         justify-content: center;
