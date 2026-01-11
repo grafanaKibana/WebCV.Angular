@@ -3,7 +3,7 @@
 @import 'variables/vars';
 
 .dark-block {
-  background: rgba(15, 20, 25, 0.2);
+  background: rgba(15, 20, 25, 0.18);
   border-radius: var(--radius-20);
   backdrop-filter: blur(12px) saturate(1.1);
   -webkit-backdrop-filter: blur(12px) saturate(1.1);
@@ -23,12 +23,31 @@
     background: linear-gradient(var(--reflection-angle, 135deg),
       var(--reflection-color) 0%,
       var(--reflection-color-subtle) 20%,
-      rgba(var(--reflection-r), var(--reflection-g), var(--reflection-b), 0.04) 45%,
-      rgba(var(--reflection-r), var(--reflection-g), var(--reflection-b), 0.02) 65%,
+      rgba(var(--reflection-r), var(--reflection-g), var(--reflection-b), 0.03) 45%,
+      rgba(var(--reflection-r), var(--reflection-g), var(--reflection-b), 0.015) 65%,
       transparent 85%);
     pointer-events: none;
     contain: layout style paint;
     transition: background 0.6s cubic-bezier(0.4, 0.0, 0.2, 1);
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 0.75px;
+    pointer-events: none;
+    background: linear-gradient(var(--reflection-angle, 135deg),
+      var(--reflection-edge-glint) 0%,
+      var(--reflection-edge-color) 4%,
+      rgba(var(--reflection-r), var(--reflection-g), var(--reflection-b), 0.08) 30%,
+      transparent 55%);
+    -webkit-mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
   }
 }
 
@@ -51,12 +70,31 @@
     border-radius: inherit;
     background: linear-gradient(var(--reflection-angle, 135deg),
       var(--reflection-color-subtle) 0%,
-      rgba(var(--reflection-r), var(--reflection-g), var(--reflection-b), 0.04) 30%,
-      rgba(var(--reflection-r), var(--reflection-g), var(--reflection-b), 0.02) 55%,
+      rgba(var(--reflection-r), var(--reflection-g), var(--reflection-b), 0.03) 30%,
+      rgba(var(--reflection-r), var(--reflection-g), var(--reflection-b), 0.015) 55%,
       transparent 80%);
     pointer-events: none;
     contain: layout style paint;
     transition: background 0.6s cubic-bezier(0.4, 0.0, 0.2, 1);
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 0.75px;
+    pointer-events: none;
+    background: linear-gradient(var(--reflection-angle, 135deg),
+      var(--reflection-edge-glint) 0%,
+      var(--reflection-edge-color) 4%,
+      rgba(var(--reflection-r), var(--reflection-g), var(--reflection-b), 0.08) 30%,
+      transparent 55%);
+    -webkit-mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
   }
 }
 

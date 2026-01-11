@@ -40,6 +40,13 @@ export class BlogDataService {
     );
   }
 
+  getArticleBySlug(slug: string): Observable<ArticleModel | undefined> {
+    const normalizedSlug = this.normalizeSlug(slug);
+    return this.getArticles().pipe(
+      map(articles => articles.find(article => this.normalizeSlug(article.slug) === normalizedSlug))
+    );
+  }
+
   private normalizeArticle(article: ArticleData): ArticleModel {
     return {
       ...article,
@@ -103,6 +110,7 @@ export class BlogDataService {
       return null;
     }
 
+    const slug = this.extractSlug(sourcePath, headline, id);
     const publishDate = typeof metadata['publishDate'] === 'string'
       ? metadata['publishDate'].trim()
       : new Date().toISOString().slice(0, 10);
@@ -115,6 +123,7 @@ export class BlogDataService {
 
     return {
       id,
+      slug,
       headline,
       content,
       topics,
@@ -245,6 +254,28 @@ export class BlogDataService {
       title: typeof authorMap['title'] === 'string' ? authorMap['title'] : fallback.title,
       avatarUrl: typeof authorMap['avatarUrl'] === 'string' ? authorMap['avatarUrl'] : fallback.avatarUrl
     };
+  }
+
+  private extractSlug(sourcePath: string, headline: string, id: number): string {
+    const fileName = sourcePath.split('/').pop() ?? '';
+    const sanitized = fileName.split('?')[0].split('#')[0];
+    const base = sanitized.replace(/\.md$/i, '');
+    if (base) {
+      return base;
+    }
+    const fallback = this.slugify(headline);
+    return fallback || `post-${id}`;
+  }
+
+  private normalizeSlug(slug: string): string {
+    return decodeURIComponent(slug).trim().toLowerCase();
+  }
+
+  private slugify(value: string): string {
+    return value
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/(^-|-$)/g, '');
   }
 
 }

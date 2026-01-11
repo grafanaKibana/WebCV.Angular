@@ -26,6 +26,8 @@ export interface BackgroundConfig {
 export interface ReflectionConfig {
   // Color Settings
   lightenFactor: number;      // Multiply base color brightness (1.0 = same as background, 1.25 = 25% brighter, 2.0 = very bright)
+  saturationFactor: number;   // Multiply saturation (1.0 = original, 0.8 = slightly desaturated, 0.6 = more neutral)
+  lightnessBoost: number;     // Add to lightness (0.0 = none, 0.05 = subtle lift, 0.10 = noticeable lift)
 
   // Opacity Settings (0.0 = transparent, 1.0 = fully opaque)
   opacityBase: number;         // Base reflection opacity (0.10 = subtle glow, 0.20 = more visible, 0.30 = strong)
@@ -139,7 +141,7 @@ export const webglConfig = {
      * The color scheme used when no specific theme is selected.
      * Examples: 'Neon Cyan', 'Ocean Blue', 'Deep Purple', etc.
      */
-    defaultTheme: 'Neon Cyan',
+  defaultTheme: 'Emerald Forest',
 
     /**
      * Animation Speed
@@ -201,21 +203,39 @@ export const webglConfig = {
     lightenFactor: 1.25,
 
     /**
+     * Saturation Factor
+     * Reduces color intensity so reflections feel softer and more glass-like.
+     * - 1.0: Original saturation (vivid)
+     * - 0.8: Slightly desaturated (default)
+     * - 0.6: More neutral, muted reflection
+     */
+    saturationFactor: 0.7,
+
+    /**
+     * Lightness Boost
+     * Lifts reflection lightness for better contrast against the background.
+     * - 0.0: No lift
+     * - 0.06: Subtle lift (default)
+     * - 0.12: Noticeable lift
+     */
+    lightnessBoost: 0.08,
+
+    /**
      * Base Opacity
      * The standard opacity for reflection gradients.
      * - 0.05: Very subtle, barely visible
-     * - 0.10: Subtle but noticeable (default)
+     * - 0.08: Subtle but noticeable (default)
      * - 0.20: More visible, prominent reflection
      * - 0.30: Strong, very visible reflection
      */
-    opacityBase: 0.08,
+    opacityBase: 0.05,
 
     /**
      * Subtle Opacity
      * Used for softer reflection areas that fade more gently.
      * Should be slightly lower than base opacity.
      * - 0.04: Very subtle fade
-     * - 0.08: Gentle fade (default)
+     * - 0.06: Gentle fade (default)
      * - 0.12: More noticeable fade
      */
     opacitySubtle: 0.04,
@@ -223,12 +243,12 @@ export const webglConfig = {
     /**
      * Strong Opacity
      * Used for more prominent reflection highlights.
-     * Should be higher than base opacity.
-     * - 0.12: Moderate highlight
-     * - 0.15: Visible highlight (default)
+     * Should be higher than ase opacity.
+     * - 0.10: Moderate highlight
+     * - 0.12: Visible highlight (default)
      * - 0.25: Strong highlight, very visible
      */
-    opacityStrong: 0.15,
+    opacityStrong: 0.10,
 
     /**
      * Gradient Stops
@@ -301,4 +321,3 @@ export function getRandomColorScheme(): number[][] {
   const randomIndex = Math.floor(Math.random() * schemes.length);
   return schemes[randomIndex].colors;
 }
-

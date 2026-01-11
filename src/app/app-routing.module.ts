@@ -9,7 +9,7 @@ import { PortfolioPageComponent } from './pages/portfolio/portfolio-page/portfol
 const routes: Routes = [
   { path: '', component: HomePageComponent, data: { animation: 'HomePage' } },
   { path: 'portfolio', component: PortfolioPageComponent, data: { animation: 'PortfolioPage' } },
-  { path: 'blog/:id', component: BlogDetailPageComponent, data: { animation: 'BlogDetailPage' } },
+  { path: 'blog/:slug', component: BlogDetailPageComponent, data: { animation: 'BlogDetailPage' } },
   { path: 'blog', component: BlogPageComponent, data: { animation: 'BlogPage' }, pathMatch: 'full' }
 ]
 

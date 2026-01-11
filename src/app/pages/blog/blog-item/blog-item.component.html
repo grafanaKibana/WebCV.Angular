@@ -1,4 +1,4 @@
-<a class="blog-card" [routerLink]="['/blog', article.id]" [attr.aria-label]="article.headline">
+<a class="blog-card" [routerLink]="['/blog', article.slug]" [attr.aria-label]="article.headline">
   <div class="blog-card__media">
     <img class="blog-card__image" [src]="article.imagePath" [alt]="article.headline" loading="lazy">
   </div>

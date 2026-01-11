@@ -6,6 +6,7 @@ export interface ArticleAuthor {
 
 export interface ArticleData {
   id: number;
+  slug: string;
   headline: string;
   content: string;
   topics: string[];

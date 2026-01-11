@@ -32,10 +32,7 @@ export class DynamicReflectionService {
     // Sample the first color (or average multiple colors for better representation)
     const avgColor = this.calculateAverageColor(colors);
     
-    // Create lighter versions for reflections using configured lighten factor
-    const reflectionR = Math.min(255, Math.floor(avgColor[0] * webglConfig.reflection.lightenFactor));
-    const reflectionG = Math.min(255, Math.floor(avgColor[1] * webglConfig.reflection.lightenFactor));
-    const reflectionB = Math.min(255, Math.floor(avgColor[2] * webglConfig.reflection.lightenFactor));
+    const { r: reflectionR, g: reflectionG, b: reflectionB } = this.tuneReflectionColor(avgColor);
 
     if (
       this.lastReflection &&
@@ -144,6 +141,74 @@ export class DynamicReflectionService {
       Math.round(weightedSum[1] / totalWeight),
       Math.round(weightedSum[2] / totalWeight)
     ];
+  }
+
+  private tuneReflectionColor(color: number[]): { r: number; g: number; b: number } {
+    const scaled = color.map(channel =>
+      Math.min(255, Math.floor(channel * webglConfig.reflection.lightenFactor))
+    ) as [number, number, number];
+    const { h, s, l } = this.rgbToHsl(scaled[0], scaled[1], scaled[2]);
+    const tunedS = Math.min(1, Math.max(0, s * webglConfig.reflection.saturationFactor));
+    const tunedL = Math.min(1, Math.max(0, l + webglConfig.reflection.lightnessBoost));
+    const [r, g, b] = this.hslToRgb(h, tunedS, tunedL);
+    return { r, g, b };
+  }
+
+  private rgbToHsl(r: number, g: number, b: number): { h: number; s: number; l: number } {
+    const rNorm = r / 255;
+    const gNorm = g / 255;
+    const bNorm = b / 255;
+    const max = Math.max(rNorm, gNorm, bNorm);
+    const min = Math.min(rNorm, gNorm, bNorm);
+    const l = (max + min) / 2;
+
+    if (max === min) {
+      return { h: 0, s: 0, l };
+    }
+
+    const delta = max - min;
+    const s = l > 0.5 ? delta / (2 - max - min) : delta / (max + min);
+    let h = 0;
+
+    switch (max) {
+      case rNorm:
+        h = (gNorm - bNorm) / delta + (gNorm < bNorm ? 6 : 0);
+        break;
+      case gNorm:
+        h = (bNorm - rNorm) / delta + 2;
+        break;
+      default:
+        h = (rNorm - gNorm) / delta + 4;
+        break;
+    }
+
+    h /= 6;
+    return { h, s, l };
+  }
+
+  private hslToRgb(h: number, s: number, l: number): [number, number, number] {
+    if (s === 0) {
+      const gray = Math.round(l * 255);
+      return [gray, gray, gray];
+    }
+
+    const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+    const p = 2 * l - q;
+    const r = this.hueToRgb(p, q, h + 1 / 3);
+    const g = this.hueToRgb(p, q, h);
+    const b = this.hueToRgb(p, q, h - 1 / 3);
+
+    return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
+  }
+
+  private hueToRgb(p: number, q: number, t: number): number {
+    let hue = t;
+    if (hue < 0) hue += 1;
+    if (hue > 1) hue -= 1;
+    if (hue < 1 / 6) return p + (q - p) * 6 * hue;
+    if (hue < 1 / 2) return q;
+    if (hue < 2 / 3) return p + (q - p) * (2 / 3 - hue) * 6;
+    return p;
   }
 
   /**

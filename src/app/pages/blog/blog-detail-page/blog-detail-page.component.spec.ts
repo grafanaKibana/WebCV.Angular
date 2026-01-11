@@ -17,11 +17,11 @@ describe('BlogDetailPageComponent', () => {
       providers: [
         {
           provide: ActivatedRoute,
-          useValue: { paramMap: of(convertToParamMap({ id: '1' })) }
+          useValue: { paramMap: of(convertToParamMap({ slug: 'test-article' })) }
         },
         {
           provide: BlogDataService,
-          useValue: { getArticleById: () => of(undefined) }
+          useValue: { getArticleBySlug: () => of(undefined) }
         }
       ]
     }).compileComponents();

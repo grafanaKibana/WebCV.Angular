@@ -21,6 +21,7 @@ describe('BlogItemComponent', () => {
     component = fixture.componentInstance;
     const article: ArticleModel = {
       id: 1,
+      slug: 'test-article',
       headline: 'Test article',
       content: '',
       topics: ['Test'],

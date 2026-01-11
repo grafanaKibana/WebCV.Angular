@@ -47,7 +47,7 @@ export class BlogDetailPageComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.route.paramMap
       .pipe(
-        switchMap(params => this.blogDataService.getArticleById(Number(params.get('id')))),
+        switchMap(params => this.blogDataService.getArticleBySlug(params.get('slug') ?? '')),
         takeUntil(this.destroy$)
       )
       .subscribe(article => {
