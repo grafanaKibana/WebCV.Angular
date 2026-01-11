@@ -60,10 +60,22 @@ $baseSystemFontSize: 16px;
   --progress-track-color: var(--color-dark-border);
   --progress-fill-color: var(--color-dark-heading);
   --progress-sweep-width: 60%;
-  --progress-sweep-duration: 1.35s;
-  --progress-glow-color: rgba(0, 187, 255, 0.6);
+  --progress-sweep-height: 200%;
+  --progress-sweep-core-color: rgba(255, 255, 255, 0.95);
+  --progress-sweep-core-stop: 20%;
+  --progress-sweep-mid-stop: 50%;
+  --progress-sweep-edge-stop: 75%;
+  --progress-sweep-blur: #{rem(0.6px)};
+  --progress-sweep-duration: 1s;
+  --progress-glow-color: rgba(0, 187, 255, 0.9);
+  --progress-glow-core-white: 30%;
+  --progress-glow-core-stop: 35%;
+  --progress-glow-edge-stop: 70%;
   --progress-glow-blur: #{rem(8px)};
+  --progress-glow-bleed: #{rem(6px)};
+  --progress-glow-height: 100%;
   --progress-glow-spread: #{rem(10px)};
+  --progress-glass-blur: #{rem(24px)};
 
   // Smooth transitions for dynamic reflection colors
   transition: --reflection-color 1s ease-out,

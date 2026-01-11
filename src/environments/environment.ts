@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  cvDownloadSimulatedDelayMs: 2000
+  cvDownloadSimulatedDelayMs: 60000
 };
 
 /*

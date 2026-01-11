@@ -324,101 +324,92 @@
 .progress-sweep::after {
   content: '';
   position: absolute;
-  inset: 0;
   border-radius: inherit;
   opacity: 0;
   background-repeat: no-repeat;
-  background-size: var(--progress-sweep-width, 60%) 100%;
-  background-position: calc(-1 * var(--progress-sweep-width, 60%)) 0;
-  will-change: background-position, opacity;
+  background-position: calc(-1 * var(--progress-sweep-width, 60%)) 50%;
+  will-change: background-position, opacity, filter;
   animation: progress-sweep var(--progress-sweep-duration, 1.35s) linear infinite;
   animation-play-state: paused;
   pointer-events: none;
 }
 
 .progress-sweep::before {
-  background-image: linear-gradient(
-    90deg,
-    transparent 0%,
-    transparent 14%,
-    color-mix(in srgb, var(--progress-fill-color, var(--color-dark-heading)) 8%, transparent) 20%,
-    color-mix(in srgb, var(--progress-fill-color, var(--color-dark-heading)) 14%, transparent) 26%,
-    color-mix(in srgb, var(--progress-fill-color, var(--color-dark-heading)) 22%, transparent) 32%,
-    color-mix(in srgb, var(--progress-fill-color, var(--color-dark-heading)) 32%, transparent) 37%,
-    color-mix(in srgb, var(--progress-fill-color, var(--color-dark-heading)) 44%, transparent) 41%,
-    color-mix(in srgb, var(--progress-fill-color, var(--color-dark-heading)) 58%, transparent) 44%,
-    color-mix(in srgb, var(--progress-fill-color, var(--color-dark-heading)) 72%, transparent) 46%,
-    color-mix(in srgb, var(--progress-fill-color, var(--color-dark-heading)) 86%, transparent) 47.5%,
-    var(--progress-fill-color, var(--color-dark-heading)) 49%,
-    var(--progress-fill-color, var(--color-dark-heading)) 51%,
-    color-mix(in srgb, var(--progress-fill-color, var(--color-dark-heading)) 86%, transparent) 52.5%,
-    color-mix(in srgb, var(--progress-fill-color, var(--color-dark-heading)) 72%, transparent) 54%,
-    color-mix(in srgb, var(--progress-fill-color, var(--color-dark-heading)) 58%, transparent) 56%,
-    color-mix(in srgb, var(--progress-fill-color, var(--color-dark-heading)) 44%, transparent) 59%,
-    color-mix(in srgb, var(--progress-fill-color, var(--color-dark-heading)) 32%, transparent) 63%,
-    color-mix(in srgb, var(--progress-fill-color, var(--color-dark-heading)) 22%, transparent) 68%,
-    color-mix(in srgb, var(--progress-fill-color, var(--color-dark-heading)) 14%, transparent) 74%,
-    color-mix(in srgb, var(--progress-fill-color, var(--color-dark-heading)) 8%, transparent) 80%,
-    transparent 86%,
-    transparent 100%
-  );
+  inset: 0;
+  z-index: 1;
+  background-size:
+    var(--progress-sweep-width, 60%) var(--progress-sweep-height, 200%),
+    var(--progress-sweep-width, 60%) 100%;
+  background-image:
+    radial-gradient(
+      ellipse at center,
+      var(--progress-sweep-core-color, rgba(255, 255, 255, 0.95)) 0%,
+      color-mix(in srgb, var(--progress-fill-color, var(--color-dark-heading)) 70%, transparent)
+        var(--progress-sweep-core-stop, 30%),
+      color-mix(in srgb, var(--progress-fill-color, var(--color-dark-heading)) 45%, transparent)
+        var(--progress-sweep-mid-stop, 54%),
+      transparent var(--progress-sweep-edge-stop, 76%)
+    ),
+    linear-gradient(
+      90deg,
+      transparent 0%,
+      transparent 14%,
+      color-mix(in srgb, var(--progress-fill-color, var(--color-dark-heading)) 8%, transparent) 20%,
+      color-mix(in srgb, var(--progress-fill-color, var(--color-dark-heading)) 14%, transparent) 26%,
+      color-mix(in srgb, var(--progress-fill-color, var(--color-dark-heading)) 22%, transparent) 32%,
+      color-mix(in srgb, var(--progress-fill-color, var(--color-dark-heading)) 32%, transparent) 37%,
+      color-mix(in srgb, var(--progress-fill-color, var(--color-dark-heading)) 44%, transparent) 41%,
+      color-mix(in srgb, var(--progress-fill-color, var(--color-dark-heading)) 58%, transparent) 44%,
+      color-mix(in srgb, var(--progress-fill-color, var(--color-dark-heading)) 72%, transparent) 46%,
+      color-mix(in srgb, var(--progress-fill-color, var(--color-dark-heading)) 86%, transparent) 47.5%,
+      var(--progress-fill-color, var(--color-dark-heading)) 49%,
+      var(--progress-fill-color, var(--color-dark-heading)) 51%,
+      color-mix(in srgb, var(--progress-fill-color, var(--color-dark-heading)) 86%, transparent) 52.5%,
+      color-mix(in srgb, var(--progress-fill-color, var(--color-dark-heading)) 72%, transparent) 54%,
+      color-mix(in srgb, var(--progress-fill-color, var(--color-dark-heading)) 58%, transparent) 56%,
+      color-mix(in srgb, var(--progress-fill-color, var(--color-dark-heading)) 44%, transparent) 59%,
+      color-mix(in srgb, var(--progress-fill-color, var(--color-dark-heading)) 32%, transparent) 63%,
+      color-mix(in srgb, var(--progress-fill-color, var(--color-dark-heading)) 22%, transparent) 68%,
+      color-mix(in srgb, var(--progress-fill-color, var(--color-dark-heading)) 14%, transparent) 74%,
+      color-mix(in srgb, var(--progress-fill-color, var(--color-dark-heading)) 8%, transparent) 80%,
+      transparent 86%,
+      transparent 100%
+    );
+  filter: blur(var(--progress-sweep-blur, #{rem(0.6px)}));
 }
 
 .progress-sweep::after {
-  background-image: linear-gradient(
-    90deg,
-    transparent 0%,
-    transparent 34%,
-    color-mix(in srgb, var(--progress-fill-color, var(--color-dark-heading)) 24%, transparent) 40%,
-    color-mix(in srgb, var(--progress-fill-color, var(--color-dark-heading)) 42%, transparent) 44%,
-    color-mix(in srgb, var(--progress-fill-color, var(--color-dark-heading)) 62%, transparent) 46%,
-    color-mix(in srgb, var(--progress-fill-color, var(--color-dark-heading)) 78%, transparent) 48%,
-    var(--progress-fill-color, var(--color-dark-heading)) 49%,
-    var(--progress-fill-color, var(--color-dark-heading)) 51%,
-    color-mix(in srgb, var(--progress-fill-color, var(--color-dark-heading)) 78%, transparent) 52%,
-    color-mix(in srgb, var(--progress-fill-color, var(--color-dark-heading)) 62%, transparent) 54%,
-    color-mix(in srgb, var(--progress-fill-color, var(--color-dark-heading)) 42%, transparent) 56%,
-    color-mix(in srgb, var(--progress-fill-color, var(--color-dark-heading)) 24%, transparent) 60%,
-    transparent 66%,
-    transparent 100%
+  inset: calc(-1 * var(--progress-glow-bleed, #{rem(4px)}));
+  z-index: 0;
+  border-radius: calc(
+    var(--progress-radius, #{rem(3px)}) + var(--progress-glow-bleed, #{rem(4px)})
   );
-  -webkit-mask-image: linear-gradient(
-    90deg,
-    rgba(0, 0, 0, 0) 0,
-    rgba(0, 0, 0, 1) min(
-      #{rem(12px)},
-      calc(var(--progress-glow-blur, #{rem(8px)}) + var(--progress-glow-spread, #{rem(10px)}))
-    ),
-    rgba(0, 0, 0, 1) calc(
-      100% - min(
-        #{rem(12px)},
-        calc(var(--progress-glow-blur, #{rem(8px)}) + var(--progress-glow-spread, #{rem(10px)}))
-      )
-    ),
-    rgba(0, 0, 0, 0) 100%
+  background-size: var(--progress-sweep-width, 60%) var(--progress-glow-height, 220%);
+  background-image: radial-gradient(
+    ellipse at center,
+    color-mix(
+      in srgb,
+      #fff var(--progress-glow-core-white, 30%),
+      var(--progress-glow-color, rgba(0, 187, 255, 0.6))
+    ) 0%,
+    color-mix(in srgb, var(--progress-glow-color, rgba(0, 187, 255, 0.6)) 65%, transparent)
+      var(--progress-glow-core-stop, 38%),
+    transparent var(--progress-glow-edge-stop, 68%)
   );
-  mask-image: linear-gradient(
-    90deg,
-    rgba(0, 0, 0, 0) 0,
-    rgba(0, 0, 0, 1) min(
-      #{rem(12px)},
-      calc(var(--progress-glow-blur, #{rem(8px)}) + var(--progress-glow-spread, #{rem(10px)}))
-    ),
-    rgba(0, 0, 0, 1) calc(
-      100% - min(
-        #{rem(12px)},
-        calc(var(--progress-glow-blur, #{rem(8px)}) + var(--progress-glow-spread, #{rem(10px)}))
-      )
-    ),
-    rgba(0, 0, 0, 0) 100%
-  );
-  -webkit-mask-size: 100% 100%;
-  mask-size: 100% 100%;
-  -webkit-mask-repeat: no-repeat;
-  mask-repeat: no-repeat;
-  filter:
-    drop-shadow(0 0 var(--progress-glow-blur, #{rem(8px)}) var(--progress-glow-color, rgba(0, 187, 255, 0.6)))
-    drop-shadow(0 0 var(--progress-glow-spread, #{rem(10px)}) color-mix(in srgb, var(--progress-glow-color, rgba(0, 187, 255, 0.6)) 55%, transparent));
+  filter: blur(var(--progress-glow-blur, #{rem(8px)}));
+  mix-blend-mode: screen;
+}
+
+.progress-sweep__glass {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  backdrop-filter: blur(var(--progress-glass-blur, #{rem(8px)})) saturate(1.1);
+  -webkit-backdrop-filter: blur(var(--progress-glass-blur, #{rem(8px)})) saturate(1.1);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  z-index: 2;
 }
 
 .progress-sweep.is-active::before {
@@ -428,15 +419,19 @@
 
 .progress-sweep.is-active::after {
   animation-play-state: running;
+  opacity: 0.6;
+}
+
+.progress-sweep.is-active .progress-sweep__glass {
   opacity: 1;
 }
 
 @media (prefers-reduced-motion: reduce) {
   .progress-sweep.is-active::before {
     animation: none;
-    background-size: 100% 100%;
-    background-position: 50% 0;
-    opacity: 0.35;
+    background-size: 120% 140%;
+    background-position: 50% 50%;
+    opacity: 0.4;
   }
 
   .progress-sweep.is-active::after {
@@ -446,9 +441,9 @@
 
 @keyframes progress-sweep {
   0% {
-    background-position: calc(-1 * var(--progress-sweep-width, 60%)) 0;
+    background-position: calc(-1 * var(--progress-sweep-width, 60%)) 50%;
   }
   100% {
-    background-position: calc(100% + var(--progress-sweep-width, 60%)) 0;
+    background-position: calc(100% + var(--progress-sweep-width, 60%)) 50%;
   }
 }
