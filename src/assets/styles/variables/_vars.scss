@@ -68,6 +68,8 @@ $baseSystemFontSize: 16px;
   --progress-sweep-width-frac: 0.5;
   --progress-sweep-width: calc(100% * var(--progress-sweep-width-frac));
   --progress-sweep-height: 200%;
+  --progress-sweep-edge-fade-frac: 0.08;
+  --progress-sweep-edge-fade-frac-inv: calc(1 / var(--progress-sweep-edge-fade-frac));
   --progress-sweep-fade-exp: 0.7;
   --progress-sweep-wrap-start-clip: 0.5;
   --progress-sweep-core-color: rgba(255, 255, 255, 0.95);
