@@ -82,8 +82,8 @@ $baseSystemFontSize: 16px;
   --progress-glow-edge-stop: 70%;
   --progress-glow-blur: #{rem(8px)};
   --progress-glow-bleed: #{rem(6px)};
-  --progress-glow-height: 100%;
-  --progress-glow-spread: #{rem(10px)};
+  --progress-glow-height: 80%;
+  --progress-glow-spread: #{rem(8px)};
   --progress-glass-blur: #{rem(24px)};
 
   // Smooth transitions for dynamic reflection colors
