@@ -182,6 +182,10 @@
     margin: 0;
     font-size: rem(32px);
     margin-bottom: var(--spacing-2);
+    max-width: 100%;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    hyphens: auto;
   }
 
   &__eyebrow {
@@ -197,8 +201,9 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    gap: var(--spacing-4);
+    gap: clamp(var(--spacing-4), 3vw, var(--spacing-8));
     min-height: 100%;
+    min-width: 0;
   }
 
   &__top {
@@ -216,13 +221,8 @@
   &__meta {
     display: flex;
     align-items: flex-end;
+    flex-wrap: wrap;
     gap: var(--spacing-4);
-
-    @include respond-tablet {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: var(--spacing-3);
-    }
   }
 
   &__media {
@@ -253,6 +253,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: var(--spacing-2);
+  margin-top: var(--spacing-3);
 }
 
 .blog-hero__topics .blog-topic {
@@ -266,7 +267,7 @@
   display: flex;
   align-items: center;
   gap: var(--spacing-3);
-  align-self: center;
+  align-self: flex-start;
 
   &__avatar {
     width: rem(48px);
@@ -290,15 +291,11 @@
 
 .blog-meta {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+  white-space: nowrap;
   gap: 0;
   margin-left: auto;
   align-self: flex-end;
-
-  @include respond-tablet {
-    margin-left: 0;
-    align-self: flex-start;
-  }
 
   &__item {
     display: inline-flex;
@@ -338,7 +335,7 @@
   @extend .box-shadow-8;
   font-size: rem(12px);
   padding: rem(6px) rem(10px);
-  border-radius: var(--radius-12);
+  border-radius: var(--radius-8);
   background: rgba(15, 20, 25, 0.4);
   color: var(--color-dark-paragraph);
   position: relative;
@@ -361,7 +358,6 @@
 
   &__link,
   &__button {
-    @include interactive-glow();
     border: none;
     background: transparent;
     color: var(--color-dark-heading);
@@ -376,6 +372,20 @@
     min-width: rem(32px);
     min-height: rem(32px);
     justify-content: center;
+    box-shadow: none;
+    transition: color var(--transition-fast) var(--transition-easing),
+      text-shadow var(--transition-fast) var(--transition-easing);
+
+    &:hover,
+    &:active {
+      @extend .text-glow-12;
+    }
+
+    &:focus-visible {
+      outline: rem(2px) solid var(--color-dark-accent);
+      outline-offset: rem(2px);
+      @extend .text-glow-12;
+    }
 
     i {
       font-size: rem(14px);
