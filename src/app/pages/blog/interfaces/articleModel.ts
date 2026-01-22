@@ -9,7 +9,6 @@ export interface ArticleData {
   slug: string;
   headline: string;
   content: string;
-  topics: string[];
   publishDate: string;
   imagePath: string;
   author: ArticleAuthor;

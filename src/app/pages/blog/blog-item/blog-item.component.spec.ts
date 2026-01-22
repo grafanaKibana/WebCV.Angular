@@ -24,7 +24,6 @@ describe('BlogItemComponent', () => {
       slug: 'test-article',
       headline: 'Test article',
       content: '',
-      topics: ['Test'],
       publishDate: new Date('2024-01-01'),
       imagePath: 'https://picsum.photos/seed/test/1200/630',
       author: {

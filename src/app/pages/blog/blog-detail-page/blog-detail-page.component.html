@@ -31,10 +31,6 @@
 
         <p class="blog-hero__eyebrow">Blog</p>
         <h1 class="blog-hero__title">{{article.headline}}</h1>
-
-        <div class="blog-hero__topics blog-topics" *ngIf="article.topics.length">
-          <span class="blog-topic" *ngFor="let topic of article.topics">{{topic}}</span>
-        </div>
       </div>
 
       <div class="blog-hero__meta">

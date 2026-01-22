@@ -183,6 +183,15 @@
     overflow-wrap: anywhere;
     word-break: break-word;
     hyphens: auto;
+
+    /* Override global h1 decoration for the blog hero title only. */
+    &::before {
+      content: none;
+    }
+
+    &::after {
+      content: none;
+    }
   }
 
   &__eyebrow {
@@ -262,20 +271,6 @@
 
 }
 
-.blog-hero__topics {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--spacing-2);
-  margin-top: var(--spacing-3);
-}
-
-.blog-hero__topics .blog-topic {
-  @extend .dark-shadow-soft;
-  padding: rem(4px) rem(10px);
-  font-size: rem(11px);
-  background: rgba(15, 20, 25, 0.25);
-}
-
 .blog-author {
   display: flex;
   align-items: center;
@@ -349,27 +344,12 @@
   }
 }
 
-.blog-topics {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--spacing-2);
-}
-
-.blog-topic {
-  @extend .box-shadow-8;
-  font-size: rem(12px);
-  padding: rem(6px) rem(10px);
-  border-radius: var(--radius-8);
-  background: rgba(15, 20, 25, 0.4);
-  color: var(--color-dark-paragraph);
-  position: relative;
-
-}
-
 .blog-share {
   display: flex;
   align-items: center;
   gap: var(--spacing-2);
+  padding: rem(0px) rem(10px);
+
 
   &__label {
     font-size: rem(12px);
@@ -382,10 +362,11 @@
 
   &__link,
   &__button {
+    appearance: none;
+    -webkit-appearance: none;
     border: none;
     background: transparent;
     color: var(--color-dark-heading);
-    padding: rem(6px);
     border-radius: var(--radius-12);
     font-size: rem(12px);
     text-decoration: none;
@@ -393,8 +374,9 @@
     display: inline-flex;
     align-items: center;
     gap: var(--spacing-1);
-    min-width: rem(32px);
-    min-height: rem(32px);
+    width: rem(32px);
+    height: rem(32px);
+    box-sizing: border-box;
     justify-content: center;
     box-shadow: none;
     transition: color var(--transition-fast) var(--transition-easing),
@@ -435,6 +417,7 @@
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, rem(260px));
   gap: var(--spacing-6);
+  margin: 0;
 
   @include respond-tablet {
     grid-template-columns: minmax(0, 1fr);

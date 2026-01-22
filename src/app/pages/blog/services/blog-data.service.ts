@@ -115,9 +115,6 @@ export class BlogDataService {
       ? metadata['publishDate'].trim()
       : new Date().toISOString().slice(0, 10);
     const imagePath = typeof metadata['imagePath'] === 'string' ? metadata['imagePath'].trim() : '';
-    const topics = Array.isArray(metadata['topics'])
-      ? metadata['topics'].map(topic => String(topic)).filter(Boolean)
-      : [];
     const author = this.parseAuthor(metadata['author']);
     const content = body.trim();
 
@@ -126,7 +123,6 @@ export class BlogDataService {
       slug,
       headline,
       content,
-      topics,
       publishDate,
       imagePath,
       author
@@ -176,7 +172,7 @@ export class BlogDataService {
 
         if (!rawValue) {
           currentKey = key;
-          result[key] = key === 'topics' ? [] : {};
+          result[key] = {};
           continue;
         }
 
@@ -186,14 +182,6 @@ export class BlogDataService {
       }
 
       if (!currentKey) {
-        continue;
-      }
-
-      if (currentKey === 'topics') {
-        const listMatch = trimmed.match(/^[-*]\s+(.*)$/);
-        if (listMatch && Array.isArray(result[currentKey])) {
-          (result[currentKey] as unknown[]).push(this.parseScalarValue(listMatch[1]));
-        }
         continue;
       }
 
