@@ -249,6 +249,9 @@ class GradientInstance {
   private onBrightnessUpdate?: (angle: number, brightness: number) => void;
   private lastEmittedColors: number[][] = [];
   private colorEmitThrottle: number = 0;
+  private resizeObserver?: ResizeObserver;
+  private readonly onWindowResize = () => this.resize();
+  private readonly onWindowScroll = () => this.handleScroll();
 
   constructor(options: {
     element: HTMLElement;
@@ -292,12 +295,17 @@ class GradientInstance {
     options.element.appendChild(this.canvas);
     
     // NOW set canvas dimensions after it's in the DOM (critical for Safari)
-    this.width = options.element.offsetWidth || options.element.clientWidth || window.innerWidth;
-    this.height = options.element.offsetHeight || options.element.clientHeight || window.innerHeight;
-    
-    // Set actual canvas buffer size (Safari needs explicit values)
-    this.canvas.width = this.width;
-    this.canvas.height = this.height;
+    const displayWidth = options.element.offsetWidth || options.element.clientWidth || window.innerWidth;
+    const displayHeight = options.element.offsetHeight || options.element.clientHeight || window.innerHeight;
+
+    // Store CSS dimensions
+    this.width = displayWidth;
+    this.height = displayHeight;
+
+    // Set actual canvas buffer size accounting for devicePixelRatio
+    const dpr = window.devicePixelRatio || 1;
+    this.canvas.width = Math.floor(displayWidth * dpr);
+    this.canvas.height = Math.floor(displayHeight * dpr);
 
     // Try to get WebGL context with Safari-compatible options
     const contextOptions = {
@@ -329,6 +337,9 @@ class GradientInstance {
       this.setupScrollListener();
     }
 
+    // Setup ResizeObserver for robust resize detection
+    this.setupResizeObserver();
+
     // Setup shaders and WebGL program
     this.initializeShaders();
     this.resize();
@@ -336,14 +347,14 @@ class GradientInstance {
     
     // Safari-specific: Force initial render before starting animation
     // This ensures the canvas is properly initialized
-    this.gl.viewport(0, 0, this.width, this.height);
+    this.gl.viewport(0, 0, this.canvas.width, this.canvas.height);
     this.gl.clear(this.gl.COLOR_BUFFER_BIT);
     
     // Start animation
     this.animate();
 
     // Add resize listener
-    window.addEventListener('resize', this.resize.bind(this));
+    window.addEventListener('resize', this.onWindowResize);
     
     // Safari-specific: Trigger a resize after a short delay to ensure proper initialization
     setTimeout(() => {
@@ -359,11 +370,39 @@ class GradientInstance {
   private setupScrollListener(): void {
     if (!this.scrollListenerAdded) {
       // Use passive event listener for better performance
-      window.addEventListener('scroll', this.handleScroll.bind(this), { passive: true });
+      window.addEventListener('scroll', this.onWindowScroll, { passive: true });
       this.scrollListenerAdded = true;
 
       // Initial scroll position
       this.scrollY = window.scrollY || window.pageYOffset;
+    }
+  }
+
+  /**
+   * Setup ResizeObserver for container-based resize detection
+   * More reliable than window resize events for responsive layouts
+   */
+  private setupResizeObserver(): void {
+    // Check for browser support (should be available in all modern browsers)
+    if (typeof ResizeObserver === 'undefined') {
+      console.warn('ResizeObserver not supported, falling back to window resize only');
+      return;
+    }
+
+    this.resizeObserver = new ResizeObserver(entries => {
+      // ResizeObserver callbacks are already debounced by the browser
+      for (const entry of entries) {
+        // Only respond to our canvas parent
+        if (entry.target === this.canvas.parentElement) {
+          this.resize();
+        }
+      }
+    });
+
+    // Observe the canvas parent element (not the canvas itself)
+    const parent = this.canvas.parentElement;
+    if (parent) {
+      this.resizeObserver.observe(parent);
     }
   }
 
@@ -770,30 +809,37 @@ class GradientInstance {
     const parent = this.canvas.parentElement;
     if (!parent) return;
 
-    // Get dimensions with fallbacks for Safari
-    const newWidth = parent.offsetWidth || parent.clientWidth || window.innerWidth;
-    const newHeight = parent.offsetHeight || parent.clientHeight || window.innerHeight;
+    // Get CSS display dimensions with fallbacks for Safari
+    const displayWidth = parent.offsetWidth || parent.clientWidth || window.innerWidth;
+    const displayHeight = parent.offsetHeight || parent.clientHeight || window.innerHeight;
     
     // Safari fix: Don't resize if dimensions are zero or invalid
-    if (newWidth <= 0 || newHeight <= 0) {
-      return;
-    }
-    
-    // Only resize if dimensions actually changed (optimization)
-    if (this.width === newWidth && this.height === newHeight) {
+    if (displayWidth <= 0 || displayHeight <= 0) {
       return;
     }
 
-    this.width = newWidth;
-    this.height = newHeight;
+    // Account for high-DPI displays (Retina, 4K, etc.)
+    const dpr = window.devicePixelRatio || 1;
+    const width = Math.floor(displayWidth * dpr);
+    const height = Math.floor(displayHeight * dpr);
 
-    this.canvas.width = this.width;
-    this.canvas.height = this.height;
+    // Update internal dimensions (CSS pixels for reference)
+    this.width = displayWidth;
+    this.height = displayHeight;
 
-    this.gl.viewport(0, 0, this.width, this.height);
+    // Set canvas buffer size to physical pixels (prevents blur)
+    if (this.canvas.width !== width) {
+      this.canvas.width = width;
+    }
+    if (this.canvas.height !== height) {
+      this.canvas.height = height;
+    }
+
+    // Update WebGL viewport to match physical pixel dimensions
+    this.gl.viewport(0, 0, width, height);
 
     this.gl.useProgram(this.program);
-    this.gl.uniform2f(this.uniforms.u_resolution, this.width, this.height);
+    this.gl.uniform2f(this.uniforms.u_resolution, width, height);
   }
 
   private shouldSkipFrame(): boolean {
@@ -878,11 +924,17 @@ class GradientInstance {
       this.animationFrameId = null;
     }
 
+    // Disconnect ResizeObserver
+    if (this.resizeObserver) {
+      this.resizeObserver.disconnect();
+      this.resizeObserver = undefined;
+    }
+
     // Remove event listeners
-    window.removeEventListener('resize', this.resize.bind(this));
+    window.removeEventListener('resize', this.onWindowResize);
 
     if (this.scrollListenerAdded) {
-      window.removeEventListener('scroll', this.handleScroll.bind(this));
+      window.removeEventListener('scroll', this.onWindowScroll);
       this.scrollListenerAdded = false;
     }
 

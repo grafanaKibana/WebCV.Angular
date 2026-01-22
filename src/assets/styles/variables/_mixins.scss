@@ -184,6 +184,25 @@
 }
 
 // Responsive mixins - desktop first approach
+// Ultrawide responsive mixins (min-width - apply at larger sizes)
+@mixin respond-ultrawide {
+  @media only screen and (min-width: $breakpoint-ultrawide) {
+    @content;
+  }
+}
+
+@mixin respond-superwide {
+  @media only screen and (min-width: $breakpoint-superwide) {
+    @content;
+  }
+}
+
+@mixin respond-megawide {
+  @media only screen and (min-width: $breakpoint-megawide) {
+    @content;
+  }
+}
+
 @mixin respond-wide {
   @media only screen and (max-width: $breakpoint-wide) {
     @content;
@@ -222,6 +241,12 @@
 
 @mixin respond-mobile-sm {
   @media only screen and (max-width: $breakpoint-mobile-sm) {
+    @content;
+  }
+}
+
+@mixin respond-mobile-xs {
+  @media only screen and (max-width: $breakpoint-mobile-xs) {
     @content;
   }
 }
