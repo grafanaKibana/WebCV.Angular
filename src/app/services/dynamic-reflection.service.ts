@@ -110,49 +110,63 @@ export class DynamicReflectionService {
     }
   }
 
+  // Pre-allocated buffer for average color calculation to avoid GC pressure
+  private avgColorResult: number[] = [0, 0, 0];
+
   /**
    * Calculate weighted average of colors, giving more weight to lighter colors
    * which are more visible in reflections
    */
   private calculateAverageColor(colors: number[][]): number[] {
-    if (colors.length === 0) return [0, 0, 0];
+    if (colors.length === 0) return this.avgColorResult;
     if (colors.length === 1) return colors[0];
 
-    // Calculate luminance for each color
-    const colorsWithLuminance = colors.map(color => {
-      const luminance = (0.299 * color[0] + 0.587 * color[1] + 0.114 * color[2]) / 255;
-      return { color, luminance };
-    });
-
     // Weight colors by their luminance (brighter colors = more weight)
+    // Avoid creating intermediate objects by calculating inline
     let totalWeight = 0;
-    const weightedSum = [0, 0, 0];
+    let weightedR = 0, weightedG = 0, weightedB = 0;
 
-    colorsWithLuminance.forEach(({ color, luminance }) => {
+    for (let i = 0; i < colors.length; i++) {
+      const color = colors[i];
+      const luminance = (0.299 * color[0] + 0.587 * color[1] + 0.114 * color[2]) / 255;
       const weight = luminance + 0.1; // Add 0.1 to avoid zero weight
       totalWeight += weight;
-      weightedSum[0] += color[0] * weight;
-      weightedSum[1] += color[1] * weight;
-      weightedSum[2] += color[2] * weight;
-    });
+      weightedR += color[0] * weight;
+      weightedG += color[1] * weight;
+      weightedB += color[2] * weight;
+    }
 
-    return [
-      Math.round(weightedSum[0] / totalWeight),
-      Math.round(weightedSum[1] / totalWeight),
-      Math.round(weightedSum[2] / totalWeight)
-    ];
+    // Reuse pre-allocated array
+    this.avgColorResult[0] = Math.round(weightedR / totalWeight);
+    this.avgColorResult[1] = Math.round(weightedG / totalWeight);
+    this.avgColorResult[2] = Math.round(weightedB / totalWeight);
+    return this.avgColorResult;
   }
+
+  // Pre-allocated buffer for tuned color to avoid GC pressure
+  private tunedColorResult = { r: 0, g: 0, b: 0 };
+  private scaledColor: [number, number, number] = [0, 0, 0];
 
   private tuneReflectionColor(color: number[]): { r: number; g: number; b: number } {
-    const scaled = color.map(channel =>
-      Math.min(255, Math.floor(channel * webglConfig.reflection.lightenFactor))
-    ) as [number, number, number];
-    const { h, s, l } = this.rgbToHsl(scaled[0], scaled[1], scaled[2]);
-    const tunedS = Math.min(1, Math.max(0, s * webglConfig.reflection.saturationFactor));
-    const tunedL = Math.min(1, Math.max(0, l + webglConfig.reflection.lightnessBoost));
-    const [r, g, b] = this.hslToRgb(h, tunedS, tunedL);
-    return { r, g, b };
+    // Avoid creating new array with map
+    this.scaledColor[0] = Math.min(255, Math.floor(color[0] * webglConfig.reflection.lightenFactor));
+    this.scaledColor[1] = Math.min(255, Math.floor(color[1] * webglConfig.reflection.lightenFactor));
+    this.scaledColor[2] = Math.min(255, Math.floor(color[2] * webglConfig.reflection.lightenFactor));
+    const scaled = this.scaledColor;
+    const hsl = this.rgbToHsl(scaled[0], scaled[1], scaled[2]);
+    const tunedS = Math.min(1, Math.max(0, hsl.s * webglConfig.reflection.saturationFactor));
+    const tunedL = Math.min(1, Math.max(0, hsl.l + webglConfig.reflection.lightnessBoost));
+    const rgb = this.hslToRgb(hsl.h, tunedS, tunedL);
+    // Reuse pre-allocated result object
+    this.tunedColorResult.r = rgb[0];
+    this.tunedColorResult.g = rgb[1];
+    this.tunedColorResult.b = rgb[2];
+    return this.tunedColorResult;
   }
+
+  // Pre-allocated buffers for color conversion to avoid GC pressure
+  private hslResult = { h: 0, s: 0, l: 0 };
+  private rgbResult: [number, number, number] = [0, 0, 0];
 
   private rgbToHsl(r: number, g: number, b: number): { h: number; s: number; l: number } {
     const rNorm = r / 255;
@@ -163,7 +177,10 @@ export class DynamicReflectionService {
     const l = (max + min) / 2;
 
     if (max === min) {
-      return { h: 0, s: 0, l };
+      this.hslResult.h = 0;
+      this.hslResult.s = 0;
+      this.hslResult.l = l;
+      return this.hslResult;
     }
 
     const delta = max - min;
@@ -183,22 +200,28 @@ export class DynamicReflectionService {
     }
 
     h /= 6;
-    return { h, s, l };
+    this.hslResult.h = h;
+    this.hslResult.s = s;
+    this.hslResult.l = l;
+    return this.hslResult;
   }
 
   private hslToRgb(h: number, s: number, l: number): [number, number, number] {
     if (s === 0) {
       const gray = Math.round(l * 255);
-      return [gray, gray, gray];
+      this.rgbResult[0] = gray;
+      this.rgbResult[1] = gray;
+      this.rgbResult[2] = gray;
+      return this.rgbResult;
     }
 
     const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
     const p = 2 * l - q;
-    const r = this.hueToRgb(p, q, h + 1 / 3);
-    const g = this.hueToRgb(p, q, h);
-    const b = this.hueToRgb(p, q, h - 1 / 3);
+    this.rgbResult[0] = Math.round(this.hueToRgb(p, q, h + 1 / 3) * 255);
+    this.rgbResult[1] = Math.round(this.hueToRgb(p, q, h) * 255);
+    this.rgbResult[2] = Math.round(this.hueToRgb(p, q, h - 1 / 3) * 255);
 
-    return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
+    return this.rgbResult;
   }
 
   private hueToRgb(p: number, q: number, t: number): number {

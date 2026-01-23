@@ -258,6 +258,19 @@ class GradientInstance {
   private resizeObserver?: ResizeObserver;
   private readonly onWindowResize = () => this.resize();
   private readonly onWindowScroll = () => this.handleScroll();
+  // Pre-allocated Float32Arrays for color uniforms to avoid GC pressure
+  private colorBuffers: Float32Array[] = [
+    new Float32Array(3),
+    new Float32Array(3),
+    new Float32Array(3),
+    new Float32Array(3)
+  ];
+  // Pre-allocated arrays for color emission to avoid GC pressure
+  private emitColorBuffer: number[][] = [[0,0,0], [0,0,0], [0,0,0], [0,0,0]];
+  // Track WebGL resources for cleanup
+  private vertexShader: WebGLShader | null = null;
+  private fragmentShader: WebGLShader | null = null;
+  private vertexBuffer: WebGLBuffer | null = null;
 
   constructor(options: {
     element: HTMLElement;
@@ -283,10 +296,10 @@ class GradientInstance {
     this.onColorsUpdate = options.onColorsUpdate;
     this.onBrightnessUpdate = options.onBrightnessUpdate;
 
-    // Initialize color interpolation
-    this.currentColors = JSON.parse(JSON.stringify(this.config.colors));
-    this.targetColors = JSON.parse(JSON.stringify(this.config.colors));
-    this.lastEmittedColors = JSON.parse(JSON.stringify(this.config.colors));
+    // Initialize color interpolation - use shallow array copies instead of JSON deep clone
+    this.currentColors = this.config.colors.map((c: number[]) => c.slice());
+    this.targetColors = this.config.colors.map((c: number[]) => c.slice());
+    this.lastEmittedColors = this.config.colors.map((c: number[]) => c.slice());
 
     // Setup canvas and context
     this.canvas = document.createElement('canvas');
@@ -585,34 +598,36 @@ class GradientInstance {
     `;
 
     // Create and compile shaders
-    const vertexShader = this.gl.createShader(this.gl.VERTEX_SHADER);
-    if (!vertexShader) throw new Error('Could not create vertex shader');
+    this.vertexShader = this.gl.createShader(this.gl.VERTEX_SHADER);
+    if (!this.vertexShader) throw new Error('Could not create vertex shader');
 
-    this.gl.shaderSource(vertexShader, vertexShaderSource);
-    this.gl.compileShader(vertexShader);
+    this.gl.shaderSource(this.vertexShader, vertexShaderSource);
+    this.gl.compileShader(this.vertexShader);
 
-    if (!this.gl.getShaderParameter(vertexShader, this.gl.COMPILE_STATUS)) {
-      console.error('Vertex shader compilation error:', this.gl.getShaderInfoLog(vertexShader));
-      this.gl.deleteShader(vertexShader);
+    if (!this.gl.getShaderParameter(this.vertexShader, this.gl.COMPILE_STATUS)) {
+      console.error('Vertex shader compilation error:', this.gl.getShaderInfoLog(this.vertexShader));
+      this.gl.deleteShader(this.vertexShader);
+      this.vertexShader = null;
       return;
     }
 
-    const fragmentShader = this.gl.createShader(this.gl.FRAGMENT_SHADER);
-    if (!fragmentShader) throw new Error('Could not create fragment shader');
+    this.fragmentShader = this.gl.createShader(this.gl.FRAGMENT_SHADER);
+    if (!this.fragmentShader) throw new Error('Could not create fragment shader');
 
-    this.gl.shaderSource(fragmentShader, fragmentShaderSource);
-    this.gl.compileShader(fragmentShader);
+    this.gl.shaderSource(this.fragmentShader, fragmentShaderSource);
+    this.gl.compileShader(this.fragmentShader);
 
-    if (!this.gl.getShaderParameter(fragmentShader, this.gl.COMPILE_STATUS)) {
-      console.error('Fragment shader compilation error:', this.gl.getShaderInfoLog(fragmentShader));
-      this.gl.deleteShader(fragmentShader);
+    if (!this.gl.getShaderParameter(this.fragmentShader, this.gl.COMPILE_STATUS)) {
+      console.error('Fragment shader compilation error:', this.gl.getShaderInfoLog(this.fragmentShader));
+      this.gl.deleteShader(this.fragmentShader);
+      this.fragmentShader = null;
       return;
     }
 
     // Create program and link shaders
     this.program = this.gl.createProgram() as WebGLProgram;
-    this.gl.attachShader(this.program, vertexShader);
-    this.gl.attachShader(this.program, fragmentShader);
+    this.gl.attachShader(this.program, this.vertexShader);
+    this.gl.attachShader(this.program, this.fragmentShader);
     this.gl.linkProgram(this.program);
 
     if (!this.gl.getProgramParameter(this.program, this.gl.LINK_STATUS)) {
@@ -628,9 +643,9 @@ class GradientInstance {
        1.0,  1.0,  // top right
     ]);
 
-    // Create buffer for vertices
-    const buffer = this.gl.createBuffer();
-    this.gl.bindBuffer(this.gl.ARRAY_BUFFER, buffer);
+    // Create buffer for vertices and store reference for cleanup
+    this.vertexBuffer = this.gl.createBuffer();
+    this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.vertexBuffer);
     this.gl.bufferData(this.gl.ARRAY_BUFFER, vertices, this.gl.STATIC_DRAW);
 
     // Setup position attribute
@@ -659,9 +674,13 @@ class GradientInstance {
     this.gl.useProgram(this.program);
 
     // Set color uniforms using current interpolated colors
+    // Reuse pre-allocated Float32Arrays to avoid GC pressure
     for (let i = 0; i < 4; i++) {
       const color = i < this.currentColors.length ? this.currentColors[i] : [0, 0, 0];
-      this.gl.uniform3fv(this.uniforms.u_colors[i], new Float32Array(color));
+      this.colorBuffers[i][0] = color[0];
+      this.colorBuffers[i][1] = color[1];
+      this.colorBuffers[i][2] = color[2];
+      this.gl.uniform3fv(this.uniforms.u_colors[i], this.colorBuffers[i]);
     }
   }
 
@@ -690,16 +709,15 @@ class GradientInstance {
       ? 2 * progress * progress
       : 1 - Math.pow(-2 * progress + 2, 2) / 2;
 
-    // Interpolate each color
+    // Interpolate each color in-place to avoid allocations
     for (let i = 0; i < 4; i++) {
-      const startColor = this.currentColors[i] || [0, 0, 0];
-      const endColor = this.targetColors[i] || [0, 0, 0];
+      const startColor = this.currentColors[i];
+      const endColor = this.targetColors[i];
 
-      this.currentColors[i] = [
-        startColor[0] + (endColor[0] - startColor[0]) * easedProgress,
-        startColor[1] + (endColor[1] - startColor[1]) * easedProgress,
-        startColor[2] + (endColor[2] - startColor[2]) * easedProgress
-      ];
+      // Modify in-place instead of creating new array
+      this.currentColors[i][0] = startColor[0] + (endColor[0] - startColor[0]) * easedProgress;
+      this.currentColors[i][1] = startColor[1] + (endColor[1] - startColor[1]) * easedProgress;
+      this.currentColors[i][2] = startColor[2] + (endColor[2] - startColor[2]) * easedProgress;
     }
 
     // Update colors in shader
@@ -708,7 +726,12 @@ class GradientInstance {
     // Check if transition is complete
     if (progress >= 1.0) {
       this.isTransitioning = false;
-      this.currentColors = JSON.parse(JSON.stringify(this.targetColors));
+      // Copy values in-place instead of creating new arrays
+      for (let i = 0; i < 4; i++) {
+        this.currentColors[i][0] = this.targetColors[i][0];
+        this.currentColors[i][1] = this.targetColors[i][1];
+        this.currentColors[i][2] = this.targetColors[i][2];
+      }
     }
   }
 
@@ -723,11 +746,15 @@ class GradientInstance {
     }
 
     // Convert normalized colors (0-1) back to RGB (0-255) for emission
+    // Reuse pre-allocated buffer to avoid GC pressure
     if (this.onColorsUpdate) {
-      const rgbColors = this.currentColors.map(color => 
-        color.map(c => Math.round(c * 255))
-      );
-      this.onColorsUpdate(rgbColors);
+      for (let i = 0; i < 4; i++) {
+        const color = this.currentColors[i];
+        this.emitColorBuffer[i][0] = Math.round(color[0] * 255);
+        this.emitColorBuffer[i][1] = Math.round(color[1] * 255);
+        this.emitColorBuffer[i][2] = Math.round(color[2] * 255);
+      }
+      this.onColorsUpdate(this.emitColorBuffer);
     }
 
     // Calculate and emit brightness distribution for dynamic reflection angle
@@ -736,7 +763,12 @@ class GradientInstance {
       this.onBrightnessUpdate(angle, brightness);
     }
     
-    this.lastEmittedColors = this.currentColors.map(color => color.slice());
+    // Update last emitted colors in-place to avoid allocations
+    for (let i = 0; i < 4; i++) {
+      this.lastEmittedColors[i][0] = this.currentColors[i][0];
+      this.lastEmittedColors[i][1] = this.currentColors[i][1];
+      this.lastEmittedColors[i][2] = this.currentColors[i][2];
+    }
     this.colorEmitThrottle = currentTime;
   }
 
@@ -960,9 +992,50 @@ class GradientInstance {
       this.scrollListenerAdded = false;
     }
 
+    // Clean up callbacks to prevent memory retention
+    this.onColorsUpdate = undefined;
+    this.onBrightnessUpdate = undefined;
+
+    // Clean up WebGL resources to release GPU memory
+    if (this.gl) {
+      // Delete vertex buffer
+      if (this.vertexBuffer) {
+        this.gl.deleteBuffer(this.vertexBuffer);
+        this.vertexBuffer = null;
+      }
+
+      // Detach and delete shaders
+      if (this.program) {
+        if (this.vertexShader) {
+          this.gl.detachShader(this.program, this.vertexShader);
+          this.gl.deleteShader(this.vertexShader);
+          this.vertexShader = null;
+        }
+        if (this.fragmentShader) {
+          this.gl.detachShader(this.program, this.fragmentShader);
+          this.gl.deleteShader(this.fragmentShader);
+          this.fragmentShader = null;
+        }
+
+        // Delete program
+        this.gl.deleteProgram(this.program);
+      }
+
+      // Lose the WebGL context to release GPU memory
+      const loseContextExt = this.gl.getExtension('WEBGL_lose_context');
+      if (loseContextExt) {
+        loseContextExt.loseContext();
+      }
+    }
+
     // Remove the canvas from DOM
     if (this.canvas.parentElement) {
       this.canvas.parentElement.removeChild(this.canvas);
     }
+
+    // Clear references to allow garbage collection
+    this.currentColors = [];
+    this.targetColors = [];
+    this.lastEmittedColors = [];
   }
 }

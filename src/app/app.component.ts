@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { Router, NavigationEnd, NavigationStart, ChildrenOutletContexts } from '@angular/router';
-import { filter } from 'rxjs/operators';
+import { Subject } from 'rxjs';
+import { filter, takeUntil } from 'rxjs/operators';
 import { trigger, transition, style, animate, query } from '@angular/animations';
 import { DynamicReflectionService } from './services/dynamic-reflection.service';
 
@@ -23,8 +24,9 @@ import { DynamicReflectionService } from './services/dynamic-reflection.service'
     ])
   ]
 })
-export class AppComponent {
+export class AppComponent implements OnDestroy {
   title = 'webcv-angular';
+  private readonly destroy$ = new Subject<void>();
 
   constructor(
     private router: Router,
@@ -32,14 +34,20 @@ export class AppComponent {
     private dynamicReflectionService: DynamicReflectionService
   ) {
     this.router.events
-      .pipe(filter((event): event is NavigationStart => event instanceof NavigationStart))
+      .pipe(
+        filter((event): event is NavigationStart => event instanceof NavigationStart),
+        takeUntil(this.destroy$)
+      )
       .subscribe(() => {
         this.dynamicReflectionService.applyLastReflection();
       });
 
     // Scroll to top on route change
     this.router.events
-      .pipe(filter((event): event is NavigationEnd => event instanceof NavigationEnd))
+      .pipe(
+        filter((event): event is NavigationEnd => event instanceof NavigationEnd),
+        takeUntil(this.destroy$)
+      )
       .subscribe((event) => {
         const fragment = this.router.parseUrl(event.urlAfterRedirects).fragment;
         if (fragment) {
@@ -50,6 +58,11 @@ export class AppComponent {
           this.dynamicReflectionService.applyLastReflection();
         });
       });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   getRouteAnimationData(): string {

@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AppRoutingModule } from '../app-routing.module';
 import { FormsModule } from '@angular/forms';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+// FontAwesomeModule removed - using CSS classes directly instead of <fa-icon> component
 
 import { HeaderModule } from './header/header.module';
 import { FooterComponent } from './footer/footer.component';
@@ -41,7 +41,6 @@ import { DurationPipe } from './pipes/duration.pipe';
   imports: [
     CommonModule,
     AppRoutingModule,
-    FontAwesomeModule,
     FormsModule,
     MatDialogModule,
     MatButtonModule,

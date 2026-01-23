@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { ExperienceModel } from '../interfaces/experienceModel';
 import { HomeDataService } from '../../../services/home-data.service';
 import { animate, style, transition, trigger, state } from '@angular/animations';
@@ -39,22 +41,30 @@ import { animate, style, transition, trigger, state } from '@angular/animations'
     ])
   ]
 })
-export class ExperienceSectionComponent implements OnInit {
+export class ExperienceSectionComponent implements OnInit, OnDestroy {
   experienceList: Array<ExperienceModel> = [];
   allToggles: Array<boolean> = [];
+  private readonly destroy$ = new Subject<void>();
 
   constructor(private homeDataService: HomeDataService) {}
 
   ngOnInit(): void {
-    this.homeDataService.getExperience().subscribe({
-      next: (data: ExperienceModel[]) => {
-        this.experienceList = data;
-        this.allToggles = new Array(this.experienceList.length).fill(false);
-      },
-      error: (error) => {
-        console.error('Error loading experience data:', error);
-      }
-    });
+    this.homeDataService.getExperience()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (data: ExperienceModel[]) => {
+          this.experienceList = data;
+          this.allToggles = new Array(this.experienceList.length).fill(false);
+        },
+        error: (error) => {
+          console.error('Error loading experience data:', error);
+        }
+      });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   toggleShow(index: number): void {
