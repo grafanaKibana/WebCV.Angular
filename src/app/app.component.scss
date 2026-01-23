@@ -2,7 +2,7 @@
 
 .wrapper {
   margin: var(--spacing-8) rem(190px) 0;
-  min-height: 100vh;
+  min-height: var(--app-height, 100vh);
   display: flex;
   flex-direction: column;
   position: relative;
@@ -14,18 +14,27 @@
 
   @include respond-tablet {
     margin: 0;
-    padding: var(--spacing-4) var(--spacing-4) 0;
+    padding-top: calc(var(--spacing-4) + var(--safe-top));
+    padding-right: calc(var(--spacing-4) + var(--safe-right));
+    padding-bottom: calc(var(--spacing-4) + var(--safe-bottom));
+    padding-left: calc(var(--spacing-4) + var(--safe-left));
     border-radius: 0 0 var(--radius-32) var(--radius-32) !important;
   }
 
   @include respond-tablet-sm {
     margin: 0;
-    padding: var(--spacing-2) var(--spacing-2) 0;
+    padding-top: calc(var(--spacing-2) + var(--safe-top));
+    padding-right: calc(var(--spacing-2) + var(--safe-right));
+    padding-bottom: calc(var(--spacing-2) + var(--safe-bottom));
+    padding-left: calc(var(--spacing-2) + var(--safe-left));
   }
 
   @include respond-mobile {
     margin: 0;
-    padding: var(--spacing-2) var(--spacing-2) 0;
+    padding-top: calc(var(--spacing-2) + var(--safe-top));
+    padding-right: calc(var(--spacing-2) + var(--safe-right));
+    padding-bottom: calc(var(--spacing-2) + var(--safe-bottom));
+    padding-left: calc(var(--spacing-2) + var(--safe-left));
   }
 }
 

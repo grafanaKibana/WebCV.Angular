@@ -1,17 +1,17 @@
+const { createEsmPreset } = require('jest-preset-angular/presets');
+
+const preset = createEsmPreset({
+  tsconfig: '<rootDir>/tsconfig.spec.json',
+  stringifyContentPathRegex: '\\.(html|svg)$'
+});
+
 module.exports = {
-  preset: 'jest-preset-angular',
+  ...preset,
   setupFilesAfterEnv: ['<rootDir>/src/setup-jest.ts'],
   testMatch: ['<rootDir>/src/**/*.spec.ts'],
-  testEnvironment: 'jsdom',
-  transform: {
-    '^.+\\.(ts|mjs|html)$': [
-      'jest-preset-angular',
-      {
-        tsconfig: '<rootDir>/tsconfig.spec.json',
-        stringifyContentPathRegex: '\\.(html|svg)$'
-      }
-    ]
-  },
-  moduleFileExtensions: ['ts', 'html', 'js', 'json', 'mjs'],
-  transformIgnorePatterns: ['node_modules/(?!.*\\.mjs$)']
+  moduleNameMapper: {
+    ...preset.moduleNameMapper,
+    '^rxjs$': '<rootDir>/node_modules/rxjs/dist/cjs/index.js',
+    '^rxjs/(.*)$': '<rootDir>/node_modules/rxjs/dist/cjs/$1'
+  }
 };

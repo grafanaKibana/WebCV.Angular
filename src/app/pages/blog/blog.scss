@@ -175,14 +175,29 @@
   align-items: center;
   isolation: isolate;
 
+  @include respond-tablet {
+    padding: var(--spacing-5);
+    gap: var(--spacing-5);
+  }
+
+  @include respond-tablet-sm {
+    padding: var(--spacing-5);
+    gap: var(--spacing-4);
+    align-items: stretch;
+  }
+
+  @include respond-mobile {
+    padding: var(--spacing-4);
+  }
+
   &__title {
     margin: 0;
-    font-size: rem(32px);
+    font-size: clamp(rem(24px), 4.2vw, rem(32px));
     margin-bottom: var(--spacing-2);
     max-width: 100%;
-    overflow-wrap: anywhere;
-    word-break: break-word;
-    hyphens: auto;
+    overflow-wrap: break-word;
+    word-break: normal;
+    hyphens: none;
 
     /* Override global h1 decoration for the blog hero title only. */
     &::before {
@@ -224,6 +239,11 @@
     align-items: center;
     justify-content: space-between;
     gap: var(--spacing-3);
+
+    @include respond-tablet-sm {
+      flex-wrap: wrap;
+      align-items: flex-start;
+    }
   }
 
   &__meta {
@@ -258,6 +278,19 @@
     mask-size: 100% 100%;
     -webkit-mask-repeat: no-repeat;
     mask-repeat: no-repeat;
+
+    @include respond-tablet-sm {
+      position: relative;
+      top: auto;
+      right: auto;
+      bottom: auto;
+      width: 100%;
+      height: clamp(rem(200px), 56vw, rem(320px));
+      border-radius: var(--radius-20);
+
+      -webkit-mask-image: none;
+      mask-image: none;
+    }
   }
 
   &__image {
@@ -395,6 +428,17 @@
 
     i {
       font-size: rem(14px);
+    }
+  }
+
+  @include respond-tablet-sm {
+    padding: rem(4px) rem(10px);
+
+    &__link,
+    &__button {
+      width: rem(44px);
+      height: rem(44px);
+      touch-action: manipulation;
     }
   }
 

@@ -1,34 +1,74 @@
 <header>
   <ul>
-    <li routerLink='/'>
-      <i class="fa-solid fa-house"></i>
-      <span>Who am I?</span>
+    <li>
+      <a routerLink="/" aria-label="Who am I?" title="Who am I?">
+        <i class="fa-solid fa-house" aria-hidden="true"></i>
+        <span>Who am I?</span>
+      </a>
     </li>
 
-    <li routerLink="{{isBlogDone? '/blog' : null}}" class="{{isBlogDone ? null : 'soon'}}">
-      <i class="fa-solid fa-rss"></i>
-      <span>Blog</span>
+    <li>
+      <a
+        *ngIf="isBlogDone; else blogSoon"
+        routerLink="/blog"
+        aria-label="Blog"
+        title="Blog"
+      >
+        <i class="fa-solid fa-rss" aria-hidden="true"></i>
+        <span>Blog</span>
+      </a>
+      <ng-template #blogSoon>
+        <a class="soon" aria-label="Blog" title="Blog" aria-disabled="true" tabindex="-1">
+          <i class="fa-solid fa-rss" aria-hidden="true"></i>
+          <span>Blog</span>
+        </a>
+      </ng-template>
     </li>
 
-    <li routerLink="{{isPortfolioDone ? '/portfolio' : null}}" class="{{isPortfolioDone ? null : 'soon'}}">
-      <i class="fa-solid fa-briefcase"></i>
-      <span>Portfolio</span>
+    <li>
+      <a
+        *ngIf="isPortfolioDone; else portfolioSoon"
+        routerLink="/portfolio"
+        aria-label="Portfolio"
+        title="Portfolio"
+      >
+        <i class="fa-solid fa-briefcase" aria-hidden="true"></i>
+        <span>Portfolio</span>
+      </a>
+      <ng-template #portfolioSoon>
+        <a class="soon" aria-label="Portfolio" title="Portfolio" aria-disabled="true" tabindex="-1">
+          <i class="fa-solid fa-briefcase" aria-hidden="true"></i>
+          <span>Portfolio</span>
+        </a>
+      </ng-template>
     </li>
 
-    <div class="right-menu-items">
-      <li (click)="setRandomTheme()" class="theme-button" aria-label="Change colors" title="Change colors">
+    <li class="right-menu-item">
+      <button type="button" class="theme-button" (click)="setRandomTheme()" aria-label="Change colors" title="Change colors">
         <i class="fa-solid fa-palette" aria-hidden="true"></i>
-      </li>
-      <li class="download-button {{isDownloadCVDone ? null : 'soon'}} {{isDownloading ? 'is-downloading' : ''}}" (click)="downloadCv()">
+      </button>
+    </li>
+
+    <li>
+      <button
+        type="button"
+        class="download-button {{isDownloadCVDone ? null : 'soon'}} {{isDownloading ? 'is-downloading' : ''}}"
+        (click)="downloadCv()"
+        [disabled]="!isDownloadCVDone || isDownloading"
+        [attr.aria-disabled]="!isDownloadCVDone || isDownloading ? 'true' : null"
+        [attr.tabindex]="!isDownloadCVDone || isDownloading ? -1 : null"
+        aria-label="Download CV"
+        title="Download CV"
+      >
         <div class="download-button-content" [class.is-hidden]="isDownloading">
           <span>Download CV</span>
-          <i class="fa-solid fa-angles-down"></i>
-	        </div>
-	        <div class="download-progress progress-sweep" [class.is-active]="isDownloading" aria-hidden="true">
-	          <span class="progress-sweep__wrap" aria-hidden="true"></span>
-	          <span class="progress-sweep__glass" aria-hidden="true"></span>
-	        </div>
-	      </li>
-	    </div>
-	  </ul>
+          <i class="fa-solid fa-angles-down" aria-hidden="true"></i>
+        </div>
+        <div class="download-progress progress-sweep" [class.is-active]="isDownloading" aria-hidden="true">
+          <span class="progress-sweep__wrap" aria-hidden="true"></span>
+          <span class="progress-sweep__glass" aria-hidden="true"></span>
+        </div>
+      </button>
+    </li>
+  </ul>
 </header>

@@ -1,5 +1,4 @@
 import { Component, Inject } from '@angular/core';
-import { ProjectModel } from '../../pages/portfolio/interfaces/projectModel';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
@@ -8,5 +7,5 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
   styleUrls: ['./modal-dialog.component.scss']
 })
 export class ModalDialogComponent {
-  constructor(@Inject(MAT_DIALOG_DATA) public data: ProjectModel) { }
+  constructor(@Inject(MAT_DIALOG_DATA) public data: any) { }
 }

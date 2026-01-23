@@ -1,7 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatDialog } from '@angular/material/dialog';
+import { jest } from '@jest/globals';
 import { PortfolioItemComponent } from './portfolio-item.component';
-import { ProjectModel } from '../interfaces/projectModel';
+import type { ProjectModel } from '../interfaces/projectModel';
 
 describe('PortfolioItemComponent', () => {
   let component: PortfolioItemComponent;

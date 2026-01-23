@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { jest } from '@jest/globals';
 import { WebGLBackgroundComponent } from './webgl-background.component';
 import { WebGLGradientService } from '../../services/webgl-gradient.service';
 

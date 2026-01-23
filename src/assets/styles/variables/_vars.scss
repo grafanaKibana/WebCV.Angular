@@ -47,6 +47,13 @@ $baseSystemFontSize: 16px;
   --font-mobile-size: 11px;
   --font-family-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
 
+  // Mobile viewport + safe-area support
+  --app-height: 100vh;
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+
   // Color Dark Theme
   --color-dark-block-background: rgba(15, 20, 25, 0.35);
   --color-dark-wrapper-background: rgba(10, 15, 20, 0.65);

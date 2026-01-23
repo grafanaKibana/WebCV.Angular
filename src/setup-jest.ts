@@ -1,4 +1,4 @@
-import { setupZoneTestEnv } from 'jest-preset-angular/setup-env/zone';
+import { setupZoneTestEnv } from 'jest-preset-angular/setup-env/zone/index.mjs';
 import { TextDecoder, TextEncoder } from 'util';
 
 setupZoneTestEnv();
