@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { ProjectModel } from '../interfaces/projectModel';
+import type { ProjectModel } from '../interfaces/projectModel';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { ScrollStrategyOptions } from '@angular/cdk/overlay';
 import { ModalDialogComponent } from '../../../shared/modal-dialog/modal-dialog.component';
