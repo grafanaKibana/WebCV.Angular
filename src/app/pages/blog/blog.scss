@@ -210,11 +210,11 @@
 
   &__title {
     margin: 0;
-    font-size: rem(32px);
+    font-size: clamp(rem(24px), 4.2vw, rem(32px));
     margin-bottom: var(--spacing-2);
     max-width: 100%;
-    overflow-wrap: anywhere;
-    word-break: break-word;
+    overflow-wrap: break-word;
+    word-break: normal;
     hyphens: auto;
 
     /* Override global h1 decoration for the blog hero title only. */
@@ -428,6 +428,17 @@
 
     i {
       font-size: rem(14px);
+    }
+  }
+
+  @include respond-tablet-sm {
+    padding: rem(4px) rem(10px);
+
+    &__link,
+    &__button {
+      width: rem(44px);
+      height: rem(44px);
+      touch-action: manipulation;
     }
   }
 
