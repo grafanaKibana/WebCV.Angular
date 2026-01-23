@@ -33,23 +33,45 @@ header {
       padding: var(--spacing-2) var(--spacing-2);
     }
 
-    .right-menu-items {
+    li {
       display: flex;
-      margin-left: auto;
+      align-items: stretch;
+
+      &.right-menu-item {
+        margin-left: auto;
+
+        @include respond-tablet-sm {
+          margin-left: 0;
+        }
+      }
 
       @include respond-tablet-sm {
-        margin-left: 0;
-        display: contents;
+        flex: 1;
+        justify-content: center;
+        min-width: 0;
       }
     }
 
-    li {
+    a,
+    button {
       display: flex;
+      width: 100%;
       align-items: center;
+      justify-content: flex-start;
       padding: 0.5em 1em;
       border-radius: var(--radius-12);
       color: var(--color-dark-heading);
       text-decoration: none;
+      background: transparent;
+      border: 0;
+      font: inherit;
+      cursor: pointer;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+
+      &:disabled {
+        cursor: default;
+      }
 
       &.soon {
         color: color-mix(in srgb, var(--color-dark-heading) 40%, transparent);
@@ -105,9 +127,9 @@ header {
 
       @include respond-tablet-sm {
         padding: var(--spacing-3);
-        flex: 1;
+        min-width: 44px;
+        min-height: 44px;
         justify-content: center;
-        min-width: 0;
 
         span {
           display: none;
@@ -136,13 +158,6 @@ header {
 
       &:hover i {
         text-shadow: 0 0 12px var(--color-dark-neon-glow), 0 0 6px rgba(0, 187, 255, 0.3);
-      }
-
-      @include respond-tablet-sm {
-        flex: 1;
-        justify-content: center;
-        padding: var(--spacing-3);
-        min-width: 0;
       }
     }
 
@@ -200,11 +215,6 @@ header {
       }
 
       @include respond-tablet-sm {
-        flex: 1;
-        justify-content: center;
-        padding: var(--spacing-3);
-        min-width: 0;
-
         .download-button-content {
           width: 100%;
           justify-content: center;
