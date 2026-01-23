@@ -17,13 +17,15 @@ section {
       }
     }
 
-    &:hover {
-      border-left: rem(2px) solid var(--color-dark-paragraph);
-      transition: border-left var(--transition-normal) ease-in;
+    @media (hover: hover) and (pointer: fine) {
+      &:hover {
+        border-left: rem(2px) solid var(--color-dark-paragraph);
+        transition: border-left var(--transition-normal) ease-in;
 
-      i {
-        opacity: 1;
-        transition: opacity var(--transition-normal) var(--transition-easing);
+        i {
+          opacity: 1;
+          transition: opacity var(--transition-normal) var(--transition-easing);
+        }
       }
     }
 
@@ -68,10 +70,12 @@ section {
         width: auto;
         flex-shrink: 0;
         margin-left: var(--spacing-2);
-        height: auto;
+        min-width: rem(44px);
+        min-height: rem(44px);
         display: flex;
         align-items: center;
         justify-content: center;
+        touch-action: manipulation;
       }
     }
 

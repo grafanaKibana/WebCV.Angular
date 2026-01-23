@@ -4,6 +4,18 @@
   display: grid;
   grid-template-columns: 380px 1fr;
   grid-gap: var(--spacing-4);
+
+  /* Grid items default to min-width:auto which can cause subtle mobile overflow.
+     Allow children to shrink so long content wraps instead of forcing side-scroll. */
+  > app-sidebar,
+  > div {
+    min-width: 0;
+  }
+
+  > div {
+    width: 100%;
+    max-width: 100%;
+  }
   
   @include respond-desktop {
     grid-template-columns: 360px 1fr;
@@ -22,6 +34,5 @@
     grid-gap: var(--spacing-2);
   }
 }
-
 
 
