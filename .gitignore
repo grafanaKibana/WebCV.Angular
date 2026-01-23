@@ -38,6 +38,7 @@ testem.log
 /typings
 /.planning/
 /.claude/
+/.opencode/
 
 # System files
 .DS_Store
