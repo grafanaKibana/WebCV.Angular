@@ -1,14 +1,16 @@
 <section class="dark-block">
   <h2>Education</h2>
-  <div *ngFor="let education of educationList" class="section-item">
-    <div class="section-item-head">
-      <div>
-        <h3 class="section-item-title">{{education.educationalInstitution}}</h3>
-        <span>{{education.degree}} degree of {{education.speciality}}</span>
+  <div class="section-item-body">
+    <div *ngFor="let education of educationList" class="section-item">
+      <div class="section-item-head">
+        <div>
+          <h3 class="section-item-title">{{education.educationalInstitution}}</h3>
+          <span>{{education.degree}} degree of {{education.speciality}}</span>
+        </div>
       </div>
-    </div>
-    <div *ngIf="education.description" class="section-item-content">
-      <p style="white-space: pre-line;">{{education.description}}</p>
+      <div *ngIf="education.description" class="section-item-content">
+        <p style="white-space: pre-line;">{{education.description}}</p>
+      </div>
     </div>
   </div>
 </section>

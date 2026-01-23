@@ -6,6 +6,35 @@
 @import 'variables/mixins';
 @import 'variables/vars';
 
+:root {
+  // Layout spacing tokens (responsive overrides)
+  // Baseline: matches the blog post mobile “feel” (less cramped than the old global mobile section padding).
+  --page-pad: var(--spacing-4);
+  --section-pad: var(--spacing-5);
+  --section-gap: var(--spacing-4);
+}
+
+@include respond-tablet {
+  :root {
+    --section-pad: var(--spacing-5);
+    --section-gap: var(--spacing-4);
+  }
+}
+
+@include respond-tablet-sm {
+  :root {
+    --section-pad: var(--spacing-4);
+    --section-gap: var(--spacing-3);
+  }
+}
+
+@include respond-mobile {
+  :root {
+    --section-pad: var(--spacing-4);
+    --section-gap: var(--spacing-3);
+  }
+}
+
 html {
   scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch;
@@ -18,24 +47,9 @@ body {
 }
 
 section {
-  padding: var(--spacing-6);
-  margin-bottom: var(--spacing-4);
+  padding: var(--section-pad);
+  margin-bottom: var(--section-gap);
   @extend .box-shadow-16;
-
-  @include respond-tablet {
-    padding: var(--spacing-5);
-    margin-bottom: var(--spacing-4);
-  }
-
-  @include respond-tablet-sm {
-    padding: var(--spacing-4);
-    margin-bottom: var(--spacing-3);
-  }
-
-  @include respond-mobile {
-    padding: var(--spacing-3);
-    margin-bottom: var(--spacing-2);
-  }
 }
 
 * {

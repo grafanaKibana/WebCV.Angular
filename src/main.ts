@@ -13,11 +13,28 @@ function setViewportVars() {
   document.documentElement.style.setProperty('--app-height', `${height}px`);
 }
 
-setViewportVars();
-window.addEventListener('resize', setViewportVars);
-window.addEventListener('orientationchange', setViewportVars);
-window.visualViewport?.addEventListener('resize', setViewportVars);
-window.visualViewport?.addEventListener('scroll', setViewportVars);
+let lastAppHeightPx: number | null = null;
+let rafPending = false;
+
+function scheduleViewportVarsUpdate(): void {
+  if (rafPending) return;
+  rafPending = true;
+  requestAnimationFrame(() => {
+    rafPending = false;
+    const height = window.visualViewport?.height ?? window.innerHeight;
+    const floored = Math.floor(height);
+    if (lastAppHeightPx !== null && Math.abs(lastAppHeightPx - floored) < 2) {
+      return;
+    }
+    lastAppHeightPx = floored;
+    document.documentElement.style.setProperty('--app-height', `${floored}px`);
+  });
+}
+
+scheduleViewportVarsUpdate();
+window.addEventListener('resize', scheduleViewportVarsUpdate);
+window.addEventListener('orientationchange', scheduleViewportVarsUpdate);
+window.visualViewport?.addEventListener('resize', scheduleViewportVarsUpdate);
 
 
 if (environment.production) {

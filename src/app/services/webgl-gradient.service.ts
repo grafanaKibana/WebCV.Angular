@@ -85,8 +85,13 @@ export class WebGLGradientService {
       onBrightnessUpdate?: (angle: number, brightness: number) => void;
     } = {}
   ): void {
+    const existingId = container.getAttribute('data-gradient-id');
+    if (existingId && this.gradients.has(existingId)) {
+      return;
+    }
+
     // Generate a unique ID for this gradient instance
-    const id = `gradient-${Math.random().toString(36).substring(2, 9)}`;
+    const id = existingId || `gradient-${Math.random().toString(36).substring(2, 9)}`;
     container.setAttribute('data-gradient-id', id);
 
     // Run outside Angular zone for better performance
@@ -226,6 +231,7 @@ class GradientInstance {
   private gl: WebGLRenderingContext;
   private width!: number;
   private height!: number;
+  private dpr: number = window.devicePixelRatio || 1;
   private uniforms: any = {};
   private program!: WebGLProgram;
   private amplitudeValue: number;
@@ -730,7 +736,7 @@ class GradientInstance {
       this.onBrightnessUpdate(angle, brightness);
     }
     
-    this.lastEmittedColors = JSON.parse(JSON.stringify(this.currentColors));
+    this.lastEmittedColors = this.currentColors.map(color => color.slice());
     this.colorEmitThrottle = currentTime;
   }
 
@@ -820,6 +826,18 @@ class GradientInstance {
 
     // Account for high-DPI displays (Retina, 4K, etc.)
     const dpr = window.devicePixelRatio || 1;
+    const dprChanged = dpr !== this.dpr;
+
+    // Avoid resize churn (1px jitter can cause unbounded GPU reallocations).
+    if (!dprChanged && this.width && this.height) {
+      const widthDiff = Math.abs(displayWidth - this.width);
+      const heightDiff = Math.abs(displayHeight - this.height);
+      if (widthDiff < 2 && heightDiff < 2) {
+        return;
+      }
+    }
+    this.dpr = dpr;
+
     const width = Math.floor(displayWidth * dpr);
     const height = Math.floor(displayHeight * dpr);
 
@@ -900,6 +918,9 @@ class GradientInstance {
   private animate(): void {
     // Start animation loop
     const animateFrame = (time: number) => {
+      if (!this.playing) {
+        return;
+      }
       // Increment frame counter (used for skipping frames)
       this.frame += 1;
 
@@ -918,6 +939,7 @@ class GradientInstance {
    * Clean up resources
    */
   destroy(): void {
+    this.playing = false;
     // Stop animation
     if (this.animationFrameId !== null) {
       cancelAnimationFrame(this.animationFrameId);

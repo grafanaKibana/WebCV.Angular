@@ -121,6 +121,12 @@ $baseSystemFontSize: 16px;
   --spacing-2xl: var(--spacing-12);
   --spacing-3xl: var(--spacing-16);
 
+  // Layout spacing tokens (systemized)
+  // NOTE: Responsive values are overridden in `src/assets/styles/_general.scss`.
+  --page-pad: var(--spacing-4);
+  --section-pad: var(--spacing-6);
+  --section-gap: var(--spacing-4);
+
   // Transition Timing
   --transition-fast: 0.15s;
   --transition-normal: 0.25s;
@@ -134,6 +140,14 @@ $baseSystemFontSize: 16px;
   --radius-16: 16px;
   --radius-20: 20px;
   --radius-32: 32px;
+
+  // Semantic radii (nested elements should step down at least one level)
+  --radius-surface-lg: var(--radius-32);
+  --radius-surface: var(--radius-20);
+  --radius-card: var(--radius-16);
+  --radius-inner: var(--radius-12);
+  --radius-control: var(--radius-8);
+  --radius-xs: var(--radius-4);
 
   // Frosted Glass Reflections (blue-tinted to match background)
   // Individual RGB values for smooth transitions

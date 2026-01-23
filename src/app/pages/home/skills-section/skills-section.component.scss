@@ -1,20 +1,10 @@
 @import "../home";
 
 section {
-  //padding: rem(18px);
   padding: 0;
+  margin-bottom: var(--section-gap);
   box-shadow: none;
-
-  @include respond-laptop {
-    padding: rem(10px);
-  }
-
-  h2 {
-    padding: rem(6px) 0;
-    border-radius: var(--radius-12);
-    margin: rem(24px) 0 rem(12px);
-    text-align: center;
-  }
+  background: transparent;
 
   .skill-wrapper {
     display: flex;
@@ -34,6 +24,10 @@ section {
 
       @include respond-mobile {
         width: 100%;
+      }
+
+      > h3 {
+        margin-left: rem(6px);
       }
 
       &-item {
