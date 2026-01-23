@@ -197,7 +197,7 @@
     max-width: 100%;
     overflow-wrap: break-word;
     word-break: normal;
-    hyphens: auto;
+    hyphens: none;
 
     /* Override global h1 decoration for the blog hero title only. */
     &::before {

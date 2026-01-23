@@ -119,18 +119,20 @@
 
   .technology-wrapper {
     margin: var(--spacing-2) 0;
-    justify-content: space-between;
     display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
     gap: var(--spacing-4);
 
     .technology-badge {
       @extend .box-shadow-8;
       min-width: fit-content;
-      width: 100%;
+      width: auto;
+      flex: 0 0 auto;
       font-size: 14px;
       text-align: center;
       font-weight: 300;
-      line-height: 1;
+      line-height: 1.1;
       vertical-align: baseline;
       border-radius: var(--radius-8);
       padding: var(--spacing-1) var(--spacing-2);
