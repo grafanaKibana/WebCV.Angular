@@ -175,6 +175,39 @@
   align-items: center;
   isolation: isolate;
 
+  @include respond-tablet {
+    padding: var(--spacing-5);
+    gap: var(--spacing-5);
+  }
+
+  @include respond-tablet-sm {
+    padding: var(--spacing-5);
+    gap: var(--spacing-4);
+    align-items: stretch;
+
+    &__top-row {
+      flex-wrap: wrap;
+      align-items: flex-start;
+    }
+
+    &__media {
+      position: relative;
+      top: auto;
+      right: auto;
+      bottom: auto;
+      width: 100%;
+      height: clamp(rem(200px), 56vw, rem(320px));
+      border-radius: var(--radius-20);
+
+      -webkit-mask-image: none;
+      mask-image: none;
+    }
+  }
+
+  @include respond-mobile {
+    padding: var(--spacing-4);
+  }
+
   &__title {
     margin: 0;
     font-size: rem(32px);
