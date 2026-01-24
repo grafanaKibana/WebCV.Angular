@@ -33,6 +33,7 @@ export class BlogDetailPageComponent implements OnInit, OnDestroy {
   readingTimeMinutes = 0;
   shareLinks: ShareLink[] = [];
   copyLabel = 'Copy link';
+  copySuccess = false;
 
   private readonly destroy$ = new Subject<void>();
   private currentUrl = '';
@@ -79,12 +80,15 @@ export class BlogDetailPageComponent implements OnInit, OnDestroy {
     navigator.clipboard.writeText(this.currentUrl)
       .then(() => {
         this.copyLabel = 'Copied';
+        this.copySuccess = true;
         setTimeout(() => {
           this.copyLabel = 'Copy link';
-        }, 2000);
+          this.copySuccess = false;
+        }, 3000);
       })
       .catch(() => {
         this.copyLabel = 'Copy failed';
+        this.copySuccess = false;
       });
   }
 

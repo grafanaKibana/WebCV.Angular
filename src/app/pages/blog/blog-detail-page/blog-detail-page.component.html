@@ -20,11 +20,13 @@
             </a>
             <button
               class="blog-share__button"
+              [class.blog-share__button--success]="copySuccess"
               type="button"
               [attr.aria-label]="copyLabel"
               [attr.title]="copyLabel"
               (click)="copyLink()">
-              <i class="fa-solid fa-link"></i>
+              <i class="fa-solid fa-link" [class.hidden]="copySuccess"></i>
+              <i class="fa-solid fa-check" [class.hidden]="!copySuccess"></i>
             </button>
           </div>
         </div>

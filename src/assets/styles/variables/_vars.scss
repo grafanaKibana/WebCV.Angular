@@ -95,10 +95,8 @@ $baseSystemFontSize: 16px;
   --progress-glow-spread: #{rem(8px)};
   --progress-glass-blur: #{rem(24px)};
 
-  // Smooth transitions for dynamic reflection colors
-  transition: --reflection-color 1s ease-out,
-              --reflection-color-subtle 1s ease-out,
-              --reflection-color-strong 1s ease-out;
+  // Note: Composed colors (--reflection-color, etc.) inherit transitions
+  // from their component RGB values via @property declarations above
 
   // Spacing Scale (4px base unit)
   --spacing-1: 4px;
@@ -165,9 +163,11 @@ $baseSystemFontSize: 16px;
   --reflection-edge-glint: rgba(var(--reflection-r), var(--reflection-g), var(--reflection-b), 0.5);
 
   // Smooth transitions for RGB values and angle
-  transition: --reflection-r 1s cubic-bezier(0.4, 0.0, 0.2, 1),
-              --reflection-g 1s cubic-bezier(0.4, 0.0, 0.2, 1),
-              --reflection-b 1s cubic-bezier(0.4, 0.0, 0.2, 1),
-              --reflection-angle 0.8s cubic-bezier(0.4, 0.0, 0.2, 1),
-              --reflection-brightness 0.8s cubic-bezier(0.4, 0.0, 0.2, 1);
+  // Duration matches updateThrottle (1s) for seamless interpolation between frames
+  // Using linear easing ensures constant velocity, preventing jarring stops/starts
+  transition: --reflection-r 1s linear,
+              --reflection-g 1s linear,
+              --reflection-b 1s linear,
+              --reflection-angle 1s linear,
+              --reflection-brightness 1s linear;
 }

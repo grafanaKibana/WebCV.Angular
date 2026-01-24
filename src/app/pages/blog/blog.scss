@@ -414,6 +414,7 @@
     box-shadow: none;
     transition: color var(--transition-fast) var(--transition-easing),
       text-shadow var(--transition-fast) var(--transition-easing);
+    position: relative;
 
     &:hover,
     &:active {
@@ -428,6 +429,24 @@
 
     i {
       font-size: rem(14px);
+      transition: opacity var(--transition-normal) var(--transition-easing),
+        transform var(--transition-normal) var(--transition-easing);
+
+      &.hidden {
+        opacity: 0;
+        transform: scale(0.5);
+        position: absolute;
+      }
+    }
+  }
+
+  &__button--success {
+    color: #4ade80; // Green color for success
+
+    &:hover,
+    &:active,
+    &:focus-visible {
+      text-shadow: 0 0 rem(12px) rgba(74, 222, 128, 0.6);
     }
   }
 

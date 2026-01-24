@@ -279,21 +279,22 @@ export const webglConfig = {
     /**
      * Transition Duration
      * How long CSS transitions take when reflection colors/angles change.
-     * - 0.3: Quick transitions, responsive feel
-     * - 0.6: Smooth transitions, natural feel (default)
-     * - 1.0: Slow transitions, relaxed feel
+     * IMPORTANT: Should match updateThrottle (in seconds) for seamless interpolation.
+     * The CSS transition bridges the gap between JavaScript updates, creating
+     * smooth continuous animation from discrete keyframes.
      */
-    transitionDuration: 0.6,
+    transitionDuration: 1.0,
 
     /**
      * Update Throttle
      * How often reflection colors are updated (in milliseconds).
-     * Lower values = more frequent updates = smoother but more CPU usage.
-     * - 50: Very frequent updates, very smooth (higher CPU)
-     * - 100: Balanced updates, smooth appearance (default)
-     * - 200: Less frequent updates, lower CPU usage
+     * CSS transitions (with linear easing) handle smooth interpolation between updates.
+     * IMPORTANT: Should match transitionDuration (in ms) for seamless animation.
+     * - 100: Frequent updates (higher CPU, smoother but diminishing returns)
+     * - 500: Balanced updates
+     * - 1000: Optimal - relies on CSS transitions for interpolation (default, lowest CPU)
      */
-    updateThrottle: 100,
+    updateThrottle: 1000,
 
   } as ReflectionConfig,
 
