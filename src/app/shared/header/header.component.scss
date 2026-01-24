@@ -1,8 +1,8 @@
 @import '../../../assets/styles/utility';
 
 header {
-  @extend .container-shadow;
-  @extend .container-glass;
+  @extend .shadow-medium;
+  @extend .glass-heavy;
   z-index: 2;
   display: flex;
   align-items: center;

@@ -331,7 +331,8 @@
 }
 
 .blog-meta {
-  @extend .container-glass;
+  @extend .glass-medium;
+  @extend .shadow-floating;
 
   display: flex;
   flex-wrap: nowrap;
@@ -462,7 +463,8 @@
   }
 
   &--icons {
-    @extend .container-glass;
+    @extend .glass-medium;
+    @extend .shadow-floating;
 
     gap: var(--spacing-2);
     border-radius: var(--radius-16);

@@ -51,8 +51,9 @@
   }
 }
 
-.container-glass {
-  background: rgba(10, 15, 20, 0.65);
+// Glass effect mixin - creates frosted glass appearance with reflection overlay
+@mixin glass-effect($bg-opacity: 0.55) {
+  background: rgba(10, 15, 20, $bg-opacity);
   backdrop-filter: blur(24px) saturate(1.2);
   -webkit-backdrop-filter: blur(24px) saturate(1.2);
   box-shadow:
@@ -96,6 +97,19 @@
     -webkit-mask-composite: xor;
     mask-composite: exclude;
   }
+}
+
+// Glass variants: light (0.25) / medium (0.40) / heavy (0.55)
+.glass-light {
+  @include glass-effect(0.25);
+}
+
+.glass-medium {
+  @include glass-effect(0.40);
+}
+
+.glass-heavy {
+  @include glass-effect(0.55);
 }
 
 .dark-shadow {
@@ -178,13 +192,39 @@
   }
 }
 
-.container-shadow {
+// Shadow variants: light / medium / heavy
+.shadow-light {
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.08),
+    0 4px 8px rgba(0, 0, 0, 0.04),
+    0 8px 16px rgba(0, 0, 0, 0.02);
+}
+
+.shadow-medium {
   box-shadow:
     0 1px 3px rgba(0, 0, 0, 0.12),
     0 1px 2px rgba(0, 0, 0, 0.24),
     0 10px 20px rgba(0, 0, 0, 0.08),
     0 20px 30px rgba(0, 0, 0, 0.06),
     0 0 40px rgba(0, 0, 0, 0.04);
+}
+
+.shadow-heavy {
+  box-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.16),
+    0 4px 6px rgba(0, 0, 0, 0.28),
+    0 15px 30px rgba(0, 0, 0, 0.12),
+    0 30px 45px rgba(0, 0, 0, 0.10),
+    0 0 60px rgba(0, 0, 0, 0.08);
+}
+
+// Floating glass effect - elevated labels/badges that appear to hover above the UI
+.shadow-floating {
+  box-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.12),
+    0 8px 16px rgba(0, 0, 0, 0.16),
+    0 16px 32px rgba(0, 0, 0, 0.12),
+    0 0 0 1px rgba(255, 255, 255, 0.04);
 }
 
 // Responsive utilities
