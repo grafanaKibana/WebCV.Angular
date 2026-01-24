@@ -74,6 +74,20 @@ export class BlogDataService {
     return `${this.postsBasePath}${path}`;
   }
 
+  private resolveImagePath(imagePath: string, sourcePath: string): string {
+    // If empty, external URL, or already absolute path, return as-is
+    if (!imagePath || imagePath.startsWith('http') || imagePath.startsWith('./assets/') || imagePath.startsWith('assets/')) {
+      return imagePath;
+    }
+
+    // Get the directory of the source markdown file
+    const sourceDir = sourcePath.substring(0, sourcePath.lastIndexOf('/') + 1);
+
+    // Handle relative paths (e.g., "./hero.jpg" or "hero.jpg")
+    const cleanPath = imagePath.startsWith('./') ? imagePath.slice(2) : imagePath;
+    return `${sourceDir}${cleanPath}`;
+  }
+
   private loadPosts(postPaths: string[]): Observable<ArticleModel[]> {
     if (!postPaths.length) {
       return of([]);
@@ -114,7 +128,8 @@ export class BlogDataService {
     const publishDate = typeof metadata['publishDate'] === 'string'
       ? metadata['publishDate'].trim()
       : new Date().toISOString().slice(0, 10);
-    const imagePath = typeof metadata['imagePath'] === 'string' ? metadata['imagePath'].trim() : '';
+    const rawImagePath = typeof metadata['imagePath'] === 'string' ? metadata['imagePath'].trim() : '';
+    const imagePath = this.resolveImagePath(rawImagePath, sourcePath);
     const author = this.parseAuthor(metadata['author']);
     const content = body.trim();
 

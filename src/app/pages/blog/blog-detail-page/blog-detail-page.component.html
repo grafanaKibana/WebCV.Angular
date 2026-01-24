@@ -30,8 +30,6 @@
             </button>
           </div>
         </div>
-
-        <p class="blog-hero__eyebrow">Blog</p>
         <h1 class="blog-hero__title">{{article.headline}}</h1>
       </div>
 
@@ -61,22 +59,19 @@
   </section>
 
   <section class="blog-content">
-    <div class="blog-content__body" [innerHTML]="contentHtml"></div>
-
-    <aside class="blog-content__aside" *ngIf="tocItems.length">
-      <div class="blog-toc">
-        <p class="blog-toc__title">On this page</p>
-        <a
-          *ngFor="let item of tocItems"
-          class="blog-toc__link"
-          [class.blog-toc__link--sub]="item.level > 2"
-          [attr.data-level]="item.level"
-          [routerLink]="[]"
-          [fragment]="item.id">
-          {{item.text}}
-        </a>
-      </div>
+    <aside class="blog-toc" *ngIf="tocItems.length">
+      <p class="blog-toc__title">On this page</p>
+      <a
+        *ngFor="let item of tocItems"
+        class="blog-toc__link"
+        [class.blog-toc__link--sub]="item.level > 2"
+        [attr.data-level]="item.level"
+        [routerLink]="[]"
+        [fragment]="item.id">
+        {{item.text}}
+      </a>
     </aside>
+    <div class="blog-content__body" [innerHTML]="contentHtml"></div>
   </section>
 
 </ng-container>

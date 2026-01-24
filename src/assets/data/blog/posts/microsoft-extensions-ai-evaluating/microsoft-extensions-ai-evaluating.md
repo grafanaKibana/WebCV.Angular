@@ -6,7 +6,7 @@ topics:
   - Evaluation
   - Azure DevOps
 publishDate: "2024-07-06"
-imagePath: "https://picsum.photos/seed/ai-evaluating/1200/630"
+imagePath: "hero.png"
 author:
   name: "Nikita Reshetnik"
   title: ".NET / AI Engineer"

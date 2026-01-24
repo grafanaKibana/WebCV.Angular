@@ -2,7 +2,9 @@
 
 section {
   .section-item-body {
-    padding-left: var(--spacing-1);
+    @include respond-laptop {
+      padding-left: var(--spacing-1);
+    }
   }
 
     .section-item {

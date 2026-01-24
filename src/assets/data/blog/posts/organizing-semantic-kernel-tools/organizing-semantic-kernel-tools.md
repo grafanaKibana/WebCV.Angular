@@ -6,7 +6,7 @@ topics:
   - Architecture
   - Tools
 publishDate: "2024-07-05"
-imagePath: "https://picsum.photos/seed/semantic-kernel-tools/1200/630"
+imagePath: "hero.png"
 author:
   name: "Nikita Reshetnik"
   title: ".NET / AI Engineer"
