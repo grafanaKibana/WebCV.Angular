@@ -137,20 +137,24 @@
       ]
     },
     {
-      "name": "Data Storage",
+      "name": "AI",
       "skills": [
         {
-          "technology": "MS SQL Server",
+          "technology": "Semantic Kernel",
+          "level": 3
+        },
+        {
+          "technology": "Prompt Engineering",
           "level": 2
         },
         {
-          "technology": "ElasticSearch",
+          "technology": "Azure AI Services",
           "level": 2
         }
       ]
     },
     {
-      "name": "Technologies",
+      "name": "Frameworks",
       "skills": [
         {
           "technology": "ASP.NET Web API",
@@ -162,6 +166,20 @@
         }
       ]
     },
+    {
+      "name": "Persistence",
+      "skills": [
+        {
+          "technology": "MS SQL Server",
+          "level": 2
+        },
+        {
+          "technology": "ElasticSearch",
+          "level": 2
+        }
+      ]
+    },
+
     {
       "name": "Cloud",
       "skills": [
@@ -176,61 +194,40 @@
       ]
     },
     {
-      "name": "AI",
-      "skills": [
-        {
-          "technology": "Semantic Kernel + OpenAI",
-          "level": 3
-        },
-        {
-          "technology": "Prompt Engineering",
-          "level": 2
-        },
-        {
-          "technology": "Azure AI Services",
-          "level": 2
-        }
-      ]
-    },
-    {
       "name": "CI / CD",
       "skills": [
-        {
-          "technology": "Jenkins",
-          "level": 2
-        },
         {
           "technology": "Azure DevOps",
           "level": 2
         },
         {
+          "technology": "Jenkins",
+          "level": 2
+        },
+        {
           "technology": "GitHub Actions",
           "level": 2
+        },
+        {
+          "technology": "ArgoCD",
+          "level": 1
         }
       ]
     },
     {
-      "name": "Other",
+      "name": "Observability",
       "skills": [
         {
           "technology": "Grafana",
           "level": 2
         },
         {
-          "technology": "Kibana",
-          "level": 1
-        },
-        {
-          "technology": "ArgoCD",
-          "level": 1
-        },
-        {
-          "technology": "Git",
+          "technology": "Prometheus",
           "level": 2
         },
         {
-          "technology": "UML",
-          "level": 1
+          "technology": "Kibana",
+          "level": 2
         }
       ]
     }

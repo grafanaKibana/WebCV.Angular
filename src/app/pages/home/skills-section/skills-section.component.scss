@@ -16,7 +16,11 @@ section {
     }
 
     .skill-group {
-      width: calc(50% - rem(6px));
+      width: calc(33.333% - rem(8px));
+
+      @include respond-wide {
+        width: calc(50% - rem(6px));
+      }
 
       @include respond-tablet-sm {
         width: 100%;
