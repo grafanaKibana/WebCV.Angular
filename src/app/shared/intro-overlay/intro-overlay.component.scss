@@ -8,9 +8,9 @@
 
   // Keep the background continuous (WebGL shows through) but add a
   // semi-transparent scrim so bright gradients don't wash out the text.
-  background: rgba(0, 0, 0, 0.32);
-  backdrop-filter: blur(12px) saturate(1.05);
-  -webkit-backdrop-filter: blur(12px) saturate(1.05);
+  background: rgba(0, 0, 0, 0.30);
+  backdrop-filter: blur(12px) saturate(1.15);
+  -webkit-backdrop-filter: blur(12px) saturate(1.15);
 
   // Edge vignette; preserves center colors.
   &::after {
@@ -71,7 +71,7 @@
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-    text-shadow: 0 26px 68px rgba(0, 0, 0, 0.5);
+    text-shadow: 0 26px 68px rgba(0, 0, 0, 0.4);
 
   opacity: 0;
   transform: translateY(8px);

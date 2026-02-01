@@ -52,8 +52,15 @@ export class HeaderComponent implements OnInit, OnDestroy {
     // Find all WebGL background containers in the document
     const containers = document.querySelectorAll('[data-gradient-id]');
 
-    // Get random color scheme
-    const randomColors = this.webglGradientService.getRandomColorScheme();
+    const themeName = this.webglGradientService.getRandomThemeName();
+    if (!themeName) {
+      return;
+    }
+
+    // Persist for next reload.
+    this.webglGradientService.saveThemeName(themeName);
+
+    const colors = this.webglGradientService.getColorScheme(themeName);
 
     // Transition existing gradients to new colors smoothly
     containers.forEach(container => {
@@ -62,10 +69,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
       if (id) {
         // If gradient exists, transition smoothly
-        this.webglGradientService.transitionGradientColors(element, randomColors);
+        this.webglGradientService.transitionGradientColors(element, colors);
       } else {
         // If no gradient exists, create new one
-        this.webglGradientService.applyGradient(element);
+        this.webglGradientService.applyGradient(element, { themeName });
       }
     });
   }

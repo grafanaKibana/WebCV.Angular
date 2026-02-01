@@ -17,6 +17,7 @@ import {
 })
 export class WebGLGradientService {
   private gradients: Map<string, GradientInstance> = new Map();
+  private readonly themeStorageKey = 'webcv.themeName.v1';
 
   constructor(private ngZone: NgZone) {}
 
@@ -25,6 +26,40 @@ export class WebGLGradientService {
    */
   getThemeNames(): string[] {
     return getThemeNames();
+  }
+
+  /**
+   * Persist selected theme name.
+   * Stored in localStorage to survive reloads.
+   */
+  saveThemeName(themeName: string): void {
+    try {
+      localStorage.setItem(this.themeStorageKey, themeName);
+    } catch {
+      // ignore
+    }
+  }
+
+  /**
+   * Load the persisted theme name (if it matches an available theme).
+   */
+  getSavedThemeName(): string | undefined {
+    try {
+      const value = localStorage.getItem(this.themeStorageKey);
+      if (!value) return undefined;
+      const names = this.getThemeNames();
+      return names.includes(value) ? value : undefined;
+    } catch {
+      return undefined;
+    }
+  }
+
+  clearSavedThemeName(): void {
+    try {
+      localStorage.removeItem(this.themeStorageKey);
+    } catch {
+      // ignore
+    }
   }
 
   /**
@@ -51,6 +86,19 @@ export class WebGLGradientService {
    */
   getRandomColorScheme(): number[][] {
     return getRandomColorScheme();
+  }
+
+  getRandomThemeName(): string | undefined {
+    const names = this.getThemeNames();
+    if (!names.length) return undefined;
+    const idx = Math.floor(Math.random() * names.length);
+    return names[idx];
+  }
+
+  private resolveColors(options: { colors?: number[][]; themeName?: string } = {}): number[][] {
+    if (options.colors) return options.colors;
+    if (options.themeName) return this.getColorScheme(options.themeName);
+    return getDefaultColorScheme();
   }
 
   /**
@@ -97,6 +145,8 @@ export class WebGLGradientService {
     // Run outside Angular zone for better performance
     this.ngZone.runOutsideAngular(() => {
       try {
+        const resolvedColors = this.resolveColors(options);
+
         // Check if WebGL is supported with Safari-compatible context options
         const testCanvas = document.createElement('canvas');
         const contextOptions = {
@@ -112,26 +162,11 @@ export class WebGLGradientService {
 
         if (!testContext) {
           // WebGL not supported, apply CSS fallback
-          this.applyCssFallback(container, options.colors || getDefaultColorScheme());
+          this.applyCssFallback(container, resolvedColors);
           return;
         }
 
-        // Determine which colors to use:
-        // 1. Explicitly provided colors take precedence
-        // 2. If a theme name is provided, use that scheme
-        // 3. Otherwise use random or default based on config
-        let colors: number[][];
-
-        if (options.colors) {
-          // Use explicitly provided colors
-          colors = options.colors;
-        } else if (options.themeName) {
-          // Use the specified theme
-          colors = this.getColorScheme(options.themeName);
-        } else {
-          // Use default theme
-          colors = getDefaultColorScheme();
-        }
+        const colors = resolvedColors;
 
         // Initialize gradient with configuration
         const gradient = new GradientInstance({
@@ -151,7 +186,7 @@ export class WebGLGradientService {
       } catch (error) {
         console.error('Error initializing WebGL gradient:', error);
         // Apply CSS fallback in case of errors
-        this.applyCssFallback(container, options.colors || getDefaultColorScheme());
+        this.applyCssFallback(container, this.resolveColors(options));
       }
     });
   }

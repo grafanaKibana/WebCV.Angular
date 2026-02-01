@@ -23,7 +23,8 @@ export class WebGLBackgroundComponent implements OnInit, AfterViewInit, OnDestro
   ) {}
 
   ngOnInit(): void {
-    // Empty - initialization moved to AfterViewInit for Safari compatibility
+    // Load persisted theme name early so AfterViewInit uses it.
+    this.themeName = this.webglGradientService.getSavedThemeName();
   }
   
   ngAfterViewInit(): void {
