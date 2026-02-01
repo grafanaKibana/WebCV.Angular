@@ -14,6 +14,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MonthShortPipe } from './pipes/month-short.pipe';
 import { DurationPipe } from './pipes/duration.pipe';
+import { IntroOverlayComponent } from './intro-overlay/intro-overlay.component';
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import { DurationPipe } from './pipes/duration.pipe';
     HorizontalSeparatorComponent,
     VerticalSeparatorComponent,
     ModalDialogComponent,
+    IntroOverlayComponent,
     MonthShortPipe,
     DurationPipe,
   ],
@@ -35,6 +37,7 @@ import { DurationPipe } from './pipes/duration.pipe';
     VerticalSeparatorComponent,
     MatDialogModule,
     ModalDialogComponent,
+    IntroOverlayComponent,
     MonthShortPipe,
     DurationPipe,
   ],
