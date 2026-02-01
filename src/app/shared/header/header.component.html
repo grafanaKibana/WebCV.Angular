@@ -57,12 +57,12 @@
         [disabled]="!isDownloadCVDone || isDownloading"
         [attr.aria-disabled]="!isDownloadCVDone || isDownloading ? 'true' : null"
         [attr.tabindex]="!isDownloadCVDone || isDownloading ? -1 : null"
-        aria-label="Download CV"
-        title="Download CV"
+        aria-label="Get Resume"
+        title="Get Resume"
       >
         <div class="download-button-content" [class.is-hidden]="isDownloading">
-          <span>Download CV</span>
-          <i class="fa-solid fa-angles-down" aria-hidden="true"></i>
+          <span>Get Resume</span>
+          <i class="fa-solid fa-floppy-disk" aria-hidden="true"></i>
         </div>
         <div class="download-progress progress-sweep" [class.is-active]="isDownloading" aria-hidden="true">
           <span class="progress-sweep__wrap" aria-hidden="true"></span>
