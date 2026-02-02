@@ -4,16 +4,42 @@
   <meta charset="utf-8">
   <title>ReshetnikCV</title>
   <base href="/">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
-  <!--Fonts-->
+  <!--Fonts - consolidated to only what's actually used-->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Ubuntu&display=swap" rel="stylesheet">
-  <script type="module" src="https://unpkg.com/ionicons@5.1.2/dist/ionicons/ionicons.esm.js"></script>
-  <link rel="preconnect" href="https://fonts.gstatic.com">
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <!-- Poppins is the main font, JetBrains Mono for code - loaded via CSS -->
+
+  <script>
+    // Prevent first-paint flash: hide app until intro completes.
+    // Intro shows only once per tab session.
+    (function () {
+      try {
+        var KEY = 'webcv.introSeen.v1';
+        var qs = new URLSearchParams(window.location.search || '');
+        var debugParam = qs.get('intro');
+        var debug =
+          debugParam === '1' ||
+          debugParam === 'true' ||
+          debugParam === 'debug' ||
+          localStorage.getItem('webcv.intro.debug') === '1';
+
+        var seen = sessionStorage.getItem(KEY) === '1';
+        var reduce =
+          window.matchMedia &&
+          window.matchMedia('(prefers-reduced-motion: reduce)') &&
+          window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        if ((debug || !seen) && !reduce) {
+          document.documentElement.classList.add('intro-prehide');
+          document.documentElement.classList.add('intro-animate');
+        }
+      } catch (e) {
+        // ignore
+      }
+    })();
+  </script>
 </head>
   <body>
     <app-root></app-root>

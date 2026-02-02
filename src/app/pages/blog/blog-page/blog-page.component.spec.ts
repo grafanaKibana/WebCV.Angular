@@ -1,6 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
+import { of } from 'rxjs';
+import { RouterTestingModule } from '@angular/router/testing';
 import { BlogPageComponent } from './blog-page.component';
+import { BlogItemComponent } from '../blog-item/blog-item.component';
+import { BlogDataService } from '../services/blog-data.service';
 
 describe('BlogPageComponent', () => {
   let component: BlogPageComponent;
@@ -8,7 +12,14 @@ describe('BlogPageComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ BlogPageComponent ]
+      declarations: [ BlogPageComponent, BlogItemComponent ],
+      imports: [RouterTestingModule],
+      providers: [
+        {
+          provide: BlogDataService,
+          useValue: { getArticles: () => of([]) }
+        }
+      ]
     })
     .compileComponents();
   });

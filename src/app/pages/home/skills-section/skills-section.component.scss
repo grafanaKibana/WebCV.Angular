@@ -1,20 +1,10 @@
 @import "../home";
 
 section {
-  //padding: rem(18px);
   padding: 0;
+  margin-bottom: var(--section-gap);
   box-shadow: none;
-
-  @include respond-laptop {
-    padding: rem(10px);
-  }
-
-  h2 {
-    padding: rem(6px) 0;
-    border-radius: var(--radius-12);
-    margin: rem(24px) 0 rem(12px);
-    text-align: center;
-  }
+  background: transparent;
 
   .skill-wrapper {
     display: flex;
@@ -26,7 +16,11 @@ section {
     }
 
     .skill-group {
-      width: calc(50% - rem(6px));
+      width: calc(33.333% - rem(8px));
+
+      @include respond-wide {
+        width: calc(50% - rem(6px));
+      }
 
       @include respond-tablet-sm {
         width: 100%;
@@ -34,6 +28,10 @@ section {
 
       @include respond-mobile {
         width: 100%;
+      }
+
+      > h3 {
+        margin-left: rem(6px);
       }
 
       &-item {
@@ -78,21 +76,21 @@ section {
 
           span {
             margin: rem(3px) 0;
-            border-radius: rem(3px);
+            border-radius: var(--progress-radius);
             display: block;
             overflow: hidden;
             position: relative;
-            height: rem(8px);
+            height: var(--progress-height);
             width: 100%;
             transition: width .6s ease-in-out;
 
             &.active {
-              background: var(--color-dark-heading);
+              background: var(--progress-fill-color);
               @extend .box-glow-12
             }
 
             &.inactive {
-              background: var(--color-dark-border);
+              background: var(--progress-track-color);
             }
           }
         }

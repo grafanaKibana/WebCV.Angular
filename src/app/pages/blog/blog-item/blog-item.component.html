@@ -1,13 +1,11 @@
-<div class="article dark-block">
-  <img src="{{getRandomImageUrl()}}" alt="">
-  <div class="article-body">
-    <h3>{{article.headline}}</h3>
-    <p>{{article.summary}}</p>
-    <div class="article-body-footer">
-      <div class="topics">
-        <span *ngFor="let topic of article.topics">{{topic}}</span>
-      </div>
-      <span class="publish-date">{{article.publishDate.toLocaleDateString('en-US', {day: 'numeric', month: 'long', year: 'numeric'})}}</span>
+<a class="blog-card" [routerLink]="['/blog', article.slug]" [attr.aria-label]="article.headline">
+  <div class="blog-card__media">
+    <img class="blog-card__image" [src]="article.imagePath" [alt]="article.headline" loading="lazy">
+  </div>
+  <div class="blog-card__content">
+    <h3 class="blog-card__title">{{article.headline}}</h3>
+    <div class="blog-card__meta">
+      <span>{{article.publishDate | date: 'MMM d, y'}}</span>
     </div>
   </div>
-</div>
+</a>

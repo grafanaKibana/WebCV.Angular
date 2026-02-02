@@ -3,8 +3,8 @@
 @import 'variables/vars';
 
 .dark-block {
-  background: rgba(15, 20, 25, 0.2);
-  border-radius: var(--radius-20);
+  background: rgba(15, 20, 25, 0.18);
+  border-radius: var(--radius-surface);
   backdrop-filter: blur(12px) saturate(1.1);
   -webkit-backdrop-filter: blur(12px) saturate(1.1);
   box-shadow:
@@ -23,17 +23,38 @@
     background: linear-gradient(var(--reflection-angle, 135deg),
       var(--reflection-color) 0%,
       var(--reflection-color-subtle) 20%,
-      rgba(var(--reflection-r), var(--reflection-g), var(--reflection-b), 0.04) 45%,
-      rgba(var(--reflection-r), var(--reflection-g), var(--reflection-b), 0.02) 65%,
+      rgba(var(--reflection-r), var(--reflection-g), var(--reflection-b), 0.03) 45%,
+      rgba(var(--reflection-r), var(--reflection-g), var(--reflection-b), 0.015) 65%,
       transparent 85%);
     pointer-events: none;
     contain: layout style paint;
     transition: background 0.6s cubic-bezier(0.4, 0.0, 0.2, 1);
   }
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 0.75px;
+    pointer-events: none;
+    background: linear-gradient(var(--reflection-angle, 135deg),
+      var(--reflection-tip-glint) 0%,
+      var(--reflection-edge-glint) 1%,
+      var(--reflection-edge-color) 5%,
+      rgba(var(--reflection-r), var(--reflection-g), var(--reflection-b), 0.08) 30%,
+      transparent 55%);
+    -webkit-mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+  }
 }
 
-.container-glass {
-  background: rgba(10, 15, 20, 0.65);
+// Glass effect mixin - creates frosted glass appearance with reflection overlay
+@mixin glass-effect($bg-opacity: 0.55) {
+  background: rgba(10, 15, 20, $bg-opacity);
   backdrop-filter: blur(24px) saturate(1.2);
   -webkit-backdrop-filter: blur(24px) saturate(1.2);
   box-shadow:
@@ -51,13 +72,46 @@
     border-radius: inherit;
     background: linear-gradient(var(--reflection-angle, 135deg),
       var(--reflection-color-subtle) 0%,
-      rgba(var(--reflection-r), var(--reflection-g), var(--reflection-b), 0.04) 30%,
-      rgba(var(--reflection-r), var(--reflection-g), var(--reflection-b), 0.02) 55%,
+      rgba(var(--reflection-r), var(--reflection-g), var(--reflection-b), 0.03) 30%,
+      rgba(var(--reflection-r), var(--reflection-g), var(--reflection-b), 0.015) 55%,
       transparent 80%);
     pointer-events: none;
     contain: layout style paint;
     transition: background 0.6s cubic-bezier(0.4, 0.0, 0.2, 1);
   }
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 0.75px;
+    pointer-events: none;
+    background: linear-gradient(var(--reflection-angle, 135deg),
+      var(--reflection-tip-glint) 0%,
+      var(--reflection-edge-glint) 1%,
+      var(--reflection-edge-color) 5%,
+      rgba(var(--reflection-r), var(--reflection-g), var(--reflection-b), 0.08) 30%,
+      transparent 55%);
+    -webkit-mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+  }
+}
+
+// Glass variants: light (0.25) / medium (0.40) / heavy (0.55)
+.glass-light {
+  @include glass-effect(0.25);
+}
+
+.glass-medium {
+  @include glass-effect(0.40);
+}
+
+.glass-heavy {
+  @include glass-effect(0.55);
 }
 
 .dark-shadow {
@@ -140,13 +194,39 @@
   }
 }
 
-.container-shadow {
+// Shadow variants: light / medium / heavy
+.shadow-light {
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.08),
+    0 4px 8px rgba(0, 0, 0, 0.04),
+    0 8px 16px rgba(0, 0, 0, 0.02);
+}
+
+.shadow-medium {
   box-shadow:
     0 1px 3px rgba(0, 0, 0, 0.12),
     0 1px 2px rgba(0, 0, 0, 0.24),
     0 10px 20px rgba(0, 0, 0, 0.08),
     0 20px 30px rgba(0, 0, 0, 0.06),
     0 0 40px rgba(0, 0, 0, 0.04);
+}
+
+.shadow-heavy {
+  box-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.16),
+    0 4px 6px rgba(0, 0, 0, 0.28),
+    0 15px 30px rgba(0, 0, 0, 0.12),
+    0 30px 45px rgba(0, 0, 0, 0.10),
+    0 0 60px rgba(0, 0, 0, 0.08);
+}
+
+// Floating glass effect - elevated labels/badges that appear to hover above the UI
+.shadow-floating {
+  box-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.12),
+    0 8px 16px rgba(0, 0, 0, 0.16),
+    0 16px 32px rgba(0, 0, 0, 0.12),
+    0 0 0 1px rgba(255, 255, 255, 0.04);
 }
 
 // Responsive utilities
@@ -271,5 +351,307 @@
     @include respond-mobile {
       text-align: right;
     }
+  }
+}
+
+@mixin progress-sweep-core-bg {
+  background-size:
+    100% var(--progress-sweep-height, 200%),
+    100% 100%;
+  background-image:
+    radial-gradient(
+      ellipse at center,
+      var(--progress-sweep-core-color, rgba(255, 255, 255, 0.95)) 0%,
+      color-mix(in srgb, var(--progress-fill-color, var(--color-dark-heading)) 70%, transparent)
+        var(--progress-sweep-core-stop, 30%),
+      color-mix(in srgb, var(--progress-fill-color, var(--color-dark-heading)) 45%, transparent)
+        var(--progress-sweep-mid-stop, 54%),
+      transparent var(--progress-sweep-edge-stop, 76%)
+    ),
+    linear-gradient(
+      90deg,
+      transparent 0%,
+      transparent 14%,
+      color-mix(in srgb, var(--progress-fill-color, var(--color-dark-heading)) 8%, transparent) 20%,
+      color-mix(in srgb, var(--progress-fill-color, var(--color-dark-heading)) 14%, transparent) 26%,
+      color-mix(in srgb, var(--progress-fill-color, var(--color-dark-heading)) 22%, transparent) 32%,
+      color-mix(in srgb, var(--progress-fill-color, var(--color-dark-heading)) 32%, transparent) 37%,
+      color-mix(in srgb, var(--progress-fill-color, var(--color-dark-heading)) 44%, transparent) 41%,
+      color-mix(in srgb, var(--progress-fill-color, var(--color-dark-heading)) 58%, transparent) 44%,
+      color-mix(in srgb, var(--progress-fill-color, var(--color-dark-heading)) 72%, transparent) 46%,
+      color-mix(in srgb, var(--progress-fill-color, var(--color-dark-heading)) 86%, transparent) 47.5%,
+      var(--progress-fill-color, var(--color-dark-heading)) 49%,
+      var(--progress-fill-color, var(--color-dark-heading)) 51%,
+      color-mix(in srgb, var(--progress-fill-color, var(--color-dark-heading)) 86%, transparent) 52.5%,
+      color-mix(in srgb, var(--progress-fill-color, var(--color-dark-heading)) 72%, transparent) 54%,
+      color-mix(in srgb, var(--progress-fill-color, var(--color-dark-heading)) 58%, transparent) 56%,
+      color-mix(in srgb, var(--progress-fill-color, var(--color-dark-heading)) 44%, transparent) 59%,
+      color-mix(in srgb, var(--progress-fill-color, var(--color-dark-heading)) 32%, transparent) 63%,
+      color-mix(in srgb, var(--progress-fill-color, var(--color-dark-heading)) 22%, transparent) 68%,
+      color-mix(in srgb, var(--progress-fill-color, var(--color-dark-heading)) 14%, transparent) 74%,
+      color-mix(in srgb, var(--progress-fill-color, var(--color-dark-heading)) 8%, transparent) 80%,
+      transparent 86%,
+      transparent 100%
+    );
+  filter: blur(var(--progress-sweep-blur, #{rem(0.6px)}));
+}
+
+@mixin progress-sweep-glow-bg {
+  background-size: var(--progress-sweep-width, 60%) var(--progress-glow-height, 220%);
+  background-image: radial-gradient(
+    ellipse at center,
+    color-mix(
+      in srgb,
+      #fff var(--progress-glow-core-white, 30%),
+      var(--progress-glow-color, rgba(0, 187, 255, 0.6))
+    ) 0%,
+    color-mix(in srgb, var(--progress-glow-color, rgba(0, 187, 255, 0.6)) 65%, transparent)
+      var(--progress-glow-core-stop),
+    transparent var(--progress-glow-edge-stop)
+  );
+  filter: blur(var(--progress-glow-blur, #{rem(8px)}));
+  mix-blend-mode: screen;
+}
+
+.progress-sweep {
+  position: relative;
+  height: var(--progress-height, #{rem(8px)});
+  border-radius: var(--progress-radius, #{rem(3px)});
+  background: var(--progress-track-color, var(--color-dark-border));
+  isolation: isolate;
+  --_progress-sweep-glow-radius: calc(
+    var(--progress-radius, #{rem(3px)}) + var(--progress-glow-bleed, #{rem(4px)})
+  );
+  --_progress-sweep-glow-clip-y: calc(
+    -1 * (var(--progress-glow-bleed, #{rem(4px)}) + var(--progress-glow-blur, #{rem(8px)}))
+  );
+  --_progress-sweep-edge-fade-frac: var(--progress-sweep-edge-fade-frac, 0.06);
+  --_progress-sweep-edge-fade-frac-inv: var(--progress-sweep-edge-fade-frac-inv, 16.6667);
+  --_progress-sweep-left: calc(100% * var(--progress-sweep-t, 0));
+  --_progress-sweep-clip-right: clamp(
+    0,
+    calc(
+      (var(--progress-sweep-t, 0) + var(--progress-sweep-width-frac, 0.6) - 1) /
+        var(--progress-sweep-width-frac, 0.6)
+    ),
+    1
+  );
+  --_progress-sweep-wrap-phase: clamp(
+    0,
+    calc(
+      (var(--_progress-sweep-clip-right) - var(--progress-sweep-wrap-start-clip, 0.5)) /
+        (1 - var(--progress-sweep-wrap-start-clip, 0.5))
+    ),
+    1
+  );
+  --_progress-sweep-wrap-left: calc(
+    -1 * var(--progress-sweep-width, 60%) +
+      (var(--progress-sweep-width, 60%) * var(--_progress-sweep-wrap-phase))
+  );
+  --_progress-sweep-edge-approach: clamp(
+    0,
+    calc(
+      (var(--progress-sweep-t, 0) -
+          (1 - var(--progress-sweep-width-frac, 0.6) - var(--_progress-sweep-edge-fade-frac))) *
+        var(--_progress-sweep-edge-fade-frac-inv)
+    ),
+    1
+  );
+  --_progress-sweep-edge-fade-main: clamp(
+    0,
+    calc(1 - var(--_progress-sweep-edge-approach)),
+    1
+  );
+  --_progress-sweep-wrap-edge-approach: clamp(
+    0,
+    calc(
+      var(--progress-sweep-width-frac, 0.6) * var(--_progress-sweep-wrap-phase) *
+        var(--_progress-sweep-edge-fade-frac-inv)
+    ),
+    1
+  );
+  --_progress-sweep-edge-fade-wrap: clamp(
+    0,
+    var(--_progress-sweep-wrap-edge-approach),
+    1
+  );
+}
+
+.progress-sweep::before,
+.progress-sweep::after,
+.progress-sweep__wrap::before,
+.progress-sweep__wrap::after {
+  content: '';
+  position: absolute;
+  border-radius: inherit;
+  opacity: 0;
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
+  will-change: left, opacity, filter;
+  pointer-events: none;
+}
+
+.progress-sweep::before {
+  top: calc(-1 * var(--progress-glow-bleed, #{rem(4px)}));
+  bottom: calc(-1 * var(--progress-glow-bleed, #{rem(4px)}));
+  width: var(--progress-sweep-width, 60%);
+  left: var(--_progress-sweep-left);
+  z-index: 0;
+  border-radius: calc(
+    var(--progress-radius, #{rem(3px)}) + var(--progress-glow-bleed, #{rem(4px)})
+  );
+  @include progress-sweep-glow-bg;
+}
+
+.progress-sweep::after {
+  top: calc(-1 * var(--progress-glow-bleed, #{rem(4px)}));
+  bottom: calc(-1 * var(--progress-glow-bleed, #{rem(4px)}));
+  width: var(--progress-sweep-width, 60%);
+  left: var(--_progress-sweep-wrap-left);
+  z-index: 0;
+  border-radius: calc(
+    var(--progress-radius, #{rem(3px)}) + var(--progress-glow-bleed, #{rem(4px)})
+  );
+  @include progress-sweep-glow-bg;
+}
+
+.progress-sweep__wrap {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.progress-sweep__wrap::before {
+  top: 0;
+  bottom: 0;
+  width: var(--progress-sweep-width, 60%);
+  left: var(--_progress-sweep-left);
+  z-index: 1;
+  @include progress-sweep-core-bg;
+}
+
+.progress-sweep__wrap::after {
+  top: 0;
+  bottom: 0;
+  width: var(--progress-sweep-width, 60%);
+  left: var(--_progress-sweep-wrap-left);
+  z-index: 1;
+  @include progress-sweep-core-bg;
+}
+
+.progress-sweep__glass {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  backdrop-filter: blur(var(--progress-glass-blur, #{rem(8px)})) saturate(1.1);
+  -webkit-backdrop-filter: blur(var(--progress-glass-blur, #{rem(8px)})) saturate(1.1);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  z-index: 2;
+}
+
+.progress-sweep.is-active {
+  animation: progress-sweep var(--progress-sweep-duration, 1.35s) linear infinite;
+  --_progress-sweep-alpha-main: clamp(0, calc(1 - var(--_progress-sweep-clip-right)), 1);
+  --_progress-sweep-alpha-wrap: var(--_progress-sweep-wrap-phase);
+  --_progress-sweep-glow-alpha-main: calc(
+    var(--_progress-sweep-alpha-main, 1) * var(--_progress-sweep-edge-fade-main, 1)
+  );
+  --_progress-sweep-glow-alpha-wrap: calc(
+    var(--_progress-sweep-alpha-wrap, 0) * var(--_progress-sweep-edge-fade-wrap, 1)
+  );
+}
+
+@supports (opacity: calc(1 - pow(0.1, 0.69897))) {
+  .progress-sweep.is-active {
+    --_progress-sweep-alpha-main: clamp(
+      0,
+      calc(
+        1 -
+          pow(
+            var(--_progress-sweep-clip-right),
+            var(--progress-sweep-fade-exp, 0.69897)
+          )
+      ),
+      1
+    );
+    --_progress-sweep-alpha-wrap: clamp(
+      0,
+      calc(
+        1 -
+          pow(
+            calc(1 - var(--_progress-sweep-wrap-phase)),
+            var(--progress-sweep-fade-exp, 0.69897)
+          )
+      ),
+      1
+    );
+    --_progress-sweep-glow-alpha-main: calc(
+      var(--_progress-sweep-alpha-main, 1) * var(--_progress-sweep-edge-fade-main, 1)
+    );
+    --_progress-sweep-glow-alpha-wrap: calc(
+      var(--_progress-sweep-alpha-wrap, 0) * var(--_progress-sweep-edge-fade-wrap, 1)
+    );
+  }
+}
+
+.progress-sweep.is-active::before {
+  opacity: calc(0.6 * var(--_progress-sweep-glow-alpha-main, 1));
+}
+
+.progress-sweep.is-active::after {
+  opacity: calc(0.6 * var(--_progress-sweep-glow-alpha-wrap, 0));
+}
+
+.progress-sweep.is-active .progress-sweep__wrap::before {
+  opacity: var(--_progress-sweep-alpha-main, 1);
+}
+
+.progress-sweep.is-active .progress-sweep__wrap::after {
+  opacity: var(--_progress-sweep-alpha-wrap, 0);
+}
+
+.progress-sweep.is-active .progress-sweep__glass {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .progress-sweep.is-active {
+    animation: none;
+    --progress-sweep-t: 0.5;
+    --_progress-sweep-alpha-main: 0.35;
+    --_progress-sweep-alpha-wrap: 0;
+  }
+
+  .progress-sweep.is-active::before,
+  .progress-sweep.is-active::after {
+    display: none;
+  }
+
+  .progress-sweep.is-active .progress-sweep__wrap::before {
+    opacity: var(--_progress-sweep-alpha-main, 0.35);
+  }
+
+  .progress-sweep.is-active .progress-sweep__wrap {
+    display: block;
+  }
+}
+
+@supports not (clip-path: inset(0 0 0 0)) {
+  .progress-sweep {
+    overflow: hidden;
+  }
+}
+
+@keyframes progress-sweep {
+  from {
+    --progress-sweep-t: 0;
+  }
+  to {
+    --progress-sweep-t: 1;
   }
 }

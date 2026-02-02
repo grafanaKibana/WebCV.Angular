@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
 $baseSystemFontSize: 16px;
 
@@ -23,13 +23,13 @@ $baseSystemFontSize: 16px;
 
 @property --reflection-angle {
   syntax: '<angle>';
-  initial-value: 135deg;
+  initial-value: 40deg;
   inherits: true;
 }
 
-@property --reflection-brightness {
+@property --progress-sweep-t {
   syntax: '<number>';
-  initial-value: 0.5;
+  initial-value: 0;
   inherits: true;
 }
 
@@ -39,6 +39,14 @@ $baseSystemFontSize: 16px;
   --font-base-size: 16px;
   --font-tablet-size: 13px;
   --font-mobile-size: 11px;
+  --font-family-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+
+  // Mobile viewport + safe-area support
+  --app-height: 100vh;
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
 
   // Color Dark Theme
   --color-dark-block-background: rgba(15, 20, 25, 0.35);
@@ -53,10 +61,36 @@ $baseSystemFontSize: 16px;
   --color-dark-separator: rgba(255, 255, 255, 0.125);
   --color-dark-error: #B84C4C;
 
-  // Smooth transitions for dynamic reflection colors
-  transition: --reflection-color 1s ease-out,
-              --reflection-color-subtle 1s ease-out,
-              --reflection-color-strong 1s ease-out;
+  // Progress (shared tokens)
+  --progress-height: 8px;
+  --progress-radius: 3px;
+  --progress-track-color: var(--color-dark-border);
+  --progress-fill-color: var(--color-dark-heading);
+  --progress-sweep-width-frac: 0.5;
+  --progress-sweep-width: calc(100% * var(--progress-sweep-width-frac));
+  --progress-sweep-height: 200%;
+  --progress-sweep-edge-fade-frac: 0.08;
+  --progress-sweep-edge-fade-frac-inv: calc(1 / var(--progress-sweep-edge-fade-frac));
+  --progress-sweep-fade-exp: 0.7;
+  --progress-sweep-wrap-start-clip: 0.5;
+  --progress-sweep-core-color: rgba(255, 255, 255, 0.95);
+  --progress-sweep-core-stop: 20%;
+  --progress-sweep-mid-stop: 50%;
+  --progress-sweep-edge-stop: 75%;
+  --progress-sweep-blur: #{rem(0.6px)};
+  --progress-sweep-duration: 1s;
+  --progress-glow-color: rgba(0, 187, 255, 0.9);
+  --progress-glow-core-white: 30%;
+  --progress-glow-core-stop: 35%;
+  --progress-glow-edge-stop: 70%;
+  --progress-glow-blur: #{rem(8px)};
+  --progress-glow-bleed: #{rem(6px)};
+  --progress-glow-height: 80%;
+  --progress-glow-spread: #{rem(8px)};
+  --progress-glass-blur: #{rem(24px)};
+
+  // Note: Composed colors (--reflection-color, etc.) inherit transitions
+  // from their component RGB values via @property declarations above
 
   // Spacing Scale (4px base unit)
   --spacing-1: 4px;
@@ -79,6 +113,12 @@ $baseSystemFontSize: 16px;
   --spacing-2xl: var(--spacing-12);
   --spacing-3xl: var(--spacing-16);
 
+  // Layout spacing tokens (systemized)
+  // NOTE: Responsive values are overridden in `src/assets/styles/_general.scss`.
+  --page-pad: var(--spacing-4);
+  --section-pad: var(--spacing-6);
+  --section-gap: var(--spacing-4);
+
   // Transition Timing
   --transition-fast: 0.15s;
   --transition-normal: 0.25s;
@@ -93,23 +133,34 @@ $baseSystemFontSize: 16px;
   --radius-20: 20px;
   --radius-32: 32px;
 
+  // Semantic radii (nested elements should step down at least one level)
+  --radius-surface-lg: var(--radius-32);
+  --radius-surface: var(--radius-20);
+  --radius-card: var(--radius-16);
+  --radius-inner: var(--radius-12);
+  --radius-control: var(--radius-8);
+  --radius-xs: var(--radius-4);
+
   // Frosted Glass Reflections (blue-tinted to match background)
   // Individual RGB values for smooth transitions
   --reflection-r: 0;
   --reflection-g: 0;
   --reflection-b: 0;
-  --reflection-angle: 135deg;
-  --reflection-brightness: 0.5;
+  --reflection-angle: 40deg;
 
   // Composed colors using RGB values
-  --reflection-color: rgba(var(--reflection-r), var(--reflection-g), var(--reflection-b), 0.10);
-  --reflection-color-subtle: rgba(var(--reflection-r), var(--reflection-g), var(--reflection-b), 0.08);
-  --reflection-color-strong: rgba(var(--reflection-r), var(--reflection-g), var(--reflection-b), 0.15);
+  --reflection-color: rgba(var(--reflection-r), var(--reflection-g), var(--reflection-b), 0.08);
+  --reflection-color-subtle: rgba(var(--reflection-r), var(--reflection-g), var(--reflection-b), 0.06);
+  --reflection-color-strong: rgba(var(--reflection-r), var(--reflection-g), var(--reflection-b), 0.12);
+  --reflection-edge-color: rgba(var(--reflection-r), var(--reflection-g), var(--reflection-b), 0.25);
+  --reflection-edge-glint: rgba(var(--reflection-r), var(--reflection-g), var(--reflection-b), 0.5);
+  --reflection-tip-glint: rgba(var(--reflection-r), var(--reflection-g), var(--reflection-b), 0.85);
 
   // Smooth transitions for RGB values and angle
-  transition: --reflection-r 1s cubic-bezier(0.4, 0.0, 0.2, 1),
-              --reflection-g 1s cubic-bezier(0.4, 0.0, 0.2, 1),
-              --reflection-b 1s cubic-bezier(0.4, 0.0, 0.2, 1),
-              --reflection-angle 0.8s cubic-bezier(0.4, 0.0, 0.2, 1),
-              --reflection-brightness 0.8s cubic-bezier(0.4, 0.0, 0.2, 1);
+  // Duration matches updateThrottle (1s) for seamless interpolation between frames
+  // Using linear easing ensures constant velocity, preventing jarring stops/starts
+  transition: --reflection-r 1s linear,
+              --reflection-g 1s linear,
+              --reflection-b 1s linear,
+              --reflection-angle 1s linear;
 }

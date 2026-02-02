@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AppRoutingModule } from '../app-routing.module';
 import { FormsModule } from '@angular/forms';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+// FontAwesomeModule removed - using CSS classes directly instead of <fa-icon> component
 
 import { HeaderModule } from './header/header.module';
 import { FooterComponent } from './footer/footer.component';
@@ -14,6 +14,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MonthShortPipe } from './pipes/month-short.pipe';
 import { DurationPipe } from './pipes/duration.pipe';
+import { IntroOverlayComponent } from './intro-overlay/intro-overlay.component';
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import { DurationPipe } from './pipes/duration.pipe';
     HorizontalSeparatorComponent,
     VerticalSeparatorComponent,
     ModalDialogComponent,
+    IntroOverlayComponent,
     MonthShortPipe,
     DurationPipe,
   ],
@@ -35,13 +37,13 @@ import { DurationPipe } from './pipes/duration.pipe';
     VerticalSeparatorComponent,
     MatDialogModule,
     ModalDialogComponent,
+    IntroOverlayComponent,
     MonthShortPipe,
     DurationPipe,
   ],
   imports: [
     CommonModule,
     AppRoutingModule,
-    FontAwesomeModule,
     FormsModule,
     MatDialogModule,
     MatButtonModule,

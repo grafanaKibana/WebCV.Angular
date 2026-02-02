@@ -1,8 +1,56 @@
 @import '../assets/styles/utility';
 
+:host-context(html.intro-animate) .wrapper,
+:host-context(html.intro-animate) app-header,
+:host-context(html.intro-animate) .main-container,
+:host-context(html.intro-animate) app-footer {
+  transition:
+    opacity 700ms cubic-bezier(0.2, 0.8, 0.2, 1),
+    transform 700ms cubic-bezier(0.2, 0.8, 0.2, 1),
+    filter 700ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  will-change: opacity, transform, filter;
+}
+
+:host-context(html.intro-animate) app-header {
+  transition-delay: 60ms;
+}
+
+:host-context(html.intro-animate) .main-container {
+  transition-delay: 140ms;
+}
+
+:host-context(html.intro-animate) app-footer {
+  transition-delay: 220ms;
+}
+
+// Initial hidden state while intro overlay is showing.
+:host-context(html.intro-prehide) .wrapper {
+  opacity: 0;
+  transform: translateY(10px) scale(0.99);
+  filter: blur(6px);
+}
+
+:host-context(html.intro-prehide) app-header {
+  opacity: 0;
+  transform: translateY(8px);
+  filter: blur(4px);
+}
+
+:host-context(html.intro-prehide) .main-container {
+  opacity: 0;
+  transform: translateY(12px) scale(0.99);
+  filter: blur(6px);
+}
+
+:host-context(html.intro-prehide) app-footer {
+  opacity: 0;
+  transform: translateY(12px);
+  filter: blur(6px);
+}
+
 .wrapper {
   margin: var(--spacing-8) rem(190px) 0;
-  min-height: 100vh;
+  min-height: var(--app-height, 100vh);
   display: flex;
   flex-direction: column;
   position: relative;
@@ -14,24 +62,33 @@
 
   @include respond-tablet {
     margin: 0;
-    padding: var(--spacing-4) var(--spacing-4) 0;
+    padding-top: calc(var(--spacing-4) + var(--safe-top));
+    padding-right: calc(var(--spacing-4) + var(--safe-right));
+    padding-bottom: calc(var(--spacing-4) + var(--safe-bottom));
+    padding-left: calc(var(--spacing-4) + var(--safe-left));
     border-radius: 0 0 var(--radius-32) var(--radius-32) !important;
   }
 
   @include respond-tablet-sm {
     margin: 0;
-    padding: var(--spacing-2) var(--spacing-2) 0;
+    padding-top: calc(var(--spacing-2) + var(--safe-top));
+    padding-right: calc(var(--spacing-2) + var(--safe-right));
+    padding-bottom: calc(var(--spacing-2) + var(--safe-bottom));
+    padding-left: calc(var(--spacing-2) + var(--safe-left));
   }
 
   @include respond-mobile {
     margin: 0;
-    padding: var(--spacing-2) var(--spacing-2) 0;
+    padding-top: calc(var(--spacing-2) + var(--safe-top));
+    padding-right: calc(var(--spacing-2) + var(--safe-right));
+    padding-bottom: calc(var(--spacing-2) + var(--safe-bottom));
+    padding-left: calc(var(--spacing-2) + var(--safe-left));
   }
 }
 
 .main-container {
-  @extend .container-shadow;
-  @extend .container-glass;
+  @extend .shadow-medium;
+  @extend .glass-heavy;
   z-index: 1;
   border-radius: var(--radius-20);
   padding: var(--spacing-4);

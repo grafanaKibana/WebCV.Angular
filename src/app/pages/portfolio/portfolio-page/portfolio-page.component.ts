@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ProjectModel } from '../interfaces/projectModel';
+import type { ProjectModel } from '../interfaces/projectModel';
 
 @Component({
   selector: 'app-portfolio-page',

@@ -1,6 +1,12 @@
 @import '../../../assets/styles/utility';
 
 section {
+  .section-item-body {
+    @include respond-laptop {
+      padding-left: var(--spacing-1);
+    }
+  }
+
     .section-item {
     border-left: rem(2px) solid var(--color-dark-separator);
     padding: var(--spacing-1) 0 var(--spacing-1) var(--spacing-4);
@@ -17,13 +23,15 @@ section {
       }
     }
 
-    &:hover {
-      border-left: rem(2px) solid var(--color-dark-paragraph);
-      transition: border-left var(--transition-normal) ease-in;
+    @media (hover: hover) and (pointer: fine) {
+      &:hover {
+        border-left: rem(2px) solid var(--color-dark-paragraph);
+        transition: border-left var(--transition-normal) ease-in;
 
-      i {
-        opacity: 1;
-        transition: opacity var(--transition-normal) var(--transition-easing);
+        i {
+          opacity: 1;
+          transition: opacity var(--transition-normal) var(--transition-easing);
+        }
       }
     }
 
@@ -68,10 +76,12 @@ section {
         width: auto;
         flex-shrink: 0;
         margin-left: var(--spacing-2);
-        height: auto;
+        min-width: rem(40px);
+        min-height: rem(40px);
         display: flex;
         align-items: center;
         justify-content: center;
+        touch-action: manipulation;
       }
     }
 
@@ -103,7 +113,7 @@ section {
       margin-top: var(--spacing-2);
       margin-bottom: 0;
       padding-top: var(--spacing-2);
-      padding-right: var(--spacing-8);
+      padding-right: 0;
       padding-bottom: var(--spacing-2);
       box-sizing: border-box;
       transform: translateZ(0);

@@ -51,6 +51,114 @@
   @return calc($pixels / $context) * 1rem;
 }
 
+@mixin interactive-glow($hover-bg: rgba(15, 20, 25, 0.3)) {
+  position: relative;
+  z-index: 0;
+  isolation: isolate;
+  transition: all var(--transition-fast) var(--transition-easing);
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    opacity: 0;
+    background: linear-gradient(var(--reflection-angle, 135deg),
+      var(--reflection-color-subtle) 0%,
+      rgba(var(--reflection-r), var(--reflection-g), var(--reflection-b), 0.03) 30%,
+      rgba(var(--reflection-r), var(--reflection-g), var(--reflection-b), 0.015) 55%,
+      transparent 80%);
+    transition: opacity var(--transition-normal) var(--transition-easing);
+    contain: layout style paint;
+    z-index: 0;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 0.75px;
+    pointer-events: none;
+    opacity: 0;
+    background: linear-gradient(var(--reflection-angle, 135deg),
+      var(--reflection-tip-glint) 0%,
+      var(--reflection-edge-glint) 1%,
+      var(--reflection-edge-color) 5%,
+      rgba(var(--reflection-r), var(--reflection-g), var(--reflection-b), 0.08) 30%,
+      transparent 55%);
+    -webkit-mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    transition: opacity var(--transition-normal) var(--transition-easing);
+    contain: layout style paint;
+    z-index: 0;
+  }
+
+  & > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  &:hover {
+    @extend .box-shadow-16;
+    @extend .text-glow-12;
+    background: $hover-bg;
+    cursor: pointer;
+
+    &::before,
+    &::after {
+      opacity: 1;
+    }
+  }
+
+  &:active {
+    @extend .box-shadow-16;
+    transition: all var(--transition-fast) ease-in;
+  }
+
+  &:focus-visible {
+    outline: rem(2px) solid var(--color-dark-accent);
+    outline-offset: rem(2px);
+
+    &::before,
+    &::after {
+      opacity: 1;
+    }
+  }
+}
+
+@mixin reflection-overlay(
+  $angle: 135deg,
+  $start: var(--reflection-color),
+  $mid: var(--reflection-color-subtle),
+  $end: transparent
+) {
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: inherit;
+    background: linear-gradient($angle, $start 0%, $mid 40%, $end 70%);
+    pointer-events: none;
+  }
+}
+
+@mixin glass-panel($background: rgba(15, 20, 25, 0.3), $blur: 8px) {
+  background: $background;
+  backdrop-filter: blur($blur);
+  -webkit-backdrop-filter: blur($blur);
+  @include reflection-overlay();
+}
+
 @keyframes pulse {
   from {
     transform: scale(.95);
@@ -77,6 +185,25 @@
 }
 
 // Responsive mixins - desktop first approach
+// Ultrawide responsive mixins (min-width - apply at larger sizes)
+@mixin respond-ultrawide {
+  @media only screen and (min-width: $breakpoint-ultrawide) {
+    @content;
+  }
+}
+
+@mixin respond-superwide {
+  @media only screen and (min-width: $breakpoint-superwide) {
+    @content;
+  }
+}
+
+@mixin respond-megawide {
+  @media only screen and (min-width: $breakpoint-megawide) {
+    @content;
+  }
+}
+
 @mixin respond-wide {
   @media only screen and (max-width: $breakpoint-wide) {
     @content;
@@ -115,6 +242,12 @@
 
 @mixin respond-mobile-sm {
   @media only screen and (max-width: $breakpoint-mobile-sm) {
+    @content;
+  }
+}
+
+@mixin respond-mobile-xs {
+  @media only screen and (max-width: $breakpoint-mobile-xs) {
     @content;
   }
 }

@@ -1,30 +1,32 @@
 <section class="dark-block">
   <h2>Experience</h2>
-  <div *ngFor="let experience of experienceList; let i = index" class="section-item" (click)="toggleShow(i)">
-    <div class="section-item-head">
-      <div>
-        <h3 class="section-item-title">{{experience.positionTitle}}</h3>
-        <span>{{experience.company}}</span>
+  <div class="section-item-body">
+    <div *ngFor="let experience of experienceList; let i = index" class="section-item" (click)="toggleShow(i)">
+      <div class="section-item-head">
+        <div>
+          <h3 class="section-item-title">{{experience.positionTitle}}</h3>
+          <span>{{experience.company}}</span>
+        </div>
+        <div class="section-item-date-container">
+          <span class="section-item-date">{{experience.startMonth | monthShort}} {{experience.startYear}} - {{(experience.endMonth && experience.endYear) ? ((experience.endMonth | monthShort) + ' ' + experience.endYear) : 'Present'}}</span>
+          <span class="section-item-duration">{{experience.startMonth | duration: experience.startYear : experience.endMonth : experience.endYear}}</span>
+        </div>
+        <div class="section-item-toggler">
+          <i class="fa-angle-down fa-solid"></i>
+        </div>
       </div>
-      <div class="section-item-date-container">
-        <span class="section-item-date">{{experience.startMonth | monthShort}} {{experience.startYear}} - {{(experience.endMonth && experience.endYear) ? ((experience.endMonth | monthShort) + ' ' + experience.endYear) : 'Present'}}</span>
-        <span class="section-item-duration">{{experience.startMonth | duration: experience.startYear : experience.endMonth : experience.endYear}}</span>
-      </div>
-      <div class="section-item-toggler">
-        <i class="fa-angle-down fa-solid"></i>
-      </div>
-    </div>
-    <div class="section-item-content" [@slideInOut]="allToggles[i].toString()">
-      <h5 *ngIf="experience.description.aboutProject">About project:</h5>
-      <p *ngIf="experience.description.aboutProject">{{experience.description.aboutProject}}</p>
+      <div class="section-item-content" [@slideInOut]="allToggles[i].toString()">
+        <h5 *ngIf="experience.description.aboutProject">About project:</h5>
+        <p *ngIf="experience.description.aboutProject">{{experience.description.aboutProject}}</p>
 
-      <h5 *ngIf="experience.description.responsibilities">Responsibilities:</h5>
-      <ul *ngIf="experience.description.responsibilities">
-        <li *ngFor="let responsibility of experience.description.responsibilities"><p>{{responsibility}}</p></li>
-      </ul>
+        <h5 *ngIf="experience.description.responsibilities">Responsibilities:</h5>
+        <ul *ngIf="experience.description.responsibilities">
+          <li *ngFor="let responsibility of experience.description.responsibilities"><p>{{responsibility}}</p></li>
+        </ul>
 
-      <h5 *ngIf="experience.description.toolsAndTechnologies">Tools & Technologies:</h5>
-      <p *ngIf="experience.description.toolsAndTechnologies">{{experience.description.toolsAndTechnologies}}</p>
+        <h5 *ngIf="experience.description.toolsAndTechnologies">Tools & Technologies:</h5>
+        <p *ngIf="experience.description.toolsAndTechnologies">{{experience.description.toolsAndTechnologies}}</p>
+      </div>
     </div>
   </div>
 </section>
