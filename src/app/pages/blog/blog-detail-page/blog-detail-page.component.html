@@ -18,16 +18,13 @@
               rel="noopener noreferrer">
               <i [class]="share.iconClass"></i>
             </a>
-            <button
-              class="blog-share__button"
-              [class.blog-share__button--success]="copySuccess"
-              type="button"
-              [attr.aria-label]="copyLabel"
-              [attr.title]="copyLabel"
-              (click)="copyLink()">
-              <i class="fa-solid fa-link" [class.hidden]="copySuccess"></i>
-              <i class="fa-solid fa-check" [class.hidden]="!copySuccess"></i>
-            </button>
+            <app-copy-button
+              [text]="currentUrl"
+              idleIcon="fa-solid fa-link"
+              idleLabel="Copy link"
+              successLabel="Link copied!"
+              buttonClass="blog-share__button">
+            </app-copy-button>
           </div>
         </div>
         <h1 class="blog-hero__title">{{article.headline}}</h1>

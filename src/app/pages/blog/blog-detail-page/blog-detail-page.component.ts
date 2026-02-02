@@ -33,11 +33,9 @@ export class BlogDetailPageComponent implements OnInit, OnDestroy, AfterViewChec
   tocItems: TocItem[] = [];
   readingTimeMinutes = 0;
   shareLinks: ShareLink[] = [];
-  copyLabel = 'Copy link';
-  copySuccess = false;
+  currentUrl = '';
 
   private readonly destroy$ = new Subject<void>();
-  private currentUrl = '';
   private copyButtonsInitialized = false;
 
   constructor(
@@ -100,18 +98,21 @@ export class BlogDetailPageComponent implements OnInit, OnDestroy, AfterViewChec
   private copyCodeToClipboard(code: string, button: HTMLButtonElement): void {
     if (!navigator?.clipboard) return;
 
+    // Prevent rapid re-clicks during animation
+    if (button.classList.contains('copy-button--success')) return;
+
     navigator.clipboard.writeText(code)
       .then(() => {
-        const icon = button.querySelector('i');
-        if (icon) {
-          icon.className = 'fa-solid fa-check';
-          setTimeout(() => {
-            icon.className = 'fa-regular fa-copy';
-          }, 2000);
-        }
+        button.classList.add('copy-button--success');
+        setTimeout(() => {
+          button.classList.remove('copy-button--success');
+        }, 2000);
       })
       .catch(() => {
-        // Silently fail
+        button.classList.add('copy-button--error');
+        setTimeout(() => {
+          button.classList.remove('copy-button--error');
+        }, 2000);
       });
   }
 
@@ -122,27 +123,6 @@ export class BlogDetailPageComponent implements OnInit, OnDestroy, AfterViewChec
       .replace(/&gt;/g, '>')
       .replace(/&quot;/g, '"')
       .replace(/&#039;/g, "'");
-  }
-
-  copyLink(): void {
-    if (!this.currentUrl || !navigator?.clipboard) {
-      this.copyLabel = 'Copy not supported';
-      return;
-    }
-
-    navigator.clipboard.writeText(this.currentUrl)
-      .then(() => {
-        this.copyLabel = 'Copied';
-        this.copySuccess = true;
-        setTimeout(() => {
-          this.copyLabel = 'Copy link';
-          this.copySuccess = false;
-        }, 3000);
-      })
-      .catch(() => {
-        this.copyLabel = 'Copy failed';
-        this.copySuccess = false;
-      });
   }
 
   private renderMarkdown(markdown: string): void {
@@ -174,11 +154,17 @@ export class BlogDetailPageComponent implements OnInit, OnDestroy, AfterViewChec
       const className = canHighlight ? `language-${language}` : 'language-plaintext';
       const displayLang = language || 'code';
       const escapedCode = this.escapeHtml(token.text);
+      // Generate animation-ready HTML with dual-icon structure
       return `<details class="code-block">
         <summary class="code-block__header">
           <span class="code-block__lang">${displayLang}</span>
-          <button type="button" class="code-block__copy" data-code="${escapedCode}" title="Copy code">
-            <i class="fa-regular fa-copy"></i>
+          <button type="button" class="code-block__copy copy-button" data-code="${escapedCode}" title="Copy code" aria-label="Copy code">
+            <span class="copy-button__icon copy-button__icon--idle">
+              <i class="fa-regular fa-copy"></i>
+            </span>
+            <span class="copy-button__icon copy-button__icon--success">
+              <i class="fa-solid fa-check"></i>
+            </span>
           </button>
         </summary>
         <pre><code class="hljs ${className}">${highlighted}</code></pre>

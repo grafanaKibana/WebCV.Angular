@@ -61,6 +61,12 @@ $baseSystemFontSize: 16px;
   --color-dark-separator: rgba(255, 255, 255, 0.125);
   --color-dark-error: #B84C4C;
 
+  // Copy button colors
+  --copy-success-color: #4ade80;
+  --copy-success-glow: rgba(74, 222, 128, 0.4);
+  --copy-error-color: var(--color-dark-error);
+  --copy-error-glow: rgba(184, 76, 76, 0.4);
+
   // Progress (shared tokens)
   --progress-height: 8px;
   --progress-radius: 3px;

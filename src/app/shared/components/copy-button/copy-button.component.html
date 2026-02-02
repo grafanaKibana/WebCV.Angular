@@ -1,0 +1,19 @@
+<button
+  type="button"
+  class="copy-button"
+  [class.copy-button--success]="state === 'success'"
+  [class.copy-button--error]="state === 'error'"
+  [ngClass]="buttonClass"
+  [attr.aria-label]="currentLabel"
+  [attr.title]="currentLabel"
+  (click)="copy()">
+  <span class="copy-button__icon copy-button__icon--idle">
+    <i [class]="idleIcon"></i>
+  </span>
+  <span class="copy-button__icon copy-button__icon--success">
+    <i [class]="successIcon"></i>
+  </span>
+  <span class="copy-button__icon copy-button__icon--error" *ngIf="errorIcon">
+    <i [class]="errorIcon"></i>
+  </span>
+</button>

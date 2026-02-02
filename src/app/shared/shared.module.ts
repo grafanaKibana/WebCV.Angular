@@ -15,6 +15,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MonthShortPipe } from './pipes/month-short.pipe';
 import { DurationPipe } from './pipes/duration.pipe';
 import { IntroOverlayComponent } from './intro-overlay/intro-overlay.component';
+import { CopyButtonComponent } from './components/copy-button/copy-button.component';
 
 @NgModule({
   declarations: [
@@ -26,6 +27,7 @@ import { IntroOverlayComponent } from './intro-overlay/intro-overlay.component';
     IntroOverlayComponent,
     MonthShortPipe,
     DurationPipe,
+    CopyButtonComponent,
   ],
   exports: [
     CommonModule,
@@ -40,6 +42,7 @@ import { IntroOverlayComponent } from './intro-overlay/intro-overlay.component';
     IntroOverlayComponent,
     MonthShortPipe,
     DurationPipe,
+    CopyButtonComponent,
   ],
   imports: [
     CommonModule,

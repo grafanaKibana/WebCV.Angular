@@ -2,48 +2,76 @@
 @import 'variables/mixins';
 @import 'variables/vars';
 
-.dark-block {
-  background: rgba(15, 20, 25, 0.18);
-  border-radius: var(--radius-surface);
-  backdrop-filter: blur(12px) saturate(1.1);
-  -webkit-backdrop-filter: blur(12px) saturate(1.1);
+// ===========================================
+// Dark Block Mixins (Composable)
+// ===========================================
+
+/// Base styles for dark block (no pseudo-elements)
+/// Use this for nested blocks or when pseudo-elements conflict
+/// @param {Color} $bg - Background color
+/// @param {Length} $radius - Border radius
+/// @param {Length} $blur - Backdrop blur amount
+@mixin dark-block-base(
+  $bg: rgba(15, 20, 25, 0.18),
+  $radius: var(--radius-surface),
+  $blur: 12px
+) {
+  background: $bg;
+  border-radius: $radius;
+  backdrop-filter: blur($blur) saturate(1.1);
+  -webkit-backdrop-filter: blur($blur) saturate(1.1);
   box-shadow:
     0 8px 32px 0 rgba(0, 0, 0, 0.2),
     inset 0 1px 0 0 rgba(255, 255, 255, 0.05);
   position: relative;
+}
 
+/// Reflection overlay gradient (uses ::before)
+/// Creates a subtle light reflection effect on the surface
+/// @param {String} $start-color - Starting gradient color
+/// @param {String} $mid-color - Middle gradient color
+@mixin dark-block-reflection(
+  $start-color: var(--reflection-color),
+  $mid-color: var(--reflection-color-subtle)
+) {
   &::before {
     content: '';
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    inset: 0;
     border-radius: inherit;
-    background: linear-gradient(var(--reflection-angle, 135deg),
-      var(--reflection-color) 0%,
-      var(--reflection-color-subtle) 20%,
+    background: linear-gradient(
+      var(--reflection-angle, 135deg),
+      $start-color 0%,
+      $mid-color 20%,
       rgba(var(--reflection-r), var(--reflection-g), var(--reflection-b), 0.03) 45%,
       rgba(var(--reflection-r), var(--reflection-g), var(--reflection-b), 0.015) 65%,
-      transparent 85%);
+      transparent 85%
+    );
     pointer-events: none;
     contain: layout style paint;
-    transition: background 0.6s cubic-bezier(0.4, 0.0, 0.2, 1);
+    transition: background 0.6s cubic-bezier(0.4, 0, 0.2, 1);
   }
+}
 
+/// Border glint effect (uses ::after)
+/// Creates a subtle border highlight that follows the reflection angle
+/// @param {Length} $padding - Border thickness
+@mixin dark-block-glint($padding: 0.75px) {
   &::after {
     content: '';
     position: absolute;
     inset: 0;
     border-radius: inherit;
-    padding: 0.75px;
+    padding: $padding;
     pointer-events: none;
-    background: linear-gradient(var(--reflection-angle, 135deg),
+    background: linear-gradient(
+      var(--reflection-angle, 135deg),
       var(--reflection-tip-glint) 0%,
       var(--reflection-edge-glint) 1%,
       var(--reflection-edge-color) 5%,
       rgba(var(--reflection-r), var(--reflection-g), var(--reflection-b), 0.08) 30%,
-      transparent 55%);
+      transparent 55%
+    );
     -webkit-mask:
       linear-gradient(#fff 0 0) content-box,
       linear-gradient(#fff 0 0);
@@ -52,53 +80,64 @@
   }
 }
 
-// Glass effect mixin - creates frosted glass appearance with reflection overlay
+/// Full dark block with all effects
+/// Combines base, reflection, and glint for complete dark block styling
+/// @param {Color} $bg - Background color
+/// @param {Length} $radius - Border radius
+/// @param {Length} $blur - Backdrop blur amount
+@mixin dark-block-full(
+  $bg: rgba(15, 20, 25, 0.18),
+  $radius: var(--radius-surface),
+  $blur: 12px
+) {
+  @include dark-block-base($bg, $radius, $blur);
+  @include dark-block-reflection;
+  @include dark-block-glint;
+}
+
+// ===========================================
+// Dark Block Classes
+// ===========================================
+
+/// Standard dark block with reflection and glint
+.dark-block {
+  @include dark-block-full;
+}
+
+/// Dark block without pseudo-elements (for nested usage)
+.dark-block--plain {
+  @include dark-block-base;
+}
+
+/// Dark block with only reflection (no border glint)
+.dark-block--soft {
+  @include dark-block-base;
+  @include dark-block-reflection;
+}
+
+// ===========================================
+// Glass Effect Mixin (using dark-block primitives)
+// ===========================================
+
+/// Creates frosted glass appearance with reflection overlay
+/// Uses darker background and stronger blur than dark-block
+/// @param {Number} $bg-opacity - Background opacity (0-1)
 @mixin glass-effect($bg-opacity: 0.55) {
-  background: rgba(10, 15, 20, $bg-opacity);
-  backdrop-filter: blur(24px) saturate(1.2);
-  -webkit-backdrop-filter: blur(24px) saturate(1.2);
+  @include dark-block-base(
+    $bg: rgba(10, 15, 20, $bg-opacity),
+    $blur: 24px
+  );
+  // Override box-shadow for glass effect
   box-shadow:
     0 8px 32px 0 rgba(0, 0, 0, 0.3),
     inset 0 1px 0 0 rgba(255, 255, 255, 0.03);
-  position: relative;
 
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    border-radius: inherit;
-    background: linear-gradient(var(--reflection-angle, 135deg),
-      var(--reflection-color-subtle) 0%,
-      rgba(var(--reflection-r), var(--reflection-g), var(--reflection-b), 0.03) 30%,
-      rgba(var(--reflection-r), var(--reflection-g), var(--reflection-b), 0.015) 55%,
-      transparent 80%);
-    pointer-events: none;
-    contain: layout style paint;
-    transition: background 0.6s cubic-bezier(0.4, 0.0, 0.2, 1);
-  }
-
-  &::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    padding: 0.75px;
-    pointer-events: none;
-    background: linear-gradient(var(--reflection-angle, 135deg),
-      var(--reflection-tip-glint) 0%,
-      var(--reflection-edge-glint) 1%,
-      var(--reflection-edge-color) 5%,
-      rgba(var(--reflection-r), var(--reflection-g), var(--reflection-b), 0.08) 30%,
-      transparent 55%);
-    -webkit-mask:
-      linear-gradient(#fff 0 0) content-box,
-      linear-gradient(#fff 0 0);
-    -webkit-mask-composite: xor;
-    mask-composite: exclude;
-  }
+  // Use subtler reflection for glass
+  @include dark-block-reflection(
+    $start-color: var(--reflection-color-subtle),
+    $mid-color: rgba(var(--reflection-r), var(--reflection-g), var(--reflection-b), 0.03)
+  );
+  @include dark-block-glint;
 }
 
 // Glass variants: light (0.25) / medium (0.40) / heavy (0.55)
