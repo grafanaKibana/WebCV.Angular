@@ -556,6 +556,7 @@
     padding: var(--spacing-3);
     overflow-x: auto;
     font-size: rem(13px);
+    margin: 0;
   }
 
   pre code {
@@ -566,6 +567,106 @@
 
   .hljs {
     background: transparent;
+  }
+
+  .code-block {
+    @extend .dark-shadow-soft;
+    background: rgba(15, 20, 25, 0.35);
+    border: rem(1px) solid var(--color-dark-border);
+    border-radius: var(--radius-12);
+    padding: 0;
+    margin: var(--spacing-4) 0;
+    overflow: hidden;
+
+    &__header {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-2);
+      padding: var(--spacing-2) var(--spacing-3);
+      cursor: pointer;
+      list-style: none;
+      user-select: none;
+      color: var(--color-dark-heading);
+      font-weight: 500;
+      transition: color var(--transition-fast) ease;
+
+      &::-webkit-details-marker {
+        display: none;
+      }
+
+      &::before {
+        content: '';
+        width: 0;
+        height: 0;
+        border-left: rem(5px) solid transparent;
+        border-right: rem(5px) solid transparent;
+        border-top: rem(6px) solid var(--color-dark-paragraph);
+        transition: transform var(--transition-fast) ease;
+        flex-shrink: 0;
+      }
+
+      // Remove the default details ::after arrow since we use ::before
+      &::after {
+        content: none;
+      }
+    }
+
+    &__lang {
+      font-size: rem(11px);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--color-dark-paragraph);
+      opacity: 0.8;
+    }
+
+    &__copy {
+      appearance: none;
+      -webkit-appearance: none;
+      border: none;
+      background: transparent;
+      color: var(--color-dark-heading);
+      border-radius: var(--radius-12);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: rem(32px);
+      height: rem(32px);
+      box-sizing: border-box;
+      box-shadow: none;
+      transition: color var(--transition-fast) var(--transition-easing),
+        text-shadow var(--transition-fast) var(--transition-easing);
+      margin-left: auto;
+
+      &:hover,
+      &:active {
+        @extend .text-glow-12;
+      }
+
+      &:focus-visible {
+        outline: rem(2px) solid var(--color-dark-accent);
+        outline-offset: rem(2px);
+        @extend .text-glow-12;
+      }
+
+      i {
+        font-size: rem(14px);
+      }
+    }
+
+    > pre {
+      border-radius: 0;
+      border: none;
+      box-shadow: none;
+      margin: 0;
+      animation: blog-details-reveal 500ms cubic-bezier(0.4, 0.0, 0.2, 1);
+    }
+
+    &[open] {
+      .code-block__header::before {
+        transform: rotate(180deg);
+      }
+    }
   }
 
   code {

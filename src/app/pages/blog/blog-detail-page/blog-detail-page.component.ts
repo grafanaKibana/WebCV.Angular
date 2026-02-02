@@ -1,4 +1,4 @@
-import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewChecked, Component, ElementRef, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { DOCUMENT } from '@angular/common';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
@@ -26,7 +26,8 @@ interface ShareLink {
   templateUrl: './blog-detail-page.component.html',
   styleUrls: ['./blog-detail-page.component.scss']
 })
-export class BlogDetailPageComponent implements OnInit, OnDestroy {
+export class BlogDetailPageComponent implements OnInit, OnDestroy, AfterViewChecked {
+  @ViewChild('contentBody') contentBodyRef?: ElementRef<HTMLElement>;
   article?: ArticleModel;
   contentHtml: SafeHtml | null = null;
   tocItems: TocItem[] = [];
@@ -37,6 +38,7 @@ export class BlogDetailPageComponent implements OnInit, OnDestroy {
 
   private readonly destroy$ = new Subject<void>();
   private currentUrl = '';
+  private copyButtonsInitialized = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -60,6 +62,7 @@ export class BlogDetailPageComponent implements OnInit, OnDestroy {
           return;
         }
 
+        this.copyButtonsInitialized = false;
         this.renderMarkdown(article.content);
         this.currentUrl = this.document.location.href;
         this.shareLinks = this.buildShareLinks(article, this.currentUrl);
@@ -69,6 +72,56 @@ export class BlogDetailPageComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  ngAfterViewChecked(): void {
+    if (this.contentBodyRef && this.contentHtml && !this.copyButtonsInitialized) {
+      this.initCopyButtons();
+      this.copyButtonsInitialized = true;
+    }
+  }
+
+  private initCopyButtons(): void {
+    const container = this.contentBodyRef?.nativeElement;
+    if (!container) return;
+
+    const copyButtons = container.querySelectorAll<HTMLButtonElement>('.code-block__copy');
+    copyButtons.forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const code = btn.getAttribute('data-code') ?? '';
+        const decodedCode = this.unescapeHtml(code);
+        this.copyCodeToClipboard(decodedCode, btn);
+      });
+    });
+  }
+
+  private copyCodeToClipboard(code: string, button: HTMLButtonElement): void {
+    if (!navigator?.clipboard) return;
+
+    navigator.clipboard.writeText(code)
+      .then(() => {
+        const icon = button.querySelector('i');
+        if (icon) {
+          icon.className = 'fa-solid fa-check';
+          setTimeout(() => {
+            icon.className = 'fa-regular fa-copy';
+          }, 2000);
+        }
+      })
+      .catch(() => {
+        // Silently fail
+      });
+  }
+
+  private unescapeHtml(value: string): string {
+    return value
+      .replace(/&amp;/g, '&')
+      .replace(/&lt;/g, '<')
+      .replace(/&gt;/g, '>')
+      .replace(/&quot;/g, '"')
+      .replace(/&#039;/g, "'");
   }
 
   copyLink(): void {
@@ -119,7 +172,17 @@ export class BlogDetailPageComponent implements OnInit, OnDestroy {
         ? hljs.highlight(token.text, { language, ignoreIllegals: true }).value
         : hljs.highlightAuto(token.text).value;
       const className = canHighlight ? `language-${language}` : 'language-plaintext';
-      return `<pre><code class="hljs ${className}">${highlighted}</code></pre>`;
+      const displayLang = language || 'code';
+      const escapedCode = this.escapeHtml(token.text);
+      return `<details class="code-block">
+        <summary class="code-block__header">
+          <span class="code-block__lang">${displayLang}</span>
+          <button type="button" class="code-block__copy" data-code="${escapedCode}" title="Copy code">
+            <i class="fa-regular fa-copy"></i>
+          </button>
+        </summary>
+        <pre><code class="hljs ${className}">${highlighted}</code></pre>
+      </details>`;
     };
 
     const html = marked(markdown, {
@@ -178,5 +241,14 @@ export class BlogDetailPageComponent implements OnInit, OnDestroy {
 
   private stripHtml(value: string): string {
     return value.replace(/<[^>]*>/g, ' ');
+  }
+
+  private escapeHtml(value: string): string {
+    return value
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
   }
 }
