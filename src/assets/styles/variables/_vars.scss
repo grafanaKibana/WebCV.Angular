@@ -155,9 +155,9 @@ $baseSystemFontSize: 16px;
   --reflection-angle: 40deg;
 
   // Composed colors using RGB values
-  --reflection-color: rgba(var(--reflection-r), var(--reflection-g), var(--reflection-b), 0.08);
-  --reflection-color-subtle: rgba(var(--reflection-r), var(--reflection-g), var(--reflection-b), 0.06);
-  --reflection-color-strong: rgba(var(--reflection-r), var(--reflection-g), var(--reflection-b), 0.12);
+  --reflection-color: rgba(var(--reflection-r), var(--reflection-g), var(--reflection-b), 0.12);
+  --reflection-color-subtle: rgba(var(--reflection-r), var(--reflection-g), var(--reflection-b), 0.08);
+  --reflection-color-strong: rgba(var(--reflection-r), var(--reflection-g), var(--reflection-b), 0.16);
   --reflection-edge-color: rgba(var(--reflection-r), var(--reflection-g), var(--reflection-b), 0.25);
   --reflection-edge-glint: rgba(var(--reflection-r), var(--reflection-g), var(--reflection-b), 0.5);
   --reflection-tip-glint: rgba(var(--reflection-r), var(--reflection-g), var(--reflection-b), 0.85);
