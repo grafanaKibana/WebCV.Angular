@@ -10,10 +10,9 @@ import { webglConfig } from '../config/webgl.config';
 })
 export class DynamicReflectionService {
   private lastColorUpdateTime: number = 0;
-  private lastAngleUpdateTime: number = 0;
   private lastReflection?: { r: number; g: number; b: number };
-  private lastAngle?: number;
-  private lastBrightness?: number;
+  private pendingFrameId: number | null = null;
+  private pendingReflection?: { r: number; g: number; b: number };
 
   /**
    * Update reflection colors based on gradient colors
@@ -44,44 +43,25 @@ export class DynamicReflectionService {
     }
 
     this.lastReflection = { r: reflectionR, g: reflectionG, b: reflectionB };
-
-    // Batch CSS variable updates using requestAnimationFrame to align with paint cycle.
-    requestAnimationFrame(() => {
-      const root = document.documentElement;
-      root.style.setProperty('--reflection-r', reflectionR.toString());
-      root.style.setProperty('--reflection-g', reflectionG.toString());
-      root.style.setProperty('--reflection-b', reflectionB.toString());
-    });
+    this.pendingReflection = this.lastReflection;
+    this.scheduleApply();
   }
 
-  /**
-   * Update reflection gradient angle based on brightness distribution
-   * @param angle Angle in degrees (0-360) indicating direction of reflection
-   * @param brightness Overall brightness level (0-1)
-   */
-  updateReflectionAngle(angle: number, brightness: number): void {
-    // Throttle updates separately from color updates
-    const now = performance.now();
-    if (now - this.lastAngleUpdateTime < webglConfig.reflection.updateThrottle) {
-      return;
-    }
-    this.lastAngleUpdateTime = now;
-
-    const normalizedAngle = Math.round(angle);
-    const normalizedBrightness = Number(brightness.toFixed(2));
-
-    if (this.lastAngle === normalizedAngle && this.lastBrightness === normalizedBrightness) {
+  private scheduleApply(): void {
+    if (this.pendingFrameId !== null) {
       return;
     }
 
-    this.lastAngle = normalizedAngle;
-    this.lastBrightness = normalizedBrightness;
-
-    // Update CSS variable for gradient direction
-    requestAnimationFrame(() => {
+    this.pendingFrameId = requestAnimationFrame(() => {
+      this.pendingFrameId = null;
       const root = document.documentElement;
-      root.style.setProperty('--reflection-angle', `${normalizedAngle}deg`);
-      root.style.setProperty('--reflection-brightness', normalizedBrightness.toString());
+
+      if (this.pendingReflection) {
+        root.style.setProperty('--reflection-r', this.pendingReflection.r.toString());
+        root.style.setProperty('--reflection-g', this.pendingReflection.g.toString());
+        root.style.setProperty('--reflection-b', this.pendingReflection.b.toString());
+        this.pendingReflection = undefined;
+      }
     });
   }
 
@@ -90,7 +70,7 @@ export class DynamicReflectionService {
    * Useful to avoid flashes when route content changes.
    */
   applyLastReflection(): void {
-    if (!this.lastReflection && this.lastAngle === undefined && this.lastBrightness === undefined) {
+    if (!this.lastReflection) {
       return;
     }
 
@@ -99,14 +79,6 @@ export class DynamicReflectionService {
       root.style.setProperty('--reflection-r', this.lastReflection.r.toString());
       root.style.setProperty('--reflection-g', this.lastReflection.g.toString());
       root.style.setProperty('--reflection-b', this.lastReflection.b.toString());
-    }
-
-    if (this.lastAngle !== undefined) {
-      root.style.setProperty('--reflection-angle', `${this.lastAngle}deg`);
-    }
-
-    if (this.lastBrightness !== undefined) {
-      root.style.setProperty('--reflection-brightness', this.lastBrightness.toString());
     }
   }
 
@@ -238,15 +210,18 @@ export class DynamicReflectionService {
    * Clean up resources
    */
   destroy(): void {
+    if (this.pendingFrameId !== null) {
+      cancelAnimationFrame(this.pendingFrameId);
+      this.pendingFrameId = null;
+    }
+
     // Reset CSS variables to default
     const root = document.documentElement;
     root.style.removeProperty('--reflection-r');
     root.style.removeProperty('--reflection-g');
     root.style.removeProperty('--reflection-b');
     root.style.removeProperty('--reflection-angle');
-    root.style.removeProperty('--reflection-brightness');
     this.lastReflection = undefined;
-    this.lastAngle = undefined;
-    this.lastBrightness = undefined;
+    this.pendingReflection = undefined;
   }
 }

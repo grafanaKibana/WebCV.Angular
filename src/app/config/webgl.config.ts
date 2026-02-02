@@ -21,6 +21,13 @@ export interface BackgroundConfig {
   darkerTop: boolean;         // Enable darker top effect (true = gradient fades to darker at top, false = uniform)
   parallax: boolean;          // Enable parallax scrolling effect (true = background moves slower than scroll)
   parallaxIntensity: number;  // Parallax intensity (0.0 = no parallax, 0.5 = moderate, 1.0 = strong parallax)
+
+  // Performance Settings
+  targetFps: number;          // Cap render FPS (e.g., 30 for smoother perf on GPU/CPU)
+  maxDpr: number;             // Clamp devicePixelRatio to reduce GPU load (e.g., 1.5)
+  renderScale: number;        // Additional scale to render at lower resolution (0.6 - 1.0)
+  blurPx: number;             // Blur applied to the canvas to hide low-res artifacts
+  maxDeltaMs: number;         // Max frame delta to avoid animation jumps after pauses
 }
 
 export interface ReflectionConfig {
@@ -28,23 +35,6 @@ export interface ReflectionConfig {
   lightenFactor: number;      // Multiply base color brightness (1.0 = same as background, 1.25 = 25% brighter, 2.0 = very bright)
   saturationFactor: number;   // Multiply saturation (1.0 = original, 0.8 = slightly desaturated, 0.6 = more neutral)
   lightnessBoost: number;     // Add to lightness (0.0 = none, 0.05 = subtle lift, 0.10 = noticeable lift)
-
-  // Opacity Settings (0.0 = transparent, 1.0 = fully opaque)
-  opacityBase: number;         // Base reflection opacity (0.10 = subtle glow, 0.20 = more visible, 0.30 = strong)
-  opacitySubtle: number;       // Subtle reflection opacity (0.08 = very subtle, 0.12 = noticeable)
-  opacityStrong: number;       // Strong reflection opacity (0.15 = moderate, 0.25 = prominent)
-
-  // Gradient Stops (0-100% - controls where reflection fades in/out)
-  gradientStops: {
-    start: number;             // Start position (0 = top/left edge, 20 = inset from edge)
-    subtle: number;             // Subtle fade position (20 = early fade, 30 = later fade)
-    mid: number;               // Mid fade position (45 = gradual, 50 = sharper transition)
-    end: number;               // End position (65 = longer reflection, 70 = shorter)
-    transparent: number;        // Fully transparent position (85 = long fade, 90 = quick fade)
-  };
-
-  // Animation Settings
-  transitionDuration: number;   // CSS transition duration in seconds (0.3 = quick, 0.6 = smooth, 1.0 = slow)
   updateThrottle: number;      // Throttle updates in milliseconds (50 = frequent, 100 = balanced, 200 = less frequent)
 }
 
@@ -188,6 +178,39 @@ export const webglConfig = {
      */
     parallaxIntensity: 0.5,
 
+    /**
+     * Performance Cap (FPS)
+     * Limits render rate to reduce CPU/GPU usage.
+     * - 24: cinematic, very light
+     * - 30: smooth, balanced (default)
+     * - 45: near-full, still cheaper than 60
+     */
+    targetFps: 120,
+
+    /**
+     * DPR Clamp
+     * Limits the internal canvas resolution to reduce GPU memory.
+     */
+    maxDpr: 1.5,
+
+    /**
+     * Render Scale
+     * Multiplier applied after DPR clamp to further reduce resolution.
+     */
+    renderScale: 0.85,
+
+    /**
+     * Canvas Blur
+     * Softens the upscaled gradient to hide low-res artifacts.
+     */
+    blurPx: 8,
+
+    /**
+     * Max Delta
+     * Caps animation time step to avoid large jumps after tab inactivity.
+     */
+    maxDeltaMs: 100,
+
   } as BackgroundConfig,
 
   reflection: {
@@ -221,75 +244,9 @@ export const webglConfig = {
     lightnessBoost: 0.08,
 
     /**
-     * Base Opacity
-     * The standard opacity for reflection gradients.
-     * - 0.05: Very subtle, barely visible
-     * - 0.08: Subtle but noticeable (default)
-     * - 0.20: More visible, prominent reflection
-     * - 0.30: Strong, very visible reflection
-     */
-    opacityBase: 0.05,
-
-    /**
-     * Subtle Opacity
-     * Used for softer reflection areas that fade more gently.
-     * Should be slightly lower than base opacity.
-     * - 0.04: Very subtle fade
-     * - 0.06: Gentle fade (default)
-     * - 0.12: More noticeable fade
-     */
-    opacitySubtle: 0.04,
-
-    /**
-     * Strong Opacity
-     * Used for more prominent reflection highlights.
-     * Should be higher than ase opacity.
-     * - 0.10: Moderate highlight
-     * - 0.12: Visible highlight (default)
-     * - 0.25: Strong highlight, very visible
-     */
-    opacityStrong: 0.10,
-
-    /**
-     * Gradient Stops
-     * Controls where the reflection gradient starts, fades, and ends.
-     * Values are percentages (0-100) along the gradient direction.
-     *
-     * Example with default values:
-     * - start: 0% - Reflection begins at the edge
-     * - subtle: 20% - First fade point (subtle opacity)
-     * - mid: 45% - Mid fade point (reduced opacity)
-     * - end: 65% - Second fade point (very low opacity)
-     * - transparent: 85% - Fully transparent (no reflection)
-     *
-     * Adjusting these values:
-     * - Smaller gaps = sharper transitions
-     * - Larger gaps = smoother, longer fades
-     * - Lower transparent value = shorter reflection
-     * - Higher transparent value = longer reflection
-     */
-    gradientStops: {
-      start: 0,        // Reflection starts at edge (0 = immediate start, 10 = inset)
-      subtle: 15,      // First fade point (15 = early fade, 25 = later fade)
-      mid: 40,         // Mid fade point (40 = gradual, 50 = sharper)
-      end: 60,         // Second fade point (60 = longer reflection, 70 = shorter)
-      transparent: 80, // Fully transparent (80 = long fade, 90 = quick fade)
-    },
-
-    /**
-     * Transition Duration
-     * How long CSS transitions take when reflection colors/angles change.
-     * IMPORTANT: Should match updateThrottle (in seconds) for seamless interpolation.
-     * The CSS transition bridges the gap between JavaScript updates, creating
-     * smooth continuous animation from discrete keyframes.
-     */
-    transitionDuration: 1.0,
-
-    /**
      * Update Throttle
      * How often reflection colors are updated (in milliseconds).
      * CSS transitions (with linear easing) handle smooth interpolation between updates.
-     * IMPORTANT: Should match transitionDuration (in ms) for seamless animation.
      * - 100: Frequent updates (higher CPU, smoother but diminishing returns)
      * - 500: Balanced updates
      * - 1000: Optimal - relies on CSS transitions for interpolation (default, lowest CPU)

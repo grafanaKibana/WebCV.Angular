@@ -83,8 +83,9 @@
     pointer-events: none;
     opacity: 0;
     background: linear-gradient(var(--reflection-angle, 135deg),
-      var(--reflection-edge-glint) 0%,
-      var(--reflection-edge-color) 4%,
+      var(--reflection-tip-glint) 0%,
+      var(--reflection-edge-glint) 1%,
+      var(--reflection-edge-color) 5%,
       rgba(var(--reflection-r), var(--reflection-g), var(--reflection-b), 0.08) 30%,
       transparent 55%);
     -webkit-mask:

@@ -23,13 +23,7 @@ $baseSystemFontSize: 16px;
 
 @property --reflection-angle {
   syntax: '<angle>';
-  initial-value: 135deg;
-  inherits: true;
-}
-
-@property --reflection-brightness {
-  syntax: '<number>';
-  initial-value: 0.5;
+  initial-value: 40deg;
   inherits: true;
 }
 
@@ -152,8 +146,7 @@ $baseSystemFontSize: 16px;
   --reflection-r: 0;
   --reflection-g: 0;
   --reflection-b: 0;
-  --reflection-angle: 135deg;
-  --reflection-brightness: 0.5;
+  --reflection-angle: 40deg;
 
   // Composed colors using RGB values
   --reflection-color: rgba(var(--reflection-r), var(--reflection-g), var(--reflection-b), 0.08);
@@ -161,6 +154,7 @@ $baseSystemFontSize: 16px;
   --reflection-color-strong: rgba(var(--reflection-r), var(--reflection-g), var(--reflection-b), 0.12);
   --reflection-edge-color: rgba(var(--reflection-r), var(--reflection-g), var(--reflection-b), 0.25);
   --reflection-edge-glint: rgba(var(--reflection-r), var(--reflection-g), var(--reflection-b), 0.5);
+  --reflection-tip-glint: rgba(var(--reflection-r), var(--reflection-g), var(--reflection-b), 0.85);
 
   // Smooth transitions for RGB values and angle
   // Duration matches updateThrottle (1s) for seamless interpolation between frames
@@ -168,6 +162,5 @@ $baseSystemFontSize: 16px;
   transition: --reflection-r 1s linear,
               --reflection-g 1s linear,
               --reflection-b 1s linear,
-              --reflection-angle 1s linear,
-              --reflection-brightness 1s linear;
+              --reflection-angle 1s linear;
 }

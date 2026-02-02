@@ -84,10 +84,6 @@ export class WebGLBackgroundComponent implements OnInit, AfterViewInit, OnDestro
         onColorsUpdate: (colors: number[][]) => {
           // Pass colors directly to reflection service for optimal performance
           this.dynamicReflectionService.updateReflectionColors(colors);
-        },
-        onBrightnessUpdate: (angle: number, brightness: number) => {
-          // Update reflection angle based on where bright colors are positioned
-          this.dynamicReflectionService.updateReflectionAngle(angle, brightness);
         }
       });
     }
