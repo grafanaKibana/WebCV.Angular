@@ -2,12 +2,12 @@
 
 .blog-intro {
   padding: var(--spacing-6);
-  margin-bottom: var(--spacing-4);
   box-shadow: none;
   background: transparent;
-  border-radius: 0;
   display: grid;
   gap: var(--spacing-2);
+  border-radius: 0;
+  margin-bottom: 0;
 
   @include respond-tablet {
     padding: var(--spacing-5);
@@ -40,8 +40,9 @@
 }
 
 .blog-grid {
-  @extend .dark-block;
   padding: var(--spacing-5);
+  box-shadow: none;
+  margin-bottom: 0;
 
   @include respond-tablet {
     padding: var(--spacing-4);
@@ -77,7 +78,7 @@
   color: inherit;
   border-radius: var(--radius-20);
   overflow: hidden;
-  transition: transform var(--transition-normal) ease, box-shadow var(--transition-normal) ease;
+  transition: transform var(--transition-normal) ease;
   min-height: 100%;
 
   &__media {
@@ -131,12 +132,7 @@
   }
 
   &:hover {
-    transform: translateY(rem(-2px));
-    @extend .box-shadow-16;
-
-    .blog-card__image {
-      transform: scale(1.04);
-    }
+    transform: translateY(rem(-4px));
   }
 
   &:focus-visible {
@@ -704,7 +700,6 @@
         }
       }
 
-      // Hover enhancement for idle state
       &:not(.copy-button--success):not(.copy-button--error):hover {
         .copy-button__icon--idle {
           transform: scale(1.1);

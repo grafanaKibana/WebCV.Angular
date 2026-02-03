@@ -85,13 +85,13 @@ $baseSystemFontSize: 16px;
   --progress-sweep-edge-stop: 75%;
   --progress-sweep-blur: #{rem(0.6px)};
   --progress-sweep-duration: 1s;
-  --progress-glow-color: rgba(0, 187, 255, 0.9);
+  --progress-glow-color: color-mix(in srgb, var(--color-dark-neon-glow) 72%, #001018);
   --progress-glow-core-white: 30%;
   --progress-glow-core-stop: 35%;
-  --progress-glow-edge-stop: 70%;
-  --progress-glow-blur: #{rem(8px)};
-  --progress-glow-bleed: #{rem(6px)};
-  --progress-glow-height: 80%;
+  --progress-glow-edge-stop: 75%;
+  --progress-glow-blur: #{rem(10px)};
+  --progress-glow-bleed: #{rem(8px)};
+  --progress-glow-height: 100%;
   --progress-glow-spread: #{rem(8px)};
   --progress-glass-blur: #{rem(24px)};
 
