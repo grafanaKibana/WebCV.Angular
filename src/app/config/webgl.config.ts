@@ -246,12 +246,12 @@ export const webglConfig = {
     /**
      * Update Throttle
      * How often reflection colors are updated (in milliseconds).
-     * CSS transitions (with linear easing) handle smooth interpolation between updates.
+     * CSS transitions handle smooth interpolation between updates.
      * - 100: Frequent updates (higher CPU, smoother but diminishing returns)
-     * - 500: Balanced updates
-     * - 1000: Optimal - relies on CSS transitions for interpolation (default, lowest CPU)
+     * - 500: Balanced - matches WebGL gradient transition duration (default)
+     * - 1000: Less frequent, relies heavily on CSS transitions
      */
-    updateThrottle: 1000,
+    updateThrottle: 100,
 
   } as ReflectionConfig,
 

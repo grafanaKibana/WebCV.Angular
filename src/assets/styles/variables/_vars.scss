@@ -163,10 +163,8 @@ $baseSystemFontSize: 16px;
   --reflection-tip-glint: rgba(var(--reflection-r), var(--reflection-g), var(--reflection-b), 0.85);
 
   // Smooth transitions for RGB values and angle
-  // Duration matches updateThrottle (1s) for seamless interpolation between frames
-  // Using linear easing ensures constant velocity, preventing jarring stops/starts
-  transition: --reflection-r 1s linear,
-              --reflection-g 1s linear,
-              --reflection-b 1s linear,
-              --reflection-angle 1s linear;
+  transition: --reflection-r 0.5s ease-out,
+              --reflection-g 0.5s ease-out,
+              --reflection-b 0.5s ease-out,
+              --reflection-angle 0.5s ease-out;
 }
