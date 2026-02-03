@@ -27,12 +27,6 @@ $baseSystemFontSize: 16px;
   inherits: true;
 }
 
-@property --progress-sweep-t {
-  syntax: '<number>';
-  initial-value: 0;
-  inherits: true;
-}
-
 :root {
   // Font settings
   --font-family: 'Poppins', sans-serif;

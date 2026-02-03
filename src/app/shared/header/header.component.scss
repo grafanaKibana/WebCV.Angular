@@ -1,4 +1,24 @@
 @import '../../../assets/styles/utility';
+$download-progress-radius: rem(3px);
+$download-progress-glow-bleed: rem(8px);
+$download-progress-glow-color: color-mix(in srgb, var(--color-dark-neon-glow) 72%, #001018);
+$download-progress-glass-blur: rem(24px);
+
+@property --download-progress-t {
+  syntax: '<number>';
+  initial-value: 0;
+  inherits: true;
+}
+
+@keyframes download-progress-sweep {
+  from {
+    --download-progress-t: 0;
+  }
+
+  to {
+    --download-progress-t: 1;
+  }
+}
 
 .header-shell {
   display: flex;
@@ -222,21 +242,247 @@
     transition: opacity 0.2s ease;
     pointer-events: none;
     z-index: 1;
+    height: rem(8px);
+    border-radius: $download-progress-radius;
+    background: var(--color-dark-border);
+    isolation: isolate;
+    --download-progress-left: calc(100% * var(--download-progress-t));
+    --download-progress-clip-right: clamp(
+      0,
+      calc((var(--download-progress-t) - 0.5) / 0.5),
+      1
+    );
+    --download-progress-wrap-phase: clamp(
+      0,
+      calc((var(--download-progress-clip-right) - 0.5) / 0.5),
+      1
+    );
+    --download-progress-wrap-left: calc(-50% + (50% * var(--download-progress-wrap-phase)));
+    --download-progress-edge-approach: clamp(
+      0,
+      calc((var(--download-progress-t) - 0.42) * 12.5),
+      1
+    );
+    --download-progress-edge-fade-main: clamp(
+      0,
+      calc(1 - var(--download-progress-edge-approach)),
+      1
+    );
+    --download-progress-wrap-edge-approach: clamp(
+      0,
+      calc(6.25 * var(--download-progress-wrap-phase)),
+      1
+    );
+    --download-progress-edge-fade-wrap: clamp(
+      0,
+      var(--download-progress-wrap-edge-approach),
+      1
+    );
+  }
+
+  .download-progress::before,
+  .download-progress::after,
+  .download-progress > span:first-child::before,
+  .download-progress > span:first-child::after {
+    content: '';
+    position: absolute;
+    border-radius: inherit;
+    opacity: 0;
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    will-change: left, opacity, filter;
+    pointer-events: none;
   }
 
   .download-progress::before,
   .download-progress::after {
-    --progress-glow-color: color-mix(in srgb, var(--color-dark-neon-glow) 72%, #001018);
-    --progress-glow-blur: #{rem(10px)};
-    --progress-glow-bleed: #{rem(8px)};
-    --progress-glow-height: 110%;
-    --progress-glow-core-white: 18%;
-    --progress-glow-edge-stop: 100%;
+    top: calc(-1 * #{$download-progress-glow-bleed});
+    bottom: calc(-1 * #{$download-progress-glow-bleed});
+    width: 50%;
+    z-index: 0;
+    border-radius: calc(#{$download-progress-radius} + #{$download-progress-glow-bleed});
+    background-size: 50% 110%;
+    background-image: radial-gradient(
+      ellipse at center,
+      color-mix(
+        in srgb,
+        #fff 18%,
+        $download-progress-glow-color
+      ) 0%,
+      color-mix(in srgb, $download-progress-glow-color 65%, transparent) 35%,
+      transparent 100%
+    );
+    filter: blur(rem(10px));
+    mix-blend-mode: screen;
+  }
+
+  .download-progress::before {
+    left: var(--download-progress-left);
+  }
+
+  .download-progress::after {
+    left: var(--download-progress-wrap-left);
+  }
+
+  .download-progress > span:first-child {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .download-progress > span:first-child::before,
+  .download-progress > span:first-child::after {
+    top: 0;
+    bottom: 0;
+    width: 50%;
+    z-index: 1;
+    background-size:
+      100% 200%,
+      100% 100%;
+    background-image:
+      radial-gradient(
+        ellipse at center,
+        rgba(255, 255, 255, 0.95) 0%,
+        color-mix(in srgb, var(--color-dark-heading) 70%, transparent) 20%,
+        color-mix(in srgb, var(--color-dark-heading) 45%, transparent) 50%,
+        transparent 75%
+      ),
+      linear-gradient(
+        90deg,
+        transparent 0%,
+        transparent 14%,
+        color-mix(in srgb, var(--color-dark-heading) 8%, transparent) 20%,
+        color-mix(in srgb, var(--color-dark-heading) 14%, transparent) 26%,
+        color-mix(in srgb, var(--color-dark-heading) 22%, transparent) 32%,
+        color-mix(in srgb, var(--color-dark-heading) 32%, transparent) 37%,
+        color-mix(in srgb, var(--color-dark-heading) 44%, transparent) 41%,
+        color-mix(in srgb, var(--color-dark-heading) 58%, transparent) 44%,
+        color-mix(in srgb, var(--color-dark-heading) 72%, transparent) 46%,
+        color-mix(in srgb, var(--color-dark-heading) 86%, transparent) 47.5%,
+        var(--color-dark-heading) 49%,
+        var(--color-dark-heading) 51%,
+        color-mix(in srgb, var(--color-dark-heading) 86%, transparent) 52.5%,
+        color-mix(in srgb, var(--color-dark-heading) 72%, transparent) 54%,
+        color-mix(in srgb, var(--color-dark-heading) 58%, transparent) 56%,
+        color-mix(in srgb, var(--color-dark-heading) 44%, transparent) 59%,
+        color-mix(in srgb, var(--color-dark-heading) 32%, transparent) 63%,
+        color-mix(in srgb, var(--color-dark-heading) 22%, transparent) 68%,
+        color-mix(in srgb, var(--color-dark-heading) 14%, transparent) 74%,
+        color-mix(in srgb, var(--color-dark-heading) 8%, transparent) 80%,
+        transparent 86%,
+        transparent 100%
+      );
+    filter: blur(rem(0.6px));
+  }
+
+  .download-progress > span:first-child::before {
+    left: var(--download-progress-left);
+  }
+
+  .download-progress > span:first-child::after {
+    left: var(--download-progress-wrap-left);
+  }
+
+  .download-progress > span:last-child {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    backdrop-filter: blur(#{$download-progress-glass-blur}) saturate(1.1);
+    -webkit-backdrop-filter: blur(#{$download-progress-glass-blur}) saturate(1.1);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    z-index: 2;
   }
 
   .download-progress.is-active {
     opacity: 1;
     visibility: visible;
+    animation: download-progress-sweep 1s linear infinite;
+    --download-progress-alpha-main: clamp(
+      0,
+      calc(1 - var(--download-progress-clip-right)),
+      1
+    );
+    --download-progress-alpha-wrap: var(--download-progress-wrap-phase);
+    --download-progress-glow-alpha-main: calc(
+      var(--download-progress-alpha-main) * var(--download-progress-edge-fade-main)
+    );
+    --download-progress-glow-alpha-wrap: calc(
+      var(--download-progress-alpha-wrap) * var(--download-progress-edge-fade-wrap)
+    );
+  }
+
+  @supports (opacity: calc(1 - pow(0.1, 0.69897))) {
+    .download-progress.is-active {
+      --download-progress-alpha-main: clamp(
+        0,
+        calc(1 - pow(var(--download-progress-clip-right), 0.7)),
+        1
+      );
+      --download-progress-alpha-wrap: clamp(
+        0,
+        calc(1 - pow(calc(1 - var(--download-progress-wrap-phase)), 0.7)),
+        1
+      );
+      --download-progress-glow-alpha-main: calc(
+        var(--download-progress-alpha-main) * var(--download-progress-edge-fade-main)
+      );
+      --download-progress-glow-alpha-wrap: calc(
+        var(--download-progress-alpha-wrap) * var(--download-progress-edge-fade-wrap)
+      );
+    }
+  }
+
+  .download-progress.is-active::before {
+    opacity: calc(0.6 * var(--download-progress-glow-alpha-main));
+  }
+
+  .download-progress.is-active::after {
+    opacity: calc(0.6 * var(--download-progress-glow-alpha-wrap));
+  }
+
+  .download-progress.is-active > span:first-child::before {
+    opacity: var(--download-progress-alpha-main);
+  }
+
+  .download-progress.is-active > span:first-child::after {
+    opacity: var(--download-progress-alpha-wrap);
+  }
+
+  .download-progress.is-active > span:last-child {
+    opacity: 1;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .download-progress.is-active {
+      animation: none;
+      --download-progress-t: 0.5;
+      --download-progress-alpha-main: 0.35;
+      --download-progress-alpha-wrap: 0;
+    }
+
+    .download-progress.is-active::before,
+    .download-progress.is-active::after {
+      display: none;
+    }
+
+    .download-progress.is-active > span:first-child::before {
+      opacity: var(--download-progress-alpha-main);
+    }
+
+    .download-progress.is-active > span:first-child {
+      display: block;
+    }
+  }
+
+  @supports not (clip-path: inset(0 0 0 0)) {
+    .download-progress {
+      overflow: hidden;
+    }
   }
 
   @include respond-tablet-sm {

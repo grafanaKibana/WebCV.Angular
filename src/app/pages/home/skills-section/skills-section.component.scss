@@ -68,29 +68,24 @@ section {
         .progress-bar {
           display: flex;
           border-radius: var(--radius-16);
-          overflow: inherit;
-          position: relative;
           width: 100%;
           gap: rem(10px);
           margin-top: rem(8px);
 
           span {
             margin: rem(3px) 0;
-            border-radius: var(--progress-radius);
+            border-radius: rem(3px);
             display: block;
-            overflow: hidden;
-            position: relative;
-            height: var(--progress-height);
+            height: rem(8px);
             width: 100%;
-            transition: width .6s ease-in-out;
 
             &.active {
-              background: var(--progress-fill-color);
-              @extend .box-glow-12
+              background: var(--color-dark-heading);
+              @extend .box-glow-12;
             }
 
             &.inactive {
-              background: var(--progress-track-color);
+              background: var(--color-dark-border);
             }
           }
         }
