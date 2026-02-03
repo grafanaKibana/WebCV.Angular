@@ -224,6 +224,16 @@
     z-index: 1;
   }
 
+  .download-progress::before,
+  .download-progress::after {
+    --progress-glow-color: color-mix(in srgb, var(--color-dark-neon-glow) 72%, #001018);
+    --progress-glow-blur: #{rem(10px)};
+    --progress-glow-bleed: #{rem(8px)};
+    --progress-glow-height: 110%;
+    --progress-glow-core-white: 18%;
+    --progress-glow-edge-stop: 100%;
+  }
+
   .download-progress.is-active {
     opacity: 1;
     visibility: visible;

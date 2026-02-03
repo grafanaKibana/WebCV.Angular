@@ -67,34 +67,6 @@ $baseSystemFontSize: 16px;
   --copy-error-color: var(--color-dark-error);
   --copy-error-glow: rgba(184, 76, 76, 0.4);
 
-  // Progress (shared tokens)
-  --progress-height: 8px;
-  --progress-radius: 3px;
-  --progress-track-color: var(--color-dark-border);
-  --progress-fill-color: var(--color-dark-heading);
-  --progress-sweep-width-frac: 0.5;
-  --progress-sweep-width: calc(100% * var(--progress-sweep-width-frac));
-  --progress-sweep-height: 200%;
-  --progress-sweep-edge-fade-frac: 0.08;
-  --progress-sweep-edge-fade-frac-inv: calc(1 / var(--progress-sweep-edge-fade-frac));
-  --progress-sweep-fade-exp: 0.7;
-  --progress-sweep-wrap-start-clip: 0.5;
-  --progress-sweep-core-color: rgba(255, 255, 255, 0.95);
-  --progress-sweep-core-stop: 20%;
-  --progress-sweep-mid-stop: 50%;
-  --progress-sweep-edge-stop: 75%;
-  --progress-sweep-blur: #{rem(0.6px)};
-  --progress-sweep-duration: 1s;
-  --progress-glow-color: color-mix(in srgb, var(--color-dark-neon-glow) 72%, #001018);
-  --progress-glow-core-white: 30%;
-  --progress-glow-core-stop: 35%;
-  --progress-glow-edge-stop: 75%;
-  --progress-glow-blur: #{rem(10px)};
-  --progress-glow-bleed: #{rem(8px)};
-  --progress-glow-height: 100%;
-  --progress-glow-spread: #{rem(8px)};
-  --progress-glass-blur: #{rem(24px)};
-
   // Note: Composed colors (--reflection-color, etc.) inherit transitions
   // from their component RGB values via @property declarations above
 

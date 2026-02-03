@@ -400,12 +400,10 @@
   background-image:
     radial-gradient(
       ellipse at center,
-      var(--progress-sweep-core-color, rgba(255, 255, 255, 0.95)) 0%,
-      color-mix(in srgb, var(--progress-fill-color, var(--color-dark-heading)) 70%, transparent)
-        var(--progress-sweep-core-stop, 30%),
-      color-mix(in srgb, var(--progress-fill-color, var(--color-dark-heading)) 45%, transparent)
-        var(--progress-sweep-mid-stop, 54%),
-      transparent var(--progress-sweep-edge-stop, 76%)
+      var(--progress-sweep-core-color) 0%,
+      color-mix(in srgb, var(--progress-fill-color, var(--color-dark-heading)) 70%, transparent) var(--progress-sweep-core-stop),
+      color-mix(in srgb, var(--progress-fill-color, var(--color-dark-heading)) 45%, transparent) var(--progress-sweep-mid-stop),
+      transparent var(--progress-sweep-edge-stop, 75%)
     ),
     linear-gradient(
       90deg,
@@ -436,16 +434,15 @@
 }
 
 @mixin progress-sweep-glow-bg {
-  background-size: var(--progress-sweep-width, 60%) var(--progress-glow-height, 220%);
+  background-size: var(--progress-sweep-width) var(--progress-glow-height);
   background-image: radial-gradient(
     ellipse at center,
     color-mix(
       in srgb,
       #fff var(--progress-glow-core-white, 30%),
-      var(--progress-glow-color, rgba(0, 187, 255, 0.6))
+      var(--progress-glow-color)
     ) 0%,
-    color-mix(in srgb, var(--progress-glow-color, rgba(0, 187, 255, 0.6)) 65%, transparent)
-      var(--progress-glow-core-stop),
+    color-mix(in srgb, var(--progress-glow-color) 65%, transparent) var(--progress-glow-core-stop),
     transparent var(--progress-glow-edge-stop)
   );
   filter: blur(var(--progress-glow-blur, #{rem(8px)}));
@@ -454,64 +451,68 @@
 
 .progress-sweep {
   position: relative;
+  --progress-height: #{rem(8px)};
+  --progress-radius: #{rem(3px)};
+  --progress-track-color: var(--color-dark-border);
+  --progress-fill-color: var(--color-dark-heading);
+  --progress-sweep-width-frac: 0.5;
+  --progress-sweep-height: 200%;
+  --progress-sweep-duration: 1s;
+  --progress-sweep-edge-fade-frac: 0.08;
+  --progress-sweep-wrap-start-clip: 0.5;
+  --progress-sweep-fade-exp: 0.7;
+  --progress-sweep-width: calc(100% * var(--progress-sweep-width-frac));
+  --progress-sweep-edge-fade-frac-inv: calc(1 / var(--progress-sweep-edge-fade-frac));
   height: var(--progress-height, #{rem(8px)});
   border-radius: var(--progress-radius, #{rem(3px)});
   background: var(--progress-track-color, var(--color-dark-border));
   isolation: isolate;
-  --_progress-sweep-glow-radius: calc(
-    var(--progress-radius, #{rem(3px)}) + var(--progress-glow-bleed, #{rem(4px)})
-  );
-  --_progress-sweep-glow-clip-y: calc(
-    -1 * (var(--progress-glow-bleed, #{rem(4px)}) + var(--progress-glow-blur, #{rem(8px)}))
-  );
-  --_progress-sweep-edge-fade-frac: var(--progress-sweep-edge-fade-frac, 0.06);
-  --_progress-sweep-edge-fade-frac-inv: var(--progress-sweep-edge-fade-frac-inv, 16.6667);
-  --_progress-sweep-left: calc(100% * var(--progress-sweep-t, 0));
-  --_progress-sweep-clip-right: clamp(
+  --progress-sweep-left: calc(100% * var(--progress-sweep-t));
+  --progress-sweep-clip-right: clamp(
     0,
     calc(
-      (var(--progress-sweep-t, 0) + var(--progress-sweep-width-frac, 0.6) - 1) /
-        var(--progress-sweep-width-frac, 0.6)
+      (var(--progress-sweep-t) + var(--progress-sweep-width-frac) - 1) /
+        var(--progress-sweep-width-frac)
     ),
     1
   );
-  --_progress-sweep-wrap-phase: clamp(
+  --progress-sweep-wrap-phase: clamp(
     0,
     calc(
-      (var(--_progress-sweep-clip-right) - var(--progress-sweep-wrap-start-clip, 0.5)) /
-        (1 - var(--progress-sweep-wrap-start-clip, 0.5))
+      (var(--progress-sweep-clip-right) - var(--progress-sweep-wrap-start-clip)) /
+        (1 - var(--progress-sweep-wrap-start-clip))
     ),
     1
   );
-  --_progress-sweep-wrap-left: calc(
-    -1 * var(--progress-sweep-width, 60%) +
-      (var(--progress-sweep-width, 60%) * var(--_progress-sweep-wrap-phase))
+  --progress-sweep-wrap-left: calc(
+    -1 * var(--progress-sweep-width) +
+      (var(--progress-sweep-width) * var(--progress-sweep-wrap-phase))
   );
-  --_progress-sweep-edge-approach: clamp(
+  --progress-sweep-edge-approach: clamp(
     0,
     calc(
-      (var(--progress-sweep-t, 0) -
-          (1 - var(--progress-sweep-width-frac, 0.6) - var(--_progress-sweep-edge-fade-frac))) *
-        var(--_progress-sweep-edge-fade-frac-inv)
+      (var(--progress-sweep-t) -
+          (1 - var(--progress-sweep-width-frac) - var(--progress-sweep-edge-fade-frac))) *
+        var(--progress-sweep-edge-fade-frac-inv)
     ),
     1
   );
-  --_progress-sweep-edge-fade-main: clamp(
+  --progress-sweep-edge-fade-main: clamp(
     0,
-    calc(1 - var(--_progress-sweep-edge-approach)),
+    calc(1 - var(--progress-sweep-edge-approach)),
     1
   );
-  --_progress-sweep-wrap-edge-approach: clamp(
+  --progress-sweep-wrap-edge-approach: clamp(
     0,
     calc(
-      var(--progress-sweep-width-frac, 0.6) * var(--_progress-sweep-wrap-phase) *
-        var(--_progress-sweep-edge-fade-frac-inv)
+      var(--progress-sweep-width-frac) * var(--progress-sweep-wrap-phase) *
+        var(--progress-sweep-edge-fade-frac-inv)
     ),
     1
   );
-  --_progress-sweep-edge-fade-wrap: clamp(
+  --progress-sweep-edge-fade-wrap: clamp(
     0,
-    var(--_progress-sweep-wrap-edge-approach),
+    var(--progress-sweep-wrap-edge-approach),
     1
   );
 }
@@ -530,11 +531,22 @@
   pointer-events: none;
 }
 
+.progress-sweep::before,
+.progress-sweep::after {
+  --progress-glow-color: rgba(0, 187, 255, 0.9);
+  --progress-glow-blur: #{rem(8px)};
+  --progress-glow-bleed: #{rem(6px)};
+  --progress-glow-height: 80%;
+  --progress-glow-core-white: 30%;
+  --progress-glow-core-stop: 35%;
+  --progress-glow-edge-stop: 100%;
+}
+
 .progress-sweep::before {
   top: calc(-1 * var(--progress-glow-bleed, #{rem(4px)}));
   bottom: calc(-1 * var(--progress-glow-bleed, #{rem(4px)}));
-  width: var(--progress-sweep-width, 60%);
-  left: var(--_progress-sweep-left);
+  width: var(--progress-sweep-width);
+  left: var(--progress-sweep-left);
   z-index: 0;
   border-radius: calc(
     var(--progress-radius, #{rem(3px)}) + var(--progress-glow-bleed, #{rem(4px)})
@@ -545,8 +557,8 @@
 .progress-sweep::after {
   top: calc(-1 * var(--progress-glow-bleed, #{rem(4px)}));
   bottom: calc(-1 * var(--progress-glow-bleed, #{rem(4px)}));
-  width: var(--progress-sweep-width, 60%);
-  left: var(--_progress-sweep-wrap-left);
+  width: var(--progress-sweep-width);
+  left: var(--progress-sweep-wrap-left);
   z-index: 0;
   border-radius: calc(
     var(--progress-radius, #{rem(3px)}) + var(--progress-glow-bleed, #{rem(4px)})
@@ -556,6 +568,11 @@
 
 .progress-sweep__wrap {
   position: absolute;
+  --progress-sweep-core-color: rgba(255, 255, 255, 0.95);
+  --progress-sweep-core-stop: 20%;
+  --progress-sweep-mid-stop: 50%;
+  --progress-sweep-edge-stop: 75%;
+  --progress-sweep-blur: #{rem(0.6px)};
   inset: 0;
   border-radius: inherit;
   overflow: hidden;
@@ -566,8 +583,8 @@
 .progress-sweep__wrap::before {
   top: 0;
   bottom: 0;
-  width: var(--progress-sweep-width, 60%);
-  left: var(--_progress-sweep-left);
+  width: var(--progress-sweep-width);
+  left: var(--progress-sweep-left);
   z-index: 1;
   @include progress-sweep-core-bg;
 }
@@ -575,13 +592,14 @@
 .progress-sweep__wrap::after {
   top: 0;
   bottom: 0;
-  width: var(--progress-sweep-width, 60%);
-  left: var(--_progress-sweep-wrap-left);
+  width: var(--progress-sweep-width);
+  left: var(--progress-sweep-wrap-left);
   z-index: 1;
   @include progress-sweep-core-bg;
 }
 
 .progress-sweep__glass {
+  --progress-glass-blur: #{rem(24px)};
   position: absolute;
   inset: 0;
   border-radius: inherit;
@@ -595,63 +613,63 @@
 
 .progress-sweep.is-active {
   animation: progress-sweep var(--progress-sweep-duration, 1.35s) linear infinite;
-  --_progress-sweep-alpha-main: clamp(0, calc(1 - var(--_progress-sweep-clip-right)), 1);
-  --_progress-sweep-alpha-wrap: var(--_progress-sweep-wrap-phase);
-  --_progress-sweep-glow-alpha-main: calc(
-    var(--_progress-sweep-alpha-main, 1) * var(--_progress-sweep-edge-fade-main, 1)
+  --progress-sweep-alpha-main: clamp(0, calc(1 - var(--progress-sweep-clip-right)), 1);
+  --progress-sweep-alpha-wrap: var(--progress-sweep-wrap-phase);
+  --progress-sweep-glow-alpha-main: calc(
+    var(--progress-sweep-alpha-main) * var(--progress-sweep-edge-fade-main)
   );
-  --_progress-sweep-glow-alpha-wrap: calc(
-    var(--_progress-sweep-alpha-wrap, 0) * var(--_progress-sweep-edge-fade-wrap, 1)
+  --progress-sweep-glow-alpha-wrap: calc(
+    var(--progress-sweep-alpha-wrap) * var(--progress-sweep-edge-fade-wrap)
   );
 }
 
 @supports (opacity: calc(1 - pow(0.1, 0.69897))) {
   .progress-sweep.is-active {
-    --_progress-sweep-alpha-main: clamp(
+    --progress-sweep-alpha-main: clamp(
       0,
       calc(
         1 -
           pow(
-            var(--_progress-sweep-clip-right),
-            var(--progress-sweep-fade-exp, 0.69897)
+            var(--progress-sweep-clip-right),
+            var(--progress-sweep-fade-exp)
           )
       ),
       1
     );
-    --_progress-sweep-alpha-wrap: clamp(
+    --progress-sweep-alpha-wrap: clamp(
       0,
       calc(
         1 -
           pow(
-            calc(1 - var(--_progress-sweep-wrap-phase)),
-            var(--progress-sweep-fade-exp, 0.69897)
+            calc(1 - var(--progress-sweep-wrap-phase)),
+            var(--progress-sweep-fade-exp)
           )
       ),
       1
     );
-    --_progress-sweep-glow-alpha-main: calc(
-      var(--_progress-sweep-alpha-main, 1) * var(--_progress-sweep-edge-fade-main, 1)
+    --progress-sweep-glow-alpha-main: calc(
+      var(--progress-sweep-alpha-main) * var(--progress-sweep-edge-fade-main)
     );
-    --_progress-sweep-glow-alpha-wrap: calc(
-      var(--_progress-sweep-alpha-wrap, 0) * var(--_progress-sweep-edge-fade-wrap, 1)
+    --progress-sweep-glow-alpha-wrap: calc(
+      var(--progress-sweep-alpha-wrap) * var(--progress-sweep-edge-fade-wrap)
     );
   }
 }
 
 .progress-sweep.is-active::before {
-  opacity: calc(0.6 * var(--_progress-sweep-glow-alpha-main, 1));
+  opacity: calc(0.6 * var(--progress-sweep-glow-alpha-main));
 }
 
 .progress-sweep.is-active::after {
-  opacity: calc(0.6 * var(--_progress-sweep-glow-alpha-wrap, 0));
+  opacity: calc(0.6 * var(--progress-sweep-glow-alpha-wrap));
 }
 
 .progress-sweep.is-active .progress-sweep__wrap::before {
-  opacity: var(--_progress-sweep-alpha-main, 1);
+  opacity: var(--progress-sweep-alpha-main);
 }
 
 .progress-sweep.is-active .progress-sweep__wrap::after {
-  opacity: var(--_progress-sweep-alpha-wrap, 0);
+  opacity: var(--progress-sweep-alpha-wrap);
 }
 
 .progress-sweep.is-active .progress-sweep__glass {
@@ -662,8 +680,8 @@
   .progress-sweep.is-active {
     animation: none;
     --progress-sweep-t: 0.5;
-    --_progress-sweep-alpha-main: 0.35;
-    --_progress-sweep-alpha-wrap: 0;
+    --progress-sweep-alpha-main: 0.35;
+    --progress-sweep-alpha-wrap: 0;
   }
 
   .progress-sweep.is-active::before,
@@ -672,7 +690,7 @@
   }
 
   .progress-sweep.is-active .progress-sweep__wrap::before {
-    opacity: var(--_progress-sweep-alpha-main, 0.35);
+    opacity: var(--progress-sweep-alpha-main);
   }
 
   .progress-sweep.is-active .progress-sweep__wrap {
