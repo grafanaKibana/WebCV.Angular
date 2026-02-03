@@ -4,19 +4,42 @@ $download-progress-glow-bleed: rem(8px);
 $download-progress-glow-color: color-mix(in srgb, var(--color-dark-neon-glow) 72%, #001018);
 $download-progress-glass-blur: rem(24px);
 
-@property --download-progress-t {
-  syntax: '<number>';
-  initial-value: 0;
-  inherits: true;
-}
-
 @keyframes download-progress-sweep {
-  from {
-    --download-progress-t: 0;
+  0% {
+    transform: translateX(-50%);
+    opacity: 0;
   }
 
-  to {
-    --download-progress-t: 1;
+  25% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  75% {
+    transform: translateX(150%);
+    opacity: 0;
+  }
+}
+
+@keyframes download-progress-glow {
+  0% {
+    transform: translateX(-50%);
+    opacity: 0;
+  }
+  25% {
+    opacity: var(--download-progress-glow-opacity);
+  }
+
+  50% {
+    opacity: var(--download-progress-glow-opacity);
+  }
+
+  75% {
+    transform: translateX(150%);
+    opacity: 0;
   }
 }
 
@@ -246,38 +269,9 @@ $download-progress-glass-blur: rem(24px);
     border-radius: $download-progress-radius;
     background: var(--color-dark-border);
     isolation: isolate;
-    --download-progress-left: calc(100% * var(--download-progress-t));
-    --download-progress-clip-right: clamp(
-      0,
-      calc((var(--download-progress-t) - 0.5) / 0.5),
-      1
-    );
-    --download-progress-wrap-phase: clamp(
-      0,
-      calc((var(--download-progress-clip-right) - 0.5) / 0.5),
-      1
-    );
-    --download-progress-wrap-left: calc(-50% + (50% * var(--download-progress-wrap-phase)));
-    --download-progress-edge-approach: clamp(
-      0,
-      calc((var(--download-progress-t) - 0.42) * 12.5),
-      1
-    );
-    --download-progress-edge-fade-main: clamp(
-      0,
-      calc(1 - var(--download-progress-edge-approach)),
-      1
-    );
-    --download-progress-wrap-edge-approach: clamp(
-      0,
-      calc(6.25 * var(--download-progress-wrap-phase)),
-      1
-    );
-    --download-progress-edge-fade-wrap: clamp(
-      0,
-      var(--download-progress-wrap-edge-approach),
-      1
-    );
+    --download-progress-duration: 2s;
+    --download-progress-sweep-width: 50%;
+    --download-progress-glow-opacity: 0.75;
   }
 
   .download-progress::before,
@@ -290,15 +284,22 @@ $download-progress-glass-blur: rem(24px);
     opacity: 0;
     background-repeat: no-repeat;
     background-position: 50% 50%;
-    will-change: left, opacity, filter;
+    will-change: transform, opacity, filter;
     pointer-events: none;
+    transform: translateX(-80%);
+    animation-duration: var(--download-progress-duration);
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    animation-name: none;
+    animation-play-state: paused;
   }
 
   .download-progress::before,
   .download-progress::after {
     top: calc(-1 * #{$download-progress-glow-bleed});
     bottom: calc(-1 * #{$download-progress-glow-bleed});
-    width: 50%;
+    width: var(--download-progress-sweep-width);
+    left: 0;
     z-index: 0;
     border-radius: calc(#{$download-progress-radius} + #{$download-progress-glow-bleed});
     background-image: radial-gradient(
@@ -309,14 +310,11 @@ $download-progress-glass-blur: rem(24px);
     );
     filter: blur(rem(10px));
     mix-blend-mode: screen;
-  }
-
-  .download-progress::before {
-    left: var(--download-progress-left);
+    animation-name: download-progress-glow;
   }
 
   .download-progress::after {
-    left: var(--download-progress-wrap-left);
+    animation-delay: calc(var(--download-progress-duration) / 2);
   }
 
   .download-progress > span:first-child {
@@ -332,7 +330,8 @@ $download-progress-glass-blur: rem(24px);
   .download-progress > span:first-child::after {
     top: 0;
     bottom: 0;
-    width: 50%;
+    width: var(--download-progress-sweep-width);
+    left: 0;
     z-index: 1;
     background-size:
       100% 200%,
@@ -371,14 +370,11 @@ $download-progress-glass-blur: rem(24px);
         transparent 100%
       );
     filter: blur(rem(0.6px));
-  }
-
-  .download-progress > span:first-child::before {
-    left: var(--download-progress-left);
+    animation-name: download-progress-sweep;
   }
 
   .download-progress > span:first-child::after {
-    left: var(--download-progress-wrap-left);
+    animation-delay: calc(var(--download-progress-duration) / 2);
   }
 
   .download-progress > span:last-child {
@@ -396,56 +392,13 @@ $download-progress-glass-blur: rem(24px);
   .download-progress.is-active {
     opacity: 1;
     visibility: visible;
-    animation: download-progress-sweep 1s linear infinite;
-    --download-progress-alpha-main: clamp(
-      0,
-      calc(1 - var(--download-progress-clip-right)),
-      1
-    );
-    --download-progress-alpha-wrap: var(--download-progress-wrap-phase);
-    --download-progress-glow-alpha-main: calc(
-      var(--download-progress-alpha-main) * var(--download-progress-edge-fade-main)
-    );
-    --download-progress-glow-alpha-wrap: calc(
-      var(--download-progress-alpha-wrap) * var(--download-progress-edge-fade-wrap)
-    );
   }
 
-  @supports (opacity: calc(1 - pow(0.1, 0.69897))) {
-    .download-progress.is-active {
-      --download-progress-alpha-main: clamp(
-        0,
-        calc(1 - pow(var(--download-progress-clip-right), 0.7)),
-        1
-      );
-      --download-progress-alpha-wrap: clamp(
-        0,
-        calc(1 - pow(calc(1 - var(--download-progress-wrap-phase)), 0.7)),
-        1
-      );
-      --download-progress-glow-alpha-main: calc(
-        var(--download-progress-alpha-main) * var(--download-progress-edge-fade-main)
-      );
-      --download-progress-glow-alpha-wrap: calc(
-        var(--download-progress-alpha-wrap) * var(--download-progress-edge-fade-wrap)
-      );
-    }
-  }
-
-  .download-progress.is-active::before {
-    opacity: calc(0.6 * var(--download-progress-glow-alpha-main));
-  }
-
-  .download-progress.is-active::after {
-    opacity: calc(0.6 * var(--download-progress-glow-alpha-wrap));
-  }
-
-  .download-progress.is-active > span:first-child::before {
-    opacity: var(--download-progress-alpha-main);
-  }
-
+  .download-progress.is-active::before,
+  .download-progress.is-active::after,
+  .download-progress.is-active > span:first-child::before,
   .download-progress.is-active > span:first-child::after {
-    opacity: var(--download-progress-alpha-wrap);
+    animation-play-state: running;
   }
 
   .download-progress.is-active > span:last-child {
@@ -455,9 +408,13 @@ $download-progress-glass-blur: rem(24px);
   @media (prefers-reduced-motion: reduce) {
     .download-progress.is-active {
       animation: none;
-      --download-progress-t: 0.5;
-      --download-progress-alpha-main: 0.35;
-      --download-progress-alpha-wrap: 0;
+    }
+
+    .download-progress.is-active::before,
+    .download-progress.is-active::after,
+    .download-progress.is-active > span:first-child::before,
+    .download-progress.is-active > span:first-child::after {
+      animation: none;
     }
 
     .download-progress.is-active::before,
@@ -466,7 +423,8 @@ $download-progress-glass-blur: rem(24px);
     }
 
     .download-progress.is-active > span:first-child::before {
-      opacity: var(--download-progress-alpha-main);
+      opacity: 0.4;
+      transform: translateX(20%);
     }
 
     .download-progress.is-active > span:first-child {
