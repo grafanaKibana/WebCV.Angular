@@ -301,14 +301,9 @@ $download-progress-glass-blur: rem(24px);
     width: 50%;
     z-index: 0;
     border-radius: calc(#{$download-progress-radius} + #{$download-progress-glow-bleed});
-    background-size: 50% 110%;
     background-image: radial-gradient(
-      ellipse at center,
-      color-mix(
-        in srgb,
-        #fff 18%,
-        $download-progress-glow-color
-      ) 0%,
+      ellipse 125% 50% at center,
+      color-mix(in srgb, #fff 18%, $download-progress-glow-color) 0%,
       color-mix(in srgb, $download-progress-glow-color 65%, transparent) 35%,
       transparent 100%
     );
