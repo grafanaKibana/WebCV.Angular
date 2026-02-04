@@ -19,7 +19,7 @@
       expect(scheme0).toBeTruthy();
       expect(scheme0.length).toBe(4); // Each scheme has 4 colors
       expect(scheme0[0].length).toBe(3); // Each color has 3 components (RGB)
-      
+
       // Get the fourth color scheme
       const scheme3 = service.getColorScheme('Midnight');
       expect(scheme3).toBeTruthy();
@@ -31,11 +31,4 @@
       const invalidScheme = service.getColorScheme('Invalid Theme');
       expect(invalidScheme).toEqual(defaultScheme);
     });
-
-    it('should get a random color scheme', () => {
-      const randomScheme = service.getRandomColorScheme();
-      expect(randomScheme).toBeTruthy();
-      expect(randomScheme.length).toBe(4);
-      expect(randomScheme[0].length).toBe(3);
-    });
-  }); 
+  });

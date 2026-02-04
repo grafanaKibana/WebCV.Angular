@@ -46,13 +46,16 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Apply a random theme to all gradient containers with smooth transition
+   * Apply the next theme (in config order) to all gradient containers with smooth transition
    */
   setRandomTheme(): void {
     // Find all WebGL background containers in the document
     const containers = document.querySelectorAll('[data-gradient-id]');
 
-    const themeName = this.webglGradientService.getRandomThemeName();
+    const currentThemeName =
+      this.webglGradientService.getSavedThemeName() ?? this.webglGradientService.getDefaultThemeName();
+
+    const themeName = this.webglGradientService.getNextThemeName(currentThemeName);
     if (!themeName) {
       return;
     }

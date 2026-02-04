@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { jest } from '@jest/globals';
 import { WebGLBackgroundComponent } from './webgl-background.component';
 import { WebGLGradientService } from '../../services/webgl-gradient.service';
+import { webglConfig } from '../../config/webgl.config';
 
 describe('WebGLBackgroundComponent', () => {
   let component: WebGLBackgroundComponent;
@@ -14,12 +15,14 @@ describe('WebGLBackgroundComponent', () => {
       removeGradient: jest.fn(),
       getColorScheme: jest.fn(),
       getRandomColorScheme: jest.fn(),
-      getThemeNames: jest.fn()
+      getThemeNames: jest.fn(),
+      getSavedThemeName: jest.fn()
     } as unknown as jest.Mocked<WebGLGradientService>;
     
     // Mock the getColorScheme method
     mockWebGLGradientService.getColorScheme.mockReturnValue([[0, 0, 0], [255, 255, 255]]);
     mockWebGLGradientService.getThemeNames.mockReturnValue(['Green Teal', 'Purple Sunset', 'Ocean Blue', 'Autumn', 'Midnight']);
+    mockWebGLGradientService.getSavedThemeName.mockReturnValue(undefined);
     
     await TestBed.configureTestingModule({
       declarations: [ WebGLBackgroundComponent ],
@@ -41,11 +44,11 @@ describe('WebGLBackgroundComponent', () => {
   });
 
   it('should initialize with default values', () => {
-    expect(component.speed).toBe(0.5);
-    expect(component.amplitude).toBe(0.85);
-    expect(component.darkerTop).toBe(false);
-    expect(component.parallax).toBe(true);
-    expect(component.parallaxIntensity).toBe(0.5);
+    expect(component.speed).toBe(webglConfig.background.speed);
+    expect(component.amplitude).toBe(webglConfig.background.amplitude);
+    expect(component.darkerTop).toBe(webglConfig.background.darkerTop);
+    expect(component.parallax).toBe(webglConfig.background.parallax);
+    expect(component.parallaxIntensity).toBe(webglConfig.background.parallaxIntensity);
     expect(component.themeName).toBeUndefined();
   });
 
@@ -54,12 +57,12 @@ describe('WebGLBackgroundComponent', () => {
     expect(mockWebGLGradientService.applyGradient).toHaveBeenCalledWith(
       expect.any(HTMLElement),
       expect.objectContaining({
-        speed: 0.5,
-        amplitude: 0.85,
-        darkerTop: false,
+        speed: webglConfig.background.speed,
+        amplitude: webglConfig.background.amplitude,
+        darkerTop: webglConfig.background.darkerTop,
         themeName: undefined,
-        parallax: true,
-        parallaxIntensity: 0.5
+        parallax: webglConfig.background.parallax,
+        parallaxIntensity: webglConfig.background.parallaxIntensity
       })
     );
   });

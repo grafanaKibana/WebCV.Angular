@@ -1,6 +1,7 @@
 import { Component, OnInit, AfterViewInit, OnDestroy, ElementRef, ChangeDetectionStrategy } from '@angular/core';
 import { WebGLGradientService } from '../../services/webgl-gradient.service';
 import { DynamicReflectionService } from '../../services/dynamic-reflection.service';
+import { webglConfig } from '../../config/webgl.config';
 
 @Component({
   selector: 'app-webgl-background',
@@ -9,12 +10,13 @@ import { DynamicReflectionService } from '../../services/dynamic-reflection.serv
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class WebGLBackgroundComponent implements OnInit, AfterViewInit, OnDestroy {
-  speed = 0.5;             // Animation speed (increased for more movement)
-  amplitude = 0.85;        // Wave amplitude (increased for more visible variation)
-  darkerTop = false;       // Enable darker top effect
+  // Defaults come from the centralized config so changes in `webgl.config.ts` take effect.
+  speed = webglConfig.background.speed;
+  amplitude = webglConfig.background.amplitude;
+  darkerTop = webglConfig.background.darkerTop;
   themeName?: string;      // Name of predefined color scheme
-  parallax = true;         // Enable parallax scrolling effect
-  parallaxIntensity = 0.5; // Parallax intensity (0-1)
+  parallax = webglConfig.background.parallax;
+  parallaxIntensity = webglConfig.background.parallaxIntensity;
 
   constructor(
     private elementRef: ElementRef,
