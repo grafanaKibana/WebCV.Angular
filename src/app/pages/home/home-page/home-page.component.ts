@@ -1,5 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { trigger, transition, query, style, stagger, animate } from '@angular/animations';
+import { Subject } from 'rxjs';
+import { take, takeUntil, finalize } from 'rxjs/operators';
+import { HomeDataService } from '../../../services/home-data.service';
 
 @Component({
   selector: 'app-home-pages',
@@ -18,5 +21,29 @@ import { trigger, transition, query, style, stagger, animate } from '@angular/an
     ])
   ]
 })
-export class HomePageComponent {
+export class HomePageComponent implements OnInit, OnDestroy {
+  homeReady = false;
+  private readonly destroy$ = new Subject<void>();
+
+  constructor(private homeDataService: HomeDataService) {}
+
+  ngOnInit(): void {
+    document.documentElement.classList.add('home-prehide');
+
+    this.homeDataService.getHomeData()
+      .pipe(
+        take(1),
+        takeUntil(this.destroy$),
+        finalize(() => document.documentElement.classList.remove('home-prehide'))
+      )
+      .subscribe(() => {
+        this.homeReady = true;
+      });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+    document.documentElement.classList.remove('home-prehide');
+  }
 }

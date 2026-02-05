@@ -43,6 +43,11 @@
   transform: translateY(12px);
 }
 
+:host-context(html.home-prehide) app-footer {
+  visibility: hidden;
+  pointer-events: none;
+}
+
 .wrapper {
   margin: var(--spacing-8) rem(190px) 0;
   min-height: var(--app-height, 100vh);
