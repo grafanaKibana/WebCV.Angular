@@ -16,6 +16,13 @@
     width: 100%;
     max-width: 100%;
   }
+
+  > div > app-about-me-section,
+  > div > app-experience-section,
+  > div > app-education-section,
+  > div > app-skills-section {
+    display: block;
+  }
   
   @include respond-desktop {
     grid-template-columns: 360px 1fr;
@@ -34,5 +41,4 @@
     grid-gap: var(--spacing-2);
   }
 }
-
 
