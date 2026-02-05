@@ -17,7 +17,7 @@
   -moz-osx-font-smoothing: grayscale;
   
   opacity: 0;
-  transition: opacity 800ms ease;
+  transition: opacity 800ms cubic-bezier(0.16, 1, 0.3, 1);
   will-change: opacity;
   
   // Canvas is always visible - color transitions happen in WebGL shader

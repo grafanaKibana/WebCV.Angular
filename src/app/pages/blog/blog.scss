@@ -102,7 +102,12 @@
     height: 100%;
     object-fit: cover;
     display: block;
-    transition: transform var(--transition-normal) ease;
+    opacity: 0;
+    transition: opacity var(--transition-normal) ease;
+  }
+
+  &__image.is-loaded {
+    opacity: 1;
   }
 
   &__content {

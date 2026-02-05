@@ -1,7 +1,7 @@
 <div class="main">
   <app-sidebar></app-sidebar>
 
-  <div *ngIf="homeReady" [@sectionAnimation]>
+  <div *ngIf="homeReady" [@sectionAnimation]="sectionAnimationTick">
     <app-about-me-section></app-about-me-section>
     <app-experience-section></app-experience-section>
     <app-education-section></app-education-section>

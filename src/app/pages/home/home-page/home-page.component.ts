@@ -10,7 +10,7 @@ import { HomeDataService } from '../../../services/home-data.service';
   styleUrls: ['./home-page.component.scss'],
   animations: [
     trigger('sectionAnimation', [
-      transition(':enter', [
+      transition('* => *', [
         query('app-about-me-section, app-education-section, app-experience-section, app-skills-section', [
           style({ transform: 'translateY(16px)' }),
           stagger(80, [
@@ -23,6 +23,7 @@ import { HomeDataService } from '../../../services/home-data.service';
 })
 export class HomePageComponent implements OnInit, OnDestroy {
   homeReady = false;
+  sectionAnimationTick = 0;
   private readonly destroy$ = new Subject<void>();
 
   constructor(private homeDataService: HomeDataService) {}
@@ -38,6 +39,9 @@ export class HomePageComponent implements OnInit, OnDestroy {
       )
       .subscribe(() => {
         this.homeReady = true;
+        requestAnimationFrame(() => {
+          this.sectionAnimationTick += 1;
+        });
       });
   }
 

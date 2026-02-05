@@ -12,6 +12,7 @@ import { environment } from '../../../environments/environment';
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements OnInit, OnDestroy {
+  headerReady = false;
   isPortfolioDone: boolean = false;
   isBlogDone: boolean = false;
   isDownloadCVDone: boolean = false;
@@ -30,11 +31,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (config) => {
+          this.headerReady = true;
           this.isPortfolioDone = config.isPortfolioDone;
           this.isBlogDone = config.isBlogDone;
           this.isDownloadCVDone = config.isDownloadCVDone;
         },
         error: (error) => {
+          this.headerReady = true;
           console.error('Error loading header config:', error);
         }
       });

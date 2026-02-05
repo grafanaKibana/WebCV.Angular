@@ -8,4 +8,9 @@ import { ArticleModel } from '../interfaces/articleModel';
 })
 export class BlogItemComponent {
   @Input() article!: ArticleModel;
+  imageLoaded = false;
+
+  onImageLoaded(): void {
+    this.imageLoaded = true;
+  }
 }

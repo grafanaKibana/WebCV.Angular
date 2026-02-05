@@ -29,6 +29,7 @@ interface ShareLink {
 export class BlogDetailPageComponent implements OnInit, OnDestroy, AfterViewChecked {
   @ViewChild('contentBody') contentBodyRef?: ElementRef<HTMLElement>;
   article?: ArticleModel;
+  articleLoaded = false;
   contentHtml: SafeHtml | null = null;
   tocItems: TocItem[] = [];
   readingTimeMinutes = 0;
@@ -52,6 +53,7 @@ export class BlogDetailPageComponent implements OnInit, OnDestroy, AfterViewChec
         takeUntil(this.destroy$)
       )
       .subscribe(article => {
+        this.articleLoaded = true;
         this.article = article;
         if (!article) {
           this.contentHtml = null;
