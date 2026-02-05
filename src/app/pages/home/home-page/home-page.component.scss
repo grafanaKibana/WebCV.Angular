@@ -22,12 +22,15 @@
   > div > app-education-section,
   > div > app-skills-section {
     display: block;
+    //contain: content;
+    will-change: transform;
+    background: transparent;
   }
-  
+
   @include respond-desktop {
     grid-template-columns: 360px 1fr;
   }
-  
+
   @include respond-laptop {
     grid-template-columns: 100%;
     grid-gap: var(--spacing-3);
@@ -41,4 +44,3 @@
     grid-gap: var(--spacing-2);
   }
 }
-
