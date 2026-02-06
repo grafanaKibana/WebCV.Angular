@@ -28,17 +28,17 @@ footer {
     gap: var(--spacing-6);
 
     grid-template-areas:
-      "N S"
-      "M M"
-      "B B";
+      'N S'
+      'M M'
+      'B B';
 
     @include respond-tablet-sm {
       gap: var(--spacing-4);
       grid-template-areas:
-      "N N"
-      "S S"
-      "M M"
-      "B B";
+        'N N'
+        'S S'
+        'M M'
+        'B B';
     }
 
     .contact-form-item {
@@ -46,12 +46,18 @@ footer {
       border: 0;
       border-radius: var(--radius-8);
       color: var(--color-dark-paragraph);
-      padding: var(--spacing-3);
+      padding: var(--spacing-3) var(--spacing-4);
+      background: var(--color-dark-block-background);
+      box-sizing: border-box;
+      max-width: 100%;
       outline: none;
-      @include glass-panel();
 
       @include respond-tablet-sm {
         border-radius: var(--radius-12);
+      }
+
+      @include respond-mobile {
+        padding: var(--spacing-3);
       }
     }
 
@@ -69,12 +75,13 @@ footer {
 
     .submit-button {
       grid-area: B;
-      margin-bottom: var(--spacing-16);
+      margin-bottom: var(--spacing-2);
 
       @include interactive-glow();
     }
 
-    input, textarea {
+    input,
+    textarea {
       resize: none;
 
       &:-webkit-autofill {
@@ -97,11 +104,11 @@ footer {
         color: var(--color-dark-paragraph);
       }
 
-      &:-ms-input-placeholder { /* Internet Explorer 10-11 */
+      &:-ms-input-placeholder {
         color: var(--color-dark-paragraph);
       }
 
-      &::-ms-input-placeholder { /* Microsoft Edge */
+      &::-ms-input-placeholder {
         color: var(--color-dark-paragraph);
       }
     }

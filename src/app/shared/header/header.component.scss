@@ -195,6 +195,27 @@ $download-progress-glass-blur: rem(24px);
   cursor: pointer;
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
+  transition: transform var(--transition-fast) var(--transition-easing);
+
+  .download-button-border {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    opacity: 0;
+    z-index: 2;
+    border: 1px solid color-mix(
+      in srgb,
+      var(--color-dark-border) 62%,
+      rgba(var(--reflection-r), var(--reflection-g), var(--reflection-b), 0.45)
+    );
+    filter: saturate(2);
+    transition: opacity var(--transition-fast) var(--transition-easing);
+  }
+
+  &:not(.soon):not(.is-downloading):not(:disabled) .download-button-border {
+    opacity: 1;
+  }
 
   &:disabled {
     cursor: default;
@@ -406,6 +427,15 @@ $download-progress-glass-blur: rem(24px);
   }
 
   @media (prefers-reduced-motion: reduce) {
+    &:not(.soon):not(.is-downloading):not(:disabled):hover {
+      transform: none;
+    }
+
+    &:not(.soon):not(.is-downloading):not(:disabled):focus-visible,
+    &:not(.soon):not(.is-downloading):not(:disabled):active {
+      transform: none;
+    }
+
     .download-progress.is-active {
       animation: none;
     }
@@ -510,13 +540,18 @@ header {
 .header-download {
   @extend .shadow-medium;
   @extend .glass-heavy;
+  @extend .text-glow-12;
+
   flex: 0 0 auto;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: var(--spacing-3);
   border-radius: var(--radius-20);
-  transition: background var(--transition-fast) var(--transition-easing);
+  transition:
+    background var(--transition-fast) var(--transition-easing),
+    transform var(--transition-fast) var(--transition-easing);
+
 
   .download-button-content {
     padding: 0.5em 1em;
@@ -527,7 +562,6 @@ header {
 
     &:hover {
       background: rgba(10, 15, 20, 0.65);
-      @extend .text-glow-12;
     }
   }
 
