@@ -9,7 +9,7 @@
   }
 
   .img-wrap {
-    border-radius: var(--radius-16);
+    border-radius: var(--radius-4);
     min-height: 10rem;
     max-height: 15rem;
     height: 15vw;
@@ -37,7 +37,7 @@
   }
 
   img {
-    border-radius: var(--radius-16);
+    border-radius: inherit;
     transform: scale3d(1, 1, 1);
     transition: transform .4s ease-in-out;
     object-fit: cover;

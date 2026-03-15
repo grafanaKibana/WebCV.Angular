@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, inject } from '@angular/core';
 import type { ProjectModel } from '../interfaces/projectModel';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { ScrollStrategyOptions } from '@angular/cdk/overlay';
@@ -6,13 +6,15 @@ import { ModalDialogComponent } from '../../../shared/modal-dialog/modal-dialog.
 
 @Component({
   selector: 'app-portfolio-item[project]',
+  standalone: true,
   templateUrl: './portfolio-item.component.html',
-  styleUrls: ['./portfolio-item.component.scss']
+  styleUrls: ['./portfolio-item.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PortfolioItemComponent {
   @Input() project!: ProjectModel;
-
-  constructor(private dialog: MatDialog, private sso: ScrollStrategyOptions) { }
+  private readonly dialog = inject(MatDialog);
+  private readonly sso = inject(ScrollStrategyOptions);
 
   openProjectDetails(project: ProjectModel) {
     const dialogConfig = new MatDialogConfig();

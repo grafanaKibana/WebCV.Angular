@@ -149,18 +149,7 @@
     }
   ],
   "skills": [
-    {
-      "name": "Artificial Intelligence",
-      "skills": [
-        { "technology": "Microsoft Agent Framework", "level": 3 },
-        { "technology": "Semantic Kernel", "level": 3 },
-        { "technology": "Microsoft.Extensions.AI", "level": 2 },
-        { "technology": "LLM Evaluation", "level": 2 },
-        { "technology": "RAG Systems", "level": 2 },
-        { "technology": "Azure AI Foundry", "level": 2 },
-        { "technology": "LangFuse", "level": 2 }
-      ]
-    },
+
     {
       "name": "Back-end",
       "skills": [
@@ -170,6 +159,18 @@
         { "technology": "Entity Framework", "level": 2 },
         { "technology": "T-SQL", "level": 2 },
         { "technology": "Python", "level": 1 }
+      ]
+    },
+    {
+      "name": "AI",
+      "skills": [
+        { "technology": "Microsoft Agent Framework", "level": 3 },
+        { "technology": "Semantic Kernel", "level": 3 },
+        { "technology": "Microsoft.Extensions.AI", "level": 2 },
+        { "technology": "LLM Evaluation", "level": 2 },
+        { "technology": "RAG Systems", "level": 2 },
+        { "technology": "Azure AI Foundry", "level": 2 },
+        { "technology": "LangFuse", "level": 2 }
       ]
     },
     {

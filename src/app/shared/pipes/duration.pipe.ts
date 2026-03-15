@@ -4,7 +4,8 @@ import { Pipe, PipeTransform } from '@angular/core';
  * Pipe to calculate and format duration between two dates
  */
 @Pipe({
-  name: 'duration'
+  name: 'duration',
+  standalone: true
 })
 export class DurationPipe implements PipeTransform {
   private readonly months = [
@@ -71,4 +72,3 @@ export class DurationPipe implements PipeTransform {
     return parts.length > 0 ? parts.join(' ') : '';
   }
 }
-

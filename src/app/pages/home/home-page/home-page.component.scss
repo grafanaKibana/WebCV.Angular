@@ -20,6 +20,10 @@
     background: transparent;
   }
 
+  .sections > :last-child section {
+    margin-bottom: 0;
+  }
+
   @include respond-tablet-sm {
     gap: var(--spacing-3);
   }

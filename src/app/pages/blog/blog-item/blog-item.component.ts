@@ -1,10 +1,15 @@
-import { Component, Input } from '@angular/core';
+import { DatePipe } from '@angular/common';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { ArticleModel } from '../interfaces/articleModel';
 
 @Component({
   selector: 'app-blog-item[article]',
+  standalone: true,
+  imports: [RouterLink, DatePipe],
   templateUrl: './blog-item.component.html',
-  styleUrls: ['./blog-item.component.scss']
+  styleUrls: ['./blog-item.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class BlogItemComponent {
   @Input() article!: ArticleModel;

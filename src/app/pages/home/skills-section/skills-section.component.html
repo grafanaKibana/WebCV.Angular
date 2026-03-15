@@ -1,11 +1,15 @@
 <section>
   <h2 class="numbered-heading skills-heading"><span class="section-number">04.</span> Skills & Technologies</h2>
   <div class="skill-wrapper">
-    <div *ngFor="let skillGroup of skills" class="skill-group">
-      <h3 class="skill-group-title">{{skillGroup.name}}</h3>
-      <div class="skill-tags" [style.--tag-basis]="getTagBasis(skillGroup.skills.length)">
-        <span *ngFor="let skill of skillGroup.skills" class="skill-tag">{{skill.technology}}</span>
+    @for (skillGroup of skills; track skillGroup.name) {
+      <div class="skill-group">
+        <h3 class="skill-group-title">{{skillGroup.name}}</h3>
+        <div class="skill-tags" role="list" [attr.aria-label]="skillGroup.name + ' skills'" [style.--tag-basis]="getTagBasis(skillGroup.skills.length)">
+          @for (skill of skillGroup.skills; track skill.technology) {
+            <span class="skill-tag" role="listitem">{{skill.technology}}</span>
+          }
+        </div>
       </div>
-    </div>
+    }
   </div>
 </section>

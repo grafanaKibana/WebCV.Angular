@@ -5,7 +5,9 @@
 <div class="modal-body">
   <img src="{{data.imagePath}}">
   <div class="technology-wrapper">
-    <span class="technology-badge" *ngFor="let technology of data.technologies">{{technology}}</span>
+    @for (technology of data.technologies; track $index) {
+      <span class="technology-badge">{{technology}}</span>
+    }
   </div>
   <div mat-dialog-content class="content">
     <p>{{data.description}}</p>
