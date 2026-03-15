@@ -1,4 +1,5 @@
-import { Component, OnInit, AfterViewInit, OnDestroy, ElementRef, ChangeDetectionStrategy, ChangeDetectorRef, inject } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { Component, OnInit, AfterViewInit, OnDestroy, ElementRef, ChangeDetectionStrategy, ChangeDetectorRef, PLATFORM_ID, inject } from '@angular/core';
 import { WebGLGradientService } from '../../services/webgl-gradient.service';
 import { DynamicReflectionService } from '../../services/dynamic-reflection.service';
 import { webglConfig } from '../../config/webgl.config';
@@ -24,6 +25,7 @@ export class WebGLBackgroundComponent implements OnInit, AfterViewInit, OnDestro
   private readonly webglGradientService = inject(WebGLGradientService);
   private readonly dynamicReflectionService = inject(DynamicReflectionService);
   private readonly changeDetectorRef = inject(ChangeDetectorRef);
+  private readonly platformId = inject(PLATFORM_ID);
 
   ngOnInit(): void {
     // Load persisted theme name early so AfterViewInit uses it.
@@ -31,6 +33,8 @@ export class WebGLBackgroundComponent implements OnInit, AfterViewInit, OnDestro
   }
   
   ngAfterViewInit(): void {
+    if (!isPlatformBrowser(this.platformId)) return;
+
     // Safari-specific: Use setTimeout to ensure DOM is fully rendered
     // This fixes the "black background until inspector opened" issue
     setTimeout(() => {
@@ -96,6 +100,8 @@ export class WebGLBackgroundComponent implements OnInit, AfterViewInit, OnDestro
   }
 
   private scheduleFadeIn(): void {
+    if (!isPlatformBrowser(this.platformId)) return;
+
     if (this.hasFadedIn) {
       return;
     }

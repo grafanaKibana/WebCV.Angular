@@ -1,4 +1,5 @@
-import { Injectable, NgZone } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { Injectable, NgZone, PLATFORM_ID, inject } from '@angular/core';
 import {
   webglConfig,
   getColorScheme,
@@ -19,6 +20,7 @@ import {
 export class WebGLGradientService {
   private gradients: Map<string, GradientInstance> = new Map();
   private readonly themeStorageKey = 'webcv.themeName.v1';
+  private readonly platformId = inject(PLATFORM_ID);
 
   constructor(private ngZone: NgZone) {}
 
@@ -39,6 +41,7 @@ export class WebGLGradientService {
    */
   saveThemeName(themeName: string): void {
     try {
+      if (!isPlatformBrowser(this.platformId)) return;
       localStorage.setItem(this.themeStorageKey, themeName);
     } catch {
       // ignore
@@ -50,6 +53,7 @@ export class WebGLGradientService {
    */
   getSavedThemeName(): string | undefined {
     try {
+      if (!isPlatformBrowser(this.platformId)) return undefined;
       const value = localStorage.getItem(this.themeStorageKey);
       if (!value) return undefined;
       const names = this.getThemeNames();
@@ -61,6 +65,7 @@ export class WebGLGradientService {
 
   clearSavedThemeName(): void {
     try {
+      if (!isPlatformBrowser(this.platformId)) return;
       localStorage.removeItem(this.themeStorageKey);
     } catch {
       // ignore
@@ -110,6 +115,8 @@ export class WebGLGradientService {
   }
 
   applyAccentColor(themeName: string): void {
+    if (!isPlatformBrowser(this.platformId)) return;
+
     const accent = this.getAccentColor(themeName);
     const rgb = this.hexToRgb(accent);
     if (!rgb) return;
@@ -167,6 +174,8 @@ export class WebGLGradientService {
       onColorsUpdate?: (colors: number[][]) => void;
     } = {}
   ): void {
+    if (!isPlatformBrowser(this.platformId)) return;
+
     const existingId = container.getAttribute('data-gradient-id');
     if (existingId && this.gradients.has(existingId)) {
       return;
@@ -289,6 +298,8 @@ export class WebGLGradientService {
    * Remove gradient and clean up resources
    */
   removeGradient(container: HTMLElement): void {
+    if (!isPlatformBrowser(this.platformId)) return;
+
     const id = container.getAttribute('data-gradient-id');
     if (id && this.gradients.has(id)) {
       this.gradients.get(id)?.destroy();
@@ -300,6 +311,8 @@ export class WebGLGradientService {
    * Transition existing gradient to new colors smoothly
    */
   transitionGradientColors(container: HTMLElement, newColors: number[][]): void {
+    if (!isPlatformBrowser(this.platformId)) return;
+
     const id = container.getAttribute('data-gradient-id');
     if (id && this.gradients.has(id)) {
       const gradient = this.gradients.get(id);
@@ -313,7 +326,11 @@ export class WebGLGradientService {
    * Remove all gradients and clean up
    */
   destroyAll(): void {
-    this.gradients.forEach(gradient => gradient.destroy());
+    if (!isPlatformBrowser(this.platformId)) return;
+
+    this.gradients.forEach((gradient) => {
+      gradient.destroy();
+    });
     this.gradients.clear();
   }
 }
@@ -326,7 +343,7 @@ class GradientInstance {
   private gl: WebGLRenderingContext;
   private width!: number;
   private height!: number;
-  private dpr: number = window.devicePixelRatio || 1;
+  private dpr: number = 1;
   private effectiveDpr: number = this.dpr;
   private targetFps: number = 120;
   private minFrameInterval: number = 0;

@@ -1,4 +1,5 @@
-import { Injectable } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { Injectable, PLATFORM_ID, inject } from '@angular/core';
 import { webglConfig } from '../config/webgl.config';
 
 /**
@@ -13,12 +14,15 @@ export class DynamicReflectionService {
   private lastReflection?: { r: number; g: number; b: number };
   private pendingFrameId: number | null = null;
   private pendingReflection?: { r: number; g: number; b: number };
+  private readonly platformId = inject(PLATFORM_ID);
 
   /**
    * Update reflection colors based on gradient colors
    * @param colors Array of RGB color arrays from the WebGL gradient
    */
   updateReflectionColors(colors: number[][]): void {
+    if (!isPlatformBrowser(this.platformId)) return;
+
     // Throttle updates to avoid excessive CSS recalculations
     const now = performance.now();
     if (now - this.lastColorUpdateTime < webglConfig.reflection.updateThrottle) {
@@ -48,6 +52,8 @@ export class DynamicReflectionService {
   }
 
   private scheduleApply(): void {
+    if (!isPlatformBrowser(this.platformId)) return;
+
     if (this.pendingFrameId !== null) {
       return;
     }
@@ -70,6 +76,8 @@ export class DynamicReflectionService {
    * Useful to avoid flashes when route content changes.
    */
   applyLastReflection(): void {
+    if (!isPlatformBrowser(this.platformId)) return;
+
     if (!this.lastReflection) {
       return;
     }
@@ -210,6 +218,8 @@ export class DynamicReflectionService {
    * Clean up resources
    */
   destroy(): void {
+    if (!isPlatformBrowser(this.platformId)) return;
+
     if (this.pendingFrameId !== null) {
       cancelAnimationFrame(this.pendingFrameId);
       this.pendingFrameId = null;

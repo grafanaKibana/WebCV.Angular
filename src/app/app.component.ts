@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component, OnDestroy, inject } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { ChangeDetectionStrategy, Component, OnDestroy, PLATFORM_ID, inject } from '@angular/core';
 import { Router, NavigationEnd, NavigationStart, ChildrenOutletContexts, RouterOutlet } from '@angular/router';
 import { Subject } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
@@ -59,6 +60,7 @@ export class AppComponent implements OnDestroy {
   private readonly contexts = inject(ChildrenOutletContexts);
   private readonly dynamicReflectionService = inject(DynamicReflectionService);
   private readonly seoService = inject(SeoService);
+  private readonly platformId = inject(PLATFORM_ID);
 
   constructor() {
     this.router.events
@@ -82,10 +84,12 @@ export class AppComponent implements OnDestroy {
         if (fragment) {
           return;
         }
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-        requestAnimationFrame(() => {
-          this.dynamicReflectionService.applyLastReflection();
-        });
+        if (isPlatformBrowser(this.platformId)) {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+          requestAnimationFrame(() => {
+            this.dynamicReflectionService.applyLastReflection();
+          });
+        }
 
         const path = url.split('?')[0].split('#')[0];
         const meta = ROUTE_META[path];
@@ -110,6 +114,8 @@ export class AppComponent implements OnDestroy {
   }
 
   onRouteActivate(): void {
+    if (!isPlatformBrowser(this.platformId)) return;
+
     requestAnimationFrame(() => {
       this.dynamicReflectionService.applyLastReflection();
     });
