@@ -1,0 +1,4 @@
+/blog/prompting-human-in-loop
+/blog/organizing-semantic-kernel-tools
+/blog/microsoft-extensions-ai-evaluating
+/blog/markdown-feature-showcase

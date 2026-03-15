@@ -21,27 +21,33 @@
 				"build": {
 					"builder": "@angular-devkit/build-angular:application",
 					"options": {
-						"outputPath": "dist/webcv-angular",
-						"index": "src/index.html",
-						"browser": "src/main.ts",
-						"polyfills": [
-							"src/polyfills.ts"
-						],
-						"tsConfig": "tsconfig.app.json",
-					"assets": [
-						"src/favicon.ico",
-						"src/assets",
-						"src/robots.txt",
-						"src/sitemap.xml"
-					],
-					"styles": [
-						"./node_modules/@angular/material/prebuilt-themes/deeppurple-amber.css",
-						"./node_modules/@fortawesome/fontawesome-free/css/all.min.css",
-						"./node_modules/highlight.js/styles/vs2015.css",
-						"src/styles.scss"
-					],
-						"scripts": []
-					},
+            "outputPath": "dist/webcv-angular",
+            "index": "src/index.html",
+            "browser": "src/main.ts",
+            "polyfills": [
+              "src/polyfills.ts"
+            ],
+            "tsConfig": "tsconfig.app.json",
+            "assets": [
+              "src/favicon.ico",
+              "src/assets",
+              "src/robots.txt",
+              "src/sitemap.xml"
+            ],
+            "styles": [
+              "./node_modules/@angular/material/prebuilt-themes/deeppurple-amber.css",
+              "./node_modules/@fortawesome/fontawesome-free/css/all.min.css",
+              "./node_modules/highlight.js/styles/vs2015.css",
+              "src/styles.scss"
+            ],
+            "scripts": [],
+            "server": "src/main.server.ts",
+            "prerender": {
+              "discoverRoutes": true,
+              "routesFile": "routes.txt"
+            },
+            "ssr": false
+          },
 					"configurations": {
 						"production": {
 							"budgets": [

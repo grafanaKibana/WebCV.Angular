@@ -1,4 +1,5 @@
-import { Injectable } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { Injectable, PLATFORM_ID, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, throwError, timer } from 'rxjs';
 import { map, tap, catchError, switchMap } from 'rxjs/operators';
@@ -27,6 +28,7 @@ export class CvDownloadService {
   private readonly workflowFileName = 'main.yml';
   private readonly artifactName = 'cv-pdf';
   private readonly apiBaseUrl = 'https://api.github.com';
+  private readonly platformId = inject(PLATFORM_ID);
 
   constructor(private http: HttpClient) {}
 
@@ -39,6 +41,8 @@ export class CvDownloadService {
     return timer(delayMs).pipe(
       switchMap(() => this.getLatestSuccessfulMasterRun()),
       tap(run => {
+        if (!isPlatformBrowser(this.platformId)) return;
+
         const downloadUrl = `https://nightly.link/${this.owner}/${this.repo}/actions/runs/${run.id}/${this.artifactName}.zip`;
         
         // Trigger download using an invisible iframe to avoid CORS issues
