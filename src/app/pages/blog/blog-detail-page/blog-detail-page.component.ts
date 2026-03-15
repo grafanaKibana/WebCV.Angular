@@ -1,5 +1,6 @@
 import { DatePipe, DOCUMENT } from '@angular/common';
 import { AfterViewChecked, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild, inject } from '@angular/core';
+import { trigger, transition, query, style, stagger, animate } from '@angular/animations';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { Subject } from 'rxjs';
@@ -8,6 +9,7 @@ import { marked } from 'marked';
 import hljs from 'highlight.js/lib/common';
 import { ArticleModel } from '../interfaces/articleModel';
 import { BlogDataService } from '../services/blog-data.service';
+import { HomeDataService, SidebarInfo } from '../../../services/home-data.service';
 import { CopyButtonComponent } from '../../../shared/components/copy-button/copy-button.component';
 
 interface TocItem {
@@ -28,27 +30,52 @@ interface ShareLink {
   imports: [RouterLink, CopyButtonComponent, DatePipe],
   templateUrl: './blog-detail-page.component.html',
   styleUrls: ['./blog-detail-page.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  animations: [
+    trigger('sectionAnimation', [
+      transition('* => *', [
+        query('.blog-hero, .blog-content', [
+          style({ transform: 'translateY(16px)' }),
+          stagger(80, [
+            animate('420ms cubic-bezier(0.22, 0.61, 0.36, 1)', style({ transform: 'translateY(0)' }))
+          ])
+        ], { optional: true })
+      ])
+    ])
+  ]
 })
 export class BlogDetailPageComponent implements OnInit, OnDestroy, AfterViewChecked {
   @ViewChild('contentBody') contentBodyRef?: ElementRef<HTMLElement>;
   article?: ArticleModel;
   articleLoaded = false;
+  sectionAnimationTick = 0;
   contentHtml: SafeHtml | null = null;
   tocItems: TocItem[] = [];
   readingTimeMinutes = 0;
   shareLinks: ShareLink[] = [];
   currentUrl = '';
+  authorName = '';
+  authorTitle = '';
+  authorAvatarUrl = 'assets/images/my-portrait.png';
 
   private readonly destroy$ = new Subject<void>();
   private copyButtonsInitialized = false;
   private readonly route = inject(ActivatedRoute);
   private readonly blogDataService = inject(BlogDataService);
+  private readonly homeDataService = inject(HomeDataService);
   private readonly sanitizer = inject(DomSanitizer);
   private readonly document = inject(DOCUMENT);
   private readonly cdr = inject(ChangeDetectorRef);
 
   ngOnInit(): void {
+    this.homeDataService.getSidebarInfo()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(info => {
+        this.authorName = `${info.firstName} ${info.lastName}`;
+        this.authorTitle = info.positionTitle;
+        this.cdr.markForCheck();
+      });
+
     this.route.paramMap
       .pipe(
         switchMap(params => this.blogDataService.getArticleBySlug(params.get('slug') ?? '')),
@@ -70,6 +97,10 @@ export class BlogDetailPageComponent implements OnInit, OnDestroy, AfterViewChec
         this.currentUrl = this.document.location.href;
         this.shareLinks = this.buildShareLinks(article, this.currentUrl);
         this.cdr.markForCheck();
+        requestAnimationFrame(() => {
+          this.sectionAnimationTick += 1;
+          this.cdr.markForCheck();
+        });
       });
   }
 

@@ -93,9 +93,9 @@ $baseSystemFontSize: 16px;
   --color-dark-block-background: rgba(15, 20, 25, 0.35);
   --color-dark-wrapper-background: rgba(10, 15, 20, 0.65);
   --color-dark-opaque-background: rgba(30, 35, 40, 0.95);
-  --color-dark-heading: #e6f1ff;
-  --color-dark-paragraph: #a8b2d1;
-  --color-dark-paragraph-bright: #ccd6f6;
+  --color-dark-heading: color-mix(in srgb, var(--color-dark-accent) 8%, #e8e8ee);
+  --color-dark-paragraph: color-mix(in srgb, var(--color-dark-accent) 15%, #a8a8b8);
+  --color-dark-paragraph-bright: color-mix(in srgb, var(--color-dark-accent) 10%, #c8c8d4);
   --color-dark-accent: rgb(var(--accent-r), var(--accent-g), var(--accent-b));
   --color-dark-accent-tint: rgba(var(--accent-r), var(--accent-g), var(--accent-b), 0.1);
   --color-dark-neon-glow: rgb(var(--accent-r), var(--accent-g), var(--accent-b));
@@ -103,7 +103,7 @@ $baseSystemFontSize: 16px;
   --color-dark-border: rgba(255, 255, 255, 0.1);
   --color-dark-separator: rgba(255, 255, 255, 0.1);
   --color-dark-error: #B84C4C;
-  --color-dark-muted: #8892b0;
+  --color-dark-muted: color-mix(in srgb, var(--color-dark-accent) 12%, #8888a0);
 
   // Copy button colors
   --copy-success-color: #4ade80;
