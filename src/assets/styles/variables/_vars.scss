@@ -155,5 +155,8 @@ $baseSystemFontSize: 16px;
   transition: --reflection-r 0.5s ease-out,
               --reflection-g 0.5s ease-out,
               --reflection-b 0.5s ease-out,
-              --reflection-angle 0.5s ease-out;
+              --reflection-angle 0.5s ease-out,
+              --accent-r 0.5s ease,
+              --accent-g 0.5s ease,
+              --accent-b 0.5s ease;
 }

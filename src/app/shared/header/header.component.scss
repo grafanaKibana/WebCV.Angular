@@ -550,7 +550,13 @@ header {
 
 .header-download {
   @extend .shadow-medium;
-  @extend .glass-heavy;
+  @include dark-block-base(
+    $bg: rgba(10, 15, 20, 0.55),
+    $blur: 24px
+  );
+  box-shadow:
+    0 8px 32px 0 rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.03);
 
   flex: 0 0 auto;
   display: flex;
@@ -558,20 +564,18 @@ header {
   justify-content: center;
   padding: var(--spacing-3);
   border-radius: var(--radius-20);
-  transition:
-    background var(--transition-fast) var(--transition-easing),
-    transform var(--transition-fast) var(--transition-easing);
-
 
   .download-button-content {
     padding: 0.5em 1em;
   }
 
   &:not(.soon):not(.is-downloading) {
-    cursor: pointer;
+    @include interactive-glow(rgba(10, 15, 20, 0.55));
 
     &:hover {
-      background: rgba(10, 15, 20, 0.65);
+      box-shadow:
+        0 8px 32px 0 rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 0 rgba(255, 255, 255, 0.03);
     }
   }
 

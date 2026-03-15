@@ -106,8 +106,9 @@
       white-space: nowrap;
 
       i {
-        font-size: rem(16px);
+        font-size: rem(18px);
         flex-shrink: 0;
+        transition: text-shadow var(--transition-normal) var(--transition-easing);
       }
 
       span {
@@ -118,6 +119,10 @@
 
       &:hover {
         color: var(--color-dark-heading);
+
+        i {
+          text-shadow: 0 0 12px var(--color-dark-neon-glow), 0 0 6px var(--color-dark-accent-tint);
+        }
       }
     }
   }
