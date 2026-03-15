@@ -85,7 +85,7 @@ $download-progress-glass-blur: rem(24px);
     align-items: center;
     justify-content: flex-start;
     padding: 0.6em 1.2em;
-    border-radius: var(--radius-12);
+    border-radius: var(--radius-8);
     color: var(--color-dark-heading);
     text-decoration: none;
     background: transparent;
@@ -177,6 +177,10 @@ $download-progress-glass-blur: rem(24px);
         text-shadow: 0 0 10px var(--color-dark-neon-glow);
       }
     }
+
+    @include respond-mobile {
+      border-radius: var(--radius-4);
+    }
   }
 
   .theme-button {
@@ -221,6 +225,7 @@ $download-progress-glass-blur: rem(24px);
 
   &:not(.soon):not(.is-downloading):not(:disabled) .download-button-border {
     opacity: 1;
+    position: absolute;
   }
 
   &:disabled {
