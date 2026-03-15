@@ -4,7 +4,8 @@ import { Pipe, PipeTransform } from '@angular/core';
  * Pipe to convert full month names to short abbreviations
  */
 @Pipe({
-  name: 'monthShort'
+  name: 'monthShort',
+  standalone: true
 })
 export class MonthShortPipe implements PipeTransform {
   private readonly monthMap: { [key: string]: string } = {
@@ -29,4 +30,3 @@ export class MonthShortPipe implements PipeTransform {
     return this.monthMap[month] || month;
   }
 }
-

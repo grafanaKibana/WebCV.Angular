@@ -1,4 +1,5 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, OnDestroy, inject } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { WebGLGradientService } from '../../services/webgl-gradient.service';
@@ -8,8 +9,11 @@ import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-header',
+  standalone: true,
+  imports: [RouterLink],
   templateUrl: './header.component.html',
-  styleUrls: ['./header.component.scss']
+  styleUrls: ['./header.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HeaderComponent implements OnInit, OnDestroy {
   headerReady = false;
@@ -19,12 +23,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
   isDownloading: boolean = false;
   downloadDelayMs: number = environment.cvDownloadSimulatedDelayMs;
   private readonly destroy$ = new Subject<void>();
-
-  constructor(
-    private webglGradientService: WebGLGradientService,
-    private homeDataService: HomeDataService,
-    private cvDownloadService: CvDownloadService
-  ) {}
+  private readonly webglGradientService = inject(WebGLGradientService);
+  private readonly homeDataService = inject(HomeDataService);
+  private readonly cvDownloadService = inject(CvDownloadService);
+  private readonly cdr = inject(ChangeDetectorRef);
 
   ngOnInit(): void {
     this.homeDataService.getHeaderConfig()
@@ -35,10 +37,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
           this.isPortfolioDone = config.isPortfolioDone;
           this.isBlogDone = config.isBlogDone;
           this.isDownloadCVDone = config.isDownloadCVDone;
+          this.cdr.markForCheck();
         },
         error: (error) => {
           this.headerReady = true;
           console.error('Error loading header config:', error);
+          this.cdr.markForCheck();
         }
       });
 
@@ -101,10 +105,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
       .subscribe({
         next: () => {
           this.isDownloading = false;
+          this.cdr.markForCheck();
         },
         error: (error) => {
           console.error('Error downloading CV:', error);
           this.isDownloading = false;
+          this.cdr.markForCheck();
         }
       });
   }

@@ -5,13 +5,15 @@ import {
   EventEmitter,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
-  OnDestroy
+  OnDestroy,
+  inject
 } from '@angular/core';
 
 export type CopyState = 'idle' | 'success' | 'error';
 
 @Component({
   selector: 'app-copy-button',
+  standalone: true,
   templateUrl: './copy-button.component.html',
   styleUrls: ['./copy-button.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -52,8 +54,7 @@ export class CopyButtonComponent implements OnDestroy {
 
   state: CopyState = 'idle';
   private timeoutId?: ReturnType<typeof setTimeout>;
-
-  constructor(private cdr: ChangeDetectorRef) {}
+  private readonly cdr = inject(ChangeDetectorRef);
 
   get currentLabel(): string {
     switch (this.state) {

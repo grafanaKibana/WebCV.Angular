@@ -1,12 +1,14 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { HomeDataService, SidebarInfo } from '../../services/home-data.service';
 
 @Component({
   selector: 'app-sidebar',
+  standalone: true,
   templateUrl: './sidebar.component.html',
-  styleUrls: ['./sidebar.component.scss']
+  styleUrls: ['./sidebar.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SidebarComponent implements OnInit, OnDestroy {
   sidebarReady = false;
@@ -33,8 +35,8 @@ export class SidebarComponent implements OnInit, OnDestroy {
   };
 
   private readonly destroy$ = new Subject<void>();
-
-  constructor(private homeDataService: HomeDataService) {}
+  private readonly homeDataService = inject(HomeDataService);
+  private readonly cdr = inject(ChangeDetectorRef);
 
   ngOnInit(): void {
     this.homeDataService.getSidebarInfo()
@@ -44,10 +46,12 @@ export class SidebarComponent implements OnInit, OnDestroy {
           this.sidebarReady = true;
           this.sidebarInfo = data;
           this.links = data.links;
+          this.cdr.markForCheck();
         },
         error: (error) => {
           this.sidebarReady = true;
           console.error('Error loading sidebar data:', error);
+          this.cdr.markForCheck();
         }
       });
   }

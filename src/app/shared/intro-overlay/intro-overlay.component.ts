@@ -1,7 +1,8 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, OnDestroy, OnInit, inject } from '@angular/core';
 
 @Component({
   selector: 'app-intro-overlay',
+  standalone: true,
   templateUrl: './intro-overlay.component.html',
   styleUrls: ['./intro-overlay.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -25,10 +26,9 @@ export class IntroOverlayComponent implements OnInit, OnDestroy {
   private runToken = 0;
   private exitTimeoutId: number | null = null;
   private removeAnimateTimeoutId: number | null = null;
+  private readonly cdr = inject(ChangeDetectorRef);
 
   private debugForceShow = false;
-
-  constructor(private cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     // Safety: if index.html didn't run, make sure we don't keep prehide forever.

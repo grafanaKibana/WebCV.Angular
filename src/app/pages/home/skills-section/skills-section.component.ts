@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { SkillGroupModel } from '../interfaces/skillModel';
@@ -6,16 +6,18 @@ import { HomeDataService } from '../../../services/home-data.service';
 
 @Component({
   selector: 'app-skills-section',
+  standalone: true,
   templateUrl: './skills-section.component.html',
-  styleUrls: ['./skills-section.component.scss']
+  styleUrls: ['./skills-section.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SkillsSectionComponent implements OnInit, OnDestroy {
   skills: Array<SkillGroupModel> = [];
   skillRows: SkillGroupModel[][] = [];
   private readonly destroy$ = new Subject<void>();
   private readonly columnsPerRow = 4;
-
-  constructor(private homeDataService: HomeDataService) {}
+  private readonly homeDataService = inject(HomeDataService);
+  private readonly cdr = inject(ChangeDetectorRef);
 
   ngOnInit(): void {
     this.homeDataService.getSkills()
@@ -27,6 +29,7 @@ export class SkillsSectionComponent implements OnInit, OnDestroy {
           for (let i = 0; i < data.length; i += this.columnsPerRow) {
             this.skillRows.push(data.slice(i, i + this.columnsPerRow));
           }
+          this.cdr.markForCheck();
         },
         error: (error) => {
           console.error('Error loading skills data:', error);

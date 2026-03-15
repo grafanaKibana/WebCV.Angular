@@ -1,6 +1,6 @@
-import { AfterViewChecked, Component, ElementRef, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { DOCUMENT } from '@angular/common';
+import { DatePipe, DOCUMENT } from '@angular/common';
+import { AfterViewChecked, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild, inject } from '@angular/core';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { Subject } from 'rxjs';
 import { switchMap, takeUntil } from 'rxjs/operators';
@@ -8,6 +8,7 @@ import { marked } from 'marked';
 import hljs from 'highlight.js/lib/common';
 import { ArticleModel } from '../interfaces/articleModel';
 import { BlogDataService } from '../services/blog-data.service';
+import { CopyButtonComponent } from '../../../shared/components/copy-button/copy-button.component';
 
 interface TocItem {
   id: string;
@@ -23,8 +24,11 @@ interface ShareLink {
 
 @Component({
   selector: 'app-blog-detail-page',
+  standalone: true,
+  imports: [RouterLink, CopyButtonComponent, DatePipe],
   templateUrl: './blog-detail-page.component.html',
-  styleUrls: ['./blog-detail-page.component.scss']
+  styleUrls: ['./blog-detail-page.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class BlogDetailPageComponent implements OnInit, OnDestroy, AfterViewChecked {
   @ViewChild('contentBody') contentBodyRef?: ElementRef<HTMLElement>;
@@ -38,13 +42,11 @@ export class BlogDetailPageComponent implements OnInit, OnDestroy, AfterViewChec
 
   private readonly destroy$ = new Subject<void>();
   private copyButtonsInitialized = false;
-
-  constructor(
-    private route: ActivatedRoute,
-    private blogDataService: BlogDataService,
-    private sanitizer: DomSanitizer,
-    @Inject(DOCUMENT) private document: Document
-  ) {}
+  private readonly route = inject(ActivatedRoute);
+  private readonly blogDataService = inject(BlogDataService);
+  private readonly sanitizer = inject(DomSanitizer);
+  private readonly document = inject(DOCUMENT);
+  private readonly cdr = inject(ChangeDetectorRef);
 
   ngOnInit(): void {
     this.route.paramMap
@@ -59,6 +61,7 @@ export class BlogDetailPageComponent implements OnInit, OnDestroy, AfterViewChec
           this.contentHtml = null;
           this.tocItems = [];
           this.shareLinks = [];
+          this.cdr.markForCheck();
           return;
         }
 
@@ -66,6 +69,7 @@ export class BlogDetailPageComponent implements OnInit, OnDestroy, AfterViewChec
         this.renderMarkdown(article.content);
         this.currentUrl = this.document.location.href;
         this.shareLinks = this.buildShareLinks(article, this.currentUrl);
+        this.cdr.markForCheck();
       });
   }
 
