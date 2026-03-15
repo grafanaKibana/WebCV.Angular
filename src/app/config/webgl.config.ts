@@ -8,26 +8,37 @@
 export interface ColorScheme {
   name: string;
   colors: number[][]; // Array of [R, G, B] values (0-255), typically 4 colors for smooth gradient
+  accentColor: string; // CSS color string for UI accent (links, badges, highlights)
 }
 
 export interface BackgroundConfig {
   // Color Schemes
   colorSchemes: ColorScheme[];
-  defaultTheme: string; // Name of default color scheme to use on page load
+  defaultTheme: string;
 
   // Animation Settings
-  speed: number;              // Animation speed multiplier (0.1 = very slow, 1.0 = normal, 2.0 = fast)
-  amplitude: number;          // Wave amplitude (0.0 = static gradient, 0.5 = subtle movement, 1.0 = strong waves)
-  darkerTop: boolean;         // Enable darker top effect (true = gradient fades to darker at top, false = uniform)
-  parallax: boolean;          // Enable parallax scrolling effect (true = background moves slower than scroll)
-  parallaxIntensity: number;  // Parallax intensity (0.0 = no parallax, 0.5 = moderate, 1.0 = strong parallax)
+  // Animation speed multiplier (0.1 = very slow, 1.0 = normal, 2.0 = fast)
+  speed: number;
+  // Wave amplitude (0.0 = static gradient, 0.5 = subtle movement, 1.0 = strong waves)
+  amplitude: number;
+  // Enable darker top effect (true = gradient fades to darker at top, false = uniform)
+  darkerTop: boolean;
+  // Enable parallax scrolling effect (true = background moves slower than scroll)
+  parallax: boolean;
+  // Parallax intensity (0.0 = no parallax, 0.5 = moderate, 1.0 = strong parallax)
+  parallaxIntensity: number;
 
   // Performance Settings
-  targetFps: number;          // Cap render FPS (e.g., 30 for smoother perf on GPU/CPU)
-  maxDpr: number;             // Clamp devicePixelRatio to reduce GPU load (e.g., 1.5)
-  renderScale: number;        // Additional scale to render at lower resolution (0.6 - 1.0)
-  blurPx: number;             // Blur applied to the canvas to hide low-res artifacts
-  maxDeltaMs: number;         // Max frame delta to avoid animation jumps after pauses
+  // Cap render FPS (e.g., 30 for smoother perf on GPU/CPU)
+  targetFps: number;
+  // Clamp devicePixelRatio to reduce GPU load (e.g., 1.5)
+  maxDpr: number;
+  // Additional scale to render at lower resolution (0.6 - 1.0)
+  renderScale: number;
+  // Blur applied to the canvas to hide low-res artifacts
+  blurPx: number;
+  // Max frame delta to avoid animation jumps after pauses
+  maxDeltaMs: number;
 }
 
 export interface ReflectionConfig {
@@ -52,77 +63,86 @@ export const webglConfig = {
      * - Amber Glow: Warm, cozy atmosphere
      */
     colorSchemes: [
-      {
-        name: 'Ocean Blue',
-        colors: [
-          [19, 41, 75],     // Dark navy - deepest shadow areas
-          [34, 87, 126],    // Navy blue - mid-dark tones
-          [56, 149, 211],   // Medium blue - mid-bright tones
-          [88, 204, 237],   // Light blue - brightest highlights
-        ]
-      },
-      {
-        name: 'Neon Cyan',
-        colors: [
-          [0, 20, 40],      // Deep midnight blue - darkest areas
-          [0, 50, 80],      // Dark cyan-blue - shadow tones
-          [0, 150, 200],    // Bright cyan - highlight tones
-          [0, 187, 255],    // Neon cyan - brightest accents (matches site accent)
-        ]
-      },
+
       {
         name: 'Deep Purple',
         colors: [
-          [20, 15, 35],     // Deep violet-black - rich dark base
-          [45, 30, 70],     // Rich purple - mid-dark tones
-          [90, 60, 140],    // Vibrant purple - bright tones
-          [140, 100, 200],  // Light lavender - soft highlights
-        ]
+          [20, 15, 35],
+          [45, 30, 70],
+          [90, 60, 140],
+          [140, 100, 200],
+        ],
+        accentColor: '#b794f4'
       },
       {
         name: 'Amber Glow',
         colors: [
-          [40, 25, 15],     // Deep brown-orange - warm dark base
-          [80, 50, 25],     // Dark amber - mid-dark warm tones
-          [200, 120, 50],   // Warm amber - bright warm tones
-          [255, 180, 100],  // Golden amber - golden highlights
-        ]
+          [40, 25, 15],
+          [80, 50, 25],
+          [200, 120, 50],
+          [255, 180, 100],
+        ],
+        accentColor: '#ffd866'
+      },
+      {
+        name: 'Ocean Blue',
+        colors: [
+          [19, 41, 75],
+          [34, 87, 126],
+          [56, 149, 211],
+          [88, 204, 237],
+        ],
+        accentColor: '#64d8ff'
       },
       {
         name: 'Emerald Forest',
         colors: [
-          [15, 30, 20],     // Deep forest green - natural dark base
-          [25, 60, 40],     // Dark emerald - rich mid-dark tones
-          [40, 120, 80],    // Rich emerald - vibrant mid tones
-          [80, 200, 140],   // Bright mint - fresh highlights
-        ]
+          [15, 30, 20],
+          [25, 60, 40],
+          [40, 120, 80],
+          [80, 200, 140],
+        ],
+        accentColor: '#64ffda'
       },
       {
         name: 'Magenta Dream',
         colors: [
-          [35, 15, 30],     // Deep magenta-black - rich dark base
-          [70, 25, 60],     // Dark magenta - deep mid tones
-          [150, 50, 130],   // Vibrant magenta - bright tones
-          [220, 100, 200],  // Soft pink-magenta - soft highlights
-        ]
+          [35, 15, 30],
+          [70, 25, 60],
+          [150, 50, 130],
+          [220, 100, 200],
+        ],
+        accentColor: '#ff7eb3'
       },
       {
         name: 'Slate Storm',
         colors: [
-          [20, 25, 30],     // Charcoal - neutral dark base
-          [40, 50, 60],     // Dark slate - cool mid-dark tones
-          [80, 100, 120],   // Medium slate - balanced mid tones
-          [140, 160, 180],  // Light slate blue - cool highlights
-        ]
+          [10, 15, 20],
+          [30, 40, 50],
+          [60, 80, 100],
+          [120, 140, 150],
+        ],
+        accentColor: '#a8c5da'
       },
       {
         name: 'Sunset Horizon',
         colors: [
-          [30, 20, 35],     // Deep purple-pink - rich dark base
-          [80, 40, 60],     // Dark rose - warm mid-dark tones
-          [180, 80, 100],   // Coral pink - vibrant mid tones
-          [255, 150, 120],  // Peach - warm highlights
-        ]
+          [30, 20, 35],
+          [80, 40, 60],
+          [180, 80, 100],
+          [255, 150, 120],
+        ],
+        accentColor: '#ff9a8b'
+      },
+      {
+        name: 'Cupertino Aurora',
+        colors: [
+          [10, 12, 18],
+          [18, 30, 58],
+          [0, 122, 255],
+          [100, 210, 255],
+        ],
+        accentColor: '#5ac8fa'
       }
     ],
 
@@ -141,7 +161,7 @@ export const webglConfig = {
      * - 1.0: Normal speed, noticeable movement
      * - 2.0: Fast, dynamic and energetic
      */
-    speed: 0.5,
+    speed: 0.75,
 
     /**
      * Wave Amplitude
@@ -159,7 +179,7 @@ export const webglConfig = {
      * - true: Creates depth, like light coming from below
      * - false: Uniform gradient across entire area (default)
      */
-    darkerTop: false,
+    darkerTop: true,
 
     /**
      * Parallax Scrolling
@@ -197,13 +217,13 @@ export const webglConfig = {
      * Render Scale
      * Multiplier applied after DPR clamp to further reduce resolution.
      */
-    renderScale: 0.85,
+    renderScale: 0.75,
 
     /**
      * Canvas Blur
      * Softens the upscaled gradient to hide low-res artifacts.
      */
-    blurPx: 8,
+    blurPx: 16,
 
     /**
      * Max Delta
@@ -246,12 +266,12 @@ export const webglConfig = {
     /**
      * Update Throttle
      * How often reflection colors are updated (in milliseconds).
-     * CSS transitions (with linear easing) handle smooth interpolation between updates.
+     * CSS transitions handle smooth interpolation between updates.
      * - 100: Frequent updates (higher CPU, smoother but diminishing returns)
-     * - 500: Balanced updates
-     * - 1000: Optimal - relies on CSS transitions for interpolation (default, lowest CPU)
+     * - 500: Balanced - matches WebGL gradient transition duration (default)
+     * - 1000: Less frequent, relies heavily on CSS transitions
      */
-    updateThrottle: 1000,
+    updateThrottle: 100,
 
   } as ReflectionConfig,
 
@@ -274,8 +294,14 @@ export function getThemeNames(): string[] {
   return webglConfig.background.colorSchemes.map(s => s.name);
 }
 
-export function getRandomColorScheme(): number[][] {
-  const schemes = webglConfig.background.colorSchemes;
-  const randomIndex = Math.floor(Math.random() * schemes.length);
-  return schemes[randomIndex].colors;
+export function getAccentColor(themeName: string): string | undefined {
+  const scheme = webglConfig.background.colorSchemes.find(s => s.name === themeName);
+  return scheme?.accentColor;
+}
+
+export function getDefaultAccentColor(): string {
+  const scheme = webglConfig.background.colorSchemes.find(
+    s => s.name === webglConfig.background.defaultTheme
+  );
+  return scheme?.accentColor || webglConfig.background.colorSchemes[0].accentColor;
 }

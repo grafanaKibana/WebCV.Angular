@@ -4,7 +4,8 @@ import {
   getColorScheme,
   getDefaultColorScheme,
   getThemeNames,
-  getRandomColorScheme
+  getAccentColor,
+  getDefaultAccentColor
 } from '../config/webgl.config';
 
 /**
@@ -26,6 +27,10 @@ export class WebGLGradientService {
    */
   getThemeNames(): string[] {
     return getThemeNames();
+  }
+
+  getDefaultThemeName(): string {
+    return webglConfig.background.defaultTheme;
   }
 
   /**
@@ -82,17 +87,42 @@ export class WebGLGradientService {
   }
 
   /**
-   * Get a random color scheme
+   * Get the next theme name in the order defined in `webglConfig.background.colorSchemes`.
+   * Falls back to the default theme (or the first theme) when the current theme is missing/invalid.
    */
-  getRandomColorScheme(): number[][] {
-    return getRandomColorScheme();
-  }
-
-  getRandomThemeName(): string | undefined {
+  getNextThemeName(currentThemeName?: string): string | undefined {
     const names = this.getThemeNames();
     if (!names.length) return undefined;
-    const idx = Math.floor(Math.random() * names.length);
-    return names[idx];
+    if (names.length === 1) return names[0];
+
+    const resolvedCurrent =
+      (currentThemeName && names.includes(currentThemeName) ? currentThemeName : undefined) ??
+      (names.includes(this.getDefaultThemeName()) ? this.getDefaultThemeName() : undefined) ??
+      names[0];
+
+    const idx = names.indexOf(resolvedCurrent);
+    const nextIdx = (idx + 1) % names.length;
+    return names[nextIdx];
+  }
+
+  getAccentColor(themeName: string): string {
+    return getAccentColor(themeName) || getDefaultAccentColor();
+  }
+
+  applyAccentColor(themeName: string): void {
+    const accent = this.getAccentColor(themeName);
+    const rgb = this.hexToRgb(accent);
+    if (!rgb) return;
+
+    const root = document.documentElement;
+    root.style.setProperty('--accent-r', rgb[0].toString());
+    root.style.setProperty('--accent-g', rgb[1].toString());
+    root.style.setProperty('--accent-b', rgb[2].toString());
+  }
+
+  private hexToRgb(hex: string): number[] | null {
+    const match = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return match ? [parseInt(match[1], 16), parseInt(match[2], 16), parseInt(match[3], 16)] : null;
   }
 
   private resolveColors(options: { colors?: number[][]; themeName?: string } = {}): number[][] {
@@ -150,6 +180,10 @@ export class WebGLGradientService {
     this.ngZone.runOutsideAngular(() => {
       try {
         const resolvedColors = this.resolveColors(options);
+        const resolvedSpeed =
+          options.speed !== undefined ? options.speed : webglConfig.background.speed;
+        const resolvedDarkerTop =
+          options.darkerTop !== undefined ? options.darkerTop : webglConfig.background.darkerTop;
 
         // Check if WebGL is supported with Safari-compatible context options
         const testCanvas = document.createElement('canvas');
@@ -166,7 +200,10 @@ export class WebGLGradientService {
 
         if (!testContext) {
           // WebGL not supported, apply CSS fallback
-          this.applyCssFallback(container, resolvedColors);
+          this.applyCssFallback(container, resolvedColors, {
+            speed: resolvedSpeed,
+            darkerTop: resolvedDarkerTop
+          });
           return;
         }
 
@@ -176,9 +213,9 @@ export class WebGLGradientService {
         const gradient = new GradientInstance({
           element: container,
           colors: colors,
-          speed: options.speed !== undefined ? options.speed : webglConfig.background.speed,
+          speed: resolvedSpeed,
           amplitude: options.amplitude !== undefined ? options.amplitude : webglConfig.background.amplitude,
-          darkerTop: options.darkerTop !== undefined ? options.darkerTop : webglConfig.background.darkerTop,
+          darkerTop: resolvedDarkerTop,
           parallax: options.parallax !== undefined ? options.parallax : webglConfig.background.parallax,
           parallaxIntensity: options.parallaxIntensity !== undefined ? options.parallaxIntensity : webglConfig.background.parallaxIntensity,
           targetFps: options.targetFps !== undefined ? options.targetFps : webglConfig.background.targetFps,
@@ -194,7 +231,10 @@ export class WebGLGradientService {
       } catch (error) {
         console.error('Error initializing WebGL gradient:', error);
         // Apply CSS fallback in case of errors
-        this.applyCssFallback(container, this.resolveColors(options));
+        this.applyCssFallback(container, this.resolveColors(options), {
+          speed: options.speed !== undefined ? options.speed : webglConfig.background.speed,
+          darkerTop: options.darkerTop !== undefined ? options.darkerTop : webglConfig.background.darkerTop
+        });
       }
     });
   }
@@ -202,14 +242,22 @@ export class WebGLGradientService {
   /**
    * Apply a CSS fallback gradient for browsers without WebGL support
    */
-  private applyCssFallback(container: HTMLElement, colors: number[][]): void {
+  private applyCssFallback(
+    container: HTMLElement,
+    colors: number[][],
+    options: { speed?: number; darkerTop?: boolean } = {}
+  ): void {
     // Convert RGB arrays to CSS colors
     const cssColors = colors.map(rgb =>
       `rgb(${rgb[0]}, ${rgb[1]}, ${rgb[2]})`
     );
 
     // Apply a simple linear gradient as fallback
-    container.style.background = `linear-gradient(135deg, ${cssColors.join(', ')})`;
+    const baseGradient = `linear-gradient(135deg, ${cssColors.join(', ')})`;
+    const darkerTop = options.darkerTop === true;
+    container.style.background = darkerTop
+      ? `linear-gradient(180deg, rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0) 45%), ${baseGradient}`
+      : baseGradient;
 
     // Add some subtle animation with CSS
     const keyframes = `
@@ -229,8 +277,12 @@ export class WebGLGradientService {
     }
 
     // Apply animation
+    const rawSpeed = options.speed;
+    const safeSpeed = typeof rawSpeed === 'number' && Number.isFinite(rawSpeed) ? Math.max(0.05, rawSpeed) : 0.5;
+    // Keep the old feel: 15s at speed=0.5, faster speeds reduce duration.
+    const durationSeconds = Math.min(120, Math.max(4, 15 * (0.5 / safeSpeed)));
     container.style.backgroundSize = '400% 400%';
-    container.style.animation = 'gradientShift 15s ease infinite';
+    container.style.animation = `gradientShift ${durationSeconds}s ease infinite`;
   }
 
   /**
@@ -276,7 +328,7 @@ class GradientInstance {
   private height!: number;
   private dpr: number = window.devicePixelRatio || 1;
   private effectiveDpr: number = this.dpr;
-  private targetFps: number = 30;
+  private targetFps: number = 120;
   private minFrameInterval: number = 0;
   private maxDeltaMs: number = 100;
   private animationTime: number = 0;

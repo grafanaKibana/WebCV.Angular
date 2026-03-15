@@ -12,6 +12,7 @@ import { environment } from '../../../environments/environment';
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements OnInit, OnDestroy {
+  headerReady = false;
   isPortfolioDone: boolean = false;
   isBlogDone: boolean = false;
   isDownloadCVDone: boolean = false;
@@ -30,14 +31,20 @@ export class HeaderComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (config) => {
+          this.headerReady = true;
           this.isPortfolioDone = config.isPortfolioDone;
           this.isBlogDone = config.isBlogDone;
           this.isDownloadCVDone = config.isDownloadCVDone;
         },
         error: (error) => {
+          this.headerReady = true;
           console.error('Error loading header config:', error);
         }
       });
+
+    const currentTheme =
+      this.webglGradientService.getSavedThemeName() ?? this.webglGradientService.getDefaultThemeName();
+    this.webglGradientService.applyAccentColor(currentTheme);
   }
 
   ngOnDestroy(): void {
@@ -46,19 +53,22 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Apply a random theme to all gradient containers with smooth transition
+   * Apply the next theme (in config order) to all gradient containers with smooth transition
    */
   setRandomTheme(): void {
     // Find all WebGL background containers in the document
     const containers = document.querySelectorAll('[data-gradient-id]');
 
-    const themeName = this.webglGradientService.getRandomThemeName();
+    const currentThemeName =
+      this.webglGradientService.getSavedThemeName() ?? this.webglGradientService.getDefaultThemeName();
+
+    const themeName = this.webglGradientService.getNextThemeName(currentThemeName);
     if (!themeName) {
       return;
     }
 
-    // Persist for next reload.
     this.webglGradientService.saveThemeName(themeName);
+    this.webglGradientService.applyAccentColor(themeName);
 
     const colors = this.webglGradientService.getColorScheme(themeName);
 

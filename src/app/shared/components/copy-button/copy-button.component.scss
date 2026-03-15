@@ -1,0 +1,106 @@
+@import '../../../../assets/styles/utility';
+
+.copy-button {
+  // Base styles
+  appearance: none;
+  -webkit-appearance: none;
+  border: none;
+  background: transparent;
+  color: var(--color-dark-heading);
+  border-radius: var(--radius-12);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: rem(32px);
+  height: rem(32px);
+  box-sizing: border-box;
+  position: relative;
+  transition:
+    color var(--transition-fast) var(--transition-easing),
+    text-shadow var(--transition-fast) var(--transition-easing);
+
+  // Icon containers
+  &__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 1;
+    transition:
+      opacity var(--transition-normal) var(--transition-easing),
+      transform var(--transition-normal) var(--transition-easing);
+
+    i {
+      font-size: rem(14px);
+    }
+
+    &--success,
+    &--error {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transform: scale(0.5);
+    }
+  }
+
+  // Success state
+  &--success {
+    color: var(--copy-success-color, #4ade80);
+
+    .copy-button__icon--idle {
+      opacity: 0;
+      transform: scale(0.5);
+    }
+
+    .copy-button__icon--success {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  // Error state
+  &--error {
+    color: var(--color-dark-error);
+
+    .copy-button__icon--idle {
+      opacity: 0;
+      transform: scale(0.5);
+    }
+
+    .copy-button__icon--error {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  // Interaction states
+  &:hover,
+  &:active {
+    @extend .text-glow-12;
+  }
+
+  &:focus-visible {
+    outline: rem(2px) solid var(--color-dark-accent);
+    outline-offset: rem(2px);
+    @extend .text-glow-12;
+  }
+
+  // Hover enhancement for idle state
+  &:not(&--success):not(&--error):hover {
+    .copy-button__icon--idle {
+      transform: scale(1.1);
+    }
+  }
+
+  // Touch target sizing for mobile
+  @include respond-tablet-sm {
+    width: rem(44px);
+    height: rem(44px);
+    touch-action: manipulation;
+
+    &__icon i {
+      font-size: rem(16px);
+    }
+  }
+}

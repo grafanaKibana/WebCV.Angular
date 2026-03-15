@@ -6,9 +6,8 @@
 :host-context(html.intro-animate) app-footer {
   transition:
     opacity 700ms cubic-bezier(0.2, 0.8, 0.2, 1),
-    transform 700ms cubic-bezier(0.2, 0.8, 0.2, 1),
-    filter 700ms cubic-bezier(0.2, 0.8, 0.2, 1);
-  will-change: opacity, transform, filter;
+    transform 700ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  will-change: opacity, transform;
 }
 
 :host-context(html.intro-animate) app-header {
@@ -27,29 +26,30 @@
 :host-context(html.intro-prehide) .wrapper {
   opacity: 0;
   transform: translateY(10px) scale(0.99);
-  filter: blur(6px);
 }
 
 :host-context(html.intro-prehide) app-header {
   opacity: 0;
   transform: translateY(8px);
-  filter: blur(4px);
 }
 
 :host-context(html.intro-prehide) .main-container {
   opacity: 0;
   transform: translateY(12px) scale(0.99);
-  filter: blur(6px);
 }
 
 :host-context(html.intro-prehide) app-footer {
   opacity: 0;
   transform: translateY(12px);
-  filter: blur(6px);
+}
+
+:host-context(html.home-prehide) app-footer {
+  visibility: hidden;
+  pointer-events: none;
 }
 
 .wrapper {
-  margin: var(--spacing-8) rem(190px) 0;
+  margin: var(--spacing-10) rem(200px) 0;
   min-height: var(--app-height, 100vh);
   display: flex;
   flex-direction: column;
@@ -57,7 +57,11 @@
   z-index: 1;
 
   @include respond-desktop {
-    margin: var(--spacing-8) rem(75px) 0;
+    margin: var(--spacing-10) rem(80px) 0;
+  }
+
+  @include respond-laptop {
+    margin: var(--spacing-8) rem(40px) 0;
   }
 
   @include respond-tablet {
@@ -71,10 +75,10 @@
 
   @include respond-tablet-sm {
     margin: 0;
-    padding-top: calc(var(--spacing-2) + var(--safe-top));
-    padding-right: calc(var(--spacing-2) + var(--safe-right));
-    padding-bottom: calc(var(--spacing-2) + var(--safe-bottom));
-    padding-left: calc(var(--spacing-2) + var(--safe-left));
+    padding-top: calc(var(--spacing-3) + var(--safe-top));
+    padding-right: calc(var(--spacing-3) + var(--safe-right));
+    padding-bottom: calc(var(--spacing-3) + var(--safe-bottom));
+    padding-left: calc(var(--spacing-3) + var(--safe-left));
   }
 
   @include respond-mobile {
@@ -91,15 +95,19 @@
   @extend .glass-heavy;
   z-index: 1;
   border-radius: var(--radius-20);
-  padding: var(--spacing-4);
+  padding: var(--spacing-6);
   flex: 1;
 
   @include respond-tablet {
-    padding: var(--spacing-3);
+    padding: var(--spacing-5);
+  }
+
+  @include respond-tablet-sm {
+    padding: var(--spacing-4);
   }
 
   @include respond-mobile {
-    padding: var(--spacing-2);
+    padding: var(--spacing-3);
     border-radius: var(--radius-16);
   }
 }

@@ -2,16 +2,26 @@
 
 .section-item-content {
   ul {
-    list-style: '- ';
-    padding-inline-start: rem(20px);
-    margin: rem(6px) 0 rem(12px) 0;
+    list-style: none;
+    padding-inline-start: 0;
+    margin: rem(8px) 0 rem(12px) 0;
 
     &:last-child {
       margin-bottom: 0;
     }
 
     li {
-      margin-bottom: rem(4px);
+      margin-bottom: rem(8px);
+      padding-left: rem(20px);
+      position: relative;
+
+      &::before {
+        content: '—';
+        position: absolute;
+        left: 0;
+        color: var(--color-dark-accent);
+        font-size: rem(14px);
+      }
 
       &:last-child {
         margin-bottom: 0;

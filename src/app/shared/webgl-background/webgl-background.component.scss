@@ -16,11 +16,16 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   
-  // Smooth background color transition (for CSS fallback)
-  transition: background 0.5s ease-in-out;
+  opacity: 0;
+  transition: opacity 800ms cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity;
   
   // Canvas is always visible - color transitions happen in WebGL shader
   canvas {
     opacity: 1;
   }
-} 
+}
+
+.webgl-background-container.is-ready {
+  opacity: 1;
+}

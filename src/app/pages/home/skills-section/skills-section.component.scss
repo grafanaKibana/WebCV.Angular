@@ -1,102 +1,108 @@
 @import "../home";
 
 section {
-  padding: 0;
+  @include dark-block-full;
+  padding: var(--section-pad);
   margin-bottom: var(--section-gap);
-  box-shadow: none;
-  background: transparent;
+
+  .skills-heading {
+    margin-bottom: var(--spacing-6);
+  }
 
   .skill-wrapper {
-    display: flex;
-    flex-wrap: wrap;
-    gap: rem(12px);
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-5) var(--spacing-6);
+    align-items: stretch;
+    position: relative;
 
-    @include respond-tablet-sm {
-      display: flex;
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 50%;
+      width: 1px;
+      background: var(--color-dark-border);
     }
 
-    .skill-group {
-      width: calc(33.333% - rem(8px));
+    @include respond-tablet-sm {
+      grid-template-columns: repeat(2, 1fr);
+    }
 
-      @include respond-wide {
-        width: calc(50% - rem(6px));
+    @include respond-mobile {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .skill-group {
+    display: flex;
+    align-items: stretch;
+
+    &:nth-child(even) {
+      flex-direction: row-reverse;
+
+      .skill-group-title {
+        transform: none;
+        padding: 0 0 0 var(--spacing-3);
       }
 
-      @include respond-tablet-sm {
-        width: 100%;
+      .skill-tags {
+        border-left: none;
+        border-right: 1px solid var(--color-dark-border);
+        padding-left: 0;
+        padding-right: var(--spacing-3);
       }
+    }
 
-      @include respond-mobile {
-        width: 100%;
-      }
+    &-title {
+      writing-mode: vertical-lr;
+      transform: rotate(180deg);
+      color: var(--color-dark-paragraph);
+      font-size: rem(11px);
+      font-family: var(--font-family-mono);
+      font-weight: 400;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin: 0;
+      padding: 0 0 0 var(--spacing-3);
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
 
-      > h3 {
-        margin-left: rem(6px);
-      }
+    .skill-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--spacing-2);
+      flex: 1;
+      align-content: space-evenly;
+      border-left: 1px solid var(--color-dark-border);
+      padding-left: var(--spacing-3);
 
-      &-item {
-        margin-bottom: rem(10px);
-        padding: rem(10px) rem(18px);
-        border-radius: var(--radius-16);
-        @extend .box-shadow-8;
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-between;
-        align-items: center;
+      .skill-tag {
+        @include dark-block-base(
+          $bg: rgba(15, 20, 25, 0.3),
+          $radius: var(--radius-8),
+          $blur: 6px
+        );
+        @include interactive-glow();
+        box-sizing: border-box;
+        flex: 1 1 var(--tag-basis, 33%);
+        padding: rem(6px) rem(12px);
+        font-size: rem(12px);
+        font-weight: 400;
+        color: var(--color-dark-paragraph-bright);
+        border: 1px solid var(--color-dark-border);
+        cursor: default;
+        line-height: 1.4;
+        text-align: center;
+        white-space: nowrap;
 
-        .skill-title {
-          h4 {
-            display: inline;
-            margin: 0;
-          }
-        }
-
-        &-level {
-          color: var(--color-dark-paragraph);
-          font-weight: 500;
-          font-size: rem(12px);
-          text-transform: uppercase;
-          text-align: right;
-
-          /* &::before {
-            margin: 0 rem(4px);
-            color: var(--color-dark-paragraph);
-            content: '•';
-          } */
-        }
-
-        .progress-bar {
-          display: flex;
-          border-radius: var(--radius-16);
-          overflow: inherit;
-          position: relative;
-          width: 100%;
-          gap: rem(10px);
-          margin-top: rem(8px);
-
-          span {
-            margin: rem(3px) 0;
-            border-radius: var(--progress-radius);
-            display: block;
-            overflow: hidden;
-            position: relative;
-            height: var(--progress-height);
-            width: 100%;
-            transition: width .6s ease-in-out;
-
-            &.active {
-              background: var(--progress-fill-color);
-              @extend .box-glow-12
-            }
-
-            &.inactive {
-              background: var(--progress-track-color);
-            }
-          }
-        }
-
-        &:last-child {
-          margin-bottom: 0;
+        &:hover {
+          cursor: default;
         }
       }
     }

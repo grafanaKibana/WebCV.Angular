@@ -1,4 +1,5 @@
-<ng-container *ngIf="article; else missingArticle">
+<ng-container *ngIf="articleLoaded">
+  <ng-container *ngIf="article; else missingArticle">
   <section class="blog-hero">
     <div class="blog-hero__content">
       <div class="blog-hero__top">
@@ -18,16 +19,13 @@
               rel="noopener noreferrer">
               <i [class]="share.iconClass"></i>
             </a>
-            <button
-              class="blog-share__button"
-              [class.blog-share__button--success]="copySuccess"
-              type="button"
-              [attr.aria-label]="copyLabel"
-              [attr.title]="copyLabel"
-              (click)="copyLink()">
-              <i class="fa-solid fa-link" [class.hidden]="copySuccess"></i>
-              <i class="fa-solid fa-check" [class.hidden]="!copySuccess"></i>
-            </button>
+            <app-copy-button
+              [text]="currentUrl"
+              idleIcon="fa-solid fa-link"
+              idleLabel="Copy link"
+              successLabel="Link copied!"
+              buttonClass="blog-share__button">
+            </app-copy-button>
           </div>
         </div>
         <h1 class="blog-hero__title">{{article.headline}}</h1>
@@ -74,18 +72,19 @@
     <div #contentBody class="blog-content__body" [innerHTML]="contentHtml"></div>
   </section>
 
-</ng-container>
+  </ng-container>
 
-<ng-template #missingArticle>
-  <section class="blog-intro">
-    <p class="blog-intro__eyebrow">Blog</p>
-    <h1 class="blog-intro__title">Article not found</h1>
-    <p class="blog-intro__lead">
-      The link might be outdated. Head back to the blog list to pick another post.
-    </p>
-    <a class="blog-back" routerLink="/blog">
-      <span>&larr;</span>
-      Back to blog
-    </a>
-  </section>
-</ng-template>
+  <ng-template #missingArticle>
+    <section class="blog-intro">
+      <p class="blog-intro__eyebrow">Blog</p>
+      <h1 class="blog-intro__title">Article not found</h1>
+      <p class="blog-intro__lead">
+        The link might be outdated. Head back to the blog list to pick another post.
+      </p>
+      <a class="blog-back" routerLink="/blog">
+        <span>&larr;</span>
+        Back to blog
+      </a>
+    </section>
+  </ng-template>
+</ng-container>

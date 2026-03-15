@@ -9,6 +9,7 @@ import { HomeDataService, SidebarInfo } from '../../services/home-data.service';
   styleUrls: ['./sidebar.component.scss']
 })
 export class SidebarComponent implements OnInit, OnDestroy {
+  sidebarReady = false;
   sidebarInfo: SidebarInfo = {
     firstName: '',
     lastName: '',
@@ -40,10 +41,12 @@ export class SidebarComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (data: SidebarInfo) => {
+          this.sidebarReady = true;
           this.sidebarInfo = data;
           this.links = data.links;
         },
         error: (error) => {
+          this.sidebarReady = true;
           console.error('Error loading sidebar data:', error);
         }
       });
@@ -54,4 +57,3 @@ export class SidebarComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 }
-

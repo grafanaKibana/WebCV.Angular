@@ -12,13 +12,16 @@ import { DynamicReflectionService } from './services/dynamic-reflection.service'
   animations: [
     trigger('routeAnimations', [
       transition('* <=> *', [
+        query(':leave', [
+          style({
+            display: 'none'
+          })
+        ], { optional: true }),
         query(':enter', [
           style({
             transform: 'translateY(20px)'
           }),
-          animate('350ms cubic-bezier(0.4, 0.0, 0.2, 1)',
-            style({ transform: 'translateY(0)' })
-          )
+          animate('350ms cubic-bezier(0.4, 0.0, 0.2, 1)', style({ transform: 'translateY(0)' }))
         ], { optional: true })
       ])
     ])

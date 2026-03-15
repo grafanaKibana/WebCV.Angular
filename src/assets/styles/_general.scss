@@ -7,23 +7,22 @@
 
 :root {
   // Layout spacing tokens (responsive overrides)
-  // Baseline: matches the blog post mobile “feel” (less cramped than the old global mobile section padding).
-  --page-pad: var(--spacing-4);
-  --section-pad: var(--spacing-5);
-  --section-gap: var(--spacing-4);
+  --page-pad: var(--spacing-6);
+  --section-pad: var(--spacing-8);
+  --section-gap: var(--spacing-6);
 }
 
 @include respond-tablet {
   :root {
-    --section-pad: var(--spacing-5);
-    --section-gap: var(--spacing-4);
+    --section-pad: var(--spacing-6);
+    --section-gap: var(--spacing-5);
   }
 }
 
 @include respond-tablet-sm {
   :root {
-    --section-pad: var(--spacing-4);
-    --section-gap: var(--spacing-3);
+    --section-pad: var(--spacing-5);
+    --section-gap: var(--spacing-4);
   }
 }
 
@@ -37,6 +36,7 @@
 html {
   scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch;
+  transition: --accent-r 1.5s ease, --accent-g 1.5s ease, --accent-b 1.5s ease;
 }
 
 body {
@@ -67,4 +67,10 @@ section {
   @extend .box-shadow-8;
   background: var(--color-dark-wrapper-background);
   border-radius: var(--radius-8);
+}
+
+// Selection color
+::selection {
+  background-color: var(--color-dark-accent-tint);
+  color: var(--color-dark-accent);
 }

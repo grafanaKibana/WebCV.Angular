@@ -4,6 +4,7 @@ import { BlogPageComponent } from './blog-page/blog-page.component';
 import { BlogItemComponent } from './blog-item/blog-item.component';
 import { BlogDetailPageComponent } from './blog-detail-page/blog-detail-page.component';
 import { RouterModule } from '@angular/router';
+import { SharedModule } from '../../shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -13,7 +14,8 @@ import { RouterModule } from '@angular/router';
   ],
   imports: [
     CommonModule,
-    RouterModule
+    RouterModule,
+    SharedModule
   ]
 })
 export class BlogModule { }

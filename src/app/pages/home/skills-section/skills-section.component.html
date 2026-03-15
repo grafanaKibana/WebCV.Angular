@@ -1,20 +1,11 @@
 <section>
+  <h2 class="numbered-heading skills-heading"><span class="section-number">04.</span> Skills & Technologies</h2>
   <div class="skill-wrapper">
-    <ng-container *ngFor="let skillGroup of skills">
-      <!-- Skill group -->
-      <div class="skill-group">
-        <h3>{{skillGroup.name}}</h3>
-        <div *ngFor="let skill of skillGroup.skills" class="skill-group-item dark-block">
-          <div class="skill-title">
-            <h4>{{skill.technology}}</h4>
-          </div>
-          <span class="skill-group-item-level">{{getSkillLevelName(skill.level)}}</span>
-          <div class="progress-bar">
-            <span *ngFor="let level of [].constructor(skill.level)" class="active" role="progressbar"></span>
-            <span *ngFor="let level of [].constructor(3 - skill.level)" class="inactive" role="progressbar"></span>
-          </div>
-        </div>
+    <div *ngFor="let skillGroup of skills" class="skill-group">
+      <h3 class="skill-group-title">{{skillGroup.name}}</h3>
+      <div class="skill-tags" [style.--tag-basis]="getTagBasis(skillGroup.skills.length)">
+        <span *ngFor="let skill of skillGroup.skills" class="skill-tag">{{skill.technology}}</span>
       </div>
-    </ng-container>
+    </div>
   </div>
 </section>

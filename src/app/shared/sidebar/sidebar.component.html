@@ -1,61 +1,34 @@
-<aside>
-  <div class="aside-heading">
-    <div class="img-wrapper">
+<aside *ngIf="sidebarReady" class="profile">
+  <div class="profile__left">
+    <div class="profile__avatar">
       <img src="./assets/images/my-emoji.png" alt="Character">
     </div>
-    <h2>{{sidebarInfo.firstName}} {{sidebarInfo.lastName}}</h2>
-    <span class="dark-block position-title">{{sidebarInfo.positionTitle}}</span>
+    <div class="profile__identity">
+      <h2 class="profile__name">{{sidebarInfo.firstName}} {{sidebarInfo.lastName}}</h2>
+      <span class="profile__title">{{sidebarInfo.positionTitle}}</span>
+    </div>
   </div>
 
-  <app-vertical-separator></app-vertical-separator>
-  <app-horizontal-separator></app-horizontal-separator>
-
-  <div class="aside-body text-center">
-    <ul>
-      <li *ngIf="sidebarInfo.positionTitle">
-        <div class="icon-box">
-          <i class="fa-solid fa-map-pin"></i>
-        </div>
-        <div>
-          <span class="overhead">Location:</span>
-          <span class="list-content">{{sidebarInfo.city}}, {{sidebarInfo.country}}</span>
-        </div>
-      </li>
-      <li *ngIf="sidebarInfo.email">
-        <div class="icon-box">
-          <i class="fa-solid fa-at"></i>
-        </div>
-        <div>
-          <span class="overhead">Email:</span>
-          <span class="list-content">{{sidebarInfo.email}}</span>
-        </div>
-      </li>
-      <li *ngIf="sidebarInfo.phone">
-        <div class="icon-box">
-          <i class="fa-solid fa-phone"></i>
-        </div>
-        <div>
-          <span class="overhead">Phone:</span>
-          <span class="list-content">{{sidebarInfo.phone}}</span>
-        </div>
-      </li>
-      <li *ngIf="sidebarInfo.telegram">
-        <div class="icon-box">
-          <i class="fa-solid fa-paper-plane"></i>
-        </div>
-        <div>
-          <span class="overhead">Telegram:</span>
-          <span class="list-content">{{sidebarInfo.telegram}}</span>
-        </div>
-      </li>
-    </ul>
-
-    <app-horizontal-separator></app-horizontal-separator>
-
-    <div class="ju-social">
-      <a *ngIf="links.gitHubLink" [href]='links.gitHubLink' target="_blank" class="fa-brands fa-github-alt"></a>
-      <a *ngIf="links.linkedInLink" [href]='links.linkedInLink' target="_blank" class="fa-brands fa-linkedin-in"></a>
-      <a *ngIf="links.repositoryLink" [href]='links.repositoryLink' target="_blank" class="fa-solid fa-code-branch"></a>
+  <div class="profile__right">
+    <div class="profile__contact">
+      <span *ngIf="sidebarInfo.city" class="profile__contact-item">
+        <i class="fa-solid fa-map-pin"></i>{{sidebarInfo.city}}, {{sidebarInfo.country}}
+      </span>
+      <span *ngIf="sidebarInfo.email" class="profile__contact-item">
+        <i class="fa-solid fa-at"></i>{{sidebarInfo.email}}
+      </span>
+      <span *ngIf="sidebarInfo.phone" class="profile__contact-item">
+        <i class="fa-solid fa-phone"></i>{{sidebarInfo.phone}}
+      </span>
+      <span *ngIf="sidebarInfo.telegram" class="profile__contact-item">
+        <i class="fa-solid fa-paper-plane"></i>{{sidebarInfo.telegram}}
+      </span>
+    </div>
+    <div class="profile__separator"></div>
+    <div class="profile__socials">
+      <a *ngIf="links.gitHubLink" [href]='links.gitHubLink' target="_blank" aria-label="GitHub"><i class="fa-brands fa-github-alt"></i></a>
+      <a *ngIf="links.linkedInLink" [href]='links.linkedInLink' target="_blank" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+      <a *ngIf="links.repositoryLink" [href]='links.repositoryLink' target="_blank" aria-label="Source code"><i class="fa-solid fa-code-branch"></i></a>
     </div>
   </div>
 </aside>

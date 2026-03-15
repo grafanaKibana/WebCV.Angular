@@ -27,9 +27,21 @@ $baseSystemFontSize: 16px;
   inherits: true;
 }
 
-@property --progress-sweep-t {
+@property --accent-r {
   syntax: '<number>';
-  initial-value: 0;
+  initial-value: 100;
+  inherits: true;
+}
+
+@property --accent-g {
+  syntax: '<number>';
+  initial-value: 255;
+  inherits: true;
+}
+
+@property --accent-b {
+  syntax: '<number>';
+  initial-value: 218;
   inherits: true;
 }
 
@@ -37,8 +49,8 @@ $baseSystemFontSize: 16px;
   // Font settings
   --font-family: 'Poppins', sans-serif;
   --font-base-size: 16px;
-  --font-tablet-size: 13px;
-  --font-mobile-size: 11px;
+  --font-tablet-size: 14px;
+  --font-mobile-size: 13px;
   --font-family-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
 
   // Mobile viewport + safe-area support
@@ -52,42 +64,23 @@ $baseSystemFontSize: 16px;
   --color-dark-block-background: rgba(15, 20, 25, 0.35);
   --color-dark-wrapper-background: rgba(10, 15, 20, 0.65);
   --color-dark-opaque-background: rgba(30, 35, 40, 0.95);
-  --color-dark-heading: #FCFCFC;
-  --color-dark-paragraph: #E0E0E0;
-  --color-dark-accent: rgba(164, 229, 250, 0.8);
-  --color-dark-neon-glow: rgb(0, 187, 255);
-  --color-dark-gray-glow: rgba(255, 255, 255, 0.2);
-  --color-dark-border: rgba(255, 255, 255, 0.125);
-  --color-dark-separator: rgba(255, 255, 255, 0.125);
+  --color-dark-heading: #e6f1ff;
+  --color-dark-paragraph: #a8b2d1;
+  --color-dark-paragraph-bright: #ccd6f6;
+  --color-dark-accent: rgb(var(--accent-r), var(--accent-g), var(--accent-b));
+  --color-dark-accent-tint: rgba(var(--accent-r), var(--accent-g), var(--accent-b), 0.1);
+  --color-dark-neon-glow: rgb(var(--accent-r), var(--accent-g), var(--accent-b));
+  --color-dark-gray-glow: rgba(255, 255, 255, 0.15);
+  --color-dark-border: rgba(255, 255, 255, 0.1);
+  --color-dark-separator: rgba(255, 255, 255, 0.1);
   --color-dark-error: #B84C4C;
+  --color-dark-muted: #8892b0;
 
-  // Progress (shared tokens)
-  --progress-height: 8px;
-  --progress-radius: 3px;
-  --progress-track-color: var(--color-dark-border);
-  --progress-fill-color: var(--color-dark-heading);
-  --progress-sweep-width-frac: 0.5;
-  --progress-sweep-width: calc(100% * var(--progress-sweep-width-frac));
-  --progress-sweep-height: 200%;
-  --progress-sweep-edge-fade-frac: 0.08;
-  --progress-sweep-edge-fade-frac-inv: calc(1 / var(--progress-sweep-edge-fade-frac));
-  --progress-sweep-fade-exp: 0.7;
-  --progress-sweep-wrap-start-clip: 0.5;
-  --progress-sweep-core-color: rgba(255, 255, 255, 0.95);
-  --progress-sweep-core-stop: 20%;
-  --progress-sweep-mid-stop: 50%;
-  --progress-sweep-edge-stop: 75%;
-  --progress-sweep-blur: #{rem(0.6px)};
-  --progress-sweep-duration: 1s;
-  --progress-glow-color: rgba(0, 187, 255, 0.9);
-  --progress-glow-core-white: 30%;
-  --progress-glow-core-stop: 35%;
-  --progress-glow-edge-stop: 70%;
-  --progress-glow-blur: #{rem(8px)};
-  --progress-glow-bleed: #{rem(6px)};
-  --progress-glow-height: 80%;
-  --progress-glow-spread: #{rem(8px)};
-  --progress-glass-blur: #{rem(24px)};
+  // Copy button colors
+  --copy-success-color: #4ade80;
+  --copy-success-glow: rgba(74, 222, 128, 0.4);
+  --copy-error-color: var(--color-dark-error);
+  --copy-error-glow: rgba(184, 76, 76, 0.4);
 
   // Note: Composed colors (--reflection-color, etc.) inherit transitions
   // from their component RGB values via @property declarations above
@@ -103,6 +96,8 @@ $baseSystemFontSize: 16px;
   --spacing-10: 40px;
   --spacing-12: 48px;
   --spacing-16: 64px;
+  --spacing-20: 80px;
+  --spacing-24: 96px;
 
   // Common spacing variables
   --spacing-xs: var(--spacing-1);
@@ -115,9 +110,9 @@ $baseSystemFontSize: 16px;
 
   // Layout spacing tokens (systemized)
   // NOTE: Responsive values are overridden in `src/assets/styles/_general.scss`.
-  --page-pad: var(--spacing-4);
-  --section-pad: var(--spacing-6);
-  --section-gap: var(--spacing-4);
+  --page-pad: var(--spacing-6);
+  --section-pad: var(--spacing-8);
+  --section-gap: var(--spacing-6);
 
   // Transition Timing
   --transition-fast: 0.15s;
@@ -149,18 +144,16 @@ $baseSystemFontSize: 16px;
   --reflection-angle: 40deg;
 
   // Composed colors using RGB values
-  --reflection-color: rgba(var(--reflection-r), var(--reflection-g), var(--reflection-b), 0.08);
-  --reflection-color-subtle: rgba(var(--reflection-r), var(--reflection-g), var(--reflection-b), 0.06);
-  --reflection-color-strong: rgba(var(--reflection-r), var(--reflection-g), var(--reflection-b), 0.12);
+  --reflection-color: rgba(var(--reflection-r), var(--reflection-g), var(--reflection-b), 0.12);
+  --reflection-color-subtle: rgba(var(--reflection-r), var(--reflection-g), var(--reflection-b), 0.08);
+  --reflection-color-strong: rgba(var(--reflection-r), var(--reflection-g), var(--reflection-b), 0.16);
   --reflection-edge-color: rgba(var(--reflection-r), var(--reflection-g), var(--reflection-b), 0.25);
   --reflection-edge-glint: rgba(var(--reflection-r), var(--reflection-g), var(--reflection-b), 0.5);
   --reflection-tip-glint: rgba(var(--reflection-r), var(--reflection-g), var(--reflection-b), 0.85);
 
   // Smooth transitions for RGB values and angle
-  // Duration matches updateThrottle (1s) for seamless interpolation between frames
-  // Using linear easing ensures constant velocity, preventing jarring stops/starts
-  transition: --reflection-r 1s linear,
-              --reflection-g 1s linear,
-              --reflection-b 1s linear,
-              --reflection-angle 1s linear;
+  transition: --reflection-r 0.5s ease-out,
+              --reflection-g 0.5s ease-out,
+              --reflection-b 0.5s ease-out,
+              --reflection-angle 0.5s ease-out;
 }

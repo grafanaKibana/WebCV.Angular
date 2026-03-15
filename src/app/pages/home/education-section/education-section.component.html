@@ -1,5 +1,5 @@
 <section class="dark-block">
-  <h2>Education</h2>
+  <h2 class="numbered-heading"><span class="section-number">03.</span> Education</h2>
   <div class="section-item-body">
     <div *ngFor="let education of educationList" class="section-item">
       <div class="section-item-head">
@@ -8,9 +8,7 @@
           <span>{{education.degree}} degree of {{education.speciality}}</span>
         </div>
       </div>
-      <div *ngIf="education.description" class="section-item-content">
-        <p style="white-space: pre-line;">{{education.description}}</p>
-      </div>
+
     </div>
   </div>
 </section>
