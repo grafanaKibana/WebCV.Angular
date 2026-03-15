@@ -501,7 +501,7 @@
 .blog-content {
   @extend .dark-block;
   padding: var(--spacing-8);
-  margin: 0;
+  margin-bottom: 0;
 
   @include respond-tablet {
     padding: var(--spacing-6);

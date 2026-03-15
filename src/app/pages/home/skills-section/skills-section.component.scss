@@ -3,7 +3,6 @@
 section {
   @include dark-block-full;
   padding: var(--section-pad);
-  margin-bottom: var(--section-gap);
 
   .skills-heading {
     margin-bottom: var(--spacing-6);

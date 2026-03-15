@@ -53,23 +53,12 @@ section {
       background-color: var(--color-dark-heading);
       left: -5px;
       top: var(--spacing-2);
-    }
-
-    &::after {
-      content: '';
-      position: absolute;
-      left: 0;
-      top: 0;
-      bottom: 0;
-      width: rem(2px);
-      background: var(--color-dark-paragraph);
-      opacity: 0;
-      transition: opacity var(--transition-normal) ease;
+      transition: filter var(--transition-fast) var(--transition-easing);
     }
 
     @media (hover: hover) and (pointer: fine) {
-      &:hover::after {
-        opacity: 1;
+      &:hover::before {
+        filter: brightness(1.4);
       }
     }
 
