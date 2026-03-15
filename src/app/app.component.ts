@@ -4,10 +4,28 @@ import { Subject } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
 import { trigger, transition, style, animate, query } from '@angular/animations';
 import { DynamicReflectionService } from './services/dynamic-reflection.service';
+import { SeoService, PageMeta } from './services/seo.service';
 import { HeaderComponent } from './shared/header/header.component';
 import { FooterComponent } from './shared/footer/footer.component';
 import { IntroOverlayComponent } from './shared/intro-overlay/intro-overlay.component';
 import { WebGLBackgroundComponent } from './shared/webgl-background/webgl-background.component';
+
+const ROUTE_META: Record<string, PageMeta> = {
+  '/': {
+    title: 'Nikita Reshetnik — Senior AI Engineer',
+    path: '/',
+  },
+  '/blog': {
+    title: 'Blog | Nikita Reshetnik',
+    description: 'Articles on AI engineering, .NET, LLMs, and software development by Nikita Reshetnik.',
+    path: '/blog',
+  },
+  '/portfolio': {
+    title: 'Portfolio | Nikita Reshetnik',
+    description: 'Projects and work by Nikita Reshetnik — Senior AI Engineer.',
+    path: '/portfolio',
+  },
+};
 
 @Component({
   selector: 'app-root',
@@ -40,6 +58,7 @@ export class AppComponent implements OnDestroy {
   private readonly router = inject(Router);
   private readonly contexts = inject(ChildrenOutletContexts);
   private readonly dynamicReflectionService = inject(DynamicReflectionService);
+  private readonly seoService = inject(SeoService);
 
   constructor() {
     this.router.events
@@ -58,7 +77,8 @@ export class AppComponent implements OnDestroy {
         takeUntil(this.destroy$)
       )
       .subscribe((event) => {
-        const fragment = this.router.parseUrl(event.urlAfterRedirects).fragment;
+        const url = event.urlAfterRedirects;
+        const fragment = this.router.parseUrl(url).fragment;
         if (fragment) {
           return;
         }
@@ -66,6 +86,17 @@ export class AppComponent implements OnDestroy {
         requestAnimationFrame(() => {
           this.dynamicReflectionService.applyLastReflection();
         });
+
+        const path = url.split('?')[0].split('#')[0];
+        const meta = ROUTE_META[path];
+        if (meta) {
+          this.seoService.updatePageMeta(meta);
+        } else if (path.startsWith('/blog/')) {
+          this.seoService.updatePageMeta({
+            title: 'Blog | Nikita Reshetnik',
+            path,
+          });
+        }
       });
   }
 
