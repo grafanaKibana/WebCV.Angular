@@ -1,8 +1,16 @@
-// Media
-$small-sm: 320px;
-$small: 580px;
-$medium: 768px;
-$large: 991px;
-$large-xl: 1200px;
-$large-xxl: 1500px;
-$large-xxxl: 2400px;
+// Responsive Breakpoints
+// Desktop-first approach (max-width)
+
+// Device breakpoints
+// Ultrawide breakpoints (min-width - content expands)
+$breakpoint-ultrawide: 2560px;   // 2K QHD monitors
+$breakpoint-superwide: 3440px;   // 21:9 ultrawide displays
+$breakpoint-megawide: 5120px;    // 32:9 super ultrawide / 5K displays
+$breakpoint-wide: 1920px;     // Wide monitors
+$breakpoint-desktop: 1440px;  // Standard desktop monitors
+$breakpoint-laptop: 1200px;   // Laptops
+$breakpoint-tablet: 992px;    // Tablets landscape
+$breakpoint-tablet-sm: 768px; // Tablets portrait
+$breakpoint-mobile: 576px;    // Mobile landscape
+$breakpoint-mobile-sm: 375px; // Mobile portrait
+$breakpoint-mobile-xs: 320px;    // iPhone SE, accessibility (400% zoom)

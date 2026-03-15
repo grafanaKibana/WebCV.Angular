@@ -1,0 +1,31 @@
+.webgl-background-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: var(--app-height, 100vh);
+  z-index: -1;
+  overflow: hidden;
+  
+  // Force hardware acceleration
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000;
+  
+  // Ensure smooth rendering
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  
+  opacity: 0;
+  transition: opacity 800ms cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity;
+  
+  // Canvas is always visible - color transitions happen in WebGL shader
+  canvas {
+    opacity: 1;
+  }
+}
+
+.webgl-background-container.is-ready {
+  opacity: 1;
+}

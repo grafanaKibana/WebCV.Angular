@@ -1,54 +1,35 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { EducationModel } from '../interfaces/educationModel';
+import { HomeDataService } from '../../../services/home-data.service';
 
 @Component({
   selector: 'app-education-section',
   templateUrl: './education-section.component.html',
   styleUrls: ['./education-section.component.scss']
 })
-export class EducationSectionComponent implements OnInit {
-  @Input() collapsing= true;
+export class EducationSectionComponent implements OnInit, OnDestroy {
+  educationList: Array<EducationModel> = [];
+  private readonly destroy$ = new Subject<void>();
 
-  expanded = new Set<number>();
-
-  getToggleState = (index: number) => {
-    return this.toggleState.bind(this, index)
-  }
-
-  toggleState = (index: number) => {
-    if (this.expanded.has(index)) {
-      this.expanded.delete(index);
-    } else {
-      if (this.collapsing) {
-        this.expanded.clear();
-      }
-      this.expanded.add(index);
-    }
-  }
-
-  educationList: Array<EducationModel> = [
-    {
-      educationalInstitution: 'State University of Telecommunication',
-      degree: 'Bachelor',
-      speciality: 'Computer science',
-      startYear: '2019',
-      endYear: '2023',
-      description: 'In the course, I got educational experience of developing C# applications, аlso designing it from UML diagrams, UX / UI, front-end development, to back-end development using a database, design patterns, and a lot more.',
-    },
-    {
-      educationalInstitution: 'University of Cambridge',
-      degree: 'Master',
-      speciality: 'Computer science',
-      startYear: '2023',
-      endYear: '2025',
-      description: 'Countless faiths will be lost in deaths like turbulences in sonic showers All the tragedies will be lost in sensors like stigmas in disconnections dozens of procedures will be lost in coordinates like minerals in moons.'
-    }
-  ]
-
-  constructor() {
-  }
+  constructor(private homeDataService: HomeDataService) {}
 
   ngOnInit(): void {
+    this.homeDataService.getEducation()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (data: EducationModel[]) => {
+          this.educationList = data;
+        },
+        error: (error) => {
+          console.error('Error loading education data:', error);
+        }
+      });
   }
 
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 }

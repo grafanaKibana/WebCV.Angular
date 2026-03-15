@@ -1,166 +1,46 @@
 @import '../../../assets/styles/utility';
 
 footer {
-  background-color: var(--color-dark-wrapper-background);
-  backdrop-filter: blur(20px) saturate(0);
-  -webkit-backdrop-filter: blur(20px) saturate(0);
-  box-shadow:
-    0 0 7.7px rgba(0, 0, 0, 0.033),
-    0 0 16.1px rgba(0, 0, 0, 0.063),
-    0 0 26.9px rgba(0, 0, 0, 0.091),
-    0 0 45.9px rgba(0, 0, 0, 0.119),
-    0 0 110px rgba(0, 0, 0, 0.15);
+  @extend .shadow-medium;
+  @extend .glass-heavy;
   border-radius: var(--radius-20) var(--radius-20) 0 0;
-  margin-top: rem(26px);
-  padding: rem(18px);
+  margin-top: var(--spacing-6);
+  padding: var(--spacing-5) var(--spacing-6);
 
-  @media only screen and (max-width: $large) {
-    padding: rem(14px);
+  @include respond-tablet-sm {
+    margin-top: var(--spacing-4);
+    padding: var(--spacing-4);
   }
 
-  @media only screen and (max-width: $medium) {
-    margin-top: rem(18px);
-  }
-
-  @media only screen and (max-width: $small) {
-    padding: rem(16px);
-  }
-
-
-  h2 {
-    text-align: center;
-  }
-
-  form {
-    display: grid;
-    gap: rem(26px);
-
-    grid-template-areas:
-      "N S"
-      "M M"
-      "B B";
-
-    @media only screen and (max-width: $medium) {
-      gap: rem(16px);
-      grid-template-areas:
-      "N N"
-      "S S"
-      "M M"
-      "B B";
-    }
-
-    .name-input {
-      grid-area: N;
-      //border: 1px solid var(--color-dark-border);
-      background-color: var(--color-dark-block-background);
-    }
-
-    .surname-input {
-      grid-area: S;
-      //border: 1px solid var(--color-dark-border);
-      background-color: var(--color-dark-block-background);
-    }
-
-    .message-area {
-      grid-area: M;
-      //border: 1px solid var(--color-dark-border);
-      background-color: var(--color-dark-block-background);
-    }
-
-    .submit-button {
-      background-color: var(--color-dark-block-background);
-      grid-area: B;
-      border: 0 solid var(--color-dark-border);
-      border-radius: var(--radius-8);
-      color: var(--color-dark-paragraph);
-      margin-bottom: rem(64px);
-      padding: rem(12px);
-
-      &:hover {
-        @extend .text-glow-12;
-        //text-shadow: 0 0 10px var(--color-dark-neon-glow);
-        filter: brightness(1.5);
-        cursor: pointer;
-        transition: all .1s ease-out;
-      }
-
-      &:active {
-        //filter: brightness(1.75);
-        @extend .text-glow-16;
-        box-shadow: 0 0 8px var(--color-dark-block-background);
-        transition: all .05s ease-in;
-      }
-
-      @media only screen and (max-width: $medium) {
-        border-radius: var(--radius-12);
-      }
-    }
-
-    input, textarea {
-      outline: none;
-      padding: rem(12px);
-      border-radius: var(--radius-8);
-      resize: none;
-      border: 0 solid var(--color-dark-border);
-
-      @media only screen and (max-width: $medium) {
-        border-radius: var(--radius-12);
-      }
-
-      &:-webkit-autofill {
-        -webkit-text-fill-color: var(--color-dark-paragraph);
-        font: var(--font-family);
-        -webkit-background-clip: text;
-      }
-
-      &:hover {
-        filter: brightness(1.25);
-        transition: all .1s ease-out;
-      }
-
-      &:focus {
-        box-shadow: 0 0 8px var(--color-dark-block-background);
-        filter: brightness(1.90);
-        transition: all .15s ease-out;
-      }
-
-      &::placeholder {
-        color: var(--color-dark-paragraph);
-      }
-
-      &:-ms-input-placeholder { /* Internet Explorer 10-11 */
-        color: var(--color-dark-paragraph);
-      }
-
-      &::-ms-input-placeholder { /* Microsoft Edge */
-        color: var(--color-dark-paragraph);
-      }
-    }
+  @include respond-mobile {
+    padding: var(--spacing-3);
   }
 
   .credentials {
     text-align: center;
-    color: var(--color-dark-paragraph);
-    filter: brightness(1);
 
     p {
       margin: 0;
+      font-size: rem(13px);
+      font-family: var(--font-family-mono);
+      color: var(--color-dark-paragraph);
+      letter-spacing: 0.01em;
     }
 
     a {
       color: var(--color-dark-heading);
-      text-shadow: 0 0 6px var(--color-dark-neon-glow);
       text-decoration: none;
       font-weight: 500;
 
       &:hover {
-        filter: brightness(1.5);
+        color: var(--color-dark-accent);
+        text-shadow: 0 0 8px rgba(var(--accent-r), var(--accent-g), var(--accent-b), 0.3);
       }
 
       i {
-        margin-left: rem(2px);
-        transform: scale(2);
-        animation: pulse 1s ease-in-out infinite;
+        margin-left: var(--spacing-1);
+        font-size: rem(11px);
+        color: var(--color-dark-heading);
       }
     }
   }

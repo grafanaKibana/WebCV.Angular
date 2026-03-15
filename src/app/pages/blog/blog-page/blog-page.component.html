@@ -1,4 +1,21 @@
-<section class="dark-block">
-  <h1>Blog</h1>
-  <div></div>
+
+<section class="blog-intro" *ngIf="articlesReady">
+  <p class="blog-intro__eyebrow">Blog</p>
+  <h1 class="blog-intro__title">Posts</h1>
+</section>
+
+<section class="blog-grid" *ngIf="articlesReady">
+  <ng-container *ngIf="articles$ | async as articles">
+    <div class="blog-grid__list" *ngIf="articles.length; else emptyState" [@blogItemsAnimation]="listAnimationTick">
+      <app-blog-item
+        *ngFor="let article of articles; trackBy: trackById"
+        [article]="article">
+      </app-blog-item>
+    </div>
+  </ng-container>
+  <ng-template #emptyState>
+    <div class="blog-grid__empty">
+      No posts yet. Check back soon.
+    </div>
+  </ng-template>
 </section>

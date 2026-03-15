@@ -1,0 +1,13 @@
+<div class="modal-header">
+  <h3>Project details</h3>
+  <button mat-dialog-close class="close-dialog-button"><i class="fa-solid fa-xmark"></i></button>
+</div>
+<div class="modal-body">
+  <img src="{{data.imagePath}}">
+  <div class="technology-wrapper">
+    <span class="technology-badge" *ngFor="let technology of data.technologies">{{technology}}</span>
+  </div>
+  <div mat-dialog-content class="content">
+    <p>{{data.description}}</p>
+  </div>
+</div>

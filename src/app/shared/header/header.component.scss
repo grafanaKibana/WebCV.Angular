@@ -1,169 +1,585 @@
-@import './src/assets/styles/utility';
+@import '../../../assets/styles/utility';
+$download-progress-radius: rem(3px);
+$download-progress-glow-bleed: rem(8px);
+$download-progress-glow-color: color-mix(in srgb, var(--color-dark-neon-glow) 72%, #001018);
+$download-progress-glass-blur: rem(24px);
 
-header {
+@keyframes download-progress-sweep {
+  0% {
+    transform: translateX(-50%);
+    opacity: 0;
+  }
+
+  25% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  75% {
+    transform: translateX(150%);
+    opacity: 0;
+  }
+}
+
+@keyframes download-progress-glow {
+  0% {
+    transform: translateX(-50%);
+    opacity: 0;
+  }
+  25% {
+    opacity: var(--download-progress-glow-opacity);
+  }
+
+  50% {
+    opacity: var(--download-progress-glow-opacity);
+  }
+
+  75% {
+    transform: translateX(150%);
+    opacity: 0;
+  }
+}
+
+.header-shell {
   display: flex;
   align-items: center;
-  margin-bottom: rem(18px);
-  background-color: var(--color-dark-wrapper-background);
+  gap: var(--spacing-4);
+  margin-bottom: var(--spacing-6);
+  width: 100%;
+
+  @include respond-tablet-sm {
+    gap: var(--spacing-3);
+    margin-bottom: var(--spacing-4);
+  }
+
+  @include respond-mobile {
+    margin-bottom: var(--spacing-3);
+  }
+}
+
+.header-pill {
+  @extend .shadow-medium;
+  @extend .glass-heavy;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
   border-radius: var(--radius-20);
-  backdrop-filter: blur(20px) saturate(0);
-  -webkit-backdrop-filter: blur(20px) saturate(0);
-  box-shadow:
-    0 0 7.7px rgba(0, 0, 0, 0.033),
-    0 0 16.1px rgba(0, 0, 0, 0.063),
-    0 0 26.9px rgba(0, 0, 0, 0.091),
-    0 0 45.9px rgba(0, 0, 0, 0.119),
-    0 0 110px rgba(0, 0, 0, 0.15);
 
-
-  @media only screen and (max-width: $medium) {
+  @include respond-tablet-sm {
+    display: flex;
+    width: 100%;
     border-radius: var(--radius-16);
   }
+
+  @include respond-mobile {
+    border-radius: var(--radius-12);
+  }
+
+  a,
+  button {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 0.6em 1.2em;
+    border-radius: var(--radius-12);
+    color: var(--color-dark-heading);
+    text-decoration: none;
+    background: transparent;
+    border: 0;
+    font: inherit;
+    font-weight: 400;
+    font-size: rem(14px);
+    letter-spacing: 0.01em;
+    cursor: pointer;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+
+    &:disabled {
+      cursor: default;
+    }
+
+    &.soon {
+      color: var(--color-dark-muted);
+
+      span {
+        color: var(--color-dark-muted);
+        text-decoration: line-through;
+
+        &:after {
+          content: 'soon';
+          display: inline-block;
+          vertical-align: middle;
+          text-transform: uppercase;
+          font-weight: 400;
+          font-size: 9px;
+          font-family: var(--font-family-mono);
+          padding: 2px 6px;
+          margin-left: rem(8px);
+          background-color: var(--color-dark-accent-tint);
+          border-radius: var(--radius-4);
+            border: 1px solid rgba(var(--accent-r), var(--accent-g), var(--accent-b), 0.3);
+          color: var(--color-dark-accent);
+        }
+      }
+
+      &:hover {
+        background-color: transparent;
+        box-shadow: none;
+        text-shadow: none;
+        cursor: pointer;
+      }
+
+      &:active {
+        background-color: transparent;
+        box-shadow: none;
+      }
+
+      i {
+        color: var(--color-dark-muted);
+
+        &:hover {
+          text-shadow: none;
+        }
+      }
+    }
+
+    &:not(.soon) {
+      @include interactive-glow();
+    }
+
+    i {
+      display: none;
+      margin-right: 0.5rem;
+    }
+
+    @include respond-tablet-sm {
+      padding: var(--spacing-3);
+      min-width: 44px;
+      min-height: 44px;
+      justify-content: center;
+
+      span {
+        display: none;
+      }
+
+      i {
+        display: block;
+        margin-right: 0;
+        font-size: rem(18px);
+        text-align: center;
+      }
+
+      &:not(.soon) i:hover {
+        text-shadow: 0 0 10px var(--color-dark-neon-glow);
+      }
+    }
+  }
+
+  .theme-button {
+    i {
+      display: block;
+      margin-right: 0;
+      font-size: rem(18px);
+      text-align: center;
+    }
+
+    &:hover i {
+      text-shadow: 0 0 12px var(--color-dark-neon-glow), 0 0 6px var(--color-dark-accent-tint);
+    }
+  }
+}
+
+.download-button {
+  position: relative;
+  color: var(--color-dark-heading);
+  border: 0;
+  font: inherit;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform var(--transition-fast) var(--transition-easing);
+
+  .download-button-border {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    opacity: 0;
+    z-index: 2;
+    border: 1px solid color-mix(
+      in srgb,
+      var(--color-dark-border) 62%,
+      rgba(var(--reflection-r), var(--reflection-g), var(--reflection-b), 0.45)
+    );
+    filter: saturate(2);
+    transition: opacity var(--transition-fast) var(--transition-easing);
+  }
+
+  &:not(.soon):not(.is-downloading):not(:disabled) .download-button-border {
+    opacity: 1;
+  }
+
+  &:disabled {
+    cursor: default;
+  }
+
+  &.soon {
+    color: var(--color-dark-muted);
+
+    span {
+      color: var(--color-dark-muted);
+      text-decoration: line-through;
+
+      &:after {
+        content: 'soon';
+        display: inline-block;
+        vertical-align: middle;
+        text-transform: uppercase;
+        font-weight: 400;
+        font-size: 9px;
+        font-family: var(--font-family-mono);
+        padding: 2px 6px;
+        margin-left: rem(8px);
+        background-color: var(--color-dark-accent-tint);
+        border-radius: var(--radius-4);
+        border: 1px solid rgba(var(--accent-r), var(--accent-g), var(--accent-b), 0.3);
+        color: var(--color-dark-accent);
+      }
+    }
+
+    &:hover {
+      cursor: pointer;
+    }
+
+    i {
+      color: var(--color-dark-muted);
+    }
+  }
+
+  &.is-downloading {
+    cursor: progress;
+    overflow: hidden;
+  }
+
+  .download-button-content {
+    display: flex;
+    align-items: center;
+    transition: opacity 0.2s ease;
+    font-size: rem(14px);
+    font-weight: 400;
+    letter-spacing: 0.01em;
+  }
+
+  .download-button-content.is-hidden {
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  i {
+    display: block;
+    font-size: rem(18px);
+    margin-right: 0;
+    margin-left: rem(10px);
+  }
+
+  .download-progress {
+    position: absolute;
+    left: 1em;
+    right: 1em;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease;
+    pointer-events: none;
+    z-index: 1;
+    height: rem(8px);
+    border-radius: $download-progress-radius;
+    background: var(--color-dark-border);
+    isolation: isolate;
+    --download-progress-duration: 2s;
+    --download-progress-sweep-width: 50%;
+    --download-progress-glow-opacity: 0.75;
+  }
+
+  .download-progress::before,
+  .download-progress::after,
+  .download-progress > span:first-child::before,
+  .download-progress > span:first-child::after {
+    content: '';
+    position: absolute;
+    border-radius: inherit;
+    opacity: 0;
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    will-change: transform, opacity, filter;
+    pointer-events: none;
+    transform: translateX(-80%);
+    animation-duration: var(--download-progress-duration);
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    animation-name: none;
+    animation-play-state: paused;
+  }
+
+  .download-progress::before,
+  .download-progress::after {
+    top: calc(-1 * #{$download-progress-glow-bleed});
+    bottom: calc(-1 * #{$download-progress-glow-bleed});
+    width: var(--download-progress-sweep-width);
+    left: 0;
+    z-index: 0;
+    border-radius: calc(#{$download-progress-radius} + #{$download-progress-glow-bleed});
+    background-image: radial-gradient(
+      ellipse 125% 50% at center,
+      color-mix(in srgb, #fff 18%, $download-progress-glow-color) 0%,
+      color-mix(in srgb, $download-progress-glow-color 65%, transparent) 35%,
+      transparent 100%
+    );
+    filter: blur(rem(10px));
+    mix-blend-mode: screen;
+    animation-name: download-progress-glow;
+  }
+
+  .download-progress::after {
+    animation-delay: calc(var(--download-progress-duration) / 2);
+  }
+
+  .download-progress > span:first-child {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .download-progress > span:first-child::before,
+  .download-progress > span:first-child::after {
+    top: 0;
+    bottom: 0;
+    width: var(--download-progress-sweep-width);
+    left: 0;
+    z-index: 1;
+    background-size:
+      100% 200%,
+      100% 100%;
+    background-image:
+      radial-gradient(
+        ellipse at center,
+        rgba(255, 255, 255, 0.95) 0%,
+        color-mix(in srgb, var(--color-dark-heading) 70%, transparent) 20%,
+        color-mix(in srgb, var(--color-dark-heading) 45%, transparent) 50%,
+        transparent 75%
+      ),
+      linear-gradient(
+        90deg,
+        transparent 0%,
+        transparent 14%,
+        color-mix(in srgb, var(--color-dark-heading) 8%, transparent) 20%,
+        color-mix(in srgb, var(--color-dark-heading) 14%, transparent) 26%,
+        color-mix(in srgb, var(--color-dark-heading) 22%, transparent) 32%,
+        color-mix(in srgb, var(--color-dark-heading) 32%, transparent) 37%,
+        color-mix(in srgb, var(--color-dark-heading) 44%, transparent) 41%,
+        color-mix(in srgb, var(--color-dark-heading) 58%, transparent) 44%,
+        color-mix(in srgb, var(--color-dark-heading) 72%, transparent) 46%,
+        color-mix(in srgb, var(--color-dark-heading) 86%, transparent) 47.5%,
+        var(--color-dark-heading) 49%,
+        var(--color-dark-heading) 51%,
+        color-mix(in srgb, var(--color-dark-heading) 86%, transparent) 52.5%,
+        color-mix(in srgb, var(--color-dark-heading) 72%, transparent) 54%,
+        color-mix(in srgb, var(--color-dark-heading) 58%, transparent) 56%,
+        color-mix(in srgb, var(--color-dark-heading) 44%, transparent) 59%,
+        color-mix(in srgb, var(--color-dark-heading) 32%, transparent) 63%,
+        color-mix(in srgb, var(--color-dark-heading) 22%, transparent) 68%,
+        color-mix(in srgb, var(--color-dark-heading) 14%, transparent) 74%,
+        color-mix(in srgb, var(--color-dark-heading) 8%, transparent) 80%,
+        transparent 86%,
+        transparent 100%
+      );
+    filter: blur(rem(0.6px));
+    animation-name: download-progress-sweep;
+  }
+
+  .download-progress > span:first-child::after {
+    animation-delay: calc(var(--download-progress-duration) / 2);
+  }
+
+  .download-progress > span:last-child {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    backdrop-filter: blur(#{$download-progress-glass-blur}) saturate(1.1);
+    -webkit-backdrop-filter: blur(#{$download-progress-glass-blur}) saturate(1.1);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    z-index: 2;
+  }
+
+  .download-progress.is-active {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .download-progress.is-active::before,
+  .download-progress.is-active::after,
+  .download-progress.is-active > span:first-child::before,
+  .download-progress.is-active > span:first-child::after {
+    animation-play-state: running;
+  }
+
+  .download-progress.is-active > span:last-child {
+    opacity: 1;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    &:not(.soon):not(.is-downloading):not(:disabled):hover {
+      transform: none;
+    }
+
+    &:not(.soon):not(.is-downloading):not(:disabled):focus-visible,
+    &:not(.soon):not(.is-downloading):not(:disabled):active {
+      transform: none;
+    }
+
+    .download-progress.is-active {
+      animation: none;
+    }
+
+    .download-progress.is-active::before,
+    .download-progress.is-active::after,
+    .download-progress.is-active > span:first-child::before,
+    .download-progress.is-active > span:first-child::after {
+      animation: none;
+    }
+
+    .download-progress.is-active::before,
+    .download-progress.is-active::after {
+      display: none;
+    }
+
+    .download-progress.is-active > span:first-child::before {
+      opacity: 0.4;
+      transform: translateX(20%);
+    }
+
+    .download-progress.is-active > span:first-child {
+      display: block;
+    }
+  }
+
+  @supports not (clip-path: inset(0 0 0 0)) {
+    .download-progress {
+      overflow: hidden;
+    }
+  }
+
+  @include respond-tablet-sm {
+    .download-button-content {
+      width: 100%;
+      justify-content: center;
+    }
+
+    i {
+      margin-left: 0;
+    }
+
+    .download-progress {
+      left: var(--spacing-3);
+      right: var(--spacing-3);
+    }
+  }
+}
+
+.header-nav {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+header {
+  width: 100%;
 
   ul {
     display: flex;
     justify-content: flex-start;
     height: auto;
-    padding: rem(12px) rem(14px);
+    padding: var(--spacing-3);
     margin: 0;
     list-style-type: none;
-    font-weight: 500;
+    font-weight: 400;
     width: 100%;
 
-    @media only screen and (max-width: $medium) {
+    @include respond-tablet-sm {
       justify-content: space-evenly;
-      padding: rem(8px) rem(10px);
-
+      padding: var(--spacing-2);
     }
 
     li {
       display: flex;
-      align-items: center;
-      padding: 0.5em 1em;
-      border-radius: var(--radius-12);
-      color: var(--color-dark-heading);
-      text-decoration: none;
+      align-items: stretch;
 
-      &.soon {
-        span {
-          color: var(--color-dark-paragraph);
-          text-decoration: line-through;
-          
-          &:after {
-            content: 'soon';
-            display: inline-block;
-            text-transform: uppercase;
-            font-weight: 400;
-            font-size: 11px;
-            padding: 0 4px;
-            margin: auto auto;
-            margin-left: rem(6px);
-            background-color: rgba(0, 187, 255, 0.3);
-            border-radius: 4px;
-            border: 1px solid var(--color-dark-neon-glow);
-          }
+      &.right-menu-item {
+        margin-left: auto;
 
+        @include respond-tablet-sm {
+          margin-left: 0;
         }
       }
 
-      &:hover {
-        @extend .text-glow-12;
-        background-color: rgba(0, 0, 0, 0.25);
-        transition: all .05s linear;
-        cursor: pointer;
-
-        .btn-download {
-          @extend .text-glow-12;
-          transition: all .05s linear;
-          cursor: pointer;
-        }
+      @include respond-tablet-sm {
+        flex: 1;
+        justify-content: center;
+        min-width: 0;
       }
+    }
 
-      &:active {
-        box-shadow: 0 0 15px var(--color-dark-block-background);
-        transition: all .05s ease-in;
-      }
+    .header-download-mobile {
+      display: none;
 
-      i, .btn-icon {
-        display: none;
-      }
-
-      .btn-icon > i {
-        margin-right: 0;
-      }
-
-      @media only screen and (max-width: $medium) {
-        padding: rem(12px) 10%;
-
-        span{
-          display: none;
-        }
-
-        i {
-          display: block;
-          margin-right: 0;
-          font-size: rem(20px);
-
-          &:hover {
-            text-shadow: 0 0 10px var(--color-dark-neon-glow);
-          }
-
-          @media only screen and (max-width: $medium) {
-            font-size: 4vw;
-          }
-        }
-
-        @media only screen and (max-width: $medium) {
-          padding: rem(12px) 9%;
-        }
-
-        .btn-icon {
-          padding: 0;
-          display: flex;
-          align-items: center;
-          font-weight: 500;
-          border: none;
-          float: right;
-          border-radius: var(--radius-12);
-          background: none;
-
-          &:hover {
-            cursor: pointer;
-          }
-        }
-      }
-
-      .btn-download {
+      @include respond-tablet-sm {
         display: flex;
-        align-items: center;
-        font-weight: 500;
-        border: none;
-        float: right;
-        color: var(--color-dark-heading);
-        border-radius: var(--radius-12);
-
-        background: none;
-        transition: all .1s linear;
-
-        i {
-          display: block;
-        }
-
-        @media only screen and (max-width: $medium) {
-          display: none;
-        }
       }
     }
   }
 }
 
-.download-button-li {
-  margin-left: auto;
-  @media only screen and (max-width: $medium) {
-    margin-left: unset;
-  }
-}
+.header-download {
+  @extend .shadow-medium;
+  @extend .glass-heavy;
 
-i {
-  margin-right: 0.5rem;
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-3);
+  border-radius: var(--radius-20);
+  transition:
+    background var(--transition-fast) var(--transition-easing),
+    transform var(--transition-fast) var(--transition-easing);
+
+
+  .download-button-content {
+    padding: 0.5em 1em;
+  }
+
+  &:not(.soon):not(.is-downloading) {
+    cursor: pointer;
+
+    &:hover {
+      background: rgba(10, 15, 20, 0.65);
+    }
+  }
+
+  @include respond-tablet-sm {
+    display: none;
+  }
+
+  @include respond-mobile {
+    border-radius: var(--radius-12);
+  }
 }

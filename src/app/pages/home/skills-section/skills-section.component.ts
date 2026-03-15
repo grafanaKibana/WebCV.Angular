@@ -1,97 +1,51 @@
-import { Component, OnInit } from '@angular/core';
-import { SkillsModel } from '../interfaces/skillsModel';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { SkillGroupModel } from '../interfaces/skillModel';
+import { HomeDataService } from '../../../services/home-data.service';
 
 @Component({
   selector: 'app-skills-section',
   templateUrl: './skills-section.component.html',
   styleUrls: ['./skills-section.component.scss']
 })
-export class SkillsSectionComponent implements OnInit {
+export class SkillsSectionComponent implements OnInit, OnDestroy {
+  skills: Array<SkillGroupModel> = [];
+  skillRows: SkillGroupModel[][] = [];
+  private readonly destroy$ = new Subject<void>();
+  private readonly columnsPerRow = 4;
 
-  skills: Array<Array<SkillsModel>> = [
-    [
-      {
-        technology: 'C#',
-        level: 3
-      },
-      {
-        technology: '.NET Core',
-        level: 3
-      },
-      {
-        technology: 'ASP.NET Core',
-        level: 3
-      },
-      {
-        technology: 'EF Core',
-        level: 2
-      },
-      {
-        technology: 'SQL',
-        level: 2
-      },
-      {
-        technology: 'Unit-Testing',
-        level: 2
-      }
-
-    ],
-    [
-      {
-        technology: 'HTML',
-        level: 3
-      },
-      {
-        technology: 'CSS/SCSS',
-        level: 2
-      },
-      {
-        technology: 'TypeScript',
-        level: 1
-      },
-      {
-        technology: 'Angular',
-        level: 1
-      },
-      {
-        technology: 'Figma',
-        level: 2
-      },
-    ],
-    [
-      {
-        technology: 'Kibana',
-        level: 3
-      },
-      {
-        technology: 'Git',
-        level: 2
-      },
-      {
-        technology: 'Jenkins',
-        level: 2
-      },
-      {
-        technology: 'AWS',
-        level: 1
-      },
-      {
-        technology: 'Azure',
-        level: 1
-      },
-      {
-        technology: 'UML',
-        level: 1
-      },
-    ],
-  ]
-
-  constructor() { }
+  constructor(private homeDataService: HomeDataService) {}
 
   ngOnInit(): void {
+    this.homeDataService.getSkills()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (data: SkillGroupModel[]) => {
+          this.skills = data;
+          this.skillRows = [];
+          for (let i = 0; i < data.length; i += this.columnsPerRow) {
+            this.skillRows.push(data.slice(i, i + this.columnsPerRow));
+          }
+        },
+        error: (error) => {
+          console.error('Error loading skills data:', error);
+        }
+      });
   }
 
-  getSkillLevelName(level:number) {
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  getTagBasis(skillCount: number): string {
+    const perRow = Math.ceil(skillCount / 2);
+    if (perRow <= 1) return '100%';
+    return `calc((100% - ${perRow - 1} * var(--spacing-2)) / ${perRow})`;
+  }
+
+  getSkillLevelName(level: number): string {
     switch (level) {
       case 3:
         return 'Advanced'

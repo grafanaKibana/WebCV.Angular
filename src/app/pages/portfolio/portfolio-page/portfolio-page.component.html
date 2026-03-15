@@ -1,14 +1,5 @@
-<section class="dark-block">
-  <h1>Portfolio</h1>
-  <div class="grid-wrapper">
-    <div *ngFor="let i of [].constructor(5)" class="card">
-      <div class="img-wrap">
-        <img src="https://picsum.photos/id/{{getRandomNum()}}/200/300" alt="" class="ju-img">
-      </div>
-      <div class="card-caption">
-        <h3 class="card-title">The CV</h3>
-        <span class="card-category">Angular App</span>
-      </div>
-    </div>
-  </div>
-</section>
+
+<h1>Portfolio</h1>
+<div class="grid-wrapper">
+  <app-portfolio-item *ngFor="let project of projectsList" [project]="project" ></app-portfolio-item>
+</div>

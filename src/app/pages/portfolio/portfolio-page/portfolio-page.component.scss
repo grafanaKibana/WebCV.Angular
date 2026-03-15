@@ -1,105 +1,26 @@
 @import '../../../../assets/styles/utility';
 
-section {
+h1 {
+  margin-left: var(--spacing-4);
+}
 
-  h1 {
-    margin-left: rem(16px);
+.grid-wrapper {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: var(--spacing-4);
+
+  @include respond-laptop {
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: var(--spacing-2);
   }
-  .grid-wrapper{
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    grid-gap: rem(15px);
 
-    @media only screen and (max-width: $large-xl) {
-      grid-template-columns: repeat(3, 1fr);
-      grid-gap: rem(8px);
-    }
+  @include respond-tablet {
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: var(--spacing-2);
+  }
 
-    @media only screen and (max-width: $large) {
-      grid-template-columns: repeat(2, 1fr);
-      grid-gap: rem(5px);
-    }
-
-    @media only screen and (max-width: $medium) {
-      grid-template-columns: 1fr;
-      grid-gap: rem(5px);
-    }
-
-    .card {
-      padding: rem(14px) rem(16px);
-      border-radius: var(--radius-20);
-
-      @media only screen and (max-width: $large-xl) {
-        padding: rem(10px) rem(12px);
-      }
-
-      .img-wrap {
-        border-radius: var(--radius-16);
-        min-height: 10rem;
-        max-height: 15rem;
-        height: 15vw;
-        overflow: hidden;
-        position: relative;
-        width: 100%;
-        z-index: 1;
-
-        @media only screen and (max-width: $large-xl) {
-          max-height: rem(380px);
-          height: 15.5vw;
-        }
-
-        @media only screen and (max-width: $large) {
-          height: rem(208px);
-        }
-
-        @media only screen and (max-width: $medium) {
-          height: rem(288px);
-        }
-
-        @media only screen and (max-width: $small) {
-          height: rem(190px);
-        }
-      }
-
-      img {
-        border-radius: var(--radius-16);
-        transform: scale3d(1, 1, 1);
-        transition: transform .4s ease-in-out;
-        object-fit: cover;
-        object-position: center;
-        height: 100%;
-        width: 100%;
-      }
-
-      &-caption {
-        padding: 0 rem(8px);
-      }
-
-      &-title {
-        font-size: rem(15px);
-        font-weight: 300;
-        color: var(--color-heading);
-        margin-top: rem(16px);
-        margin-bottom: 0;
-      }
-
-      &-category {
-        font-size: rem(14px);
-        color: var(--color-paragraph);
-        display: block;
-        opacity: .7;
-      }
-
-      &:hover {
-        background-color: var(--color-dark-block-background);
-        @extend .box-shadow-16;
-        transition: transform .6s ease-in-out;
-      }
-
-      &:hover > .img-wrap > img {
-        transform: scale3d(1.05, 1.05, 1);
-        transition: transform .25s ease-in-out;
-      }
-    }
+  @include respond-tablet-sm {
+    grid-template-columns: 1fr;
+    grid-gap: var(--spacing-2);
   }
 }

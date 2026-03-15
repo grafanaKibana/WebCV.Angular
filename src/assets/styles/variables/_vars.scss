@@ -1,33 +1,159 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
 $baseSystemFontSize: 16px;
+
+// Register CSS custom properties for smooth transitions
+@property --reflection-r {
+  syntax: '<number>';
+  initial-value: 0;
+  inherits: true;
+}
+
+@property --reflection-g {
+  syntax: '<number>';
+  initial-value: 0;
+  inherits: true;
+}
+
+@property --reflection-b {
+  syntax: '<number>';
+  initial-value: 0;
+  inherits: true;
+}
+
+@property --reflection-angle {
+  syntax: '<angle>';
+  initial-value: 40deg;
+  inherits: true;
+}
+
+@property --accent-r {
+  syntax: '<number>';
+  initial-value: 100;
+  inherits: true;
+}
+
+@property --accent-g {
+  syntax: '<number>';
+  initial-value: 255;
+  inherits: true;
+}
+
+@property --accent-b {
+  syntax: '<number>';
+  initial-value: 218;
+  inherits: true;
+}
 
 :root {
   // Font settings
   --font-family: 'Poppins', sans-serif;
   --font-base-size: 16px;
-  --font-tablet-size: 13px;
-  --font-mobile-size: 11px;
+  --font-tablet-size: 14px;
+  --font-mobile-size: 13px;
+  --font-family-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+
+  // Mobile viewport + safe-area support
+  --app-height: 100vh;
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
 
   // Color Dark Theme
-  --color-dark-block-background: rgba(0, 0, 0, 0.25);
-  --color-dark-wrapper-background: rgba(0, 0, 0, 0.75);
-  --color-dark-heading: #FCFCFC;;
-  --color-dark-paragraph: #D6D6D6;
-  --color-dark-accent: rgba(164, 229, 250, 0.8);
-  --color-dark-neon-glow: rgb(0, 187, 255);
-  --color-dark-gray-glow: rgba(255, 255, 255, 0.2);
-  --color-dark-border: rgba(255, 255, 255, 0.125);
-  --color-dark-separator: rgba(255, 255, 255, 0.125);
+  --color-dark-block-background: rgba(15, 20, 25, 0.35);
+  --color-dark-wrapper-background: rgba(10, 15, 20, 0.65);
+  --color-dark-opaque-background: rgba(30, 35, 40, 0.95);
+  --color-dark-heading: #e6f1ff;
+  --color-dark-paragraph: #a8b2d1;
+  --color-dark-paragraph-bright: #ccd6f6;
+  --color-dark-accent: rgb(var(--accent-r), var(--accent-g), var(--accent-b));
+  --color-dark-accent-tint: rgba(var(--accent-r), var(--accent-g), var(--accent-b), 0.1);
+  --color-dark-neon-glow: rgb(var(--accent-r), var(--accent-g), var(--accent-b));
+  --color-dark-gray-glow: rgba(255, 255, 255, 0.15);
+  --color-dark-border: rgba(255, 255, 255, 0.1);
+  --color-dark-separator: rgba(255, 255, 255, 0.1);
   --color-dark-error: #B84C4C;
+  --color-dark-muted: #8892b0;
 
-  // Radius
-  --radius-128: 128px;
-  --radius-32: 32px;
-  --radius-20: 20px;
-  --radius-18: 18px;
-  --radius-16: 16px;
-  --radius-14: 14px;
-  --radius-12: 12px;
+  // Copy button colors
+  --copy-success-color: #4ade80;
+  --copy-success-glow: rgba(74, 222, 128, 0.4);
+  --copy-error-color: var(--color-dark-error);
+  --copy-error-glow: rgba(184, 76, 76, 0.4);
+
+  // Note: Composed colors (--reflection-color, etc.) inherit transitions
+  // from their component RGB values via @property declarations above
+
+  // Spacing Scale (4px base unit)
+  --spacing-1: 4px;
+  --spacing-2: 8px;
+  --spacing-3: 12px;
+  --spacing-4: 16px;
+  --spacing-5: 20px;
+  --spacing-6: 24px;
+  --spacing-8: 32px;
+  --spacing-10: 40px;
+  --spacing-12: 48px;
+  --spacing-16: 64px;
+  --spacing-20: 80px;
+  --spacing-24: 96px;
+
+  // Common spacing variables
+  --spacing-xs: var(--spacing-1);
+  --spacing-sm: var(--spacing-2);
+  --spacing-md: var(--spacing-4);
+  --spacing-lg: var(--spacing-6);
+  --spacing-xl: var(--spacing-8);
+  --spacing-2xl: var(--spacing-12);
+  --spacing-3xl: var(--spacing-16);
+
+  // Layout spacing tokens (systemized)
+  // NOTE: Responsive values are overridden in `src/assets/styles/_general.scss`.
+  --page-pad: var(--spacing-6);
+  --section-pad: var(--spacing-8);
+  --section-gap: var(--spacing-6);
+
+  // Transition Timing
+  --transition-fast: 0.15s;
+  --transition-normal: 0.25s;
+  --transition-slow: 0.4s;
+  --transition-easing: ease-out;
+
+  // Border Radius (consolidated set)
+  --radius-4: 4px;
   --radius-8: 8px;
+  --radius-12: 12px;
+  --radius-16: 16px;
+  --radius-20: 20px;
+  --radius-32: 32px;
+
+  // Semantic radii (nested elements should step down at least one level)
+  --radius-surface-lg: var(--radius-32);
+  --radius-surface: var(--radius-20);
+  --radius-card: var(--radius-16);
+  --radius-inner: var(--radius-12);
+  --radius-control: var(--radius-8);
+  --radius-xs: var(--radius-4);
+
+  // Frosted Glass Reflections (blue-tinted to match background)
+  // Individual RGB values for smooth transitions
+  --reflection-r: 0;
+  --reflection-g: 0;
+  --reflection-b: 0;
+  --reflection-angle: 40deg;
+
+  // Composed colors using RGB values
+  --reflection-color: rgba(var(--reflection-r), var(--reflection-g), var(--reflection-b), 0.12);
+  --reflection-color-subtle: rgba(var(--reflection-r), var(--reflection-g), var(--reflection-b), 0.08);
+  --reflection-color-strong: rgba(var(--reflection-r), var(--reflection-g), var(--reflection-b), 0.16);
+  --reflection-edge-color: rgba(var(--reflection-r), var(--reflection-g), var(--reflection-b), 0.25);
+  --reflection-edge-glint: rgba(var(--reflection-r), var(--reflection-g), var(--reflection-b), 0.5);
+  --reflection-tip-glint: rgba(var(--reflection-r), var(--reflection-g), var(--reflection-b), 0.85);
+
+  // Smooth transitions for RGB values and angle
+  transition: --reflection-r 0.5s ease-out,
+              --reflection-g 0.5s ease-out,
+              --reflection-b 0.5s ease-out,
+              --reflection-angle 0.5s ease-out;
 }

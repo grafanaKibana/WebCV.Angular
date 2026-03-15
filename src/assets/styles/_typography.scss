@@ -7,91 +7,213 @@ body, button {
   color: var(--color-dark-paragraph);
   font-family: var(--font-family);
   font-size: var(--font-base-size);
-  line-height: 1.65;
+  line-height: 1.7;
   font-weight: 300;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  @include respond-tablet {
+    font-size: var(--font-tablet-size);
+  }
+
+  @include respond-mobile {
+    font-size: var(--font-mobile-size);
+  }
 }
 
 h1, h2, h3, h4, h5, h6 {
   color: var(--color-dark-heading);
   font-weight: 600;
-  line-height: 1.3;
+  line-height: 1.15;
+  margin-top: 0;
+  letter-spacing: -0.02em;
 }
 
+// Primary page heading (About Me)
 h1 {
-  font-size: rem(36px);
-  margin-bottom: rem(20px);
-  margin-top: 0;
+  font-size: clamp(rem(30px), 4vw, rem(42px));
+  margin-bottom: rem(28px);
   position: relative;
 
-  &::before {
-    content: '';
-    @extend .box-glow-12;
-    background: var(--color-dark-heading);
-    border-radius: rem(8px);
-    height: rem(5px);
-    width: rem(40px);
-    @include position(absolute, $left: 0, $bottom: rem(-8px));
-    z-index: 1;
+  @include respond-tablet {
+    margin-bottom: rem(24px);
+  }
+
+  @include respond-mobile {
+    margin-bottom: rem(20px);
   }
 }
 
+// Section headings (Experience, Education, etc.)
 h2 {
-  font-size: rem(24px);
-  margin-bottom: rem(20px);
+  font-size: clamp(rem(24px), 3vw, rem(32px));
+  margin-bottom: rem(24px);
 
-  @media only screen and (max-width: $small) {
-    font-size: rem(22px);
+  @include respond-tablet {
+    margin-bottom: rem(20px);
+  }
+
+  @include respond-mobile {
+    margin-bottom: rem(16px);
   }
 }
 
+// Sub-section headings (job titles, school names)
 h3 {
   font-size: rem(18px);
+  font-weight: 500;
   margin-bottom: rem(8px);
+  letter-spacing: -0.01em;
 
-  @media only screen and (max-width: $small) {
+  @include respond-tablet {
+    font-size: rem(17px);
+  }
+
+  @include respond-mobile {
     font-size: rem(16px);
   }
 }
 
 h4 {
-  font-size: rem(16px);
-  margin-bottom: rem(13px);
+  font-size: rem(15px);
+  margin-bottom: rem(8px);
   font-weight: 500;
+  line-height: 1.3;
+  letter-spacing: 0;
 
-  @media only screen and (max-width: $small) {
+  @include respond-tablet {
     font-size: rem(14px);
+  }
+
+  @include respond-mobile {
+    font-size: rem(13px);
   }
 }
 
 h5 {
   font-size: rem(14px);
-  font-weight: 500;
-  margin: 6px 0;
+  font-weight: 600;
+  margin-bottom: rem(8px);
+  line-height: 1.4;
+  letter-spacing: 0;
+  color: var(--color-dark-paragraph-bright);
 
-  @media only screen and (max-width: $small) {
+  @include respond-tablet {
+    font-size: rem(13px);
+    font-weight: 500;
+  }
+
+  @include respond-mobile {
     font-size: rem(12px);
   }
 }
 
 h6 {
   font-size: rem(12px);
+  margin-bottom: rem(8px);
+  line-height: 1.4;
 
-  @media only screen and (max-width: $small) {
+  @include respond-tablet {
+    font-size: rem(11px);
+  }
+
+  @include respond-mobile {
     font-size: rem(10px);
   }
 }
 
 p {
-  font-size: rem(14px);
+  font-size: rem(15px);
   margin: 0;
+  line-height: 1.7;
+
+  @include respond-tablet {
+    font-size: rem(14px);
+  }
+
+  @include respond-mobile {
+    font-size: rem(13px);
+  }
+}
+
+span {
+  font-size: rem(15px);
+  font-weight: 400;
+  line-height: inherit;
+
+  @include respond-tablet {
+    font-size: rem(14px);
+  }
+
+  @include respond-mobile {
+    font-size: rem(13px);
+  }
 }
 
 i {
-  color: var(--color-dark-heading)
+  color: var(--color-dark-heading);
 }
 
 input, textarea {
   font-size: rem(15px);
   color: var(--color-dark-paragraph);
   font-family: var(--font-family);
+  line-height: 1.5;
+
+  @include respond-tablet {
+    font-size: rem(14px);
+  }
+
+  @include respond-mobile {
+    font-size: rem(13px);
+  }
+}
+
+// ==========================================
+// Numbered section heading style
+// Used on section h1/h2 with a .numbered-heading class
+// Renders "01." prefix in teal monospace + trailing line
+// ==========================================
+.numbered-heading {
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  width: 100%;
+
+  .section-number {
+    color: var(--color-dark-accent);
+    font-family: var(--font-family-mono);
+    font-size: 0.75em;
+    font-weight: 400;
+    margin-right: rem(10px);
+    position: relative;
+    bottom: 1px;
+  }
+
+  &::after {
+    content: '';
+    display: block;
+    position: relative;
+    flex: 1;
+    height: 1px;
+    margin-left: rem(20px);
+    background-color: var(--color-dark-border);
+
+    @include respond-mobile {
+      margin-left: rem(12px);
+    }
+  }
+}
+
+// Accent link style
+a {
+  color: var(--color-dark-accent);
+  text-decoration: none;
+  transition: all var(--transition-fast) var(--transition-easing);
+
+  &:hover,
+  &:focus {
+    color: var(--color-dark-accent);
+    text-shadow: 0 0 10px rgba(var(--accent-r), var(--accent-g), var(--accent-b), 0.3);
+  }
 }

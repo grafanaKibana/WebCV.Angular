@@ -1,44 +1,76 @@
 @import 'typography';
 @import 'utility';
-@import "fa-icons";
 
 @import 'variables/media';
 @import 'variables/mixins';
 @import 'variables/vars';
 
+:root {
+  // Layout spacing tokens (responsive overrides)
+  --page-pad: var(--spacing-6);
+  --section-pad: var(--spacing-8);
+  --section-gap: var(--spacing-6);
+}
+
+@include respond-tablet {
+  :root {
+    --section-pad: var(--spacing-6);
+    --section-gap: var(--spacing-5);
+  }
+}
+
+@include respond-tablet-sm {
+  :root {
+    --section-pad: var(--spacing-5);
+    --section-gap: var(--spacing-4);
+  }
+}
+
+@include respond-mobile {
+  :root {
+    --section-pad: var(--spacing-4);
+    --section-gap: var(--spacing-3);
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  transition: --accent-r 1.5s ease, --accent-g 1.5s ease, --accent-b 1.5s ease;
+}
 
 body {
-  background-color:#ff99b8;
-  background-image:
-    radial-gradient(at 54% 28%, hsla(201,67%,79%,1) 0px, transparent 50%),
-    radial-gradient(at 19% 11%, hsla(255,78%,74%,1) 0px, transparent 50%),
-    radial-gradient(at 25% 97%, hsla(188,65%,73%,1) 0px, transparent 50%),
-    radial-gradient(at 81% 63%, hsla(95,67%,78%,1) 0px, transparent 50%),
-    radial-gradient(at 72% 71%, hsla(318,65%,78%,1) 0px, transparent 50%),
-    radial-gradient(at 23% 89%, hsla(37,70%,67%,1) 0px, transparent 50%),
-    radial-gradient(at 52% 60%, hsla(74,99%,66%,1) 0px, transparent 50%);
-  /*background-color: hsl(0, 0%, 100%);
-  background-image: url("../images/bg-2.jpg") ;*/
-  //animation: mix-bg 30s ease infinite;
-  background-position: center top;
-  background-repeat: no-repeat;
-  background-attachment: scroll;
-  background-size: cover;
+  background-color: black;
   margin: 0;
+  overflow-x: hidden;
 }
 
 section {
-  padding: rem(26px);
-
-  margin-bottom: rem(18px);
+  padding: var(--section-pad);
+  margin-bottom: var(--section-gap);
   @extend .box-shadow-16;
+}
 
-  @media only screen and (max-width: $medium) {
-    margin-bottom: rem(14px);
-  }
+* {
+  scrollbar-gutter: stable;
+}
 
-  @media only screen and (max-width: $small) {
-    padding: rem(16px);
-    margin-bottom: rem(12px);
-  }
+::-webkit-scrollbar {
+  width: 0;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  @extend .box-shadow-8;
+  background: var(--color-dark-wrapper-background);
+  border-radius: var(--radius-8);
+}
+
+// Selection color
+::selection {
+  background-color: var(--color-dark-accent-tint);
+  color: var(--color-dark-accent);
 }

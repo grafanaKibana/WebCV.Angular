@@ -10,7 +10,8 @@
 					"strict": true
 				},
 				"@schematics/angular:component": {
-					"style": "scss"
+					"style": "scss",
+					"standalone": false
 				}
 			},
 			"root": "",
@@ -18,20 +19,25 @@
 			"prefix": "app",
 			"architect": {
 				"build": {
-					"builder": "@angular-devkit/build-angular:browser",
+					"builder": "@angular-devkit/build-angular:application",
 					"options": {
 						"outputPath": "dist/webcv-angular",
 						"index": "src/index.html",
-						"main": "src/main.ts",
-						"polyfills": "src/polyfills.ts",
+						"browser": "src/main.ts",
+						"polyfills": [
+							"src/polyfills.ts"
+						],
 						"tsConfig": "tsconfig.app.json",
 						"assets": [
 							"src/favicon.ico",
 							"src/assets"
 						],
-						"styles": [
-							"src/styles.scss"
-						],
+					"styles": [
+						"./node_modules/@angular/material/prebuilt-themes/deeppurple-amber.css",
+						"./node_modules/@fortawesome/fontawesome-free/css/all.min.css",
+						"./node_modules/highlight.js/styles/vs2015.css",
+						"src/styles.scss"
+					],
 						"scripts": []
 					},
 					"configurations": {
@@ -39,13 +45,18 @@
 							"budgets": [
 								{
 									"type": "initial",
-									"maximumWarning": "500kb",
-									"maximumError": "1mb"
+									"maximumWarning": "2mb",
+									"maximumError": "3mb"
 								},
 								{
 									"type": "anyComponentStyle",
-									"maximumWarning": "2kb",
-									"maximumError": "5kb"
+									"maximumWarning": "64kb",
+									"maximumError": "128kb"
+								},
+								{
+									"type": "any",
+									"maximumWarning": "2mb",
+									"maximumError": "3mb"
 								}
 							],
 							"fileReplacements": [
@@ -56,14 +67,12 @@
 							],
 							"outputHashing": "all"
 						},
-						"development": {
-							"buildOptimizer": false,
-							"optimization": false,
-							"vendorChunk": true,
-							"extractLicenses": false,
-							"sourceMap": true,
-							"namedChunks": true
-						}
+					"development": {
+						"optimization": false,
+						"extractLicenses": false,
+						"sourceMap": true,
+						"namedChunks": true
+					}
 					},
 					"defaultConfiguration": "production"
 				},
@@ -71,10 +80,10 @@
 					"builder": "@angular-devkit/build-angular:dev-server",
 					"configurations": {
 						"production": {
-							"browserTarget": "webcv-angular:build:production"
+							"buildTarget": "webcv-angular:build:production"
 						},
 						"development": {
-							"browserTarget": "webcv-angular:build:development"
+							"buildTarget": "webcv-angular:build:development"
 						}
 					},
 					"defaultConfiguration": "development"
@@ -82,28 +91,13 @@
 				"extract-i18n": {
 					"builder": "@angular-devkit/build-angular:extract-i18n",
 					"options": {
-						"browserTarget": "webcv-angular:build"
-					}
-				},
-				"test": {
-					"builder": "@angular-devkit/build-angular:karma",
-					"options": {
-						"main": "src/test.ts",
-						"polyfills": "src/polyfills.ts",
-						"tsConfig": "tsconfig.spec.json",
-						"karmaConfig": "karma.conf.js",
-						"assets": [
-							"src/favicon.ico",
-							"src/assets"
-						],
-						"styles": [
-							"src/styles.scss"
-						],
-						"scripts": []
+						"buildTarget": "webcv-angular:build"
 					}
 				}
 			}
 		}
-	},
-	"defaultProject": "webcv-angular"
+  },
+  "cli": {
+    "analytics": false
+  }
 }

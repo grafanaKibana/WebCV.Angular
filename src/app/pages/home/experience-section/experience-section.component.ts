@@ -1,6 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { ExperienceModel } from '../interfaces/experienceModel';
-import { animate, style, transition, trigger } from '@angular/animations';
+import { HomeDataService } from '../../../services/home-data.service';
+import { animate, style, transition, trigger, state } from '@angular/animations';
 
 @Component({
   selector: 'app-experience-section',
@@ -8,109 +11,68 @@ import { animate, style, transition, trigger } from '@angular/animations';
   styleUrls: ['./experience-section.component.scss'],
   animations: [
     trigger('slideInOut', [
-      transition(':enter', [
-        style({height: '0px', opacity: '0', visibility: 'hidden', overflow: 'hidden'}),
-        animate('.35s ease-out', style({height: '*'})),
-        animate('.15s ease-in', style({opacity: '1',visibility: 'visible'})),
+      state('false', style({
+        height: '0',
+        opacity: 0,
+        overflow: 'hidden',
+        marginTop: '0',
+        paddingTop: '0',
+        paddingBottom: '0',
+        transform: 'translateZ(0)',
+        willChange: 'height, opacity, margin-top, padding-top, padding-bottom'
+      })),
+      state('true', style({
+        height: '*',
+        opacity: 1,
+        overflow: 'visible',
+        transform: 'translateZ(0)',
+        willChange: 'auto'
+      })),
+      transition('false => true', [
+        animate('350ms cubic-bezier(0.4, 0.0, 0.2, 1)')
       ]),
-      transition(':leave', [
-        animate('.15s ease-out', style({opacity: '0', visibility: 'hidden'})),
-        animate('.15s ease-out', style({height: '0px'})),
+      transition('true => false', [
+        style({ 
+          overflow: 'hidden',
+          willChange: 'height, opacity, margin-top, padding-top, padding-bottom'
+        }),
+        animate('300ms cubic-bezier(0.4, 0.0, 0.2, 1)')
       ])
     ])
   ]
 })
-export class ExperienceSectionComponent implements OnInit {
+export class ExperienceSectionComponent implements OnInit, OnDestroy {
+  experienceList: Array<ExperienceModel> = [];
+  allToggles: Array<boolean> = [];
+  private readonly destroy$ = new Subject<void>();
 
-  experienceList: Array<ExperienceModel> = [
-    {
-      positionTitle: 'Junior .NET Developer',
-      company: 'ELEKS',
-      startMonth: 'May',
-      startYear: '2022',
-      endMonth: '',
-      endYear: '',
-      description: {
-        responsibilities: [
-          'Implementing new features in API',
-          'Writing Unit and Integration tests',
-          'Finding and fixing bugs',
-          'Investigation logs and finding the causes of Warnings and Errors',
-          'Creating wiki pages about the investigation',
-        ],
-        aboutProject: '',
-        toolsAndTechnologies: '.NET 6, ASP.NET Web API, MediatR, nUnit, Microservices, MS SQL Server, AWS, Jenkins, Kibana, Grafana, Git/GitLab'
-      }
-    },
-    {
-      positionTitle: 'Trainee .NET Developer',
-      company: 'ELEKS',
-      startMonth: 'December',
-      startYear: '2021',
-      endMonth: 'May',
-      endYear: '2022',
-      description: {
-        responsibilities: [
-          'Implementing new features in API',
-          'Writing Unit and Integration tests',
-          'Finding and fixing bugs',
-          'Investigation logs and finding the causes of Warnings and Errors',
-          'Creating wiki pages about the investigation',
-          'Testing the finished functionality'
-        ],
-        aboutProject: '',
-        toolsAndTechnologies: '.NET 6, ASP.NET Web API, MediatR, nUnit, Microservices, MS SQL Server, AWS, Jenkins, Kibana, Grafana, Git/GitLab'
-      }
-    },
-    {
-      positionTitle: 'Intern .NET Developer',
-      company: 'ELEKS',
-      startMonth: 'September',
-      startYear: '2021',
-      endMonth: 'November',
-      endYear: '2021',
-      description: {
-        responsibilities: [
-          'Attended lectures about .NET and related topics.',
-          'Created my own WebAPI pet-project from scratch.'
-        ],
-        aboutProject: 'AutoHubAPI - Web API that provides monolithic multi-layered architecture Back-End functionality for used cars auction application. The main purpose of this API was to be a playground for me to learn and practice new knowledge.',
-        toolsAndTechnologies: ' NET 6 & C# 10, ASP.NET Web API, EF Core, JWT, Identity, xUnit, FluentAssertions, AutoFixture, Moq, AutoMapper, FluentValidation, BCrypt, Swagger + SwaggerUI, Swashbuckle'
-      }
-    },
-    {
-      positionTitle: 'Intern .NET Developer',
-      company: 'Sigma Software',
-      startMonth: 'March',
-      startYear: '2021',
-      endMonth: 'April',
-      endYear: '2021',
-      description: {
-        responsibilities: [
-          'Designed project via UML diagrams (Use Case, Class Diagram, DB Diagram, etc.)',
-          'Developed common functionality (controllers, services, etc.)',
-          'Writed unit-tests',
-          'Created UI for the whole website via Figma and implemented that via HTML + CSS (Bootstrap 5, Vanilla)'
-        ],
-        aboutProject: 'A training full-stack web application that provides car rental service using React as a front-end, & monolithic three-layer architecture ASP.NET Web API as Back-end. The main purpose of this app was to learn the developing process, gain knowledge in developing the back-end on ASP.NET, and practice developing React front-end.',
-        toolsAndTechnologies: 'C# 9.0, ASP.NET 5, Web API, MS SQL, Azure, Azure DevOps, HTML, CSS, Bootstrap, React, Git/GitHub, Rider, WebStorn DataGrip, Swagger'
-      }
-    }
-  ]
-  allToggles: Array<boolean> = new Array(this.experienceList.length).fill(false)
+  constructor(private homeDataService: HomeDataService) {}
 
-  constructor() { }
+  ngOnInit(): void {
+    this.homeDataService.getExperience()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (data: ExperienceModel[]) => {
+          this.experienceList = data;
+          this.allToggles = new Array(this.experienceList.length).fill(false);
+        },
+        error: (error) => {
+          console.error('Error loading experience data:', error);
+        }
+      });
+  }
 
-  ngOnInit(): void {  }
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 
-  public toggleShow(index: number): void {
+  toggleShow(index: number): void {
     if (!this.allToggles[index]) {
-      this.allToggles = this.allToggles.map(_ => false)
-      this.allToggles[index] = !this.allToggles[index]
+      this.allToggles = this.allToggles.map(_ => false);
+      this.allToggles[index] = !this.allToggles[index];
+    } else {
+      this.allToggles[index] = !this.allToggles[index];
     }
-    else {
-      this.allToggles[index] = !this.allToggles[index]
-    }
-
   }
 }

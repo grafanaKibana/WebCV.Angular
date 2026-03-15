@@ -1,11 +1,11 @@
-@import './src/assets/styles/utility';
+@import '../../../assets/styles/utility';
 
 div {
   background: var(--color-dark-separator);
   height: 100%;
   width: 1px;
 
-  @media only screen and (max-width: $small) {
-    margin: 0 rem(6px);
+  @include respond-mobile {
+    margin: 0 var(--spacing-1);
   }
 }

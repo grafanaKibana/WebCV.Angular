@@ -2,59 +2,393 @@
 @import 'variables/mixins';
 @import 'variables/vars';
 
+// ===========================================
+// Dark Block Mixins (Composable)
+// ===========================================
+
+/// Base styles for dark block (no pseudo-elements)
+/// Use this for nested blocks or when pseudo-elements conflict
+/// @param {Color} $bg - Background color
+/// @param {Length} $radius - Border radius
+/// @param {Length} $blur - Backdrop blur amount
+@mixin dark-block-base(
+  $bg: rgba(15, 20, 25, 0.18),
+  $radius: var(--radius-surface),
+  $blur: 12px
+) {
+  background: $bg;
+  border-radius: $radius;
+  backdrop-filter: blur($blur) saturate(1.15);
+  -webkit-backdrop-filter: blur($blur) saturate(1.15);
+  box-shadow:
+    0 8px 32px 0 rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.05);
+  position: relative;
+}
+
+/// Reflection overlay gradient (uses ::before)
+/// Creates a subtle light reflection effect on the surface
+/// @param {String} $start-color - Starting gradient color
+/// @param {String} $mid-color - Middle gradient color
+@mixin dark-block-reflection(
+  $start-color: var(--reflection-color),
+  $mid-color: var(--reflection-color-subtle)
+) {
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: linear-gradient(
+      var(--reflection-angle, 135deg),
+      $start-color 0%,
+      $mid-color 20%,
+      rgba(var(--reflection-r), var(--reflection-g), var(--reflection-b), 0.03) 45%,
+      rgba(var(--reflection-r), var(--reflection-g), var(--reflection-b), 0.015) 65%,
+      transparent 85%
+    );
+    pointer-events: none;
+    contain: layout style paint;
+    transition: background 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+}
+
+/// Border glint effect (uses ::after)
+/// Creates a subtle border highlight that follows the reflection angle
+/// @param {Length} $padding - Border thickness
+@mixin dark-block-glint($padding: 1px) {
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: $padding;
+    pointer-events: none;
+    background: linear-gradient(
+      var(--reflection-angle, 135deg),
+      var(--reflection-tip-glint) 0%,
+      var(--reflection-edge-glint) 1%,
+      var(--reflection-edge-color) 5%,
+      rgba(var(--reflection-r), var(--reflection-g), var(--reflection-b), 0.08) 30%,
+      transparent 55%
+    );
+    -webkit-mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+  }
+}
+
+/// Full dark block with all effects
+/// Combines base, reflection, and glint for complete dark block styling
+/// @param {Color} $bg - Background color
+/// @param {Length} $radius - Border radius
+/// @param {Length} $blur - Backdrop blur amount
+@mixin dark-block-full(
+  $bg: rgba(15, 20, 25, 0.18),
+  $radius: var(--radius-surface),
+  $blur: 12px
+) {
+  @include dark-block-base($bg, $radius, $blur);
+  @include dark-block-reflection;
+  @include dark-block-glint;
+}
+
+// ===========================================
+// Dark Block Classes
+// ===========================================
+
+/// Standard dark block with reflection and glint
 .dark-block {
-  background-color: var(--color-dark-block-background);
-  border-radius: var(--radius-20);
+  @include dark-block-full;
+}
+
+/// Dark block without pseudo-elements (for nested usage)
+.dark-block--plain {
+  @include dark-block-base;
+}
+
+/// Dark block with only reflection (no border glint)
+.dark-block--soft {
+  @include dark-block-base;
+  @include dark-block-reflection;
+}
+
+// ===========================================
+// Glass Effect Mixin (using dark-block primitives)
+// ===========================================
+
+/// Creates frosted glass appearance with reflection overlay
+/// Uses darker background and stronger blur than dark-block
+/// @param {Number} $bg-opacity - Background opacity (0-1)
+@mixin glass-effect($bg-opacity: 0.55) {
+  @include dark-block-base(
+    $bg: rgba(10, 15, 20, $bg-opacity),
+    $blur: 24px
+  );
+  // Override box-shadow for glass effect
+  box-shadow:
+    0 8px 32px 0 rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.03);
+
+  // Use subtler reflection for glass
+  @include dark-block-reflection(
+    $start-color: var(--reflection-color-subtle),
+    $mid-color: rgba(var(--reflection-r), var(--reflection-g), var(--reflection-b), 0.03)
+  );
+  @include dark-block-glint;
+}
+
+// Glass variants: light (0.25) / medium (0.40) / heavy (0.55)
+.glass-light {
+  @include glass-effect(0.25);
+}
+
+.glass-medium {
+  @include glass-effect(0.40);
+}
+
+.glass-heavy {
+  @include glass-effect(0.55);
+}
+
+.dark-shadow {
+  box-shadow:
+    0 2px 4px 0 rgba(0, 0, 0, 0.2),
+    0 1px 5px 0 rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.05);
+
+  &-soft {
+    box-shadow:
+      0 1px 3px 0 rgba(0, 0, 0, 0.1),
+      0 1px 2px 0 rgba(0, 0, 0, 0.06),
+      inset 0 1px 0 0 rgba(255, 255, 255, 0.03);
+  }
+
+  &-intense {
+    box-shadow:
+      0 4px 6px -1px rgba(0, 0, 0, 0.2),
+      0 2px 4px -1px rgba(0, 0, 0, 0.1),
+      inset 0 1px 0 0 rgba(255, 255, 255, 0.05);
+  }
 }
 
 .box-glow {
   &-4 {
-    box-shadow: 0 0 4px var(--color-dark-neon-glow);
+    box-shadow: 0 0 4px var(--color-dark-neon-glow), 0 0 2px var(--color-dark-accent-tint);
   }
 
   &-8 {
-    box-shadow: 0 0 8px var(--color-dark-neon-glow);
+    box-shadow: 0 0 8px var(--color-dark-neon-glow), 0 0 4px var(--color-dark-accent-tint);
   }
 
   &-12 {
-    box-shadow: 0 0 12px var(--color-dark-neon-glow);
+    box-shadow: 0 0 12px var(--color-dark-neon-glow), 0 0 6px var(--color-dark-accent-tint);
   }
 
   &-16 {
-    box-shadow: 0 0 16px var(--color-dark-neon-glow);
+    box-shadow: 0 0 16px var(--color-dark-neon-glow), 0 0 8px var(--color-dark-accent-tint);
   }
 }
 
 .text-glow {
   &-4 {
-    text-shadow: 0 0 4px var(--color-dark-neon-glow);
+    text-shadow: 0 0 4px var(--color-dark-neon-glow), 0 0 2px var(--color-dark-accent-tint);
   }
 
   &-8 {
-    text-shadow: 0 0 8px var(--color-dark-neon-glow);
+    text-shadow: 0 0 8px var(--color-dark-neon-glow), 0 0 4px var(--color-dark-accent-tint);
   }
 
   &-12 {
-    text-shadow: 0 0 12px var(--color-dark-neon-glow);
+    text-shadow: 0 0 12px var(--color-dark-neon-glow), 0 0 6px var(--color-dark-accent-tint);
   }
 
   &-16 {
-    text-shadow: 0 0 16px var(--color-dark-neon-glow);
+    text-shadow: 0 0 16px var(--color-dark-neon-glow), 0 0 8px var(--color-dark-accent-tint);
   }
 }
 
 .box-shadow {
-  &-4{
-    box-shadow: 0 0 4px 0 rgba(29, 23, 40, 0.5);
+  &-4 {
+    box-shadow:
+      0 2px 4px 0 rgba(0, 0, 0, 0.12),
+      0 1px 2px 0 rgba(0, 0, 0, 0.08);
   }
-  &-8{
-    box-shadow: 0 0 8px 0 rgba(29, 23, 40, 0.5);
+  &-8 {
+    box-shadow:
+      0 4px 6px -1px rgba(0, 0, 0, 0.12),
+      0 2px 4px -1px rgba(0, 0, 0, 0.08);
   }
-  &-12{
-    box-shadow: 0 0 12px 0 rgba(29, 23, 40, 0.5);
+  &-12 {
+    box-shadow:
+      0 10px 15px -3px rgba(0, 0, 0, 0.12),
+      0 4px 6px -2px rgba(0, 0, 0, 0.08);
   }
-  &-16{
-    box-shadow: 0 0 16px 0 rgba(29, 23, 40, 0.5);
+  &-16 {
+    box-shadow:
+      0 20px 25px -5px rgba(0, 0, 0, 0.12),
+      0 10px 10px -5px rgba(0, 0, 0, 0.08);
+  }
+}
 
+// Shadow variants: light / medium / heavy
+.shadow-light {
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.08),
+    0 4px 8px rgba(0, 0, 0, 0.04),
+    0 8px 16px rgba(0, 0, 0, 0.02);
+}
+
+.shadow-medium {
+  box-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.12),
+    0 1px 2px rgba(0, 0, 0, 0.24),
+    0 10px 20px rgba(0, 0, 0, 0.08),
+    0 20px 30px rgba(0, 0, 0, 0.06),
+    0 0 40px rgba(0, 0, 0, 0.04);
+}
+
+.shadow-heavy {
+  box-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.16),
+    0 4px 6px rgba(0, 0, 0, 0.28),
+    0 15px 30px rgba(0, 0, 0, 0.12),
+    0 30px 45px rgba(0, 0, 0, 0.10),
+    0 0 60px rgba(0, 0, 0, 0.08);
+}
+
+// Floating glass effect - elevated labels/badges that appear to hover above the UI
+.shadow-floating {
+  box-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.12),
+    0 8px 16px rgba(0, 0, 0, 0.16),
+    0 16px 32px rgba(0, 0, 0, 0.12),
+    0 0 0 1px rgba(255, 255, 255, 0.04);
+}
+
+// Responsive utilities
+.container {
+  @include container-width();
+
+  &-fluid {
+    width: 100%;
+    padding-left: var(--spacing-5);
+    padding-right: var(--spacing-5);
+  }
+
+  &-wide {
+    @include container-width($breakpoint-wide);
+  }
+
+  &-narrow {
+    @include container-width($breakpoint-laptop);
+  }
+}
+
+// Responsive display utilities
+@each $breakpoint, $width in (
+  'wide': $breakpoint-wide,
+  'desktop': $breakpoint-desktop,
+  'laptop': $breakpoint-laptop,
+  'tablet': $breakpoint-tablet,
+  'tablet-sm': $breakpoint-tablet-sm,
+  'mobile': $breakpoint-mobile,
+  'mobile-sm': $breakpoint-mobile-sm
+) {
+  .hide-on-#{$breakpoint} {
+    @include hide-on($width);
+  }
+
+  .show-on-#{$breakpoint} {
+    @include show-on($width);
+  }
+}
+
+// Responsive flexbox
+.flex-responsive {
+  display: flex;
+
+  @include respond-tablet-sm {
+    flex-direction: column;
+  }
+
+  &-reverse {
+    display: flex;
+
+    @include respond-tablet-sm {
+      flex-direction: column-reverse;
+    }
+  }
+}
+
+// Responsive gaps
+.gap {
+  &-responsive {
+    gap: var(--spacing-8);
+
+    @include respond-tablet {
+      gap: var(--spacing-6);
+    }
+
+    @include respond-mobile {
+      gap: var(--spacing-4);
+    }
+  }
+}
+
+// Responsive spacing utilities using spacing scale
+@each $size, $value in (
+  'xs': var(--spacing-1),
+  'sm': var(--spacing-2),
+  'md': var(--spacing-4),
+  'lg': var(--spacing-6),
+  'xl': var(--spacing-8),
+  '2xl': var(--spacing-12)
+) {
+  .m-responsive-#{$size} {
+    margin: $value;
+
+    @include respond-tablet {
+      margin: calc(#{$value} * 0.75);
+    }
+
+    @include respond-mobile {
+      margin: calc(#{$value} * 0.5);
+    }
+  }
+
+  .p-responsive-#{$size} {
+    padding: $value;
+
+    @include respond-tablet {
+      padding: calc(#{$value} * 0.75);
+    }
+
+    @include respond-mobile {
+      padding: calc(#{$value} * 0.5);
+    }
+  }
+}
+
+// Responsive text alignment
+.text {
+  &-center-mobile {
+    @include respond-mobile {
+      text-align: center;
+    }
+  }
+
+  &-left-mobile {
+    @include respond-mobile {
+      text-align: left;
+    }
+  }
+
+  &-right-mobile {
+    @include respond-mobile {
+      text-align: right;
+    }
   }
 }

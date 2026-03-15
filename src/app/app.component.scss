@@ -1,47 +1,118 @@
-@import './src/assets/styles/variables/media';
-@import './src/assets/styles/variables/mixins';
-@import './src/assets/styles/variables/vars';
+@import '../assets/styles/utility';
+
+:host-context(html.intro-animate) .wrapper,
+:host-context(html.intro-animate) app-header,
+:host-context(html.intro-animate) .main-container,
+:host-context(html.intro-animate) app-footer {
+  transition:
+    opacity 700ms cubic-bezier(0.2, 0.8, 0.2, 1),
+    transform 700ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  will-change: opacity, transform;
+}
+
+:host-context(html.intro-animate) app-header {
+  transition-delay: 60ms;
+}
+
+:host-context(html.intro-animate) .main-container {
+  transition-delay: 140ms;
+}
+
+:host-context(html.intro-animate) app-footer {
+  transition-delay: 220ms;
+}
+
+// Initial hidden state while intro overlay is showing.
+:host-context(html.intro-prehide) .wrapper {
+  opacity: 0;
+  transform: translateY(10px) scale(0.99);
+}
+
+:host-context(html.intro-prehide) app-header {
+  opacity: 0;
+  transform: translateY(8px);
+}
+
+:host-context(html.intro-prehide) .main-container {
+  opacity: 0;
+  transform: translateY(12px) scale(0.99);
+}
+
+:host-context(html.intro-prehide) app-footer {
+  opacity: 0;
+  transform: translateY(12px);
+}
+
+:host-context(html.home-prehide) app-footer {
+  visibility: hidden;
+  pointer-events: none;
+}
 
 .wrapper {
-  margin: rem(36px) rem(200px) 0;
-  min-height: 100vh;
+  margin: var(--spacing-10) rem(200px) 0;
+  min-height: var(--app-height, 100vh);
   display: flex;
   flex-direction: column;
+  position: relative;
+  z-index: 1;
 
-  @media only screen and (max-width: $large-xxl){
-    margin: rem(36px) rem(75px) 0;
+  @include respond-desktop {
+    margin: var(--spacing-10) rem(80px) 0;
   }
 
-  @media only screen and (max-width: $large) {
+  @include respond-laptop {
+    margin: var(--spacing-8) rem(40px) 0;
+  }
+
+  @include respond-tablet {
     margin: 0;
-    padding: rem(16px) rem(16px) 0;
+    padding-top: calc(var(--spacing-4) + var(--safe-top));
+    padding-right: calc(var(--spacing-4) + var(--safe-right));
+    padding-bottom: calc(var(--spacing-4) + var(--safe-bottom));
+    padding-left: calc(var(--spacing-4) + var(--safe-left));
     border-radius: 0 0 var(--radius-32) var(--radius-32) !important;
   }
 
-  @media only screen and (max-width: $medium) {
+  @include respond-tablet-sm {
     margin: 0;
-    padding: rem(10px) rem(10px) 0;
+    padding-top: calc(var(--spacing-3) + var(--safe-top));
+    padding-right: calc(var(--spacing-3) + var(--safe-right));
+    padding-bottom: calc(var(--spacing-3) + var(--safe-bottom));
+    padding-left: calc(var(--spacing-3) + var(--safe-left));
+  }
+
+  @include respond-mobile {
+    margin: 0;
+    padding-top: calc(var(--spacing-2) + var(--safe-top));
+    padding-right: calc(var(--spacing-2) + var(--safe-right));
+    padding-bottom: calc(var(--spacing-2) + var(--safe-bottom));
+    padding-left: calc(var(--spacing-2) + var(--safe-left));
   }
 }
 
 .main-container {
+  @extend .shadow-medium;
+  @extend .glass-heavy;
+  z-index: 1;
   border-radius: var(--radius-20);
-  background-color: var(--color-dark-wrapper-background);
-  backdrop-filter: blur(20px) saturate(0);
-  -webkit-backdrop-filter: blur(20px) saturate(0);
-  box-shadow:
-    0 0 7.7px rgba(0, 0, 0, 0.033),
-    0 0 16.1px rgba(0, 0, 0, 0.063),
-    0 0 26.9px rgba(0, 0, 0, 0.091),
-    0 0 45.9px rgba(0, 0, 0, 0.119),
-    0 0 110px rgba(0, 0, 0, 0.15);
-
-  padding: rem(18px);
+  padding: var(--spacing-6);
   flex: 1;
 
-  @media only screen and (max-width: $large) {
-    padding: rem(14px);
+  @include respond-tablet {
+    padding: var(--spacing-5);
+  }
+
+  @include respond-tablet-sm {
+    padding: var(--spacing-4);
+  }
+
+  @include respond-mobile {
+    padding: var(--spacing-3);
+    border-radius: var(--radius-16);
   }
 }
 
-
+.route-container {
+  position: relative;
+  min-height: 100%;
+}

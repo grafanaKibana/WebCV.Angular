@@ -1,69 +1,11 @@
 <section>
+  <h2 class="numbered-heading skills-heading"><span class="section-number">04.</span> Skills & Technologies</h2>
   <div class="skill-wrapper">
-    <!--
-    <div class="skill-group">
-      <div *ngFor="let skill of firstGroupSkillsList" class="skill-group-item dark-block">
-        <h4>{{skill.technology}}</h4>
-        <span class="skill-group-item-level">{{getSkillLevelName(skill.level)}}</span>
-        <div class="progress-bar">
-          <span *ngFor="let level of [].constructor(skill.level)" class="active" role="progressbar"></span>
-          <span *ngFor="let level of [].constructor(3 - skill.level)" class="inactive" role="progressbar"></span>
-        </div>
+    <div *ngFor="let skillGroup of skills" class="skill-group">
+      <h3 class="skill-group-title">{{skillGroup.name}}</h3>
+      <div class="skill-tags" [style.--tag-basis]="getTagBasis(skillGroup.skills.length)">
+        <span *ngFor="let skill of skillGroup.skills" class="skill-tag">{{skill.technology}}</span>
       </div>
-    </div>
-
-    <app-vertical-separator></app-vertical-separator>
-
-    <div class="skill-group">
-      <div *ngFor="let skill of secondGroupSkillsList" class="skill-group-item dark-block">
-        <h4>{{skill.technology}}</h4>
-        <span class="skill-group-item-level">{{getSkillLevelName(skill.level)}}</span>
-        <div class="progress-bar">
-          <span *ngFor="let level of [].constructor(skill.level)" class="active" role="progressbar"></span>
-          <span *ngFor="let level of [].constructor(3 - skill.level)" class="inactive" role="progressbar"></span>
-        </div>
-      </div>
-    </div>
-
-    <app-vertical-separator></app-vertical-separator>
-
-    <div class="skill-group">
-      <div *ngFor="let skill of thirdGroupSkillsList" class="skill-group-item dark-block">
-        <h4>{{skill.technology}}</h4>
-        <span class="skill-group-item-level">{{getSkillLevelName(skill.level)}}</span>
-        <div class="progress-bar">
-          <span *ngFor="let level of [].constructor(skill.level)" class="active" role="progressbar"></span>
-          <span *ngFor="let level of [].constructor(3 - skill.level)" class="inactive" role="progressbar"></span>
-        </div>
-      </div>
-    </div>--> <!--3fors-->
-<!--
-
-    <div *ngFor="let group of skills; let i = index" class="skill-group">
-      <div *ngFor="let skill of skills[i]" class="skill-group-item dark-block">
-        <h4>{{skill.technology}}</h4>
-        <span class="skill-group-item-level">{{getSkillLevelName(skill.level)}}</span>
-        <div class="progress-bar">
-          <span *ngFor="let level of [].constructor(skill.level)" class="active" role="progressbar"></span>
-          <span *ngFor="let level of [].constructor(3 - skill.level)" class="inactive" role="progressbar"></span>
-        </div>
-      </div>
-      &lt;!&ndash;<app-vertical-separator *ngIf="i < group.length - 1"></app-vertical-separator>&ndash;&gt;
-    </div>
--->
-
-    <div *ngFor="let div of [].constructor(skills.length * 2 - 1); let i = index" [class.skill-group]="i % 2 == 0">
-      <ng-container *ngIf="i % 2 == 0">
-        <div *ngFor="let skill of skills[i - (i / 2)]" class="skill-group-item dark-block">
-          <h4>{{skill.technology}}</h4>
-          <span class="skill-group-item-level">{{getSkillLevelName(skill.level)}}</span>
-          <div class="progress-bar">
-            <span *ngFor="let level of [].constructor(skill.level)" class="active" role="progressbar"></span>
-            <span *ngFor="let level of [].constructor(3 - skill.level)" class="inactive" role="progressbar"></span>
-          </div>
-        </div>
-      </ng-container>
-      <app-vertical-separator *ngIf="i % 2 != 0" ></app-vertical-separator>
     </div>
   </div>
 </section>
