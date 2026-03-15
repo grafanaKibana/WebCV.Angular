@@ -52,6 +52,14 @@ export class SidebarComponent implements OnInit, OnDestroy {
       });
   }
 
+  extractPathName(url: string): string {
+    try {
+      return new URL(url).pathname.split('/').filter(Boolean).pop() || '';
+    } catch {
+      return '';
+    }
+  }
+
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();

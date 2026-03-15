@@ -1,27 +1,86 @@
-# WebcvAngular
+# WebCV.Angular
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 13.3.3.
+Personal CV / portfolio website built with Angular 18. Features an animated WebGL gradient background, a markdown-powered blog, and data-driven resume sections — all wrapped in a polished dark-themed UI.
 
-## Development server
+**Live**: [reshetnik.dev](https://reshetnik.dev) · **Repo**: [github.com/grafanaKibana/WebCV.Angular](https://github.com/grafanaKibana/WebCV.Angular)
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+![Screenshot](screenshot-full.png)
 
-## Code scaffolding
+## Features
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+- **WebGL gradient background** — animated mesh gradient with parallax, dynamic color themes, and real-time UI reflections
+- **Intro overlay** — typewriter-style intro sequence on first visit (skippable, respects `prefers-reduced-motion`)
+- **Data-driven content** — all resume data (experience, education, skills, sidebar info) loaded from a single JSON config
+- **Markdown blog** — blog posts authored in Markdown with YAML front matter, syntax highlighting via highlight.js
+- **CV download** — fetches the latest PDF from a [LaTeX CV repo](https://github.com/grafanaKibana/LatexCV) via GitHub Actions artifacts
+- **Route animations** — smooth page transitions between Home, Blog, and Portfolio
+- **Responsive design** — mobile-friendly layout with SCSS mixins and media queries
 
-## Build
+## Tech Stack
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+| Layer | Technology |
+|---|---|
+| Framework | Angular 18 (NgModules) |
+| Language | TypeScript 5.5 |
+| Styling | SCSS, Angular Material, FontAwesome |
+| Graphics | Custom WebGL gradient renderer |
+| Blog | Markdown (`marked`), highlight.js |
+| Testing | Jest, jest-preset-angular |
+| Analytics | Vercel Analytics, Vercel Speed Insights |
+| Node | 22 (see `.nvmrc`) |
 
-## Running unit tests
+## Project Structure
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+```
+src/
+├── app/
+│   ├── pages/
+│   │   ├── home/           # About, Experience, Education, Skills sections
+│   │   ├── blog/           # Blog listing, detail page, markdown parser
+│   │   └── portfolio/      # Portfolio page (WIP)
+│   ├── shared/             # Header, Footer, Sidebar, WebGL background, Intro overlay
+│   ├── services/           # Home data, CV download, WebGL gradient, dynamic reflections
+│   └── config/             # WebGL configuration
+├── assets/
+│   ├── data/
+│   │   ├── home-data.json  # All resume content
+│   │   └── blog/           # Blog posts (Markdown + images)
+│   ├── images/
+│   └── styles/             # Global SCSS variables, mixins, typography
+└── environments/
+```
 
-## Running end-to-end tests
+## Getting Started
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+### Prerequisites
 
-## Further help
+- Node.js 22 (`nvm use` if you have nvm)
+- Angular CLI (`npm install -g @angular/cli`)
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+### Install & Run
+
+```bash
+npm install
+ng serve
+```
+
+Open [http://localhost:4200](http://localhost:4200).
+
+### Build
+
+```bash
+ng build
+```
+
+Production artifacts go to `dist/webcv-angular/`.
+
+### Test
+
+```bash
+npm test              # single run
+npm run test:watch    # watch mode
+```
+
+## Customization
+
+All resume content lives in [`src/assets/data/home-data.json`](src/assets/data/home-data.json) — edit it to make the site yours. Blog posts go in `src/assets/data/blog/posts/` as Markdown files with YAML front matter.

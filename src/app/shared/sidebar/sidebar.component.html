@@ -1,7 +1,7 @@
 <aside *ngIf="sidebarReady" class="profile">
   <div class="profile__left">
     <div class="profile__avatar">
-      <img src="./assets/images/my-emoji.png" alt="Character">
+      <img src="./assets/images/my-portrait.png" alt="Character">
     </div>
     <div class="profile__identity">
       <h2 class="profile__name">{{sidebarInfo.firstName}} {{sidebarInfo.lastName}}</h2>
@@ -10,24 +10,10 @@
   </div>
 
   <div class="profile__right">
-    <div class="profile__contact">
-      <span *ngIf="sidebarInfo.city" class="profile__contact-item">
-        <i class="fa-solid fa-map-pin"></i>{{sidebarInfo.city}}, {{sidebarInfo.country}}
-      </span>
-      <span *ngIf="sidebarInfo.email" class="profile__contact-item">
-        <i class="fa-solid fa-at"></i>{{sidebarInfo.email}}
-      </span>
-      <span *ngIf="sidebarInfo.phone" class="profile__contact-item">
-        <i class="fa-solid fa-phone"></i>{{sidebarInfo.phone}}
-      </span>
-      <span *ngIf="sidebarInfo.telegram" class="profile__contact-item">
-        <i class="fa-solid fa-paper-plane"></i>{{sidebarInfo.telegram}}
-      </span>
-    </div>
-    <div class="profile__separator"></div>
     <div class="profile__socials">
-      <a *ngIf="links.gitHubLink" [href]='links.gitHubLink' target="_blank" aria-label="GitHub"><i class="fa-brands fa-github-alt"></i></a>
+      <a *ngIf="sidebarInfo.email" [href]="'mailto:' + sidebarInfo.email" aria-label="Email"><i class="fa-solid fa-at"></i></a>
       <a *ngIf="links.linkedInLink" [href]='links.linkedInLink' target="_blank" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+      <a *ngIf="links.gitHubLink" [href]='links.gitHubLink' target="_blank" aria-label="GitHub"><i class="fa-brands fa-github-alt"></i></a>
       <a *ngIf="links.repositoryLink" [href]='links.repositoryLink' target="_blank" aria-label="Source code"><i class="fa-solid fa-code-branch"></i></a>
     </div>
   </div>
