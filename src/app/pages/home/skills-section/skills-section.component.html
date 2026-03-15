@@ -1,12 +1,12 @@
 <section>
   <h2 class="numbered-heading skills-heading"><span class="section-number">04.</span> Skills & Technologies</h2>
   <div class="skill-wrapper">
-    @for (skillGroup of skills; track $index) {
+    @for (skillGroup of skills; track skillGroup.name) {
       <div class="skill-group">
         <h3 class="skill-group-title">{{skillGroup.name}}</h3>
-        <div class="skill-tags" [style.--tag-basis]="getTagBasis(skillGroup.skills.length)">
-          @for (skill of skillGroup.skills; track $index) {
-            <span class="skill-tag">{{skill.technology}}</span>
+        <div class="skill-tags" role="list" [attr.aria-label]="skillGroup.name + ' skills'" [style.--tag-basis]="getTagBasis(skillGroup.skills.length)">
+          @for (skill of skillGroup.skills; track skill.technology) {
+            <span class="skill-tag" role="listitem">{{skill.technology}}</span>
           }
         </div>
       </div>

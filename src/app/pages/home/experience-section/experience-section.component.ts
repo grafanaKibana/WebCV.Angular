@@ -73,6 +73,12 @@ export class ExperienceSectionComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
+  private static readonly MONTH_ISO: Record<string, string> = {
+    'January': '01', 'February': '02', 'March': '03', 'April': '04',
+    'May': '05', 'June': '06', 'July': '07', 'August': '08',
+    'September': '09', 'October': '10', 'November': '11', 'December': '12'
+  };
+
   toggleShow(index: number): void {
     if (!this.allToggles[index]) {
       this.allToggles = this.allToggles.map(_ => false);
@@ -80,5 +86,10 @@ export class ExperienceSectionComponent implements OnInit, OnDestroy {
     } else {
       this.allToggles[index] = !this.allToggles[index];
     }
+  }
+
+  toIsoDate(year: string, month?: string | null): string {
+    if (!month) return year;
+    return `${year}-${ExperienceSectionComponent.MONTH_ISO[month] ?? '01'}`;
   }
 }

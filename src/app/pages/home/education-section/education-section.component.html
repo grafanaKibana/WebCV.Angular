@@ -1,15 +1,15 @@
 <section class="dark-block">
   <h2 class="numbered-heading"><span class="section-number">03.</span> Education</h2>
-  <div class="section-item-body">
+  <ol class="section-item-body" aria-label="Education">
     @for (education of educationList; track $index) {
-      <div class="section-item">
+      <li class="section-item">
         <div class="section-item-head">
           <div>
             <h3 class="section-item-title">{{education.educationalInstitution}}</h3>
             <span>{{education.degree}} degree of {{education.speciality}}</span>
           </div>
         </div>
-      </div>
+      </li>
     }
-  </div>
+  </ol>
 </section>

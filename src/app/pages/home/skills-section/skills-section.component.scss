@@ -107,6 +107,11 @@ section {
         &:hover {
           cursor: default;
         }
+
+        @include respond-mobile {
+          font-size: rem(11px);
+          padding: rem(4px) rem(10px);
+        }
       }
     }
   }

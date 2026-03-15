@@ -1,30 +1,34 @@
 <section class="dark-block">
   <h2 class="numbered-heading"><span class="section-number">02.</span> Experience</h2>
-  <div class="section-item-body">
+  <ol class="section-item-body" aria-label="Work experience">
     @for (experience of experienceList; track $index; let i = $index) {
-      <div class="section-item" (click)="toggleShow(i)">
+      <li class="section-item" (click)="toggleShow(i)">
         <div class="section-item-head">
           <div>
             <h3 class="section-item-title">{{experience.positionTitle}}</h3>
             <span>{{experience.company}}</span>
           </div>
           <div class="section-item-date-container">
-            <span class="section-item-date">{{experience.startMonth | monthShort}} {{experience.startYear}} – {{(experience.endMonth && experience.endYear) ? ((experience.endMonth | monthShort) + ' ' + experience.endYear) : 'Present'}}</span>
+            <span class="section-item-date">
+              <time [attr.datetime]="toIsoDate(experience.startYear, experience.startMonth)">{{experience.startMonth | monthShort}} {{experience.startYear}}</time>
+              –
+              @if (experience.endMonth && experience.endYear) {
+                <time [attr.datetime]="toIsoDate(experience.endYear, experience.endMonth)">{{experience.endMonth | monthShort}} {{experience.endYear}}</time>
+              } @else {
+                Present
+              }
+            </span>
             <span class="section-item-duration">{{experience.startMonth | duration: experience.startYear : experience.endMonth : experience.endYear}}</span>
           </div>
         </div>
         <div class="section-item-content" [@slideInOut]="allToggles[i].toString()">
           @if (experience.description.aboutProject) {
             <h5>About project:</h5>
-          }
-          @if (experience.description.aboutProject) {
             <p>{{experience.description.aboutProject}}</p>
           }
 
           @if (experience.description.responsibilities) {
             <h5>Responsibilities:</h5>
-          }
-          @if (experience.description.responsibilities) {
             <ul>
               @for (responsibility of experience.description.responsibilities; track $index) {
                 <li><p>{{responsibility}}</p></li>
@@ -34,12 +38,10 @@
 
           @if (experience.description.toolsAndTechnologies) {
             <h5>Tools & Technologies:</h5>
-          }
-          @if (experience.description.toolsAndTechnologies) {
             <p>{{experience.description.toolsAndTechnologies}}</p>
           }
         </div>
-      </div>
+      </li>
     }
-  </div>
+  </ol>
 </section>
