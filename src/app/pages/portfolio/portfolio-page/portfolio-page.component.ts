@@ -1,10 +1,14 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import type { ProjectModel } from '../interfaces/projectModel';
+import { PortfolioItemComponent } from '../portfolio-item/portfolio-item.component';
 
 @Component({
   selector: 'app-portfolio-page',
+  standalone: true,
+  imports: [PortfolioItemComponent],
   templateUrl: './portfolio-page.component.html',
-  styleUrls: ['./portfolio-page.component.scss']
+  styleUrls: ['./portfolio-page.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PortfolioPageComponent {
   projectsList: Array<ProjectModel> = [

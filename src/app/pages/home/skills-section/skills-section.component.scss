@@ -3,7 +3,6 @@
 section {
   @include dark-block-full;
   padding: var(--section-pad);
-  margin-bottom: var(--section-gap);
 
   .skills-heading {
     margin-bottom: var(--spacing-6);
@@ -78,7 +77,7 @@ section {
       flex-wrap: wrap;
       gap: var(--spacing-2);
       flex: 1;
-      align-content: space-evenly;
+
       border-left: 1px solid var(--color-dark-border);
       padding-left: var(--spacing-3);
 
@@ -100,9 +99,17 @@ section {
         line-height: 1.4;
         text-align: center;
         white-space: nowrap;
+        display: flex;
+        align-items: center;
+        justify-content: center;
 
         &:hover {
           cursor: default;
+        }
+
+        @include respond-mobile {
+          font-size: rem(11px);
+          padding: rem(4px) rem(10px);
         }
       }
     }

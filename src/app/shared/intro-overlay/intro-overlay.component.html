@@ -1,12 +1,13 @@
-<div
-  *ngIf="visible"
-  class="intro"
-  [class.is-exiting]="isExiting"
-  (click)="skip()"
-  role="presentation"
->
-  <div class="intro-inner" (click)="$event.stopPropagation()">
-    <div class="intro-line" [class.is-on]="lineVisible">{{ lineText }}</div>
-    <div class="intro-hint">Click to skip or press Space / Esc</div>
+@if (visible) {
+  <div
+    class="intro"
+    [class.is-exiting]="isExiting"
+    (click)="skip()"
+    role="presentation"
+  >
+    <div class="intro-inner" (click)="$event.stopPropagation()">
+      <div class="intro-line" [class.is-on]="lineVisible">{{ lineText }}</div>
+      <div class="intro-hint">Click to skip or press Space / Esc</div>
+    </div>
   </div>
-</div>
+}

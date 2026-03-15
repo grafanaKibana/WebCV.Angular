@@ -1,4 +1,33 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap');
+// Self-hosted variable fonts — no Google Fonts CDN (see redesign guide §3)
+@font-face {
+  font-family: 'Inter';
+  src: url('/assets/fonts/inter-var.woff2') format('woff2-variations');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC,
+                  U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074,
+                  U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215,
+                  U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'JetBrains Mono';
+  src: url('/assets/fonts/jetbrains-mono-var.woff2') format('woff2-variations');
+  font-weight: 100 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+// CLS-preventing fallback: metrics matched to Inter
+@font-face {
+  font-family: 'Inter-fallback';
+  src: local('Arial');
+  size-adjust: 107%;
+  ascent-override: 90%;
+  descent-override: 22%;
+  line-gap-override: 0%;
+}
 
 $baseSystemFontSize: 16px;
 
@@ -47,7 +76,7 @@ $baseSystemFontSize: 16px;
 
 :root {
   // Font settings
-  --font-family: 'Poppins', sans-serif;
+  --font-family: 'Inter', 'Inter-fallback', system-ui, sans-serif;
   --font-base-size: 16px;
   --font-tablet-size: 14px;
   --font-mobile-size: 13px;
@@ -64,9 +93,9 @@ $baseSystemFontSize: 16px;
   --color-dark-block-background: rgba(15, 20, 25, 0.35);
   --color-dark-wrapper-background: rgba(10, 15, 20, 0.65);
   --color-dark-opaque-background: rgba(30, 35, 40, 0.95);
-  --color-dark-heading: #e6f1ff;
-  --color-dark-paragraph: #a8b2d1;
-  --color-dark-paragraph-bright: #ccd6f6;
+  --color-dark-heading: color-mix(in srgb, var(--color-dark-accent) 8%, #e8e8ee);
+  --color-dark-paragraph: color-mix(in srgb, var(--color-dark-accent) 15%, #a8a8b8);
+  --color-dark-paragraph-bright: color-mix(in srgb, var(--color-dark-accent) 10%, #c8c8d4);
   --color-dark-accent: rgb(var(--accent-r), var(--accent-g), var(--accent-b));
   --color-dark-accent-tint: rgba(var(--accent-r), var(--accent-g), var(--accent-b), 0.1);
   --color-dark-neon-glow: rgb(var(--accent-r), var(--accent-g), var(--accent-b));
@@ -74,7 +103,7 @@ $baseSystemFontSize: 16px;
   --color-dark-border: rgba(255, 255, 255, 0.1);
   --color-dark-separator: rgba(255, 255, 255, 0.1);
   --color-dark-error: #B84C4C;
-  --color-dark-muted: #8892b0;
+  --color-dark-muted: color-mix(in srgb, var(--color-dark-accent) 12%, #8888a0);
 
   // Copy button colors
   --copy-success-color: #4ade80;
@@ -155,5 +184,8 @@ $baseSystemFontSize: 16px;
   transition: --reflection-r 0.5s ease-out,
               --reflection-g 0.5s ease-out,
               --reflection-b 0.5s ease-out,
-              --reflection-angle 0.5s ease-out;
+              --reflection-angle 0.5s ease-out,
+              --accent-r 0.5s ease,
+              --accent-g 0.5s ease,
+              --accent-b 0.5s ease;
 }

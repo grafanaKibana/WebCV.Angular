@@ -1,10 +1,12 @@
 <div class="main">
   <app-sidebar></app-sidebar>
 
-  <div *ngIf="homeReady" class="sections" [@sectionAnimation]="sectionAnimationTick">
-    <app-about-me-section></app-about-me-section>
-    <app-experience-section></app-experience-section>
-    <app-education-section></app-education-section>
-    <app-skills-section></app-skills-section>
-  </div>
+  @if (homeReady) {
+    <div class="sections" [@sectionAnimation]="sectionAnimationTick">
+      <app-about-me-section></app-about-me-section>
+      <app-experience-section></app-experience-section>
+      <app-education-section></app-education-section>
+      <app-skills-section></app-skills-section>
+    </div>
+  }
 </div>

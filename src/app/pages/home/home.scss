@@ -2,26 +2,44 @@
 
 section {
   .section-item-body {
+    position: relative;
+    list-style: none;
+    margin: 0;
+    padding: 0 0 0 0;
+
+    &::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: calc(var(--spacing-1) + var(--spacing-2) + 4px);
+      bottom: 0;
+      width: rem(2px);
+      background: linear-gradient(
+        to bottom,
+        var(--color-dark-accent) 0%,
+        var(--color-dark-accent) 25%,
+        var(--color-dark-muted) 70%,
+        transparent 100%
+      );
+      border-radius: 1px;
+    }
+
     @include respond-laptop {
       padding-left: var(--spacing-1);
+
+      &::before {
+        left: var(--spacing-1);
+      }
     }
   }
 
   .section-item {
-    border-left: rem(2px) solid var(--color-dark-separator);
     padding: var(--spacing-1) 0 var(--spacing-1) var(--spacing-4);
     position: relative;
     cursor: pointer;
 
     @include respond-mobile {
       padding-left: var(--spacing-4);
-    }
-
-    @media (hover: hover) and (pointer: fine) {
-      &:hover {
-        border-left: rem(2px) solid var(--color-dark-paragraph);
-        transition: border-left var(--transition-normal) ease-in;
-      }
     }
 
     &::before {
@@ -33,13 +51,19 @@ section {
       content: '';
       @extend .box-glow-12;
       background-color: var(--color-dark-heading);
-      left: -7px;
-      top: 0;
+      left: -5px;
+      top: var(--spacing-2);
+      transition: filter var(--transition-fast) var(--transition-easing);
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+      &:hover::before {
+        filter: brightness(1.4);
+      }
     }
 
     &:last-child {
       padding-bottom: 0;
-      border-radius: 0 var(--radius-12) var(--radius-12) var(--radius-12);
     }
 
     h3 {
@@ -73,7 +97,8 @@ section {
       margin-left: auto;
     }
 
-    span.section-item-date {
+    span.section-item-date,
+    time.section-item-date {
       font-family: var(--font-family-mono);
       font-size: rem(13px);
       color: var(--color-dark-heading);
@@ -92,7 +117,7 @@ section {
     &-content {
       overflow: hidden;
       color: var(--color-dark-paragraph);
-      margin-top: var(--spacing-3);
+      // margin-top: var(--spacing-3);
       margin-bottom: 0;
       padding-top: var(--spacing-2);
       padding-right: 0;

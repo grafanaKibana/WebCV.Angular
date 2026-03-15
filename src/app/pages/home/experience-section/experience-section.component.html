@@ -1,29 +1,47 @@
 <section class="dark-block">
   <h2 class="numbered-heading"><span class="section-number">02.</span> Experience</h2>
-  <div class="section-item-body">
-    <div *ngFor="let experience of experienceList; let i = index" class="section-item" (click)="toggleShow(i)">
-      <div class="section-item-head">
-        <div>
-          <h3 class="section-item-title">{{experience.positionTitle}}</h3>
-          <span>{{experience.company}}</span>
+  <ol class="section-item-body" aria-label="Work experience">
+    @for (experience of experienceList; track $index; let i = $index) {
+      <li class="section-item" (click)="toggleShow(i)">
+        <div class="section-item-head">
+          <div>
+            <h3 class="section-item-title">{{experience.positionTitle}}</h3>
+            <span>{{experience.company}}</span>
+          </div>
+          <div class="section-item-date-container">
+            <span class="section-item-date">
+              <time [attr.datetime]="toIsoDate(experience.startYear, experience.startMonth)">{{experience.startMonth | monthShort}} {{experience.startYear}}</time>
+              –
+              @if (experience.endMonth && experience.endYear) {
+                <time [attr.datetime]="toIsoDate(experience.endYear, experience.endMonth)">{{experience.endMonth | monthShort}} {{experience.endYear}}</time>
+              } @else {
+                Present
+              }
+            </span>
+            <span class="section-item-duration">{{experience.startMonth | duration: experience.startYear : experience.endMonth : experience.endYear}}</span>
+          </div>
         </div>
-        <div class="section-item-date-container">
-          <span class="section-item-date">{{experience.startMonth | monthShort}} {{experience.startYear}} – {{(experience.endMonth && experience.endYear) ? ((experience.endMonth | monthShort) + ' ' + experience.endYear) : 'Present'}}</span>
-          <span class="section-item-duration">{{experience.startMonth | duration: experience.startYear : experience.endMonth : experience.endYear}}</span>
+        <div class="section-item-content" [@slideInOut]="allToggles[i].toString()">
+          @if (experience.description.aboutProject) {
+            <h5>About project:</h5>
+            <p>{{experience.description.aboutProject}}</p>
+          }
+
+          @if (experience.description.responsibilities) {
+            <h5>Responsibilities:</h5>
+            <ul>
+              @for (responsibility of experience.description.responsibilities; track $index) {
+                <li><p>{{responsibility}}</p></li>
+              }
+            </ul>
+          }
+
+          @if (experience.description.toolsAndTechnologies) {
+            <h5>Tools & Technologies:</h5>
+            <p>{{experience.description.toolsAndTechnologies}}</p>
+          }
         </div>
-      </div>
-      <div class="section-item-content" [@slideInOut]="allToggles[i].toString()">
-        <h5 *ngIf="experience.description.aboutProject">About project:</h5>
-        <p *ngIf="experience.description.aboutProject">{{experience.description.aboutProject}}</p>
-
-        <h5 *ngIf="experience.description.responsibilities">Responsibilities:</h5>
-        <ul *ngIf="experience.description.responsibilities">
-          <li *ngFor="let responsibility of experience.description.responsibilities"><p>{{responsibility}}</p></li>
-        </ul>
-
-        <h5 *ngIf="experience.description.toolsAndTechnologies">Tools & Technologies:</h5>
-        <p *ngIf="experience.description.toolsAndTechnologies">{{experience.description.toolsAndTechnologies}}</p>
-      </div>
-    </div>
-  </div>
+      </li>
+    }
+  </ol>
 </section>

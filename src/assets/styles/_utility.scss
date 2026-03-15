@@ -12,7 +12,7 @@
 /// @param {Length} $radius - Border radius
 /// @param {Length} $blur - Backdrop blur amount
 @mixin dark-block-base(
-  $bg: rgba(15, 20, 25, 0.18),
+  $bg: rgba(15, 20, 25, 0.10),
   $radius: var(--radius-surface),
   $blur: 12px
 ) {
@@ -86,7 +86,7 @@
 /// @param {Length} $radius - Border radius
 /// @param {Length} $blur - Backdrop blur amount
 @mixin dark-block-full(
-  $bg: rgba(15, 20, 25, 0.18),
+  $bg: rgba(15, 20, 25, 0.10),
   $radius: var(--radius-surface),
   $blur: 12px
 ) {

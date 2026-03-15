@@ -3,7 +3,7 @@
   class="copy-button"
   [class.copy-button--success]="state === 'success'"
   [class.copy-button--error]="state === 'error'"
-  [ngClass]="buttonClass"
+  [class]="'copy-button ' + buttonClass"
   [attr.aria-label]="currentLabel"
   [attr.title]="currentLabel"
   (click)="copy()">
@@ -13,7 +13,9 @@
   <span class="copy-button__icon copy-button__icon--success">
     <i [class]="successIcon"></i>
   </span>
-  <span class="copy-button__icon copy-button__icon--error" *ngIf="errorIcon">
-    <i [class]="errorIcon"></i>
-  </span>
+  @if (errorIcon) {
+    <span class="copy-button__icon copy-button__icon--error">
+      <i [class]="errorIcon"></i>
+    </span>
+  }
 </button>

@@ -1,10 +1,11 @@
-import { Component, OnInit, AfterViewInit, OnDestroy, ElementRef, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, AfterViewInit, OnDestroy, ElementRef, ChangeDetectionStrategy, ChangeDetectorRef, inject } from '@angular/core';
 import { WebGLGradientService } from '../../services/webgl-gradient.service';
 import { DynamicReflectionService } from '../../services/dynamic-reflection.service';
 import { webglConfig } from '../../config/webgl.config';
 
 @Component({
   selector: 'app-webgl-background',
+  standalone: true,
   templateUrl: './webgl-background.component.html',
   styleUrls: ['./webgl-background.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -19,13 +20,10 @@ export class WebGLBackgroundComponent implements OnInit, AfterViewInit, OnDestro
   themeName?: string;      // Name of predefined color scheme
   parallax = webglConfig.background.parallax;
   parallaxIntensity = webglConfig.background.parallaxIntensity;
-
-  constructor(
-    private elementRef: ElementRef,
-    private webglGradientService: WebGLGradientService,
-    private dynamicReflectionService: DynamicReflectionService,
-    private changeDetectorRef: ChangeDetectorRef
-  ) {}
+  private readonly elementRef = inject(ElementRef);
+  private readonly webglGradientService = inject(WebGLGradientService);
+  private readonly dynamicReflectionService = inject(DynamicReflectionService);
+  private readonly changeDetectorRef = inject(ChangeDetectorRef);
 
   ngOnInit(): void {
     // Load persisted theme name early so AfterViewInit uses it.

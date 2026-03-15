@@ -1,14 +1,21 @@
-import { Component, OnDestroy } from '@angular/core';
-import { Router, NavigationEnd, NavigationStart, ChildrenOutletContexts } from '@angular/router';
+import { ChangeDetectionStrategy, Component, OnDestroy, inject } from '@angular/core';
+import { Router, NavigationEnd, NavigationStart, ChildrenOutletContexts, RouterOutlet } from '@angular/router';
 import { Subject } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
 import { trigger, transition, style, animate, query } from '@angular/animations';
 import { DynamicReflectionService } from './services/dynamic-reflection.service';
+import { HeaderComponent } from './shared/header/header.component';
+import { FooterComponent } from './shared/footer/footer.component';
+import { IntroOverlayComponent } from './shared/intro-overlay/intro-overlay.component';
+import { WebGLBackgroundComponent } from './shared/webgl-background/webgl-background.component';
 
 @Component({
   selector: 'app-root',
+  standalone: true,
+  imports: [RouterOutlet, HeaderComponent, FooterComponent, IntroOverlayComponent, WebGLBackgroundComponent],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   animations: [
     trigger('routeAnimations', [
       transition('* <=> *', [
@@ -30,12 +37,11 @@ import { DynamicReflectionService } from './services/dynamic-reflection.service'
 export class AppComponent implements OnDestroy {
   title = 'webcv-angular';
   private readonly destroy$ = new Subject<void>();
+  private readonly router = inject(Router);
+  private readonly contexts = inject(ChildrenOutletContexts);
+  private readonly dynamicReflectionService = inject(DynamicReflectionService);
 
-  constructor(
-    private router: Router,
-    private contexts: ChildrenOutletContexts,
-    private dynamicReflectionService: DynamicReflectionService
-  ) {
+  constructor() {
     this.router.events
       .pipe(
         filter((event): event is NavigationStart => event instanceof NavigationStart),
