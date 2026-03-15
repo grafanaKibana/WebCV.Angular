@@ -1,3 +1,4 @@
+import { isPlatformBrowser } from '@angular/common';
 import {
   Component,
   Input,
@@ -6,6 +7,7 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   OnDestroy,
+  PLATFORM_ID,
   inject
 } from '@angular/core';
 
@@ -55,6 +57,7 @@ export class CopyButtonComponent implements OnDestroy {
   state: CopyState = 'idle';
   private timeoutId?: ReturnType<typeof setTimeout>;
   private readonly cdr = inject(ChangeDetectorRef);
+  private readonly platformId = inject(PLATFORM_ID);
 
   get currentLabel(): string {
     switch (this.state) {
@@ -68,6 +71,11 @@ export class CopyButtonComponent implements OnDestroy {
   }
 
   async copy(): Promise<void> {
+    if (!isPlatformBrowser(this.platformId)) {
+      this.handleError(new Error('Clipboard API not supported'));
+      return;
+    }
+
     // Prevent rapid re-clicks during feedback
     if (this.state !== 'idle') return;
 

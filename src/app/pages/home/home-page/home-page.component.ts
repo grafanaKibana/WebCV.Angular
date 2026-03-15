@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, inject } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, PLATFORM_ID, inject } from '@angular/core';
 import { trigger, transition, query, style, stagger, animate } from '@angular/animations';
 import { Subject } from 'rxjs';
 import { take, takeUntil, finalize } from 'rxjs/operators';
@@ -35,19 +36,26 @@ export class HomePageComponent implements OnInit, OnDestroy {
   private readonly destroy$ = new Subject<void>();
   private readonly homeDataService = inject(HomeDataService);
   private readonly cdr = inject(ChangeDetectorRef);
+  private readonly platformId = inject(PLATFORM_ID);
 
   ngOnInit(): void {
-    document.documentElement.classList.add('home-prehide');
+    if (isPlatformBrowser(this.platformId)) {
+      document.documentElement.classList.add('home-prehide');
+    }
 
     this.homeDataService.getHomeData()
       .pipe(
         take(1),
         takeUntil(this.destroy$),
-        finalize(() => document.documentElement.classList.remove('home-prehide'))
+        finalize(() => {
+          if (!isPlatformBrowser(this.platformId)) return;
+          document.documentElement.classList.remove('home-prehide');
+        })
       )
       .subscribe(() => {
         this.homeReady = true;
         this.cdr.markForCheck();
+        if (!isPlatformBrowser(this.platformId)) return;
         requestAnimationFrame(() => {
           this.sectionAnimationTick += 1;
           this.cdr.markForCheck();
@@ -58,6 +66,7 @@ export class HomePageComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+    if (!isPlatformBrowser(this.platformId)) return;
     document.documentElement.classList.remove('home-prehide');
   }
 }

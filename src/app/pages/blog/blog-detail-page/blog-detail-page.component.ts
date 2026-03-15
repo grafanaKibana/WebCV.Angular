@@ -1,5 +1,5 @@
-import { DatePipe, DOCUMENT } from '@angular/common';
-import { AfterViewChecked, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild, inject } from '@angular/core';
+import { DatePipe, DOCUMENT, isPlatformBrowser } from '@angular/common';
+import { AfterViewChecked, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, PLATFORM_ID, ViewChild, inject } from '@angular/core';
 import { trigger, transition, query, style, stagger, animate } from '@angular/animations';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
@@ -66,6 +66,7 @@ export class BlogDetailPageComponent implements OnInit, OnDestroy, AfterViewChec
   private readonly sanitizer = inject(DomSanitizer);
   private readonly document = inject(DOCUMENT);
   private readonly cdr = inject(ChangeDetectorRef);
+  private readonly platformId = inject(PLATFORM_ID);
 
   ngOnInit(): void {
     this.homeDataService.getSidebarInfo()
@@ -94,9 +95,12 @@ export class BlogDetailPageComponent implements OnInit, OnDestroy, AfterViewChec
 
         this.copyButtonsInitialized = false;
         this.renderMarkdown(article.content);
-        this.currentUrl = this.document.location.href;
+        this.currentUrl = isPlatformBrowser(this.platformId) ? this.document.location.href : '';
         this.shareLinks = this.buildShareLinks(article, this.currentUrl);
         this.cdr.markForCheck();
+        if (!isPlatformBrowser(this.platformId)) {
+          return;
+        }
         requestAnimationFrame(() => {
           this.sectionAnimationTick += 1;
           this.cdr.markForCheck();
@@ -110,6 +114,8 @@ export class BlogDetailPageComponent implements OnInit, OnDestroy, AfterViewChec
   }
 
   ngAfterViewChecked(): void {
+    if (!isPlatformBrowser(this.platformId)) return;
+
     if (this.contentBodyRef && this.contentHtml && !this.copyButtonsInitialized) {
       this.initCopyButtons();
       this.copyButtonsInitialized = true;
@@ -133,6 +139,8 @@ export class BlogDetailPageComponent implements OnInit, OnDestroy, AfterViewChec
   }
 
   private copyCodeToClipboard(code: string, button: HTMLButtonElement): void {
+    if (!isPlatformBrowser(this.platformId)) return;
+
     if (!navigator?.clipboard) return;
 
     // Prevent rapid re-clicks during animation

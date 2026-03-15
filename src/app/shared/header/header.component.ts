@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, OnDestroy, inject } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, OnDestroy, PLATFORM_ID, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -27,6 +28,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   private readonly homeDataService = inject(HomeDataService);
   private readonly cvDownloadService = inject(CvDownloadService);
   private readonly cdr = inject(ChangeDetectorRef);
+  private readonly platformId = inject(PLATFORM_ID);
 
   ngOnInit(): void {
     this.homeDataService.getHeaderConfig()
@@ -60,6 +62,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
    * Apply the next theme (in config order) to all gradient containers with smooth transition
    */
   setRandomTheme(): void {
+    if (!isPlatformBrowser(this.platformId)) return;
+
     // Find all WebGL background containers in the document
     const containers = document.querySelectorAll('[data-gradient-id]');
 

@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, OnDestroy, OnInit, inject } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, OnDestroy, OnInit, PLATFORM_ID, inject } from '@angular/core';
 
 @Component({
   selector: 'app-intro-overlay',
@@ -27,10 +28,15 @@ export class IntroOverlayComponent implements OnInit, OnDestroy {
   private exitTimeoutId: number | null = null;
   private removeAnimateTimeoutId: number | null = null;
   private readonly cdr = inject(ChangeDetectorRef);
+  private readonly platformId = inject(PLATFORM_ID);
 
   private debugForceShow = false;
 
   ngOnInit(): void {
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+
     // Safety: if index.html didn't run, make sure we don't keep prehide forever.
     const reduce = this.prefersReducedMotion();
     this.debugForceShow = this.shouldForceShow();
@@ -60,6 +66,8 @@ export class IntroOverlayComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    if (!isPlatformBrowser(this.platformId)) return;
+
     this.runToken++;
     if (this.exitTimeoutId !== null) {
       window.clearTimeout(this.exitTimeoutId);
@@ -109,6 +117,8 @@ export class IntroOverlayComponent implements OnInit, OnDestroy {
   }
 
   private beginExit(forceImmediate: boolean = false): void {
+    if (!isPlatformBrowser(this.platformId)) return;
+
     if (!this.visible || this.isExiting) return;
 
     // Cancel any in-flight scripted sequence.
@@ -138,6 +148,8 @@ export class IntroOverlayComponent implements OnInit, OnDestroy {
   }
 
   private prefersReducedMotion(): boolean {
+    if (!isPlatformBrowser(this.platformId)) return false;
+
     return !!(
       window.matchMedia &&
       window.matchMedia('(prefers-reduced-motion: reduce)') &&
@@ -146,6 +158,8 @@ export class IntroOverlayComponent implements OnInit, OnDestroy {
   }
 
   private hasSeen(): boolean {
+    if (!isPlatformBrowser(this.platformId)) return false;
+
     try {
       return sessionStorage.getItem(this.seenKey) === '1';
     } catch {
@@ -154,6 +168,8 @@ export class IntroOverlayComponent implements OnInit, OnDestroy {
   }
 
   private shouldForceShow(): boolean {
+    if (!isPlatformBrowser(this.platformId)) return false;
+
     try {
       const qs = new URLSearchParams(window.location.search || '');
       const p = qs.get('intro');
@@ -165,6 +181,8 @@ export class IntroOverlayComponent implements OnInit, OnDestroy {
   }
 
   private markSeen(): void {
+    if (!isPlatformBrowser(this.platformId)) return;
+
     try {
       sessionStorage.setItem(this.seenKey, '1');
     } catch {
@@ -173,6 +191,8 @@ export class IntroOverlayComponent implements OnInit, OnDestroy {
   }
 
   private removePrehideClasses(): void {
+    if (!isPlatformBrowser(this.platformId)) return;
+
     try {
       document.documentElement.classList.remove('intro-prehide');
     } catch {
@@ -181,6 +201,8 @@ export class IntroOverlayComponent implements OnInit, OnDestroy {
   }
 
   private removeAnimateClass(): void {
+    if (!isPlatformBrowser(this.platformId)) return;
+
     try {
       document.documentElement.classList.remove('intro-animate');
     } catch {
@@ -189,6 +211,8 @@ export class IntroOverlayComponent implements OnInit, OnDestroy {
   }
 
   private sleep(ms: number): Promise<void> {
+    if (!isPlatformBrowser(this.platformId)) return Promise.resolve();
+
     return new Promise((resolve) => window.setTimeout(resolve, Math.max(0, Math.round(ms))));
   }
 
