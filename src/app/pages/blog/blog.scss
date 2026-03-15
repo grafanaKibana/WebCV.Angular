@@ -192,6 +192,7 @@
   gap: var(--spacing-6);
   align-items: center;
   isolation: isolate;
+  overflow: hidden;
 
   @include respond-tablet {
     padding: var(--spacing-5);
@@ -214,9 +215,13 @@
     margin-bottom: var(--spacing-2);
     max-width: 100%;
     overflow-wrap: break-word;
-    word-break: normal;
+    word-break: break-word;
     hyphens: none;
     letter-spacing: -0.02em;
+
+    @include respond-mobile {
+      font-size: clamp(rem(22px), 6vw, rem(30px));
+    }
   }
 
   &__eyebrow {
@@ -502,6 +507,7 @@
   @extend .dark-block;
   padding: var(--spacing-8);
   margin-bottom: 0;
+  overflow: hidden;
 
   @include respond-tablet {
     padding: var(--spacing-6);
@@ -516,6 +522,9 @@
     font-size: rem(15px);
     font-weight: 300;
     line-height: 1.7;
+    min-width: 0;
+    overflow-wrap: break-word;
+    word-break: break-word;
 
     @include respond-tablet {
       font-size: rem(14px);
@@ -812,6 +821,8 @@
     text-decoration: none;
     border-bottom: rem(1px) solid rgba(0, 0, 0, 0);
     transition: border-color var(--transition-fast) ease, color var(--transition-fast) ease;
+    overflow-wrap: break-word;
+    word-break: break-word;
 
     &:hover {
       border-color: var(--color-dark-accent);

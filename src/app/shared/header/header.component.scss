@@ -56,7 +56,7 @@ $download-progress-glass-blur: rem(24px);
   }
 
   @include respond-mobile {
-    margin-bottom: var(--spacing-3);
+    margin-bottom: var(--spacing-2);
   }
 }
 
@@ -75,7 +75,7 @@ $download-progress-glass-blur: rem(24px);
   }
 
   @include respond-mobile {
-    border-radius: var(--radius-12);
+    border-radius: var(--radius-8);
   }
 
   a,
@@ -179,7 +179,30 @@ $download-progress-glass-blur: rem(24px);
     }
 
     @include respond-mobile {
-      border-radius: var(--radius-4);
+      // Seamless pill segments — no individual button appearance
+      border-radius: 0;
+      padding: var(--spacing-2);
+      min-width: 40px;
+      min-height: 40px;
+
+      // Remove interactive-glow hover effects on mobile
+      &:not(.soon)::before,
+      &:not(.soon)::after {
+        display: none;
+      }
+
+      &:not(.soon):hover {
+        background: transparent;
+        box-shadow: none;
+      }
+
+      &:not(.soon):active {
+        background: rgba(255, 255, 255, 0.05);
+      }
+
+      i {
+        font-size: rem(16px);
+      }
     }
   }
 
@@ -522,6 +545,10 @@ header {
     @include respond-tablet-sm {
       justify-content: space-evenly;
       padding: var(--spacing-2);
+    }
+
+    @include respond-mobile {
+      padding: var(--spacing-1);
     }
 
     li {
