@@ -49,7 +49,7 @@
 }
 
 .wrapper {
-  margin: var(--spacing-8) rem(190px) 0;
+  margin: var(--spacing-10) rem(200px) 0;
   min-height: var(--app-height, 100vh);
   display: flex;
   flex-direction: column;
@@ -57,7 +57,11 @@
   z-index: 1;
 
   @include respond-desktop {
-    margin: var(--spacing-8) rem(75px) 0;
+    margin: var(--spacing-10) rem(80px) 0;
+  }
+
+  @include respond-laptop {
+    margin: var(--spacing-8) rem(40px) 0;
   }
 
   @include respond-tablet {
@@ -71,10 +75,10 @@
 
   @include respond-tablet-sm {
     margin: 0;
-    padding-top: calc(var(--spacing-2) + var(--safe-top));
-    padding-right: calc(var(--spacing-2) + var(--safe-right));
-    padding-bottom: calc(var(--spacing-2) + var(--safe-bottom));
-    padding-left: calc(var(--spacing-2) + var(--safe-left));
+    padding-top: calc(var(--spacing-3) + var(--safe-top));
+    padding-right: calc(var(--spacing-3) + var(--safe-right));
+    padding-bottom: calc(var(--spacing-3) + var(--safe-bottom));
+    padding-left: calc(var(--spacing-3) + var(--safe-left));
   }
 
   @include respond-mobile {
@@ -91,15 +95,19 @@
   @extend .glass-heavy;
   z-index: 1;
   border-radius: var(--radius-20);
-  padding: var(--spacing-4);
+  padding: var(--spacing-6);
   flex: 1;
 
   @include respond-tablet {
-    padding: var(--spacing-3);
+    padding: var(--spacing-5);
+  }
+
+  @include respond-tablet-sm {
+    padding: var(--spacing-4);
   }
 
   @include respond-mobile {
-    padding: var(--spacing-2);
+    padding: var(--spacing-3);
     border-radius: var(--radius-16);
   }
 }

@@ -3,7 +3,9 @@ import {
   webglConfig,
   getColorScheme,
   getDefaultColorScheme,
-  getThemeNames
+  getThemeNames,
+  getAccentColor,
+  getDefaultAccentColor
 } from '../config/webgl.config';
 
 /**
@@ -101,6 +103,26 @@ export class WebGLGradientService {
     const idx = names.indexOf(resolvedCurrent);
     const nextIdx = (idx + 1) % names.length;
     return names[nextIdx];
+  }
+
+  getAccentColor(themeName: string): string {
+    return getAccentColor(themeName) || getDefaultAccentColor();
+  }
+
+  applyAccentColor(themeName: string): void {
+    const accent = this.getAccentColor(themeName);
+    const rgb = this.hexToRgb(accent);
+    if (!rgb) return;
+
+    const root = document.documentElement;
+    root.style.setProperty('--accent-r', rgb[0].toString());
+    root.style.setProperty('--accent-g', rgb[1].toString());
+    root.style.setProperty('--accent-b', rgb[2].toString());
+  }
+
+  private hexToRgb(hex: string): number[] | null {
+    const match = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return match ? [parseInt(match[1], 16), parseInt(match[2], 16), parseInt(match[3], 16)] : null;
   }
 
   private resolveColors(options: { colors?: number[][]; themeName?: string } = {}): number[][] {

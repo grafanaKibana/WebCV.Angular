@@ -46,12 +46,13 @@ $download-progress-glass-blur: rem(24px);
 .header-shell {
   display: flex;
   align-items: center;
-  gap: var(--spacing-3);
-  margin-bottom: var(--spacing-4);
+  gap: var(--spacing-4);
+  margin-bottom: var(--spacing-6);
   width: 100%;
 
   @include respond-tablet-sm {
-    gap: var(--spacing-2);
+    gap: var(--spacing-3);
+    margin-bottom: var(--spacing-4);
   }
 
   @include respond-mobile {
@@ -83,13 +84,16 @@ $download-progress-glass-blur: rem(24px);
     width: 100%;
     align-items: center;
     justify-content: flex-start;
-    padding: 0.5em 1em;
+    padding: 0.6em 1.2em;
     border-radius: var(--radius-12);
     color: var(--color-dark-heading);
     text-decoration: none;
     background: transparent;
     border: 0;
     font: inherit;
+    font-weight: 400;
+    font-size: rem(14px);
+    letter-spacing: 0.01em;
     cursor: pointer;
     touch-action: manipulation;
     -webkit-tap-highlight-color: transparent;
@@ -99,10 +103,10 @@ $download-progress-glass-blur: rem(24px);
     }
 
     &.soon {
-      color: color-mix(in srgb, var(--color-dark-heading) 40%, transparent);
+      color: var(--color-dark-muted);
 
       span {
-        color: color-mix(in srgb, var(--color-dark-heading) 40%, transparent);
+        color: var(--color-dark-muted);
         text-decoration: line-through;
 
         &:after {
@@ -112,11 +116,13 @@ $download-progress-glass-blur: rem(24px);
           text-transform: uppercase;
           font-weight: 400;
           font-size: 9px;
-          padding: 2px 4px;
-          margin-left: rem(6px);
-          background-color: rgba(0, 187, 255, 0.3);
-          border-radius: var(--radius-8);
-          border: 1px solid var(--color-dark-neon-glow);
+          font-family: var(--font-family-mono);
+          padding: 2px 6px;
+          margin-left: rem(8px);
+          background-color: var(--color-dark-accent-tint);
+          border-radius: var(--radius-4);
+            border: 1px solid rgba(var(--accent-r), var(--accent-g), var(--accent-b), 0.3);
+          color: var(--color-dark-accent);
         }
       }
 
@@ -133,7 +139,7 @@ $download-progress-glass-blur: rem(24px);
       }
 
       i {
-        color: color-mix(in srgb, var(--color-dark-heading) 40%, transparent);
+        color: var(--color-dark-muted);
 
         &:hover {
           text-shadow: none;
@@ -163,7 +169,7 @@ $download-progress-glass-blur: rem(24px);
       i {
         display: block;
         margin-right: 0;
-        font-size: rem(20px);
+        font-size: rem(18px);
         text-align: center;
       }
 
@@ -177,12 +183,12 @@ $download-progress-glass-blur: rem(24px);
     i {
       display: block;
       margin-right: 0;
-      font-size: rem(20px);
+      font-size: rem(18px);
       text-align: center;
     }
 
     &:hover i {
-      text-shadow: 0 0 12px var(--color-dark-neon-glow), 0 0 6px rgba(0, 187, 255, 0.3);
+      text-shadow: 0 0 12px var(--color-dark-neon-glow), 0 0 6px var(--color-dark-accent-tint);
     }
   }
 }
@@ -222,10 +228,10 @@ $download-progress-glass-blur: rem(24px);
   }
 
   &.soon {
-    color: color-mix(in srgb, var(--color-dark-heading) 40%, transparent);
+    color: var(--color-dark-muted);
 
     span {
-      color: color-mix(in srgb, var(--color-dark-heading) 40%, transparent);
+      color: var(--color-dark-muted);
       text-decoration: line-through;
 
       &:after {
@@ -235,11 +241,13 @@ $download-progress-glass-blur: rem(24px);
         text-transform: uppercase;
         font-weight: 400;
         font-size: 9px;
-        padding: 2px 4px;
-        margin-left: rem(6px);
-        background-color: rgba(0, 187, 255, 0.3);
-        border-radius: var(--radius-8);
-        border: 1px solid var(--color-dark-neon-glow);
+        font-family: var(--font-family-mono);
+        padding: 2px 6px;
+        margin-left: rem(8px);
+        background-color: var(--color-dark-accent-tint);
+        border-radius: var(--radius-4);
+        border: 1px solid rgba(var(--accent-r), var(--accent-g), var(--accent-b), 0.3);
+        color: var(--color-dark-accent);
       }
     }
 
@@ -248,7 +256,7 @@ $download-progress-glass-blur: rem(24px);
     }
 
     i {
-      color: color-mix(in srgb, var(--color-dark-heading) 40%, transparent);
+      color: var(--color-dark-muted);
     }
   }
 
@@ -261,6 +269,9 @@ $download-progress-glass-blur: rem(24px);
     display: flex;
     align-items: center;
     transition: opacity 0.2s ease;
+    font-size: rem(14px);
+    font-weight: 400;
+    letter-spacing: 0.01em;
   }
 
   .download-button-content.is-hidden {
@@ -270,7 +281,7 @@ $download-progress-glass-blur: rem(24px);
 
   i {
     display: block;
-    font-size: rem(20px);
+    font-size: rem(18px);
     margin-right: 0;
     margin-left: rem(10px);
   }
@@ -497,15 +508,15 @@ header {
     display: flex;
     justify-content: flex-start;
     height: auto;
-    padding: var(--spacing-3) var(--spacing-3);
+    padding: var(--spacing-3);
     margin: 0;
     list-style-type: none;
-    font-weight: 500;
+    font-weight: 400;
     width: 100%;
 
     @include respond-tablet-sm {
       justify-content: space-evenly;
-      padding: var(--spacing-2) var(--spacing-2);
+      padding: var(--spacing-2);
     }
 
     li {
@@ -540,7 +551,6 @@ header {
 .header-download {
   @extend .shadow-medium;
   @extend .glass-heavy;
-  @extend .text-glow-12;
 
   flex: 0 0 auto;
   display: flex;

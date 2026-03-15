@@ -2,12 +2,10 @@
   "sidebar": {
     "firstName": "Nikita",
     "lastName": "Reshetnik",
-    "positionTitle": ".NET / AI Engineer",
+    "positionTitle": "Senior AI Engineer",
     "city": "Kyiv",
     "country": "Ukraine",
     "email": "reshetnik.nikita@gmail.com",
-    "phone": "+38(068)752-14-48",
-    "telegram": "@reshetnigram",
     "links": {
       "gitHubLink": "https://github.com/grafanaKibana",
       "linkedInLink": "https://www.linkedin.com/in/nikitareshetnik/",
@@ -15,7 +13,7 @@
     }
   },
   "aboutMe": {
-    "content": "Hi, I'm Nikita — a .NET and AI Engineer with 3+ years of experience delivering enterprise-grade software. I build scalable RESTful microservices, monolithic systems, and LLM-powered AI features across the .NET ecosystem.\n\nMy background includes hands-on work with MS SQL Server, ElasticSearch, Azure cloud services, and CI/CD pipelines. I’ve also led a cross-functional team delivering AI-driven capabilities for a large enterprise platform, focusing on reliability, performance, and end-to-end delivery."
+    "content": "Hi, I'm Nikita — a .NET and AI Engineer with 5+ years of experience building enterprise software. I design LLM-powered services — extraction, classification, semantic matching, embedding-based search — and back them with automated evaluation pipelines to keep quality high. Equally comfortable shipping .NET microservices, leading cross-functional teams, and driving AI tooling adoption across engineering orgs."
   },
   "education": [
     {
@@ -23,23 +21,38 @@
       "degree": "Bachelor",
       "speciality": "Software Engineering",
       "startYear": "2019",
-      "endYear": "2023",
-      "description": "In the course, I got educational experience of developing C# applications, аlso designing it from UML diagrams, UX / UI, front-end development, to back-end development using a database, design patterns, and a lot more."
+      "endYear": "2023"
     }
   ],
   "experience": [
+    {
+      "positionTitle": "Senior AI Engineer",
+      "company": "DraftKings",
+      "startMonth": "March",
+      "startYear": "2026",
+      "endMonth": "",
+      "endYear": "",
+      "description": {
+        "responsibilities": ["Just started my journey here!"],
+        "aboutProject": "An internal AI platform that empowers engineers to ship faster through AI-assisted development workflows, automated code generation, intelligent documentation, and structured enablement programs.",
+        "toolsAndTechnologies": ""
+      }
+    },
     {
       "positionTitle": "AI Engineer",
       "company": "ELEKS",
       "startMonth": "November",
       "startYear": "2024",
-      "endMonth": "",
-      "endYear": "",
+      "endMonth": "March",
+      "endYear": "2026",
       "description": {
         "responsibilities": [
-          "Designed and delivered LLM-based microservice for an enterprise-grade time management legal platform, significantly enhancing capabilities for law firms and professional services.",
-          "Led a new cross-functional team, organizing Agile ceremonies and maintaining clear communication with QA, MLOps, Data Science, DevOps, and Product stakeholders.",
-          "Introduced internal documentation and wikis, including a newcomer dashboard, ensuring knowledge sharing and efficient onboarding."
+          "Designed and delivered LLM-powered REST service from the ground up, adding intelligent extraction, classification, controlled rewriting, suggestions, and semantic matching, including embedding-based prediction search. Designed the system to be secure, scalable, and reusable, with proper prompt patterns, custom evaluations, and full observability of AI feature usage, significantly reducing manual work for end users.",
+          "Built and automated prompt quality evaluation pipelines, covering Accuracy and Macro/Micro F1 for classification tasks, and LLM-as-a-Judge metrics (Correctness, Faithfulness, Relevance) for non-deterministic outputs, to catch quality drops early as prompts evolved.",
+          "Led a new cross-functional team, running Agile ceremonies and keeping day-to-day collaboration smooth across QA, MLOps, Data Science, DevOps, and Product stakeholders. Interviewed and assessed candidates for a new AI Engineer role on the project.",
+          "Introduced internal documentation and wikis, including a newcomer dashboard,, to make knowledge sharing easier and onboarding faster.",
+          "Upgraded engineering tooling: modernized CI/CD pipelines, added automation to improve developer and QA workflows, and built several Grafana dashboards to monitor AI infrastructure and DB upgrades.",
+          "Ran hands-on AI tooling sessions for engineering teams, sharing practical workflows, best practices, and real-world usage of tools like GitHub Copilot and Cursor, and actively driving adoption in day-to-day development."
         ],
         "aboutProject": "Enterprise time-management platform used by major law firms to streamline billing and analytics.",
         "toolsAndTechnologies": ""
@@ -67,8 +80,8 @@
     {
       "positionTitle": "Junior Software Engineer",
       "company": "ELEKS",
-      "startMonth": "September",
-      "startYear": "2021",
+      "startMonth": "May",
+      "startYear": "2022",
       "endMonth": "December",
       "endYear": "2023",
       "description": {
@@ -85,10 +98,10 @@
     {
       "positionTitle": "Trainee Software Engineer",
       "company": "ELEKS",
-      "startMonth": "September",
+      "startMonth": "December",
       "startYear": "2021",
-      "endMonth": "December",
-      "endYear": "2023",
+      "endMonth": "May",
+      "endYear": "2022",
       "description": {
         "responsibilities": [
           "Delivered basic yet critical RESTful API tasks and small bug fixes under supervision, ensuring smooth integration with other team components.",
@@ -97,6 +110,23 @@
           "Created and updated dev wikis covering environment setup and project guidelines, easing onboarding for future newcomers."
         ],
         "aboutProject": "Enterprise time-management platform used by major law firms to streamline billing and analytics.",
+        "toolsAndTechnologies": ""
+      }
+    },
+    {
+      "positionTitle": "Intern Software Engineer",
+      "company": "ELEKS",
+      "startMonth": "September",
+      "startYear": "2021",
+      "endMonth": "December",
+      "endYear": "2021",
+      "description": {
+        "responsibilities": [
+          "Delivered basic yet critical RESTful API tasks and small bug fixes under supervision, ensuring smooth integration with other team components.",
+          "Efficiently consumed a large amount of knowledge about developing RESTful APIs in a short period.",
+          "Presented the application to the company management and shared the progress.."
+        ],
+        "aboutProject": "AutoHubAPI - Web API that provides monolithic multi-layered architecture Back-End functionality for used car auction applications.",
         "toolsAndTechnologies": ""
       }
     },
@@ -120,117 +150,69 @@
   ],
   "skills": [
     {
-      "name": "Languages",
+      "name": "Artificial Intelligence",
       "skills": [
-        {
-          "technology": ".NET / C#",
-          "level": 3
-        },
-        {
-          "technology": "T-SQL",
-          "level": 2
-        },
-        {
-          "technology": "Python",
-          "level": 1
-        }
+        { "technology": "Microsoft Agent Framework", "level": 3 },
+        { "technology": "Semantic Kernel", "level": 3 },
+        { "technology": "Microsoft.Extensions.AI", "level": 2 },
+        { "technology": "LLM Evaluation", "level": 2 },
+        { "technology": "RAG Systems", "level": 2 },
+        { "technology": "Azure AI Foundry", "level": 2 },
+        { "technology": "LangFuse", "level": 2 }
       ]
     },
     {
-      "name": "AI",
+      "name": "Back-end",
       "skills": [
-        {
-          "technology": "Semantic Kernel",
-          "level": 3
-        },
-        {
-          "technology": "Prompt Engineering",
-          "level": 2
-        },
-        {
-          "technology": "Azure AI Services",
-          "level": 2
-        }
+        { "technology": ".NET / C#", "level": 3 },
+        { "technology": "ASP.NET Web API", "level": 3 },
+        { "technology": "MediatR", "level": 2 },
+        { "technology": "Entity Framework", "level": 2 },
+        { "technology": "T-SQL", "level": 2 },
+        { "technology": "Python", "level": 1 }
       ]
     },
     {
-      "name": "Frameworks",
+      "name": "Data",
       "skills": [
-        {
-          "technology": "ASP.NET Web API",
-          "level": 3
-        },
-        {
-          "technology": "Entity Framework",
-          "level": 2
-        }
+        { "technology": "MS SQL Server", "level": 2 },
+        { "technology": "ElasticSearch", "level": 2 },
+        { "technology": "Kafka", "level": 1 }
       ]
     },
     {
-      "name": "Persistence",
+      "name": "Cloud & DevOps",
       "skills": [
-        {
-          "technology": "MS SQL Server",
-          "level": 2
-        },
-        {
-          "technology": "ElasticSearch",
-          "level": 2
-        }
-      ]
-    },
-
-    {
-      "name": "Cloud",
-      "skills": [
-        {
-          "technology": "Azure",
-          "level": 2
-        },
-        {
-          "technology": "AWS",
-          "level": 1
-        }
+        { "technology": "Microsoft Azure", "level": 2 },
+        { "technology": "Amazon Web Services (AWS)", "level": 1 },
+        { "technology": "Docker", "level": 1 },
+        { "technology": "Kubernetes", "level": 1 },
+        { "technology": "Argo CD", "level": 1 },
+        { "technology": "Jenkins", "level": 2 }
       ]
     },
     {
-      "name": "CI / CD",
+      "name": "Observability & CI/CD",
       "skills": [
-        {
-          "technology": "Azure DevOps",
-          "level": 2
-        },
-        {
-          "technology": "Jenkins",
-          "level": 2
-        },
-        {
-          "technology": "GitHub Actions",
-          "level": 2
-        },
-        {
-          "technology": "ArgoCD",
-          "level": 1
-        }
+        { "technology": "Grafana", "level": 2 },
+        { "technology": "Prometheus", "level": 2 },
+        { "technology": "Kibana", "level": 2 },
+        { "technology": "Azure DevOps", "level": 3 },
+        { "technology": "GitHub Actions", "level": 2 },
+        { "technology": "GitLab CI/CD", "level": 1 }
       ]
     },
     {
-      "name": "Observability",
+      "name": "AI Tooling",
       "skills": [
-        {
-          "technology": "Grafana",
-          "level": 2
-        },
-        {
-          "technology": "Prometheus",
-          "level": 2
-        },
-        {
-          "technology": "Kibana",
-          "level": 2
-        }
+        { "technology": "Claude Code", "level": 3 },
+        { "technology": "Codex", "level": 3 },
+        { "technology": "OpenCode", "level": 3 },
+        { "technology": "Cursor", "level": 3 },
+        { "technology": "CodeRabbit", "level": 3 }
       ]
     }
+
   ],
   "header": {
     "isPortfolioDone": false,

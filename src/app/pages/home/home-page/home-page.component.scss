@@ -1,46 +1,30 @@
 @import "../home";
 
 .main {
-  display: grid;
-  grid-template-columns: 380px 1fr;
-  grid-gap: var(--spacing-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
 
-  /* Grid items default to min-width:auto which can cause subtle mobile overflow.
-     Allow children to shrink so long content wraps instead of forcing side-scroll. */
   > app-sidebar,
-  > div {
+  > .sections {
     min-width: 0;
-  }
-
-  > div {
     width: 100%;
-    max-width: 100%;
   }
 
-  > div > app-about-me-section,
-  > div > app-experience-section,
-  > div > app-education-section,
-  > div > app-skills-section {
+  .sections > app-about-me-section,
+  .sections > app-experience-section,
+  .sections > app-education-section,
+  .sections > app-skills-section {
     display: block;
-    //contain: content;
     will-change: transform;
     background: transparent;
   }
 
-  @include respond-desktop {
-    grid-template-columns: 360px 1fr;
-  }
-
-  @include respond-laptop {
-    grid-template-columns: 100%;
-    grid-gap: var(--spacing-3);
-  }
-
   @include respond-tablet-sm {
-    grid-gap: var(--spacing-2);
+    gap: var(--spacing-3);
   }
 
   @include respond-mobile {
-    grid-gap: var(--spacing-2);
+    gap: var(--spacing-2);
   }
 }

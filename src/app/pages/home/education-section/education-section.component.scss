@@ -3,5 +3,9 @@
 section {
   .section-item {
     cursor: default;
+
+    .section-item-content {
+      margin-top: var(--spacing-2);
+    }
   }
 }

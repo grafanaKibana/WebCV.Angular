@@ -91,11 +91,12 @@
 }
 
 .intro-hint {
-  margin-top: 16px;
+  margin-top: 24px;
   font-family: var(--font-family-mono, ui-monospace);
   font-size: 12px;
-  letter-spacing: 0.02em;
-  color: rgba(255, 255, 255, 0.62);
+  letter-spacing: 0.04em;
+  color: var(--color-dark-accent);
+  opacity: 0.5;
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -8,6 +8,7 @@
 export interface ColorScheme {
   name: string;
   colors: number[][]; // Array of [R, G, B] values (0-255), typically 4 colors for smooth gradient
+  accentColor: string; // CSS color string for UI accent (links, badges, highlights)
 }
 
 export interface BackgroundConfig {
@@ -66,74 +67,82 @@ export const webglConfig = {
       {
         name: 'Deep Purple',
         colors: [
-          [20, 15, 35],     // Deep violet-black - rich dark base
-          [45, 30, 70],     // Rich purple - mid-dark tones
-          [90, 60, 140],    // Vibrant purple - bright tones
-          [140, 100, 200],  // Light lavender - soft highlights
-        ]
+          [20, 15, 35],
+          [45, 30, 70],
+          [90, 60, 140],
+          [140, 100, 200],
+        ],
+        accentColor: '#b794f4'
       },
       {
         name: 'Amber Glow',
         colors: [
-          [40, 25, 15],     // Deep brown-orange - warm dark base
-          [80, 50, 25],     // Dark amber - mid-dark warm tones
-          [200, 120, 50],   // Warm amber - bright warm tones
-          [255, 180, 100],  // Golden amber - golden highlights
-        ]
+          [40, 25, 15],
+          [80, 50, 25],
+          [200, 120, 50],
+          [255, 180, 100],
+        ],
+        accentColor: '#ffd866'
       },
       {
         name: 'Ocean Blue',
         colors: [
-          [19, 41, 75],     // Dark navy - deepest shadow areas
-          [34, 87, 126],    // Navy blue - mid-dark tones
-          [56, 149, 211],   // Medium blue - mid-bright tones
-          [88, 204, 237],   // Light blue - brightest highlights
-        ]
+          [19, 41, 75],
+          [34, 87, 126],
+          [56, 149, 211],
+          [88, 204, 237],
+        ],
+        accentColor: '#64d8ff'
       },
       {
         name: 'Emerald Forest',
         colors: [
-          [15, 30, 20],     // Deep forest green - natural dark base
-          [25, 60, 40],     // Dark emerald - rich mid-dark tones
-          [40, 120, 80],    // Rich emerald - vibrant mid tones
-          [80, 200, 140],   // Bright mint - fresh highlights
-        ]
+          [15, 30, 20],
+          [25, 60, 40],
+          [40, 120, 80],
+          [80, 200, 140],
+        ],
+        accentColor: '#64ffda'
       },
       {
         name: 'Magenta Dream',
         colors: [
-          [35, 15, 30],     // Deep magenta-black - rich dark base
-          [70, 25, 60],     // Dark magenta - deep mid tones
-          [150, 50, 130],   // Vibrant magenta - bright tones
-          [220, 100, 200],  // Soft pink-magenta - soft highlights
-        ]
+          [35, 15, 30],
+          [70, 25, 60],
+          [150, 50, 130],
+          [220, 100, 200],
+        ],
+        accentColor: '#ff7eb3'
       },
       {
         name: 'Slate Storm',
         colors: [
-          [10, 15, 20],     // Charcoal - neutral dark base
-          [30, 40, 50],     // Dark slate - cool mid-dark tones
-          [60, 80, 100],    // Medium slate - balanced mid tones
-          [120, 140, 150],  // Light slate blue - cool highlights
-        ]
+          [10, 15, 20],
+          [30, 40, 50],
+          [60, 80, 100],
+          [120, 140, 150],
+        ],
+        accentColor: '#a8c5da'
       },
       {
         name: 'Sunset Horizon',
         colors: [
-          [30, 20, 35],     // Deep purple-pink - rich dark base
-          [80, 40, 60],     // Dark rose - warm mid-dark tones
-          [180, 80, 100],   // Coral pink - vibrant mid tones
-          [255, 150, 120],  // Peach - warm highlights
-        ]
+          [30, 20, 35],
+          [80, 40, 60],
+          [180, 80, 100],
+          [255, 150, 120],
+        ],
+        accentColor: '#ff9a8b'
       },
       {
         name: 'Cupertino Aurora',
         colors: [
-          [10, 12, 18],     // Midnight graphite - deep, Apple-like base
-          [18, 30, 58],     // Deep indigo - smooth, glassy mid-dark tone
-          [0, 122, 255],    // iOS system blue - signature highlight
-          [100, 210, 255],  // iOS light blue - airy, luminous accent
-        ]
+          [10, 12, 18],
+          [18, 30, 58],
+          [0, 122, 255],
+          [100, 210, 255],
+        ],
+        accentColor: '#5ac8fa'
       }
     ],
 
@@ -283,4 +292,16 @@ export function getDefaultColorScheme(): number[][] {
 
 export function getThemeNames(): string[] {
   return webglConfig.background.colorSchemes.map(s => s.name);
+}
+
+export function getAccentColor(themeName: string): string | undefined {
+  const scheme = webglConfig.background.colorSchemes.find(s => s.name === themeName);
+  return scheme?.accentColor;
+}
+
+export function getDefaultAccentColor(): string {
+  const scheme = webglConfig.background.colorSchemes.find(
+    s => s.name === webglConfig.background.defaultTheme
+  );
+  return scheme?.accentColor || webglConfig.background.colorSchemes[0].accentColor;
 }

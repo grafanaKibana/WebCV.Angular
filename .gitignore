@@ -39,6 +39,7 @@ testem.log
 /.planning/
 /.claude/
 /.opencode/
+/.sisyphus/
 
 # System files
 .DS_Store

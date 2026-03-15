@@ -41,6 +41,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
           console.error('Error loading header config:', error);
         }
       });
+
+    const currentTheme =
+      this.webglGradientService.getSavedThemeName() ?? this.webglGradientService.getDefaultThemeName();
+    this.webglGradientService.applyAccentColor(currentTheme);
   }
 
   ngOnDestroy(): void {
@@ -63,8 +67,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
       return;
     }
 
-    // Persist for next reload.
     this.webglGradientService.saveThemeName(themeName);
+    this.webglGradientService.applyAccentColor(themeName);
 
     const colors = this.webglGradientService.getColorScheme(themeName);
 

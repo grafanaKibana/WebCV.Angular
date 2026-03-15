@@ -1,1 +1,11 @@
 @import "../home";
+
+section {
+  .content-item-content {
+    p {
+      color: var(--color-dark-paragraph);
+      line-height: 1.7;
+      max-width: 640px;
+    }
+  }
+}

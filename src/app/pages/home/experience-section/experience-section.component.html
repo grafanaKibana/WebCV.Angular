@@ -1,5 +1,5 @@
 <section class="dark-block">
-  <h2>Experience</h2>
+  <h2 class="numbered-heading"><span class="section-number">02.</span> Experience</h2>
   <div class="section-item-body">
     <div *ngFor="let experience of experienceList; let i = index" class="section-item" (click)="toggleShow(i)">
       <div class="section-item-head">
@@ -8,11 +8,8 @@
           <span>{{experience.company}}</span>
         </div>
         <div class="section-item-date-container">
-          <span class="section-item-date">{{experience.startMonth | monthShort}} {{experience.startYear}} - {{(experience.endMonth && experience.endYear) ? ((experience.endMonth | monthShort) + ' ' + experience.endYear) : 'Present'}}</span>
+          <span class="section-item-date">{{experience.startMonth | monthShort}} {{experience.startYear}} – {{(experience.endMonth && experience.endYear) ? ((experience.endMonth | monthShort) + ' ' + experience.endYear) : 'Present'}}</span>
           <span class="section-item-duration">{{experience.startMonth | duration: experience.startYear : experience.endMonth : experience.endYear}}</span>
-        </div>
-        <div class="section-item-toggler">
-          <i class="fa-angle-down fa-solid"></i>
         </div>
       </div>
       <div class="section-item-content" [@slideInOut]="allToggles[i].toString()">
