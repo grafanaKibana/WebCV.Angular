@@ -14,15 +14,19 @@
     margin-bottom: var(--spacing-3);
   }
 
-  @include respond-mobile {
+  @include respond-tablet-sm {
     padding: var(--spacing-4);
-    margin-bottom: var(--spacing-3);
+  }
+
+  @include respond-mobile {
+    padding: var(--spacing-3);
+    margin-bottom: var(--spacing-2);
   }
 
   &__eyebrow {
     text-transform: uppercase;
     letter-spacing: 0.08em;
-    font-size: rem(13px);
+    font-size: rem(12px);
     font-family: var(--font-family-mono);
     font-weight: 400;
     color: var(--color-dark-accent);
@@ -52,8 +56,12 @@
     padding: var(--spacing-5);
   }
 
+  @include respond-tablet-sm {
+    padding: var(--spacing-3);
+  }
+
   @include respond-mobile {
-    padding: var(--spacing-4);
+    padding: var(--spacing-2);
   }
 
   &__list {
@@ -67,6 +75,11 @@
 
     @include respond-tablet-sm {
       grid-template-columns: minmax(0, 1fr);
+      gap: var(--spacing-4);
+    }
+
+    @include respond-mobile {
+      gap: var(--spacing-3);
     }
   }
 
@@ -84,7 +97,7 @@
   flex-direction: column;
   text-decoration: none;
   color: inherit;
-  border-radius: var(--radius-20);
+  border-radius: var(--radius-surface);
   overflow: hidden;
   transition: transform var(--transition-normal) ease;
   min-height: 100%;
@@ -122,6 +135,15 @@
     padding: var(--spacing-5);
     display: grid;
     gap: var(--spacing-3);
+
+    @include respond-tablet-sm {
+      padding: var(--spacing-4);
+    }
+
+    @include respond-mobile {
+      padding: var(--spacing-3);
+      gap: var(--spacing-2);
+    }
   }
 
   &__title {
@@ -130,13 +152,17 @@
     font-weight: 500;
     letter-spacing: -0.01em;
     color: var(--color-dark-heading);
+
+    @include respond-mobile {
+      font-size: rem(16px);
+    }
   }
 
   &__meta {
     display: flex;
     justify-content: space-between;
     gap: var(--spacing-2);
-    font-size: rem(13px);
+    font-size: rem(12px);
     font-family: var(--font-family-mono);
     font-weight: 400;
     text-transform: uppercase;
@@ -145,6 +171,10 @@
     opacity: 0.7;
     span {
       font-size: inherit;
+    }
+
+    @include respond-tablet-sm {
+      font-size: rem(11px);
     }
   }
 
@@ -275,9 +305,9 @@
       grid-row: 2;
       grid-column: 1;
       align-self: start;
-      justify-self: start;
+      justify-self: stretch;
       z-index: 2;
-      margin: var(--spacing-3) 0 0 var(--spacing-3);
+      margin: var(--spacing-3);
       @include glass-effect(0.40);
       box-shadow:
         0 2px 4px rgba(0, 0, 0, 0.12),
@@ -290,7 +320,7 @@
     }
 
     @include respond-mobile {
-      margin: var(--spacing-2) 0 0 var(--spacing-2);
+      margin: var(--spacing-2);
     }
   }
 
@@ -501,7 +531,7 @@
 
   &__name {
     margin: 0;
-    font-size: rem(15px);
+    font-size: rem(14px);
     font-weight: 500;
     color: var(--color-dark-heading);
 
@@ -512,7 +542,7 @@
 
   &__title {
     margin: 0;
-    font-size: rem(13px);
+    font-size: rem(12px);
     font-family: var(--font-family-mono);
     font-weight: 400;
     letter-spacing: 0.01em;
@@ -546,12 +576,16 @@
     display: inline-flex;
     align-items: center;
     line-height: 1;
-    font-size: rem(13px);
+    font-size: rem(12px);
     font-family: var(--font-family-mono);
     font-weight: 400;
     text-transform: uppercase;
     letter-spacing: 0.01em;
     color: var(--color-dark-heading);
+
+    @include respond-tablet-sm {
+      font-size: rem(11px);
+    }
   }
 
   &__item + &__item {
@@ -578,7 +612,7 @@
   padding: 0 rem(6px);
 
   &__label {
-    font-size: rem(13px);
+    font-size: rem(12px);
     font-family: var(--font-family-mono);
     font-weight: 400;
     text-transform: uppercase;
@@ -586,6 +620,10 @@
     color: var(--color-dark-paragraph);
     opacity: 0.7;
     margin-right: var(--spacing-2);
+
+    @include respond-tablet-sm {
+      font-size: rem(11px);
+    }
   }
 
   &__link,
@@ -837,7 +875,7 @@
     }
 
     &__lang {
-      font-size: rem(13px);
+      font-size: rem(12px);
       font-family: var(--font-family-mono);
       font-weight: 400;
       text-transform: uppercase;
@@ -1164,18 +1202,22 @@
 
   &__title {
     margin: 0;
-    font-size: rem(13px);
+    font-size: rem(12px);
     font-family: var(--font-family-mono);
     text-transform: uppercase;
     letter-spacing: 0.08em;
     color: var(--color-dark-heading);
     text-align: center;
+
+    @include respond-tablet-sm {
+      font-size: rem(11px);
+    }
   }
 
   &__link {
     color: var(--color-dark-paragraph);
     text-decoration: none;
-    font-size: rem(15px);
+    font-size: rem(14px);
     font-weight: 300;
     padding-left: 0;
     transition: color var(--transition-fast) var(--transition-easing);
@@ -1249,10 +1291,14 @@
 
   &__title {
     margin: var(--spacing-1) 0 0;
-    font-size: rem(13px);
+    font-size: rem(12px);
     font-family: var(--font-family-mono);
     font-weight: 400;
     letter-spacing: 0.01em;
     color: var(--color-dark-paragraph);
+
+    @include respond-tablet-sm {
+      font-size: rem(11px);
+    }
   }
 }
