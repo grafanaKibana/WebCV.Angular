@@ -1,16 +1,8 @@
 ---
 id: 3
 headline: "Quick intro to Microsoft.Extensions.AI.Evaluating"
-topics:
-  - AI
-  - Evaluation
-  - Azure DevOps
-publishDate: "2024-07-06"
+publishDate: "2026-01-14"
 imagePath: "hero.png"
-author:
-  name: "Nikita Reshetnik"
-  title: ".NET / AI Engineer"
-  avatarUrl: "./assets/images/my-portrait.png"
 ---
 Microsoft.Extensions.AI.Evaluating helps you measure prompt quality like any other test suite. Start with a few scenarios, add evaluators, and publish results to your CI pipeline.
 

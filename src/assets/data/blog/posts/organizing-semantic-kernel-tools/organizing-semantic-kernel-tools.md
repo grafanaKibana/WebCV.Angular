@@ -1,16 +1,9 @@
 ---
 id: 2
 headline: "Organizing Semantic Kernel tools and plugins without chaos"
-topics:
-  - Semantic Kernel
-  - Architecture
-  - Tools
-publishDate: "2024-07-05"
+publishDate: "2025-09-15"
 imagePath: "hero.png"
-author:
-  name: "Nikita Reshetnik"
-  title: ".NET / AI Engineer"
-  avatarUrl: "./assets/images/my-portrait.png"
+
 ---
 Semantic Kernel is at its best when tools are easy to find, version, and test. Treat plugins as product features, not random utilities.
 
