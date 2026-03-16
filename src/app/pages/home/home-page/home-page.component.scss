@@ -11,17 +11,17 @@
     width: 100%;
   }
 
+  .sections {
+    display: flex;
+    flex-direction: column;
+    gap: var(--section-gap);
+  }
+
   .sections > app-about-me-section,
   .sections > app-experience-section,
   .sections > app-education-section,
   .sections > app-skills-section {
     display: block;
-    will-change: transform;
-    background: transparent;
-  }
-
-  .sections > :last-child section {
-    margin-bottom: 0;
   }
 
   @include respond-tablet-sm {

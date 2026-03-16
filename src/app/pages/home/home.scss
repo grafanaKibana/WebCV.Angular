@@ -1,6 +1,8 @@
 @import '../../../assets/styles/utility';
 
 section {
+  @include glass-effect(0.40);
+
   .section-item-body {
     position: relative;
     list-style: none;

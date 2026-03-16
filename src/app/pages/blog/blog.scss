@@ -1,17 +1,13 @@
 @import '../../../assets/styles/utility';
 
 .blog-intro {
+  @extend .glass-medium;
   padding: var(--spacing-8);
-  box-shadow: none;
-  background: transparent;
   display: grid;
   gap: var(--spacing-3);
-  border-radius: 0;
-  margin-bottom: 0;
 
   @include respond-tablet {
     padding: var(--spacing-6);
-    margin-bottom: var(--spacing-3);
   }
 
   @include respond-tablet-sm {
@@ -20,7 +16,6 @@
 
   @include respond-mobile {
     padding: var(--spacing-3);
-    margin-bottom: var(--spacing-2);
   }
 
   &__eyebrow {
@@ -48,21 +43,9 @@
 }
 
 .blog-grid {
-  padding: var(--spacing-6);
-  box-shadow: none;
+  padding: 0;
   margin-bottom: 0;
-
-  @include respond-tablet {
-    padding: var(--spacing-5);
-  }
-
-  @include respond-tablet-sm {
-    padding: var(--spacing-3);
-  }
-
-  @include respond-mobile {
-    padding: var(--spacing-2);
-  }
+  box-shadow: none;
 
   &__list {
     display: grid;
@@ -92,7 +75,7 @@
 }
 
 .blog-card {
-  @extend .dark-block;
+  @extend .glass-medium;
   display: flex;
   flex-direction: column;
   text-decoration: none;
@@ -215,7 +198,7 @@
 }
 
 .blog-hero {
-  @extend .dark-block;
+  @extend .glass-medium;
   padding: var(--spacing-6);
   display: grid;
   grid-template-columns: minmax(0, 1fr);
@@ -713,7 +696,7 @@
 }
 
 .blog-content {
-  @extend .dark-block;
+  @extend .glass-medium;
   padding: var(--spacing-8);
   margin-bottom: 0;
   overflow: hidden;

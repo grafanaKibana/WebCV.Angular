@@ -1,7 +1,6 @@
 @import "../home";
 
 section {
-  @include dark-block-full;
   padding: var(--section-pad);
 
   .skills-heading {

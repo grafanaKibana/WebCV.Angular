@@ -21,11 +21,6 @@ const ROUTE_META: Record<string, PageMeta> = {
     description: 'Articles on AI engineering, .NET, LLMs, and software development by Nikita Reshetnik.',
     path: '/blog',
   },
-  '/portfolio': {
-    title: 'Portfolio | Nikita Reshetnik',
-    description: 'Projects and work by Nikita Reshetnik — Senior AI Engineer.',
-    path: '/portfolio',
-  },
 };
 
 @Component({

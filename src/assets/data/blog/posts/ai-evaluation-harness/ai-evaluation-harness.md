@@ -230,6 +230,75 @@ SC-003,"The package arrived on Tuesday.",Neutral
 
 Each row becomes one NUnit test case. The test sends the input to the inference model, collects the prediction, and passes both the response and the expected label (via `ClassificationEvaluationContext`) to the evaluator. Fifteen rows = fifteen test cases, all running in parallel.
 
+## Aggregating results with the summary evaluator
+
+Here's the problem: the reporting infrastructure stores **per-iteration** results. You get 15 rows in the report — one per test case — each with an ExactMatch boolean. That's useful for debugging. It's not useful for answering "what's the overall accuracy of this prompt?"
+
+The evaluation library doesn't natively aggregate metrics across iterations. You need to do it yourself and inject the results back into the report.
+
+That's what the summary evaluator does. It doesn't actually evaluate anything — it takes **pre-computed metrics** and wraps them in the reporting format so they appear in the HTML report alongside the per-case results.
+
+```csharp open
+public class SummaryEvaluator(IEnumerable<SummaryMetric> metrics) : IEvaluator
+{
+    private readonly List<SummaryMetric> metricsList = metrics.ToList();
+
+    public IReadOnlyCollection<string> EvaluationMetricNames =>
+        metricsList.Select(m => m.Name).ToList();
+
+    public ValueTask<EvaluationResult> EvaluateAsync(
+        IEnumerable<ChatMessage> messages,
+        ChatResponse modelResponse,
+        ChatConfiguration? chatConfiguration = null,
+        IEnumerable<EvaluationContext>? additionalContext = null,
+        CancellationToken cancellationToken = default)
+    {
+        var result = metricsList
+            .Select(CreateNumericMetric)
+            .Cast<EvaluationMetric>()
+            .ToList();
+
+        return ValueTask.FromResult(new EvaluationResult(result));
+    }
+}
+```
+
+Each `SummaryMetric` carries a value, a description, and a `Kind` that controls how it's displayed and rated in the report:
+
+```csharp open
+public enum SummaryMetricKind
+{
+    Percentage,     // 0.93 → "93.00%", rated by threshold
+    FivePointScale, // 4.2 → "4.20 / 5", rated by scale
+    Count,          // 15 → "15", no rating
+    PlainNumber     // 0.87 → "0.87", no rating
+}
+
+public class SummaryMetric(
+    string name, double value, string description, SummaryMetricKind kind)
+    : EvaluationMetric(name);
+```
+
+The flow works like this: during test execution, each iteration adds a `ClassificationPrediction` to the thread-safe `ConcurrentBag`. On `[OneTimeTearDown]`, the base class calls `ComputeSummaryMetrics()` — which in the classification case computes accuracy, macro precision, macro recall, and macro F1 from all predictions — then writes them as a **separate summary scenario**:
+
+```csharp open
+private async Task GenerateSummaryReportAsync()
+{
+    if (Predictions.IsEmpty) return;
+
+    var summaryMetrics = ComputeSummaryMetrics(Predictions.ToList());
+
+    foreach (var (iterationName, metrics) in summaryMetrics)
+    {
+        await CreateSummaryScenarioAsync(iterationName, metrics);
+    }
+}
+```
+
+`CreateSummaryScenarioAsync` creates a new `DiskBasedReportingConfiguration` with the `SummaryEvaluator`, creates a scenario run named `Summary.SentimentClassification`, and calls `EvaluateAsync` with a placeholder message. The pre-computed metrics flow through the evaluator into the reporting storage.
+
+The result: the HTML report shows both the **per-case detail** (15 rows with ExactMatch pass/fail) and the **aggregate dashboard** (overall accuracy 93%, macro F1 0.91, etc.) in the same report. You see where the model failed and how it performs overall — without leaving the report.
+
 ## Running and reporting
 
 The `RunEvaluation.cs` script chains three steps:

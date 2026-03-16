@@ -1,6 +1,9 @@
 @import '../../../assets/styles/utility';
 
 .profile {
+  @include glass-effect(0.40);
+  border-radius: var(--radius-surface);
+  padding: var(--section-pad);
   z-index: 10;
   position: relative;
   width: 100%;
@@ -14,12 +17,8 @@
     flex-direction: column;
     text-align: center;
     gap: var(--spacing-4);
-    padding: var(--spacing-5);
   }
 
-  @include respond-mobile {
-    padding: var(--spacing-4);
-  }
 
   &__left {
     display: flex;
