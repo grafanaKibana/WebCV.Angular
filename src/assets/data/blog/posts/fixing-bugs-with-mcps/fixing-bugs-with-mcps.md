@@ -1,6 +1,6 @@
 ---
 id: 1
-headline: "Prompting with a human-in-the-loop: Figma, Chrome DevTools, and MCPs"
+headline: "How I Fixed 14 Frontend Bugs in One Day Without Writing CSS"
 publishDate: "2025-12-05"
 imagePath: "hero.png"
 ---

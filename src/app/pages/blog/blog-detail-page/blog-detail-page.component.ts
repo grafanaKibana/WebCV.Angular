@@ -191,7 +191,9 @@ export class BlogDetailPageComponent implements OnInit, OnDestroy, AfterViewChec
     };
 
     renderer.code = (token) => {
-      const language = (token.lang ?? '').trim().split(/\s+/)[0].toLowerCase();
+      const parts = (token.lang ?? '').trim().split(/\s+/);
+      const language = (parts[0] ?? '').toLowerCase();
+      const isOpen = parts.some(p => p.toLowerCase() === 'open');
       const canHighlight = Boolean(language && hljs.getLanguage(language));
       const highlighted = canHighlight
         ? hljs.highlight(token.text, { language, ignoreIllegals: true }).value
@@ -200,7 +202,7 @@ export class BlogDetailPageComponent implements OnInit, OnDestroy, AfterViewChec
       const displayLang = language || 'code';
       const escapedCode = this.escapeHtml(token.text);
       // Generate animation-ready HTML with dual-icon structure
-      return `<details class="code-block">
+      return `<details class="code-block"${isOpen ? ' open' : ''}>
         <summary class="code-block__header">
           <span class="code-block__lang">${displayLang}</span>
           <button type="button" class="code-block__copy copy-button" data-code="${escapedCode}" title="Copy code" aria-label="Copy code">
