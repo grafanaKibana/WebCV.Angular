@@ -31,6 +31,11 @@ section {
 
     @include respond-mobile {
       grid-template-columns: 1fr;
+      gap: var(--spacing-4);
+
+      &::after {
+        display: none;
+      }
     }
   }
 
@@ -54,15 +59,33 @@ section {
       }
     }
 
+    @include respond-mobile {
+      // Reset even/odd alternation — all groups use same layout in single column
+      &:nth-child(even) {
+        flex-direction: row;
+
+        .skill-group-title {
+          transform: rotate(180deg);
+          padding: 0 0 0 var(--spacing-3);
+        }
+
+        .skill-tags {
+          border-right: none;
+          border-left: 1px solid var(--color-dark-border);
+          padding-right: 0;
+          padding-left: var(--spacing-3);
+        }
+      }
+    }
+
     &-title {
       writing-mode: vertical-lr;
       transform: rotate(180deg);
-      color: var(--color-dark-paragraph);
+      color: var(--color-dark-heading);
       font-size: rem(11px);
-      font-family: var(--font-family-mono);
-      font-weight: 400;
+      font-weight: 500;
       text-transform: uppercase;
-      letter-spacing: 0.1em;
+      letter-spacing: 0.12em;
       margin: 0;
       padding: 0 0 0 var(--spacing-3);
       white-space: nowrap;
@@ -91,6 +114,7 @@ section {
         box-sizing: border-box;
         flex: 1 1 var(--tag-basis, 33%);
         padding: rem(6px) rem(12px);
+        font-family: var(--font-family-mono);
         font-size: rem(12px);
         font-weight: 400;
         color: var(--color-dark-paragraph-bright);
