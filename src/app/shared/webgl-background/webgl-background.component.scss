@@ -1,32 +1,27 @@
 .webgl-background-container {
   position: fixed;
-  // Extend beyond viewport to cover Safari mobile safe areas
-  // (status bar, home indicator) and prevent black flash during overscroll bounce
-  top: -100px;
+  // Physically larger than viewport so the live gradient renders
+  // into Safari's status bar, bottom bar, and overscroll areas.
+  // vh on iOS Safari = large viewport height (address bar hidden).
+  top: -10vh;
   left: 0;
-  right: 0;
-  bottom: -100px;
+  width: 100vw;
+  height: 120vh;
   z-index: -1;
-  overflow: hidden;
-  
-  // Force hardware acceleration
-  transform: translateZ(0);
-  backface-visibility: hidden;
-  perspective: 1000;
-  
-  // Ensure smooth rendering
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  
+
+  // NO overflow:hidden — let the blurred canvas edges bleed beyond
+  // the container for even more coverage in Safari safe areas.
+  // NO transform — Safari clips fixed+transformed layers at viewport boundary.
+  // will-change alone is enough to promote to GPU compositor layer.
+  will-change: opacity;
+
   opacity: 0;
   transition: opacity 800ms cubic-bezier(0.16, 1, 0.3, 1);
-  will-change: opacity;
-  
-  // Canvas is always visible - color transitions happen in WebGL shader
+
   canvas {
+    display: block;
     width: 100%;
     height: 100%;
-    opacity: 1;
   }
 }
 
