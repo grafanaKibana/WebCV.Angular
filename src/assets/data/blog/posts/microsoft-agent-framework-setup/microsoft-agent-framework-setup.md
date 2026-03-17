@@ -190,7 +190,7 @@ Few-shot examples are first-class. `RenderExamples()` in the base record formats
 
 When you need typed responses, override `ChatResponseFormat`:
 
-```csharp
+```csharp open
 public record SentimentAnalysisAgent : AgentConfigBase
 {
     public override string Description =>
@@ -228,7 +228,7 @@ public record SentimentAnalysisAgent : AgentConfigBase
 
 The `ForJsonSchema<T>()` method generates the JSON schema from the type at runtime and passes it to the model. The response is guaranteed to match your schema. You deserialize with `RunAsync<T>()`:
 
-```csharp
+```csharp open
 var agent = services.GetRequiredKeyedService<AIAgent>(nameof(SentimentAnalysisAgent));
 var response = await agent.RunAsync<SentimentAnalysisAgent.ResponseFormat>(
     "This is the best update we've had in years!");
@@ -243,7 +243,7 @@ No manual JSON parsing. No schema drift.
 
 Override `Tools` and define methods with `[Description]` attributes:
 
-```csharp
+```csharp open
 public record WeatherAssistantAgent : AgentConfigBase
 {
     public override string Description =>
@@ -291,7 +291,7 @@ public record WeatherAssistantAgent : AgentConfigBase
 
 Since every agent is resolved from DI by name, composing them is straightforward. Analyze sentiment, then translate the result:
 
-```csharp
+```csharp open
 var sentimentAgent = services
     .GetRequiredKeyedService<AIAgent>(nameof(SentimentAnalysisAgent));
 var translationAgent = services
