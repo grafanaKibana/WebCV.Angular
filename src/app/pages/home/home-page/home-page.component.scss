@@ -5,7 +5,6 @@
   flex-direction: column;
   gap: var(--spacing-4);
 
-  > app-sidebar,
   > .sections {
     min-width: 0;
     width: 100%;
@@ -17,6 +16,7 @@
     gap: var(--section-gap);
   }
 
+  .sections > app-profile-section,
   .sections > app-about-me-section,
   .sections > app-experience-section,
   .sections > app-education-section,

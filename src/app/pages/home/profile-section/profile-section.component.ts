@@ -1,17 +1,17 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { HomeDataService, SidebarInfo } from '../../services/home-data.service';
+import { HomeDataService, SidebarInfo } from '../../../services/home-data.service';
 
 @Component({
-  selector: 'app-sidebar',
+  selector: 'app-profile-section',
   standalone: true,
-  templateUrl: './sidebar.component.html',
-  styleUrls: ['./sidebar.component.scss'],
+  templateUrl: './profile-section.component.html',
+  styleUrls: ['./profile-section.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SidebarComponent implements OnInit, OnDestroy {
-  sidebarReady = false;
+export class ProfileSectionComponent implements OnInit, OnDestroy {
+  profileReady = false;
   sidebarInfo: SidebarInfo = {
     firstName: '',
     lastName: '',
@@ -43,25 +43,17 @@ export class SidebarComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (data: SidebarInfo) => {
-          this.sidebarReady = true;
+          this.profileReady = true;
           this.sidebarInfo = data;
           this.links = data.links;
           this.cdr.markForCheck();
         },
         error: (error) => {
-          this.sidebarReady = true;
-          console.error('Error loading sidebar data:', error);
+          this.profileReady = true;
+          console.error('Error loading profile data:', error);
           this.cdr.markForCheck();
         }
       });
-  }
-
-  extractPathName(url: string): string {
-    try {
-      return new URL(url).pathname.split('/').filter(Boolean).pop() || '';
-    } catch {
-      return '';
-    }
   }
 
   ngOnDestroy(): void {

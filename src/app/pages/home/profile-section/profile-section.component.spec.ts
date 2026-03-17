@@ -1,15 +1,15 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { SidebarComponent } from './sidebar.component';
+import { ProfileSectionComponent } from './profile-section.component';
 
-describe('SidebarComponent', () => {
-  let component: SidebarComponent;
-  let fixture: ComponentFixture<SidebarComponent>;
+describe('ProfileSectionComponent', () => {
+  let component: ProfileSectionComponent;
+  let fixture: ComponentFixture<ProfileSectionComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ SidebarComponent ],
+      declarations: [ ProfileSectionComponent ],
       imports: [HttpClientTestingModule],
       schemas: [NO_ERRORS_SCHEMA]
     })
@@ -17,7 +17,7 @@ describe('SidebarComponent', () => {
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SidebarComponent);
+    fixture = TestBed.createComponent(ProfileSectionComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
