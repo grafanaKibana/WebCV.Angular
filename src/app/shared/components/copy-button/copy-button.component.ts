@@ -10,6 +10,7 @@ import {
   PLATFORM_ID,
   inject
 } from '@angular/core';
+import { from } from 'rxjs';
 
 export type CopyState = 'idle' | 'success' | 'error';
 
@@ -70,7 +71,7 @@ export class CopyButtonComponent implements OnDestroy {
     }
   }
 
-  async copy(): Promise<void> {
+  copy(): void {
     if (!isPlatformBrowser(this.platformId)) {
       this.handleError(new Error('Clipboard API not supported'));
       return;
@@ -84,12 +85,10 @@ export class CopyButtonComponent implements OnDestroy {
       return;
     }
 
-    try {
-      await navigator.clipboard.writeText(this.text);
-      this.handleSuccess();
-    } catch (err) {
-      this.handleError(err as Error);
-    }
+    from(navigator.clipboard.writeText(this.text)).subscribe({
+      next: () => this.handleSuccess(),
+      error: (err: Error) => this.handleError(err)
+    });
   }
 
   private handleSuccess(): void {

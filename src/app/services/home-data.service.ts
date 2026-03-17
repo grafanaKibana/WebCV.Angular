@@ -27,7 +27,6 @@ export interface AboutMeData {
 }
 
 export interface HeaderConfig {
-  isPortfolioDone: boolean;
   isBlogDone: boolean;
   isDownloadCVDone: boolean;
 }
@@ -166,7 +165,6 @@ export class HomeDataService {
       experience: [],
       skills: [],
       header: {
-        isPortfolioDone: false,
         isBlogDone: false,
         isDownloadCVDone: false
       }

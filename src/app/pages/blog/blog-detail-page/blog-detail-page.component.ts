@@ -3,7 +3,7 @@ import { AfterViewChecked, ChangeDetectionStrategy, ChangeDetectorRef, Component
 import { trigger, transition, query, style, stagger, animate } from '@angular/animations';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { Subject } from 'rxjs';
+import { Subject, from } from 'rxjs';
 import { switchMap, takeUntil } from 'rxjs/operators';
 import { marked } from 'marked';
 import hljs from 'highlight.js/lib/common';
@@ -146,19 +146,20 @@ export class BlogDetailPageComponent implements OnInit, OnDestroy, AfterViewChec
     // Prevent rapid re-clicks during animation
     if (button.classList.contains('copy-button--success')) return;
 
-    navigator.clipboard.writeText(code)
-      .then(() => {
+    from(navigator.clipboard.writeText(code)).subscribe({
+      next: () => {
         button.classList.add('copy-button--success');
         setTimeout(() => {
           button.classList.remove('copy-button--success');
         }, 2000);
-      })
-      .catch(() => {
+      },
+      error: () => {
         button.classList.add('copy-button--error');
         setTimeout(() => {
           button.classList.remove('copy-button--error');
         }, 2000);
-      });
+      }
+    });
   }
 
   private unescapeHtml(value: string): string {

@@ -1,4 +1,4 @@
-@import '../../../assets/styles/utility';
+@import "../home";
 
 .profile {
   @include glass-effect(0.40);
@@ -104,6 +104,7 @@
       gap: var(--spacing-2);
       line-height: 1;
       white-space: nowrap;
+      min-height: 44px;
 
       i {
         font-size: rem(18px);

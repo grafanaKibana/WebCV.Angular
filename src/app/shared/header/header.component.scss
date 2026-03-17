@@ -174,11 +174,10 @@ $download-progress-glass-blur: rem(24px);
     }
 
     @include respond-mobile {
-      // Seamless pill segments — no individual button appearance
       border-radius: 0;
       padding: var(--spacing-2);
-      min-width: 40px;
-      min-height: 40px;
+      min-width: 44px;
+      min-height: 44px;
 
       // Remove interactive-glow hover effects on mobile
       &:not(.soon)::before,

@@ -37,8 +37,6 @@ yarn-error.log
 testem.log
 /typings
 /.planning/
-/.claude/
-/.opencode/
 /.sisyphus/
 
 # System files

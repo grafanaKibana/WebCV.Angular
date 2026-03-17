@@ -4,7 +4,7 @@ import { trigger, transition, query, style, stagger, animate } from '@angular/an
 import { Subject } from 'rxjs';
 import { take, takeUntil, finalize } from 'rxjs/operators';
 import { HomeDataService } from '../../../services/home-data.service';
-import { SidebarComponent } from '../../../shared/sidebar/sidebar.component';
+import { ProfileSectionComponent } from '../profile-section/profile-section.component';
 import { AboutMeSectionComponent } from '../about-me-section/about-me-section.component';
 import { EducationSectionComponent } from '../education-section/education-section.component';
 import { ExperienceSectionComponent } from '../experience-section/experience-section.component';
@@ -13,14 +13,14 @@ import { SkillsSectionComponent } from '../skills-section/skills-section.compone
 @Component({
   selector: 'app-home-pages',
   standalone: true,
-  imports: [SidebarComponent, AboutMeSectionComponent, EducationSectionComponent, ExperienceSectionComponent, SkillsSectionComponent],
+  imports: [ProfileSectionComponent, AboutMeSectionComponent, EducationSectionComponent, ExperienceSectionComponent, SkillsSectionComponent],
   templateUrl: './home-page.component.html',
   styleUrls: ['./home-page.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   animations: [
     trigger('sectionAnimation', [
       transition('* => *', [
-        query('app-about-me-section, app-education-section, app-experience-section, app-skills-section', [
+        query('app-profile-section, app-about-me-section, app-education-section, app-experience-section, app-skills-section', [
           style({ transform: 'translateY(16px)' }),
           stagger(80, [
             animate('420ms cubic-bezier(0.22, 0.61, 0.36, 1)', style({ transform: 'translateY(0)' }))
