@@ -1,1 +1,10 @@
 @import '../blog';
+
+:host {
+  display: grid;
+  gap: var(--spacing-4);
+
+  @include respond-mobile {
+    gap: var(--spacing-3);
+  }
+}

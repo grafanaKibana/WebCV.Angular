@@ -66,16 +66,11 @@ $download-progress-glass-blur: rem(24px);
   z-index: 2;
   display: inline-flex;
   align-items: center;
-  border-radius: var(--radius-20);
+  border-radius: var(--radius-surface);
 
   @include respond-tablet-sm {
     display: flex;
     width: 100%;
-    border-radius: var(--radius-16);
-  }
-
-  @include respond-mobile {
-    border-radius: var(--radius-8);
   }
 
   a,
@@ -115,14 +110,14 @@ $download-progress-glass-blur: rem(24px);
           vertical-align: middle;
           text-transform: uppercase;
           font-weight: 400;
-          font-size: 9px;
-          font-family: var(--font-family-mono);
-          padding: 2px 6px;
-          margin-left: rem(8px);
-          background-color: var(--color-dark-accent-tint);
-          border-radius: var(--radius-4);
+        font-size: rem(10px);
+        font-family: var(--font-family-mono);
+        padding: 2px 6px;
+        margin-left: rem(8px);
+        background-color: var(--color-dark-accent-tint);
+        border-radius: var(--radius-4);
             border: 1px solid rgba(var(--accent-r), var(--accent-g), var(--accent-b), 0.3);
-          color: var(--color-dark-accent);
+        color: var(--color-dark-accent);
         }
       }
 
@@ -268,7 +263,7 @@ $download-progress-glass-blur: rem(24px);
         vertical-align: middle;
         text-transform: uppercase;
         font-weight: 400;
-        font-size: 9px;
+        font-size: rem(10px);
         font-family: var(--font-family-mono);
         padding: 2px 6px;
         margin-left: rem(8px);

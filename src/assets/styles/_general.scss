@@ -23,6 +23,7 @@
   :root {
     --section-pad: var(--spacing-5);
     --section-gap: var(--spacing-4);
+    --radius-surface: var(--radius-16);
   }
 }
 
@@ -30,12 +31,13 @@
   :root {
     --section-pad: var(--spacing-4);
     --section-gap: var(--spacing-3);
+    --radius-surface: var(--radius-16);
   }
 }
 
 html {
   scroll-behavior: smooth;
-  -webkit-overflow-scrolling: touch;
+  clip-path: inset(0);
 }
 
 body {
@@ -44,9 +46,13 @@ body {
   overflow-x: hidden;
 }
 
+body {
+  margin: 0;
+  overflow-x: hidden;
+}
+
 section {
   padding: var(--section-pad);
-  margin-bottom: var(--section-gap);
   @extend .box-shadow-16;
 }
 

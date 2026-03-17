@@ -1,1 +1,26 @@
 @import '../blog';
+
+:host {
+  display: grid;
+  gap: var(--spacing-4);
+
+  @include respond-mobile {
+    gap: var(--spacing-3);
+  }
+}
+
+:host > div {
+  display: grid;
+  gap: var(--spacing-4);
+
+  @include respond-mobile {
+    gap: var(--spacing-3);
+  }
+}
+
+:host ::ng-deep .blog-hero__pills > .blog-share--icons app-copy-button .copy-button {
+  @include respond-tablet-sm {
+    width: rem(22px);
+    height: rem(22px);
+  }
+}
