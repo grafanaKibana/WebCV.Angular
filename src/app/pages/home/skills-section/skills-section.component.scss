@@ -105,7 +105,7 @@ section {
 
       .skill-tag {
         @include dark-block-base(
-          $bg: rgba(10, 15, 20, 0.15),
+          $bg: rgba(10, 15, 20, 0.10),
           $radius: var(--radius-8),
           $blur: 6px
         );

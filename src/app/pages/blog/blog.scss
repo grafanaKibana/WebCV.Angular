@@ -1173,6 +1173,7 @@
   margin-left: var(--spacing-5);
   margin-bottom: var(--spacing-4);
   padding: var(--spacing-3);
+  border-radius: var(--radius-inner);
   display: grid;
   gap: var(--spacing-2);
 
@@ -1185,12 +1186,12 @@
 
   &__title {
     margin: 0;
+    padding-left: var(--spacing-2);
     font-size: rem(12px);
     font-family: var(--font-family-mono);
     text-transform: uppercase;
     letter-spacing: 0.08em;
     color: var(--color-dark-heading);
-    text-align: center;
 
     @include respond-tablet-sm {
       font-size: rem(11px);
@@ -1204,6 +1205,12 @@
     font-weight: 300;
     padding-left: 0;
     transition: color var(--transition-fast) var(--transition-easing);
+
+    &::before {
+      content: '–';
+      color: var(--color-dark-accent);
+      margin-right: var(--spacing-2);
+    }
 
     &:hover {
       color: var(--color-dark-heading);
