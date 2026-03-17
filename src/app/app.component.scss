@@ -49,7 +49,7 @@
 
 .wrapper {
   margin: var(--spacing-10) rem(200px) 0;
-  min-height: var(--app-height, 100vh);
+  min-height: var(--app-height, 100dvh);
   display: flex;
   flex-direction: column;
   position: relative;
