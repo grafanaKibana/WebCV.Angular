@@ -35,7 +35,6 @@ describe('HomePageComponent', () => {
       experience: [],
       skills: [],
       header: {
-        isPortfolioDone: false,
         isBlogDone: false,
         isDownloadCVDone: false
       }

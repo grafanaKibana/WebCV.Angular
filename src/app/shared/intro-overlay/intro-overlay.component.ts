@@ -1,5 +1,7 @@
 import { isPlatformBrowser } from '@angular/common';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, OnDestroy, OnInit, PLATFORM_ID, inject } from '@angular/core';
+import { Observable, Subject, EMPTY, concat, timer, defer, of } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-intro-overlay',
@@ -24,7 +26,7 @@ export class IntroOverlayComponent implements OnInit, OnDestroy {
   private readonly startDelayMs = 220;
   private readonly pauseBetweenLinesMs = 2000;
   private readonly holdLastLineMs = 3000;
-  private runToken = 0;
+  private readonly cancel$ = new Subject<void>();
   private exitTimeoutId: number | null = null;
   private removeAnimateTimeoutId: number | null = null;
   private readonly cdr = inject(ChangeDetectorRef);
@@ -62,13 +64,14 @@ export class IntroOverlayComponent implements OnInit, OnDestroy {
       return;
     }
 
-    void this.playIntro();
+    this.playIntro();
   }
 
   ngOnDestroy(): void {
     if (!isPlatformBrowser(this.platformId)) return;
 
-    this.runToken++;
+    this.cancel$.next();
+    this.cancel$.complete();
     if (this.exitTimeoutId !== null) {
       window.clearTimeout(this.exitTimeoutId);
       this.exitTimeoutId = null;
@@ -93,27 +96,36 @@ export class IntroOverlayComponent implements OnInit, OnDestroy {
     }
   }
 
-  private async setLineWithTransition(text: string, token: number): Promise<void> {
-    if (token !== this.runToken || !this.visible || this.isExiting) return;
+  private setLineWithTransition$(text: string): Observable<unknown> {
+    return defer(() => {
+      if (!this.visible || this.isExiting) return EMPTY;
 
-    const first = !this.lineText;
-    if (!first) {
-      // Fade current line out, then swap text, then fade in.
-      this.lineVisible = false;
-      this.cdr.markForCheck();
-      await this.sleep(this.lineTransitionMs);
-      if (token !== this.runToken || !this.visible || this.isExiting) return;
-    }
+      const steps: Observable<unknown>[] = [];
 
-    this.lineText = text;
-    this.cdr.markForCheck();
+      if (this.lineText) {
+        steps.push(defer(() => {
+          this.lineVisible = false;
+          this.cdr.markForCheck();
+          return timer(this.lineTransitionMs);
+        }));
+      }
 
-    // Ensure transition triggers reliably.
-    await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
-    if (token !== this.runToken || !this.visible || this.isExiting) return;
+      steps.push(defer(() => {
+        if (!this.visible || this.isExiting) return EMPTY;
+        this.lineText = text;
+        this.cdr.markForCheck();
+        return this.animationFrame$();
+      }));
 
-    this.lineVisible = true;
-    this.cdr.markForCheck();
+      steps.push(defer(() => {
+        if (!this.visible || this.isExiting) return EMPTY;
+        this.lineVisible = true;
+        this.cdr.markForCheck();
+        return of(undefined);
+      }));
+
+      return concat(...steps);
+    });
   }
 
   private beginExit(forceImmediate: boolean = false): void {
@@ -121,8 +133,9 @@ export class IntroOverlayComponent implements OnInit, OnDestroy {
 
     if (!this.visible || this.isExiting) return;
 
-    // Cancel any in-flight scripted sequence.
-    this.runToken++;
+    // Set flag before cancelling so the complete handler sees isExiting = true
+    this.isExiting = true;
+    this.cancel$.next();
 
     if (!this.debugForceShow) {
       this.markSeen();
@@ -135,7 +148,6 @@ export class IntroOverlayComponent implements OnInit, OnDestroy {
     }
     this.removeAnimateTimeoutId = window.setTimeout(() => this.removeAnimateClass(), this.exitMs + 500);
 
-    this.isExiting = true;
     this.cdr.markForCheck();
 
     if (this.exitTimeoutId !== null) {
@@ -210,41 +222,51 @@ export class IntroOverlayComponent implements OnInit, OnDestroy {
     }
   }
 
-  private sleep(ms: number): Promise<void> {
-    if (!isPlatformBrowser(this.platformId)) return Promise.resolve();
-
-    return new Promise((resolve) => window.setTimeout(resolve, Math.max(0, Math.round(ms))));
+  /**
+   * Wraps requestAnimationFrame as a single-emission Observable.
+   */
+  private animationFrame$(): Observable<void> {
+    return new Observable<void>(subscriber => {
+      const id = requestAnimationFrame(() => {
+        subscriber.next();
+        subscriber.complete();
+      });
+      return () => cancelAnimationFrame(id);
+    });
   }
 
-  private async playIntro(): Promise<void> {
-    const token = ++this.runToken;
-    const startedAt = performance.now();
+  private playIntro(): void {
+    this.cancel$.next();
 
+    const startedAt = performance.now();
     const lines = this.getIntroLines();
+
     if (lines.length === 0) {
       this.beginExit(true);
       return;
     }
 
-    await this.sleep(this.startDelayMs);
-    if (token !== this.runToken || !this.visible || this.isExiting) return;
+    const steps: Observable<unknown>[] = [timer(this.startDelayMs)];
 
     for (let i = 0; i < lines.length; i++) {
-      await this.setLineWithTransition(lines[i], token);
-      if (token !== this.runToken || !this.visible || this.isExiting) return;
-
+      steps.push(this.setLineWithTransition$(lines[i]));
       const isLast = i === lines.length - 1;
-      await this.sleep(isLast ? this.holdLastLineMs : this.pauseBetweenLinesMs);
-      if (token !== this.runToken || !this.visible || this.isExiting) return;
+      steps.push(timer(isLast ? this.holdLastLineMs : this.pauseBetweenLinesMs));
     }
 
-    const elapsed = performance.now() - startedAt;
-    if (elapsed < this.minIntroMs) {
-      await this.sleep(this.minIntroMs - elapsed);
-    }
-    if (token !== this.runToken || !this.visible || this.isExiting) return;
+    steps.push(defer(() => {
+      const elapsed = performance.now() - startedAt;
+      const remaining = this.minIntroMs - elapsed;
+      return remaining > 0 ? timer(remaining) : EMPTY;
+    }));
 
-    this.beginExit(false);
+    concat(...steps).pipe(
+      takeUntil(this.cancel$)
+    ).subscribe({
+      complete: () => {
+        if (this.visible && !this.isExiting) this.beginExit(false);
+      }
+    });
   }
 
   private getIntroLines(): string[] {

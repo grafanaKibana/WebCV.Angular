@@ -5,9 +5,12 @@
     (click)="skip()"
     role="presentation"
   >
-    <div class="intro-inner" (click)="$event.stopPropagation()">
+    <div class="intro-inner">
       <div class="intro-line" [class.is-on]="lineVisible">{{ lineText }}</div>
-      <div class="intro-hint">Click to skip or press Space / Esc</div>
+      <div class="intro-hint">
+        <span class="hint-desktop">Click to skip or press Space / Esc</span>
+        <span class="hint-touch">Touch to skip</span>
+      </div>
     </div>
   </div>
 }

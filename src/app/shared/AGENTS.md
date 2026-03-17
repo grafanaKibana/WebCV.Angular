@@ -11,7 +11,6 @@ shared/
 ├── sidebar/             # Left panel on home — avatar, name, contact links, social
 ├── webgl-background/    # Hosts the WebGL canvas (delegates to WebGLGradientService)
 ├── intro-overlay/       # First-visit typewriter animation (skippable, respects prefers-reduced-motion)
-├── modal-dialog/        # Generic modal wrapper
 ├── horizontal-separator/
 ├── vertical-separator/
 ├── components/
@@ -25,7 +24,7 @@ shared/
 
 | Task | Location | Notes |
 |------|----------|-------|
-| Add nav link / feature flag | `header/` | Reads `HeaderConfig` from `HomeDataService` for `isPortfolioDone`, `isBlogDone` |
+| Add nav link / feature flag | `header/` | Reads `HeaderConfig` from `HomeDataService` for `isBlogDone`, `isDownloadCVDone` |
 | Change glass/frosted effect | `_mixins.scss` → `glass-panel()` | Uses `--reflection-*` CSS vars from `DynamicReflectionService` |
 | Change hover glow effect | `_mixins.scss` → `interactive-glow()` | Uses reflection vars + `box-shadow-16`, `text-glow-12` extends |
 | WebGL canvas setup | `webgl-background/` | Thin wrapper — all logic in `WebGLGradientService` |

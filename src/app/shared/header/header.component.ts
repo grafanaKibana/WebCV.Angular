@@ -18,7 +18,6 @@ import { environment } from '../../../environments/environment';
 })
 export class HeaderComponent implements OnInit, OnDestroy {
   headerReady = false;
-  isPortfolioDone: boolean = false;
   isBlogDone: boolean = false;
   isDownloadCVDone: boolean = false;
   isDownloading: boolean = false;
@@ -36,7 +35,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (config) => {
           this.headerReady = true;
-          this.isPortfolioDone = config.isPortfolioDone;
           this.isBlogDone = config.isBlogDone;
           this.isDownloadCVDone = config.isDownloadCVDone;
           this.cdr.markForCheck();

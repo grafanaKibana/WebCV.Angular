@@ -99,6 +99,20 @@
   letter-spacing: 0.04em;
   color: var(--color-dark-accent);
   opacity: 0.5;
+
+  .hint-touch {
+    display: none;
+  }
+
+  @include respond-tablet {
+    .hint-desktop {
+      display: none;
+    }
+
+    .hint-touch {
+      display: inline;
+    }
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

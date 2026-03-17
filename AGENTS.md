@@ -17,7 +17,7 @@ src/
 │   ├── pages/
 │   │   ├── home/            # Section-based: about-me, education, experience, skills
 │   │   ├── blog/            # Markdown blog with own BlogDataService, YAML front matter parser
-│   │   └── portfolio/       # WIP — interfaces + item/page components
+│   │   └── portfolio/       # Placeholder only — header link exists, page not implemented
 │   ├── services/            # Root-provided services (WebGL, reflections, SEO, CV download, home data)
 │   └── shared/              # Reusable: header, footer, sidebar, WebGL background, intro overlay, pipes
 ├── assets/
@@ -41,7 +41,7 @@ src/
 | Responsive breakpoints | `src/assets/styles/variables/_media.scss` | Desktop-first, 7 breakpoints (375–1920px) + ultrawide |
 | SCSS mixins | `src/assets/styles/variables/_mixins.scss` | `respond-*`, `glass-panel`, `interactive-glow`, `rem()` |
 | CSS variables | `src/assets/styles/variables/_vars.scss` | Colors, spacing, radii, fonts, reflection RGB |
-| Header feature flags | `home-data.json` → `header` | `isPortfolioDone`, `isBlogDone`, `isDownloadCVDone` |
+| Header feature flags | `home-data.json` → `header` | `isBlogDone`, `isDownloadCVDone` |
 | SEO meta tags | `src/app/services/seo.service.ts` | Per-route OG + Twitter cards |
 | WebGL gradient logic | `src/app/services/webgl-gradient.service.ts` | 1180 lines — Stripe-based shader, parallax, CSS fallback |
 | Dynamic reflections | `src/app/services/dynamic-reflection.service.ts` | Reads WebGL colors → sets CSS vars for glass effects |
