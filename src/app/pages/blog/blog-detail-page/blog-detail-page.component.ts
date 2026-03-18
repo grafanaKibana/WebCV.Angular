@@ -8,6 +8,7 @@ import {
 	DOCUMENT,
 	type ElementRef,
 	inject,
+	type OnDestroy,
 	PLATFORM_ID,
 	signal,
 	viewChild,
@@ -43,7 +44,7 @@ interface ShareLink {
 	styleUrls: ["./blog-detail-page.component.scss"],
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BlogDetailPageComponent implements AfterViewChecked {
+export class BlogDetailPageComponent implements AfterViewChecked, OnDestroy {
 	readonly contentBodyRef = viewChild<ElementRef<HTMLElement>>("contentBody");
 	readonly article = signal<ArticleModel | undefined>(undefined);
 	readonly articleLoaded = signal(false);
@@ -62,6 +63,8 @@ export class BlogDetailPageComponent implements AfterViewChecked {
 	authorAvatarUrl = "assets/images/my-portrait.png";
 
 	private copyButtonsInitialized = false;
+	private readonly copyButtonHandlers = new Map<HTMLButtonElement, (e: Event) => void>();
+	private readonly feedbackTimeoutIds = new Set<ReturnType<typeof setTimeout>>();
 	private readonly route = inject(ActivatedRoute);
 	private readonly blogDataService = inject(BlogDataService);
 	private readonly homeDataService = inject(HomeDataService);
@@ -127,13 +130,15 @@ export class BlogDetailPageComponent implements AfterViewChecked {
 		const copyButtons =
 			container.querySelectorAll<HTMLButtonElement>(".code-block__copy");
 		copyButtons.forEach((btn) => {
-			btn.addEventListener("click", (e) => {
+			const handler = (e: Event) => {
 				e.preventDefault();
 				e.stopPropagation();
 				const code = btn.getAttribute("data-code") ?? "";
 				const decodedCode = this.unescapeHtml(code);
 				this.copyCodeToClipboard(decodedCode, btn);
-			});
+			};
+			btn.addEventListener("click", handler);
+			this.copyButtonHandlers.set(btn, handler);
 		});
 	}
 
@@ -148,15 +153,19 @@ export class BlogDetailPageComponent implements AfterViewChecked {
 		from(navigator.clipboard.writeText(code)).subscribe({
 			next: () => {
 				button.classList.add("copy-button--success");
-				setTimeout(() => {
+				const tid = setTimeout(() => {
 					button.classList.remove("copy-button--success");
+					this.feedbackTimeoutIds.delete(tid);
 				}, 2000);
+				this.feedbackTimeoutIds.add(tid);
 			},
 			error: () => {
 				button.classList.add("copy-button--error");
-				setTimeout(() => {
+				const tid = setTimeout(() => {
 					button.classList.remove("copy-button--error");
+					this.feedbackTimeoutIds.delete(tid);
 				}, 2000);
+				this.feedbackTimeoutIds.add(tid);
 			},
 		});
 	}
@@ -284,5 +293,16 @@ export class BlogDetailPageComponent implements AfterViewChecked {
 			.replace(/>/g, "&gt;")
 			.replace(/"/g, "&quot;")
 			.replace(/'/g, "&#039;");
+	}
+
+	ngOnDestroy(): void {
+		this.copyButtonHandlers.forEach((handler, btn) => {
+			btn.removeEventListener("click", handler);
+		});
+		this.copyButtonHandlers.clear();
+		this.feedbackTimeoutIds.forEach((id) => {
+			clearTimeout(id);
+		});
+		this.feedbackTimeoutIds.clear();
 	}
 }
