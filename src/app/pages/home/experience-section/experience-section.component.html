@@ -10,10 +10,10 @@
           </div>
           <div class="section-item-date-container">
             <span class="section-item-date">
-              <time [attr.datetime]="toIsoDate(experience.startYear, experience.startMonth)">{{experience.startMonth | monthShort}} {{experience.startYear}}</time>
+              <time [attr.datetime]="toIsoDate(experience.startYear, experience.startMonth)">{{experience.startMonth | monthShort}} <span class="year-full">{{experience.startYear}}</span><span class="year-short">'{{experience.startYear.slice(-2)}}</span></time>
               –
               @if (experience.endMonth && experience.endYear) {
-                <time [attr.datetime]="toIsoDate(experience.endYear, experience.endMonth)">{{experience.endMonth | monthShort}} {{experience.endYear}}</time>
+                <time [attr.datetime]="toIsoDate(experience.endYear, experience.endMonth)">{{experience.endMonth | monthShort}} <span class="year-full">{{experience.endYear}}</span><span class="year-short">'{{experience.endYear.slice(-2)}}</span></time>
               } @else {
                 Present
               }

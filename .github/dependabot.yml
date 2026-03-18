@@ -1,0 +1,28 @@
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+    open-pull-requests-limit: 10
+    groups:
+      angular:
+        patterns:
+          - "@angular/*"
+          - "@angular-devkit/*"
+        update-types:
+          - "minor"
+          - "patch"
+      testing:
+        patterns:
+          - "jest"
+          - "jest-*"
+          - "@types/jest"
+      typescript:
+        patterns:
+          - "typescript"
+          - "tslib"
+      linting:
+        patterns:
+          - "eslint*"
+          - "@typescript-eslint/*"

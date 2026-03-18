@@ -34,6 +34,10 @@ h1 {
   font-size: clamp(rem(30px), 4vw, rem(42px));
   margin-bottom: rem(28px);
   position: relative;
+  background: linear-gradient(135deg, var(--color-dark-heading) 0%, color-mix(in srgb, var(--color-dark-accent) 35%, var(--color-dark-heading)) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
 
   @include respond-tablet {
     margin-bottom: rem(24px);
@@ -48,6 +52,10 @@ h1 {
 h2 {
   font-size: clamp(rem(24px), 3vw, rem(32px));
   margin-bottom: rem(24px);
+  background: linear-gradient(135deg, var(--color-dark-heading) 0%, color-mix(in srgb, var(--color-dark-accent) 35%, var(--color-dark-heading)) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
 
   @include respond-tablet {
     margin-bottom: rem(20px);
@@ -182,6 +190,7 @@ input, textarea {
 
   .section-number {
     color: var(--color-dark-accent);
+    -webkit-text-fill-color: var(--color-dark-accent);
     font-family: var(--font-family-mono);
     font-size: 0.75em;
     font-weight: 400;

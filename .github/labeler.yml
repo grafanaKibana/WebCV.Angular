@@ -1,0 +1,49 @@
+blog:
+  - changed-files:
+      - any-glob-to-any-file:
+          - src/app/pages/blog/**
+          - src/assets/data/blog/**
+
+webgl:
+  - changed-files:
+      - any-glob-to-any-file:
+          - src/app/services/webgl-gradient.service.ts
+          - src/app/services/dynamic-reflection.service.ts
+          - src/app/config/webgl.config.ts
+
+styles:
+  - changed-files:
+      - any-glob-to-any-file:
+          - src/assets/styles/**
+          - "**/*.scss"
+
+config:
+  - changed-files:
+      - any-glob-to-any-file:
+          - angular.json
+          - tsconfig*.json
+          - jest.config.ts
+          - package.json
+
+ci:
+  - changed-files:
+      - any-glob-to-any-file:
+          - .github/**
+
+tests:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "**/*.spec.ts"
+          - jest.config.ts
+
+dependencies:
+  - changed-files:
+      - any-glob-to-any-file:
+          - package.json
+          - package-lock.json
+
+content:
+  - changed-files:
+      - any-glob-to-any-file:
+          - src/assets/data/home-data.json
+          - src/assets/data/blog/**/*.md
