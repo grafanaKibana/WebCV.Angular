@@ -5,6 +5,7 @@
     "outDir": "./out-tsc/spec",
     "module": "Node16",
     "moduleResolution": "Node16",
+    "isolatedModules": true,
     "esModuleInterop": true,
     "types": [
       "jest",
