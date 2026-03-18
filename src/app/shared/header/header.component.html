@@ -40,28 +40,6 @@
           </button>
         </li>
 
-        <li class="header-download-mobile">
-          <button
-            type="button"
-            class="download-button {{isDownloadCVDone() ? null : 'soon'}} {{isDownloading() ? 'is-downloading' : ''}}"
-            (click)="downloadCv()"
-            [disabled]="!isDownloadCVDone() || isDownloading()"
-            [attr.aria-disabled]="!isDownloadCVDone() || isDownloading() ? 'true' : null"
-            [attr.tabindex]="!isDownloadCVDone() || isDownloading() ? -1 : null"
-            aria-label="Get Resume"
-            title="Get Resume"
-          >
-            <span class="download-button-border" aria-hidden="true"></span>
-            <div class="download-button-content" [class.is-hidden]="isDownloading()">
-              <span>Get Resume</span>
-              <i class="fa-solid fa-floppy-disk" aria-hidden="true"></i>
-            </div>
-            <div class="download-progress" [class.is-active]="isDownloading()" aria-hidden="true">
-              <span aria-hidden="true"></span>
-              <span aria-hidden="true"></span>
-            </div>
-          </button>
-        </li>
       </ul>
     </header>
 

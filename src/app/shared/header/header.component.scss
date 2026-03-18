@@ -116,7 +116,7 @@ $download-progress-glass-blur: rem(24px);
         margin-left: rem(8px);
         background-color: var(--color-dark-accent-tint);
         border-radius: var(--radius-4);
-            border: 1px solid rgba(var(--accent-r), var(--accent-g), var(--accent-b), 0.3);
+
         color: var(--color-dark-accent);
         }
       }
@@ -543,6 +543,10 @@ $download-progress-glass-blur: rem(24px);
 .header-nav {
   flex: 1 1 auto;
   min-width: 0;
+
+  @include respond-tablet-sm {
+    flex: 4 1 0;
+  }
 }
 
 header {
@@ -586,13 +590,7 @@ header {
       }
     }
 
-    .header-download-mobile {
-      display: none;
 
-      @include respond-tablet-sm {
-        display: flex;
-      }
-    }
   }
 }
 
@@ -600,13 +598,20 @@ header {
   flex: 0 0 auto;
   align-self: stretch;
   padding: var(--spacing-3);
+  position: relative;
 
   .header-download {
     border-radius: var(--radius-8);
   }
 
   @include respond-tablet-sm {
-    display: none;
+    flex: 1 1 0;
+    padding: var(--spacing-2);
+    width: auto;
+  }
+
+  @include respond-mobile {
+    padding: var(--spacing-1);
   }
 }
 
@@ -622,8 +627,8 @@ header {
   background: transparent;
   border: 0;
   font: inherit;
-  font-weight: 400;
-  font-size: rem(14px);
+  font-weight: 500;
+  font-size: rem(15px);
   letter-spacing: 0.01em;
   white-space: nowrap;
   cursor: pointer;
@@ -664,6 +669,44 @@ header {
 
     &:active {
       transform: scale(0.97);
+      transition: transform 80ms ease-in;
+    }
+  }
+
+  @include respond-tablet-sm {
+    padding: var(--spacing-3);
+    min-width: 44px;
+    min-height: 44px;
+
+    .download-button-content {
+      gap: 0;
+
+      span {
+        display: none;
+      }
+    }
+
+    .download-button-content i {
+      font-size: rem(18px);
+    }
+  }
+
+  @include respond-mobile {
+    padding: var(--spacing-2);
+    min-width: 44px;
+    min-height: 44px;
+
+    .download-button-content i {
+      font-size: rem(16px);
+    }
+
+    &:not(.soon):not(.is-downloading):hover {
+      background: transparent;
+      box-shadow: none;
+    }
+
+    &:not(.soon):not(.is-downloading):active {
+      transform: scale(0.93);
       transition: transform 80ms ease-in;
     }
   }
