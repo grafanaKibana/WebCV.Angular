@@ -1,5 +1,5 @@
-import { DatePipe, DOCUMENT, isPlatformBrowser } from '@angular/common';
-import { AfterViewChecked, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, PLATFORM_ID, ViewChild, inject } from '@angular/core';
+import { DatePipe, isPlatformBrowser } from '@angular/common';
+import { AfterViewChecked, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, PLATFORM_ID, ViewChild, inject, DOCUMENT } from '@angular/core';
 import { trigger, transition, query, style, stagger, animate } from '@angular/animations';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
@@ -25,24 +25,23 @@ interface ShareLink {
 }
 
 @Component({
-  selector: 'app-blog-detail-page',
-  standalone: true,
-  imports: [RouterLink, CopyButtonComponent, DatePipe],
-  templateUrl: './blog-detail-page.component.html',
-  styleUrls: ['./blog-detail-page.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  animations: [
-    trigger('sectionAnimation', [
-      transition('* => *', [
-        query('.blog-hero, .blog-content', [
-          style({ transform: 'translateY(16px)' }),
-          stagger(80, [
-            animate('420ms cubic-bezier(0.22, 0.61, 0.36, 1)', style({ transform: 'translateY(0)' }))
-          ])
-        ], { optional: true })
-      ])
-    ])
-  ]
+    selector: 'app-blog-detail-page',
+    imports: [RouterLink, CopyButtonComponent, DatePipe],
+    templateUrl: './blog-detail-page.component.html',
+    styleUrls: ['./blog-detail-page.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    animations: [
+        trigger('sectionAnimation', [
+            transition('* => *', [
+                query('.blog-hero, .blog-content', [
+                    style({ transform: 'translateY(16px)' }),
+                    stagger(80, [
+                        animate('420ms cubic-bezier(0.22, 0.61, 0.36, 1)', style({ transform: 'translateY(0)' }))
+                    ])
+                ], { optional: true })
+            ])
+        ])
+    ]
 })
 export class BlogDetailPageComponent implements OnInit, OnDestroy, AfterViewChecked {
   @ViewChild('contentBody') contentBodyRef?: ElementRef<HTMLElement>;

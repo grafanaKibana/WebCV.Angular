@@ -24,29 +24,28 @@ const ROUTE_META: Record<string, PageMeta> = {
 };
 
 @Component({
-  selector: 'app-root',
-  standalone: true,
-  imports: [RouterOutlet, HeaderComponent, FooterComponent, IntroOverlayComponent, WebGLBackgroundComponent],
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  animations: [
-    trigger('routeAnimations', [
-      transition('* <=> *', [
-        query(':leave', [
-          style({
-            display: 'none'
-          })
-        ], { optional: true }),
-        query(':enter', [
-          style({
-            transform: 'translateY(20px)'
-          }),
-          animate('350ms cubic-bezier(0.4, 0.0, 0.2, 1)', style({ transform: 'translateY(0)' }))
-        ], { optional: true })
-      ])
-    ])
-  ]
+    selector: 'app-root',
+    imports: [RouterOutlet, HeaderComponent, FooterComponent, IntroOverlayComponent, WebGLBackgroundComponent],
+    templateUrl: './app.component.html',
+    styleUrls: ['./app.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    animations: [
+        trigger('routeAnimations', [
+            transition('* <=> *', [
+                query(':leave', [
+                    style({
+                        display: 'none'
+                    })
+                ], { optional: true }),
+                query(':enter', [
+                    style({
+                        transform: 'translateY(20px)'
+                    }),
+                    animate('350ms cubic-bezier(0.4, 0.0, 0.2, 1)', style({ transform: 'translateY(0)' }))
+                ], { optional: true })
+            ])
+        ])
+    ]
 })
 export class AppComponent implements OnDestroy {
   title = 'webcv-angular';
