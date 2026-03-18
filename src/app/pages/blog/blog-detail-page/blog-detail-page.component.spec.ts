@@ -52,6 +52,6 @@ describe('BlogDetailPageComponent', () => {
   });
 
   it('should set articleLoaded to true after init', () => {
-    expect(component.articleLoaded).toBe(true);
+    expect(component.articleLoaded()).toBe(true);
   });
 });

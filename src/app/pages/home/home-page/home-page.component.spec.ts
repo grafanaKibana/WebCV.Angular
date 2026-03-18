@@ -59,6 +59,6 @@ describe('HomePageComponent', () => {
   });
 
   it('should set homeReady to true after data loads', () => {
-    expect(component.homeReady).toBe(true);
+    expect(component.homeReady()).toBe(true);
   });
 });

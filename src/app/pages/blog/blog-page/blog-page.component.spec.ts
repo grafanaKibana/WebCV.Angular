@@ -32,6 +32,6 @@ describe('BlogPageComponent', () => {
   });
 
   it('should set articlesReady after articles load', () => {
-    expect(component.articlesReady).toBe(true);
+    expect(component.articlesReady()).toBe(true);
   });
 });

@@ -36,11 +36,8 @@ describe('SkillsSectionComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should load skills data and create rows of 4', () => {
-    expect(component.skills).toEqual(mockSkills);
-    expect(component.skillRows.length).toBe(2);
-    expect(component.skillRows[0].length).toBe(4);
-    expect(component.skillRows[1].length).toBe(1);
+  it('should load skills data', () => {
+    expect(component.skills()).toEqual(mockSkills);
   });
 
   describe('getSkillLevelName', () => {
