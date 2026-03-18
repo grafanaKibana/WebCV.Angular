@@ -3,6 +3,8 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "outDir": "./out-tsc/spec",
+    "module": "Node16",
+    "moduleResolution": "Node16",
     "esModuleInterop": true,
     "types": [
       "jest",
