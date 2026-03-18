@@ -7,10 +7,4 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
   styleUrls: ['./footer.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class FooterComponent {
-  public currentDate = new Date().getUTCFullYear()
-
-  sendEmail(userName: string, userEmail: string, userMessage: string): void {
-    console.warn('You has been nayoban :(')
-  }
-}
+export class FooterComponent {}
