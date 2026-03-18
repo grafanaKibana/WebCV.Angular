@@ -1241,6 +1241,12 @@
     padding-left: var(--spacing-6);
     opacity: 0.6;
   }
+
+  &__link--sub {
+    padding-left: var(--spacing-4);
+    font-size: 0.875em;
+    opacity: 0.85;
+  }
 }
 
 .blog-author-card {
