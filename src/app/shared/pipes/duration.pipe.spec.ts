@@ -78,4 +78,39 @@ describe('DurationPipe', () => {
   it('should return large duration correctly', () => {
     expect(pipe.transform('January', '2015', 'March', '2025')).toBe('10 years 2 months');
   });
+
+  describe('sub-month duration for current jobs', () => {
+    const monthNames = [
+      'January', 'February', 'March', 'April', 'May', 'June',
+      'July', 'August', 'September', 'October', 'November', 'December'
+    ];
+
+    it('should return days format when current job started this month', () => {
+      const now = new Date();
+      const result = pipe.transform(monthNames[now.getMonth()], now.getFullYear().toString(), null, null);
+
+      if (now.getDate() > 1) {
+        expect(result).toMatch(/^\d+ days?$/);
+      } else {
+        expect(result).toBe('');
+      }
+    });
+
+    it('should return empty string for completed job with same start and end month', () => {
+      expect(pipe.transform('January', '2020', 'January', '2020')).toBe('');
+    });
+
+    it('should return "Starting in X days" when current job starts in future month', () => {
+      const future = new Date();
+      future.setMonth(future.getMonth() + 2);
+      const futureMonth = monthNames[future.getMonth()];
+      const futureYear = future.getFullYear().toString();
+
+      expect(pipe.transform(futureMonth, futureYear, null, null)).toMatch(/^Starting in \d+ days?$/);
+    });
+
+    it('should return empty string for completed job with negative duration', () => {
+      expect(pipe.transform('June', '2022', 'January', '2020')).toBe('');
+    });
+  });
 });

@@ -92,12 +92,7 @@ section {
     &-head {
       display: flex;
       align-items: center;
-
-      @include respond-mobile {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: var(--spacing-1);
-      }
+      gap: var(--spacing-4);
     }
 
     &-date-container {
@@ -107,12 +102,8 @@ section {
       align-items: flex-end;
       text-align: right;
       margin-left: auto;
-
-      @include respond-mobile {
-        align-items: flex-start;
-        text-align: left;
-        margin-left: 0;
-      }
+      white-space: nowrap;
+      flex-shrink: 0;
     }
 
     span.section-item-date,
@@ -122,6 +113,25 @@ section {
       color: var(--color-dark-heading);
       font-weight: 400;
       letter-spacing: 0.01em;
+
+      .year-full,
+      .year-short {
+        color: inherit;
+      }
+
+      .year-short {
+        display: none;
+      }
+
+      @include respond-mobile {
+        .year-full {
+          display: none;
+        }
+
+        .year-short {
+          display: inline;
+        }
+      }
     }
 
     span.section-item-duration {

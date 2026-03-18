@@ -34,9 +34,11 @@ export class DurationPipe implements PipeTransform {
     let endMonthIndex: number;
     let endYearNum: number;
 
-    if (endMonth && endYear && endMonth.trim() !== '' && endYear.trim() !== '') {
-      endMonthIndex = this.months.indexOf(endMonth);
-      endYearNum = parseInt(endYear, 10);
+    const isCurrentJob = !endMonth || !endYear || endMonth.trim() === '' || endYear.trim() === '';
+
+    if (!isCurrentJob) {
+      endMonthIndex = this.months.indexOf(endMonth!);
+      endYearNum = parseInt(endYear!, 10);
 
       if (endMonthIndex === -1 || isNaN(endYearNum)) {
         return '';
@@ -52,6 +54,25 @@ export class DurationPipe implements PipeTransform {
     const totalMonths = (endYearNum - startYearNum) * 12 + (endMonthIndex - startMonthIndex);
 
     if (totalMonths < 0) {
+      if (isCurrentJob) {
+        const startDate = new Date(startYearNum, startMonthIndex, 1);
+        const today = new Date();
+        const daysUntilStart = Math.ceil((startDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
+        if (daysUntilStart > 0) {
+          return `Starting in ${daysUntilStart} ${daysUntilStart === 1 ? 'day' : 'days'}`;
+        }
+      }
+      return '';
+    }
+
+    // Handle sub-month duration for current positions — show days
+    if (totalMonths === 0 && isCurrentJob) {
+      const startDate = new Date(startYearNum, startMonthIndex, 1);
+      const today = new Date();
+      const days = Math.floor((today.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
+      if (days > 0) {
+        return `${days} ${days === 1 ? 'day' : 'days'}`;
+      }
       return '';
     }
 
