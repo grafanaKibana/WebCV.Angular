@@ -1,21 +1,21 @@
 <button
   type="button"
   class="copy-button"
-  [class.copy-button--success]="state === 'success'"
-  [class.copy-button--error]="state === 'error'"
-  [class]="'copy-button ' + buttonClass"
+  [class.copy-button--success]="state() === 'success'"
+  [class.copy-button--error]="state() === 'error'"
+  [class]="'copy-button ' + buttonClass()"
   [attr.aria-label]="currentLabel"
   [attr.title]="currentLabel"
   (click)="copy()">
   <span class="copy-button__icon copy-button__icon--idle">
-    <i [class]="idleIcon"></i>
+    <i [class]="idleIcon()"></i>
   </span>
   <span class="copy-button__icon copy-button__icon--success">
-    <i [class]="successIcon"></i>
+    <i [class]="successIcon()"></i>
   </span>
-  @if (errorIcon) {
+  @if (errorIcon()) {
     <span class="copy-button__icon copy-button__icon--error">
-      <i [class]="errorIcon"></i>
+      <i [class]="errorIcon()"></i>
     </span>
   }
 </button>

@@ -1,8 +1,8 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, OnDestroy, inject } from '@angular/core';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
-import { EducationModel } from '../interfaces/educationModel';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { catchError, of } from 'rxjs';
 import { HomeDataService } from '../../../services/home-data.service';
+import type { EducationModel } from '../interfaces/educationModel';
 
 @Component({
   selector: 'app-education-section',
@@ -11,28 +11,14 @@ import { HomeDataService } from '../../../services/home-data.service';
   styleUrls: ['./education-section.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class EducationSectionComponent implements OnInit, OnDestroy {
-  educationList: Array<EducationModel> = [];
-  private readonly destroy$ = new Subject<void>();
-  private readonly homeDataService = inject(HomeDataService);
-  private readonly cdr = inject(ChangeDetectorRef);
-
-  ngOnInit(): void {
-    this.homeDataService.getEducation()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: (data: EducationModel[]) => {
-          this.educationList = data;
-          this.cdr.markForCheck();
-        },
-        error: (error) => {
-          console.error('Error loading education data:', error);
-        }
-      });
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
+export class EducationSectionComponent {
+  readonly educationList = toSignal(
+    inject(HomeDataService).getEducation().pipe(
+      catchError((error) => {
+        console.error('Error loading education data:', error);
+        return of([] as EducationModel[]);
+      })
+    ),
+    { initialValue: [] as EducationModel[] }
+  );
 }

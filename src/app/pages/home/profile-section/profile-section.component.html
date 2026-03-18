@@ -1,28 +1,28 @@
-@if (profileReady) {
+@if (profileReady()) {
   <aside class="profile">
     <div class="profile__left">
       <div class="profile__avatar">
         <img src="./assets/images/my-portrait-no-bg.png" alt="Character">
       </div>
       <div class="profile__identity">
-        <h2 class="profile__name">{{sidebarInfo.firstName}} {{sidebarInfo.lastName}}</h2>
-        <span class="profile__title">{{sidebarInfo.positionTitle}}</span>
+        <h2 class="profile__name">{{sidebarInfo()?.firstName}} {{sidebarInfo()?.lastName}}</h2>
+        <span class="profile__title">{{sidebarInfo()?.positionTitle}}</span>
       </div>
     </div>
 
     <div class="profile__right">
       <div class="profile__socials">
-        @if (sidebarInfo.email) {
-          <a [href]="'mailto:' + sidebarInfo.email" aria-label="Email"><i class="fa-solid fa-at"></i></a>
+        @if (sidebarInfo()?.email) {
+          <a [href]="'mailto:' + sidebarInfo()?.email" aria-label="Email"><i class="fa-solid fa-at"></i></a>
         }
-        @if (links.linkedInLink) {
-          <a [href]='links.linkedInLink' target="_blank" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+        @if (links().linkedInLink) {
+          <a [href]='links().linkedInLink' target="_blank" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
         }
-        @if (links.gitHubLink) {
-          <a [href]='links.gitHubLink' target="_blank" aria-label="GitHub"><i class="fa-brands fa-github-alt"></i></a>
+        @if (links().gitHubLink) {
+          <a [href]='links().gitHubLink' target="_blank" aria-label="GitHub"><i class="fa-brands fa-github-alt"></i></a>
         }
-        @if (links.repositoryLink) {
-          <a [href]='links.repositoryLink' target="_blank" aria-label="Source code"><i class="fa-solid fa-code-branch"></i></a>
+        @if (links().repositoryLink) {
+          <a [href]='links().repositoryLink' target="_blank" aria-label="Source code"><i class="fa-solid fa-code-branch"></i></a>
         }
       </div>
     </div>

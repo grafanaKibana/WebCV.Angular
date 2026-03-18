@@ -1,4 +1,4 @@
-import { ApplicationConfig } from '@angular/core';
+import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/core';
 import { provideRouter, withInMemoryScrolling } from '@angular/router';
 import { provideHttpClient, withFetch } from '@angular/common/http';
 import { provideAnimations } from '@angular/platform-browser/animations';
@@ -12,6 +12,8 @@ export const appConfig: ApplicationConfig = {
       withInMemoryScrolling({ anchorScrolling: 'enabled', scrollPositionRestoration: 'top' }),
     ),
     provideHttpClient(withFetch()),
-    provideAnimations(), provideClientHydration(),
+    provideAnimations(),
+    provideClientHydration(),
+    provideBrowserGlobalErrorListeners(),
   ]
 };
