@@ -194,15 +194,12 @@
     font-weight: 400;
     text-transform: uppercase;
     letter-spacing: 0.01em;
-    color: var(--color-dark-paragraph);
-    opacity: 0.7;
+    color: var(--color-dark-accent);
     span {
       font-size: inherit;
     }
 
     @include respond-tablet {
-      color: var(--color-dark-accent);
-      opacity: 1;
       text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
     }
 
