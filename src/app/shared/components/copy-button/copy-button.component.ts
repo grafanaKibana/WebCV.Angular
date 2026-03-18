@@ -1,14 +1,13 @@
 import { isPlatformBrowser } from '@angular/common';
 import {
   Component,
-  Input,
-  Output,
-  EventEmitter,
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  OnDestroy,
+  DestroyRef,
   PLATFORM_ID,
-  inject
+  inject,
+  input,
+  signal,
+  output
 } from '@angular/core';
 import { from } from 'rxjs';
 
@@ -21,53 +20,61 @@ export type CopyState = 'idle' | 'success' | 'error';
   styleUrls: ['./copy-button.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CopyButtonComponent implements OnDestroy {
+export class CopyButtonComponent {
   /** Text to copy to clipboard */
-  @Input() text = '';
+  readonly text = input('');
 
   /** Icon class for idle state */
-  @Input() idleIcon = 'fa-regular fa-copy';
+  readonly idleIcon = input('fa-regular fa-copy');
 
   /** Icon class for success state */
-  @Input() successIcon = 'fa-solid fa-check';
+  readonly successIcon = input('fa-solid fa-check');
 
   /** Icon class for error state (optional) */
-  @Input() errorIcon = 'fa-solid fa-xmark';
+  readonly errorIcon = input('fa-solid fa-xmark');
 
   /** Accessible label for idle state */
-  @Input() idleLabel = 'Copy';
+  readonly idleLabel = input('Copy');
 
   /** Accessible label for success state */
-  @Input() successLabel = 'Copied!';
+  readonly successLabel = input('Copied!');
 
   /** Accessible label for error state */
-  @Input() errorLabel = 'Copy failed';
+  readonly errorLabel = input('Copy failed');
 
   /** Duration to show success/error state (ms) */
-  @Input() feedbackDuration = 2000;
+  readonly feedbackDuration = input(2000);
 
   /** Additional CSS classes for the button */
-  @Input() buttonClass = '';
+  readonly buttonClass = input('');
 
   /** Emits when copy succeeds */
-  @Output() copied = new EventEmitter<string>();
+  readonly copied = output<string>();
 
   /** Emits when copy fails */
-  @Output() copyError = new EventEmitter<Error>();
+  readonly copyError = output<Error>();
 
-  state: CopyState = 'idle';
+  readonly state = signal<CopyState>('idle');
   private timeoutId?: ReturnType<typeof setTimeout>;
-  private readonly cdr = inject(ChangeDetectorRef);
+  private readonly destroyRef = inject(DestroyRef);
   private readonly platformId = inject(PLATFORM_ID);
 
+  constructor() {
+    this.destroyRef.onDestroy(() => {
+      if (this.timeoutId) {
+        clearTimeout(this.timeoutId);
+      }
+    });
+  }
+
   get currentLabel(): string {
-    switch (this.state) {
+    switch (this.state()) {
       case 'success':
-        return this.successLabel;
+        return this.successLabel();
       case 'error':
-        return this.errorLabel;
+        return this.errorLabel();
       default:
-        return this.idleLabel;
+        return this.idleLabel();
     }
   }
 
@@ -78,31 +85,29 @@ export class CopyButtonComponent implements OnDestroy {
     }
 
     // Prevent rapid re-clicks during feedback
-    if (this.state !== 'idle') return;
+    if (this.state() !== 'idle') return;
 
     if (!navigator?.clipboard) {
       this.handleError(new Error('Clipboard API not supported'));
       return;
     }
 
-    from(navigator.clipboard.writeText(this.text)).subscribe({
+    from(navigator.clipboard.writeText(this.text())).subscribe({
       next: () => this.handleSuccess(),
       error: (err: Error) => this.handleError(err)
     });
   }
 
   private handleSuccess(): void {
-    this.state = 'success';
-    this.copied.emit(this.text);
+    this.state.set('success');
+    this.copied.emit(this.text());
     this.scheduleReset();
-    this.cdr.markForCheck();
   }
 
   private handleError(error: Error): void {
-    this.state = 'error';
+    this.state.set('error');
     this.copyError.emit(error);
     this.scheduleReset();
-    this.cdr.markForCheck();
   }
 
   private scheduleReset(): void {
@@ -110,14 +115,7 @@ export class CopyButtonComponent implements OnDestroy {
       clearTimeout(this.timeoutId);
     }
     this.timeoutId = setTimeout(() => {
-      this.state = 'idle';
-      this.cdr.markForCheck();
-    }, this.feedbackDuration);
-  }
-
-  ngOnDestroy(): void {
-    if (this.timeoutId) {
-      clearTimeout(this.timeoutId);
-    }
+      this.state.set('idle');
+    }, this.feedbackDuration());
   }
 }

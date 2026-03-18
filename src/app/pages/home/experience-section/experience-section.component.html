@@ -1,7 +1,7 @@
 <section class="glass-medium">
   <h2 class="numbered-heading"><span class="section-number">02.</span> Experience</h2>
   <ol class="section-item-body" aria-label="Work experience">
-    @for (experience of experienceList; track $index; let i = $index) {
+    @for (experience of experienceList(); track $index; let i = $index) {
       <li class="section-item" (click)="toggleShow(i)">
         <div class="section-item-head">
           <div>
@@ -21,25 +21,27 @@
             <span class="section-item-duration">{{experience.startMonth | duration: experience.startYear : experience.endMonth : experience.endYear}}</span>
           </div>
         </div>
-        <div class="section-item-content" [@slideInOut]="allToggles[i].toString()">
-          @if (experience.description.aboutProject) {
-            <h5>About project:</h5>
-            <p>{{experience.description.aboutProject}}</p>
-          }
+        <div class="section-item-content" [class.is-open]="allToggles()[i]">
+          <div class="section-item-content__inner">
+            @if (experience.description.aboutProject) {
+              <h5>About project:</h5>
+              <p>{{experience.description.aboutProject}}</p>
+            }
 
-          @if (experience.description.responsibilities) {
-            <h5>Responsibilities:</h5>
-            <ul>
-              @for (responsibility of experience.description.responsibilities; track $index) {
-                <li><p>{{responsibility}}</p></li>
-              }
-            </ul>
-          }
+            @if (experience.description.responsibilities) {
+              <h5>Responsibilities:</h5>
+              <ul>
+                @for (responsibility of experience.description.responsibilities; track $index) {
+                  <li><p>{{responsibility}}</p></li>
+                }
+              </ul>
+            }
 
-          @if (experience.description.toolsAndTechnologies) {
-            <h5>Tools & Technologies:</h5>
-            <p>{{experience.description.toolsAndTechnologies}}</p>
-          }
+            @if (experience.description.toolsAndTechnologies) {
+              <h5>Tools & Technologies:</h5>
+              <p>{{experience.description.toolsAndTechnologies}}</p>
+            }
+          </div>
         </div>
       </li>
     }

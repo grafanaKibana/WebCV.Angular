@@ -1,6 +1,15 @@
 import { isPlatformBrowser } from '@angular/common';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, OnDestroy, OnInit, PLATFORM_ID, inject } from '@angular/core';
-import { Observable, Subject, EMPTY, concat, timer, defer, of } from 'rxjs';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  HostListener,
+  PLATFORM_ID,
+  inject,
+  signal,
+  type OnDestroy,
+  type OnInit
+} from '@angular/core';
+import { EMPTY, Observable, Subject, concat, defer, of, timer } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 @Component({
@@ -11,10 +20,10 @@ import { takeUntil } from 'rxjs/operators';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class IntroOverlayComponent implements OnInit, OnDestroy {
-  visible = false;
-  isExiting = false;
-  lineText = '';
-  lineVisible = false;
+  readonly visible = signal(false);
+  readonly isExiting = signal(false);
+  readonly lineText = signal('');
+  readonly lineVisible = signal(false);
 
   readonly introLines: string[] = ['Hi.', 'My name is Nikita.', 'I am AI Engineer'];
 
@@ -29,7 +38,6 @@ export class IntroOverlayComponent implements OnInit, OnDestroy {
   private readonly cancel$ = new Subject<void>();
   private exitTimeoutId: number | null = null;
   private removeAnimateTimeoutId: number | null = null;
-  private readonly cdr = inject(ChangeDetectorRef);
   private readonly platformId = inject(PLATFORM_ID);
 
   private debugForceShow = false;
@@ -49,8 +57,7 @@ export class IntroOverlayComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.visible = true;
-    this.cdr.markForCheck();
+    this.visible.set(true);
 
     // If there is nothing to show, reveal the app immediately.
     if (this.getIntroLines().length === 0) {
@@ -59,8 +66,7 @@ export class IntroOverlayComponent implements OnInit, OnDestroy {
       }
       this.removePrehideClasses();
       this.removeAnimateClass();
-      this.visible = false;
-      this.cdr.markForCheck();
+      this.visible.set(false);
       return;
     }
 
@@ -89,7 +95,7 @@ export class IntroOverlayComponent implements OnInit, OnDestroy {
 
   @HostListener('window:keydown', ['$event'])
   onKeydown(ev: KeyboardEvent): void {
-    if (!this.visible) return;
+    if (!this.visible()) return;
     if (ev.code === 'Space' || ev.key === ' ' || ev.key === 'Escape') {
       ev.preventDefault();
       this.skip();
@@ -98,29 +104,26 @@ export class IntroOverlayComponent implements OnInit, OnDestroy {
 
   private setLineWithTransition$(text: string): Observable<unknown> {
     return defer(() => {
-      if (!this.visible || this.isExiting) return EMPTY;
+      if (!this.visible() || this.isExiting()) return EMPTY;
 
       const steps: Observable<unknown>[] = [];
 
-      if (this.lineText) {
+      if (this.lineText()) {
         steps.push(defer(() => {
-          this.lineVisible = false;
-          this.cdr.markForCheck();
+          this.lineVisible.set(false);
           return timer(this.lineTransitionMs);
         }));
       }
 
       steps.push(defer(() => {
-        if (!this.visible || this.isExiting) return EMPTY;
-        this.lineText = text;
-        this.cdr.markForCheck();
+        if (!this.visible() || this.isExiting()) return EMPTY;
+        this.lineText.set(text);
         return this.animationFrame$();
       }));
 
       steps.push(defer(() => {
-        if (!this.visible || this.isExiting) return EMPTY;
-        this.lineVisible = true;
-        this.cdr.markForCheck();
+        if (!this.visible() || this.isExiting()) return EMPTY;
+        this.lineVisible.set(true);
         return of(undefined);
       }));
 
@@ -131,10 +134,10 @@ export class IntroOverlayComponent implements OnInit, OnDestroy {
   private beginExit(forceImmediate: boolean = false): void {
     if (!isPlatformBrowser(this.platformId)) return;
 
-    if (!this.visible || this.isExiting) return;
+    if (!this.visible() || this.isExiting()) return;
 
     // Set flag before cancelling so the complete handler sees isExiting = true
-    this.isExiting = true;
+    this.isExiting.set(true);
     this.cancel$.next();
 
     if (!this.debugForceShow) {
@@ -148,25 +151,18 @@ export class IntroOverlayComponent implements OnInit, OnDestroy {
     }
     this.removeAnimateTimeoutId = window.setTimeout(() => this.removeAnimateClass(), this.exitMs + 500);
 
-    this.cdr.markForCheck();
-
     if (this.exitTimeoutId !== null) {
       window.clearTimeout(this.exitTimeoutId);
     }
     this.exitTimeoutId = window.setTimeout(() => {
-      this.visible = false;
-      this.cdr.markForCheck();
+      this.visible.set(false);
     }, forceImmediate ? 0 : this.exitMs);
   }
 
   private prefersReducedMotion(): boolean {
     if (!isPlatformBrowser(this.platformId)) return false;
 
-    return !!(
-      window.matchMedia &&
-      window.matchMedia('(prefers-reduced-motion: reduce)') &&
-      window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    );
+    return window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches ?? false;
   }
 
   private hasSeen(): boolean {
@@ -264,7 +260,7 @@ export class IntroOverlayComponent implements OnInit, OnDestroy {
       takeUntil(this.cancel$)
     ).subscribe({
       complete: () => {
-        if (this.visible && !this.isExiting) this.beginExit(false);
+        if (this.visible() && !this.isExiting()) this.beginExit(false);
       }
     });
   }

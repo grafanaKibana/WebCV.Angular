@@ -1,12 +1,12 @@
 import { isPlatformBrowser } from '@angular/common';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, OnDestroy, PLATFORM_ID, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, DestroyRef, inject, PLATFORM_ID, signal } from '@angular/core';
+import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
-import { WebGLGradientService } from '../../services/webgl-gradient.service';
-import { HomeDataService } from '../../services/home-data.service';
-import { CvDownloadService } from '../../services/cv-download.service';
+import { catchError, of } from 'rxjs';
 import { environment } from '../../../environments/environment';
+import { CvDownloadService } from '../../services/cv-download.service';
+import { HomeDataService } from '../../services/home-data.service';
+import { WebGLGradientService } from '../../services/webgl-gradient.service';
 
 @Component({
     selector: 'app-header',
@@ -15,44 +15,32 @@ import { environment } from '../../../environments/environment';
     styleUrls: ['./header.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class HeaderComponent implements OnInit, OnDestroy {
-  headerReady = false;
-  isBlogDone: boolean = false;
-  isDownloadCVDone: boolean = false;
-  isDownloading: boolean = false;
-  downloadDelayMs: number = environment.cvDownloadSimulatedDelayMs;
-  private readonly destroy$ = new Subject<void>();
+export class HeaderComponent {
+  readonly isDownloading = signal(false);
+  readonly downloadDelayMs = environment.cvDownloadSimulatedDelayMs;
+
   private readonly webglGradientService = inject(WebGLGradientService);
   private readonly homeDataService = inject(HomeDataService);
   private readonly cvDownloadService = inject(CvDownloadService);
-  private readonly cdr = inject(ChangeDetectorRef);
+  private readonly destroyRef = inject(DestroyRef);
   private readonly platformId = inject(PLATFORM_ID);
+  private readonly headerConfig = toSignal(
+    this.homeDataService.getHeaderConfig().pipe(
+      catchError((error) => {
+        console.error('Error loading header config:', error);
+        return of(null);
+      })
+    )
+  );
 
-  ngOnInit(): void {
-    this.homeDataService.getHeaderConfig()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: (config) => {
-          this.headerReady = true;
-          this.isBlogDone = config.isBlogDone;
-          this.isDownloadCVDone = config.isDownloadCVDone;
-          this.cdr.markForCheck();
-        },
-        error: (error) => {
-          this.headerReady = true;
-          console.error('Error loading header config:', error);
-          this.cdr.markForCheck();
-        }
-      });
+  readonly headerReady = computed(() => this.headerConfig() !== undefined);
+  readonly isBlogDone = computed(() => this.headerConfig()?.isBlogDone ?? false);
+  readonly isDownloadCVDone = computed(() => this.headerConfig()?.isDownloadCVDone ?? false);
 
+  constructor() {
     const currentTheme =
       this.webglGradientService.getSavedThemeName() ?? this.webglGradientService.getDefaultThemeName();
     this.webglGradientService.applyAccentColor(currentTheme);
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
   }
 
   /**
@@ -96,22 +84,20 @@ export class HeaderComponent implements OnInit, OnDestroy {
    * Downloads the CV PDF from the latest successful GitHub Actions workflow run
    */
   downloadCv(): void {
-    if (this.isDownloading || !this.isDownloadCVDone) {
+    if (this.isDownloading() || !this.isDownloadCVDone()) {
       return;
     }
 
-    this.isDownloading = true;
+    this.isDownloading.set(true);
     this.cvDownloadService.downloadCv(this.downloadDelayMs)
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: () => {
-          this.isDownloading = false;
-          this.cdr.markForCheck();
+          this.isDownloading.set(false);
         },
         error: (error) => {
           console.error('Error downloading CV:', error);
-          this.isDownloading = false;
-          this.cdr.markForCheck();
+          this.isDownloading.set(false);
         }
       });
   }

@@ -1,15 +1,15 @@
-@if (articlesReady) {
+@if (articlesReady()) {
   <section class="blog-intro">
     <p class="blog-intro__eyebrow">Blog</p>
     <h1 class="blog-intro__title">Posts</h1>
   </section>
 }
 
-@if (articlesReady) {
+@if (articlesReady()) {
   <section class="blog-grid">
     @if (articles$ | async; as articles) {
       @if (articles.length) {
-        <div class="blog-grid__list" [@blogItemsAnimation]="listAnimationTick">
+        <div class="blog-grid__list">
           @for (article of articles; track $index) {
             <app-blog-item [article]="article"></app-blog-item>
           }

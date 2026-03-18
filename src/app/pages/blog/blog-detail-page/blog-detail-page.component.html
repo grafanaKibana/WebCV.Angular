@@ -1,6 +1,6 @@
-@if (articleLoaded) {
-  @if (article) {
-    <div [@sectionAnimation]="sectionAnimationTick">
+@if (articleLoaded()) {
+  @if (article()) {
+    <div>
       <section class="blog-hero">
         <div class="blog-hero__content">
           <div class="blog-hero__top">
@@ -10,27 +10,27 @@
                 Back to blog
               </a>
             </div>
-            <h1 class="blog-hero__title">{{article.headline}}</h1>
+            <h1 class="blog-hero__title" [textContent]="article()?.headline ?? ''"></h1>
           </div>
 
           <div class="blog-hero__meta">
             <div class="blog-author">
-              <img class="blog-author__avatar" [src]="authorAvatarUrl" [alt]="authorName">
+              <img class="blog-author__avatar" [src]="authorAvatarUrl" [alt]="authorName()">
               <div>
-                <p class="blog-author__name">{{authorName}}</p>
-                <p class="blog-author__title">{{authorTitle}}</p>
+                <p class="blog-author__name" [textContent]="authorName()"></p>
+                <p class="blog-author__title" [textContent]="authorTitle()"></p>
               </div>
             </div>
           </div>
         </div>
 
         <div class="blog-hero__media">
-          <img class="blog-hero__image" [src]="article.imagePath" [alt]="article.headline">
+          <img class="blog-hero__image" [src]="article()?.imagePath" [alt]="article()?.headline">
         </div>
 
         <div class="blog-hero__pills">
           <div class="blog-share blog-share--icons">
-            @for (share of shareLinks; track $index) {
+            @for (share of shareLinks(); track $index) {
               <a
                 class="blog-share__link"
                 [href]="share.url"
@@ -42,7 +42,7 @@
               </a>
             }
             <app-copy-button
-              [text]="currentUrl"
+              [text]="currentUrl()"
               idleIcon="fa-solid fa-link"
               idleLabel="Copy link"
               successLabel="Link copied!"
@@ -50,33 +50,29 @@
             </app-copy-button>
           </div>
           <div class="blog-meta">
-            <span class="blog-meta__item">
-              {{article.publishDate | date: 'd MMM yyyy'}}
-            </span>
-            <span class="blog-meta__item">
-              {{readingTimeMinutes}} min read
-            </span>
+            <span class="blog-meta__item" [textContent]="(article()?.publishDate | date: 'd MMM yyyy') ?? ''"></span>
+            <span class="blog-meta__item" [textContent]="readingTimeMinutes() + ' min read'"></span>
           </div>
         </div>
       </section>
 
       <section class="blog-content">
-        @if (tocItems.length) {
+        @if (tocItems().length) {
           <aside class="blog-toc">
             <p class="blog-toc__title">On this page</p>
-            @for (item of tocItems; track $index) {
+            @for (item of tocItems(); track $index) {
               <a
                 class="blog-toc__link"
                 [class.blog-toc__link--sub]="item.level > 2"
                 [attr.data-level]="item.level"
                 [routerLink]="[]"
-                [fragment]="item.id">
-                {{item.text}}
+                [fragment]="item.id"
+                [textContent]="item.text">
               </a>
             }
           </aside>
         }
-        <div #contentBody class="blog-content__body" [innerHTML]="contentHtml"></div>
+        <div #contentBody class="blog-content__body" [innerHTML]="contentHtml()"></div>
       </section>
     </div>
 

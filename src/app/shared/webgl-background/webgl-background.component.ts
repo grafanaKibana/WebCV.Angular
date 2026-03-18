@@ -1,8 +1,18 @@
 import { isPlatformBrowser } from '@angular/common';
-import { Component, OnInit, AfterViewInit, OnDestroy, ElementRef, ChangeDetectionStrategy, ChangeDetectorRef, PLATFORM_ID, inject } from '@angular/core';
-import { WebGLGradientService } from '../../services/webgl-gradient.service';
-import { DynamicReflectionService } from '../../services/dynamic-reflection.service';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  PLATFORM_ID,
+  inject,
+  signal,
+  type AfterViewInit,
+  type OnDestroy,
+  type OnInit
+} from '@angular/core';
 import { webglConfig } from '../../config/webgl.config';
+import { DynamicReflectionService } from '../../services/dynamic-reflection.service';
+import { WebGLGradientService } from '../../services/webgl-gradient.service';
 
 @Component({
   selector: 'app-webgl-background',
@@ -12,7 +22,7 @@ import { webglConfig } from '../../config/webgl.config';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class WebGLBackgroundComponent implements OnInit, AfterViewInit, OnDestroy {
-  isReady = false;
+  readonly isReady = signal(false);
   private hasFadedIn = false;
   // Defaults come from the centralized config so changes in `webgl.config.ts` take effect.
   speed = webglConfig.background.speed;
@@ -24,7 +34,6 @@ export class WebGLBackgroundComponent implements OnInit, AfterViewInit, OnDestro
   private readonly elementRef = inject(ElementRef);
   private readonly webglGradientService = inject(WebGLGradientService);
   private readonly dynamicReflectionService = inject(DynamicReflectionService);
-  private readonly changeDetectorRef = inject(ChangeDetectorRef);
   private readonly platformId = inject(PLATFORM_ID);
 
   ngOnInit(): void {
@@ -49,7 +58,7 @@ export class WebGLBackgroundComponent implements OnInit, AfterViewInit, OnDestro
       this.webglGradientService.removeGradient(container);
     }
     this.dynamicReflectionService.destroy();
-    this.isReady = false;
+    this.isReady.set(false);
     this.hasFadedIn = false;
   }
 
@@ -108,8 +117,7 @@ export class WebGLBackgroundComponent implements OnInit, AfterViewInit, OnDestro
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
         this.hasFadedIn = true;
-        this.isReady = true;
-        this.changeDetectorRef.markForCheck();
+        this.isReady.set(true);
       });
     });
   }
