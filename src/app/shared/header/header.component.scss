@@ -143,7 +143,20 @@ $download-progress-glass-blur: rem(24px);
     }
 
     &:not(.soon) {
-      @include interactive-glow();
+      transition: background var(--transition-fast) var(--transition-easing),
+        color var(--transition-fast) var(--transition-easing),
+        text-shadow var(--transition-fast) var(--transition-easing),
+        transform var(--transition-fast) var(--transition-easing);
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.04);
+        color: var(--color-dark-accent);
+      }
+
+      &:active {
+        transform: scale(0.97);
+        transition: transform 80ms ease-in;
+      }
     }
 
     i {
@@ -166,10 +179,17 @@ $download-progress-glass-blur: rem(24px);
         margin-right: 0;
         font-size: rem(18px);
         text-align: center;
+        transition: text-shadow var(--transition-fast) var(--transition-easing);
       }
 
       &:not(.soon) i:hover {
-        text-shadow: 0 0 10px var(--color-dark-neon-glow);
+        color: var(--color-dark-accent);
+      }
+
+      &:not(.soon):active i {
+        text-shadow:
+          0 0 20px var(--color-dark-neon-glow),
+          0 0 8px rgba(var(--accent-r), var(--accent-g), var(--accent-b), 0.45);
       }
     }
 
@@ -179,11 +199,6 @@ $download-progress-glass-blur: rem(24px);
       min-width: 44px;
       min-height: 44px;
 
-      // Remove interactive-glow hover effects on mobile
-      &:not(.soon)::before,
-      &:not(.soon)::after {
-        display: none;
-      }
 
       &:not(.soon):hover {
         background: transparent;
@@ -193,9 +208,13 @@ $download-progress-glass-blur: rem(24px);
       &:not(.soon):active {
         background: transparent;
         box-shadow: none;
+        transform: scale(0.93);
+        transition: transform 80ms ease-in;
 
         i {
-          text-shadow: 0 0 12px var(--color-dark-neon-glow), 0 0 6px var(--color-dark-accent-tint);
+          text-shadow:
+            0 0 20px var(--color-dark-neon-glow),
+            0 0 8px rgba(var(--accent-r), var(--accent-g), var(--accent-b), 0.45);
         }
       }
 
@@ -206,15 +225,13 @@ $download-progress-glass-blur: rem(24px);
   }
 
   .theme-button {
+    @include interactive-accent;
+
     i {
       display: block;
       margin-right: 0;
       font-size: rem(18px);
       text-align: center;
-    }
-
-    &:hover i {
-      text-shadow: 0 0 12px var(--color-dark-neon-glow), 0 0 6px var(--color-dark-accent-tint);
     }
   }
 }
@@ -579,43 +596,75 @@ header {
   }
 }
 
-.header-download {
-  @extend .shadow-medium;
-  @include dark-block-base(
-    $bg: rgba(10, 15, 20, 0.55),
-    $blur: 24px
-  );
-  box-shadow:
-    0 8px 32px 0 rgba(0, 0, 0, 0.3),
-    inset 0 1px 0 0 rgba(255, 255, 255, 0.03);
-
+.header-download-pill {
   flex: 0 0 auto;
   align-self: stretch;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   padding: var(--spacing-3);
-  border-radius: var(--radius-20);
 
-  .download-button-content {
-    padding: 0.5em 1em;
-  }
-
-  &:not(.soon):not(.is-downloading) {
-    @include interactive-glow(rgba(10, 15, 20, 0.55));
-
-    &:hover {
-      box-shadow:
-        0 8px 32px 0 rgba(0, 0, 0, 0.3),
-        inset 0 1px 0 0 rgba(255, 255, 255, 0.03);
-    }
+  .header-download {
+    border-radius: var(--radius-8);
   }
 
   @include respond-tablet-sm {
     display: none;
   }
+}
 
-  @include respond-mobile {
-    border-radius: var(--radius-12);
+.header-download {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  padding: 0.6em 1.2em;
+  border-radius: var(--radius-surface);
+  color: var(--color-dark-heading);
+  background: transparent;
+  border: 0;
+  font: inherit;
+  font-weight: 400;
+  font-size: rem(14px);
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+
+  .download-button-content {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .download-button-border {
+    display: none;
+  }
+
+  .download-button-content i {
+    display: block;
+    font-size: rem(14px);
+    margin: 0;
+    transition: color var(--transition-fast) var(--transition-easing);
+  }
+
+  &:not(.soon):not(.is-downloading) {
+    transition: background var(--transition-fast) var(--transition-easing),
+      color var(--transition-fast) var(--transition-easing),
+      text-shadow var(--transition-fast) var(--transition-easing),
+      transform var(--transition-fast) var(--transition-easing);
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--color-dark-accent);
+
+      i {
+        color: var(--color-dark-accent);
+      }
+    }
+
+    &:active {
+      transform: scale(0.97);
+      transition: transform 80ms ease-in;
+    }
   }
 }

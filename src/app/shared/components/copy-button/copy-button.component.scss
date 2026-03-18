@@ -75,23 +75,7 @@
   }
 
   // Interaction states
-  &:hover,
-  &:active {
-    @extend .text-glow-12;
-  }
-
-  &:focus-visible {
-    outline: rem(2px) solid var(--color-dark-accent);
-    outline-offset: rem(2px);
-    @extend .text-glow-12;
-  }
-
-  // Hover enhancement for idle state
-  &:not(&--success):not(&--error):hover {
-    .copy-button__icon--idle {
-      transform: scale(1.1);
-    }
-  }
+  @include interactive-accent;
 
   // Touch target sizing for mobile
   @include respond-tablet-sm {
