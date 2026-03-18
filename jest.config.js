@@ -1,4 +1,4 @@
-const { createEsmPreset } = require('jest-preset-angular/presets');
+const { createEsmPreset } = require('jest-preset-angular/presets/index.js');
 
 const preset = createEsmPreset({
   tsconfig: '<rootDir>/tsconfig.spec.json',

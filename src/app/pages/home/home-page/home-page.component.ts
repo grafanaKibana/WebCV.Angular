@@ -11,24 +11,23 @@ import { ExperienceSectionComponent } from '../experience-section/experience-sec
 import { SkillsSectionComponent } from '../skills-section/skills-section.component';
 
 @Component({
-  selector: 'app-home-pages',
-  standalone: true,
-  imports: [ProfileSectionComponent, AboutMeSectionComponent, EducationSectionComponent, ExperienceSectionComponent, SkillsSectionComponent],
-  templateUrl: './home-page.component.html',
-  styleUrls: ['./home-page.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  animations: [
-    trigger('sectionAnimation', [
-      transition('* => *', [
-        query('app-profile-section, app-about-me-section, app-education-section, app-experience-section, app-skills-section', [
-          style({ transform: 'translateY(16px)' }),
-          stagger(80, [
-            animate('420ms cubic-bezier(0.22, 0.61, 0.36, 1)', style({ transform: 'translateY(0)' }))
-          ])
-        ], { optional: true })
-      ])
-    ])
-  ]
+    selector: 'app-home-pages',
+    imports: [ProfileSectionComponent, AboutMeSectionComponent, EducationSectionComponent, ExperienceSectionComponent, SkillsSectionComponent],
+    templateUrl: './home-page.component.html',
+    styleUrls: ['./home-page.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    animations: [
+        trigger('sectionAnimation', [
+            transition('* => *', [
+                query('app-profile-section, app-about-me-section, app-education-section, app-experience-section, app-skills-section', [
+                    style({ transform: 'translateY(16px)' }),
+                    stagger(80, [
+                        animate('420ms cubic-bezier(0.22, 0.61, 0.36, 1)', style({ transform: 'translateY(0)' }))
+                    ])
+                ], { optional: true })
+            ])
+        ])
+    ]
 })
 export class HomePageComponent implements OnInit, OnDestroy {
   homeReady = false;
