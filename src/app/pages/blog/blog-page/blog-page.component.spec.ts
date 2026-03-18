@@ -1,10 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-
+import { provideRouter } from '@angular/router';
 import { of } from 'rxjs';
-import { RouterTestingModule } from '@angular/router/testing';
+
 import { BlogPageComponent } from './blog-page.component';
-import { BlogItemComponent } from '../blog-item/blog-item.component';
 import { BlogDataService } from '../services/blog-data.service';
 
 describe('BlogPageComponent', () => {
@@ -13,19 +12,16 @@ describe('BlogPageComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ BlogPageComponent, BlogItemComponent ],
-      imports: [RouterTestingModule, NoopAnimationsModule],
+      imports: [BlogPageComponent, NoopAnimationsModule],
       providers: [
+        provideRouter([]),
         {
           provide: BlogDataService,
           useValue: { getArticles: () => of([]) }
         }
       ]
-    })
-    .compileComponents();
-  });
+    }).compileComponents();
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(BlogPageComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -33,5 +29,9 @@ describe('BlogPageComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should set articlesReady after articles load', () => {
+    expect(component.articlesReady).toBe(true);
   });
 });

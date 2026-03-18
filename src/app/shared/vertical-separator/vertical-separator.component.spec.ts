@@ -8,12 +8,9 @@ describe('VerticalSeparatorComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ VerticalSeparatorComponent ]
-    })
-    .compileComponents();
-  });
+      imports: [VerticalSeparatorComponent]
+    }).compileComponents();
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(VerticalSeparatorComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

@@ -10,8 +10,7 @@ describe('FooterComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [FooterComponent]
-    })
-    .compileComponents();
+    }).compileComponents();
 
     fixture = TestBed.createComponent(FooterComponent);
     component = fixture.componentInstance;
@@ -20,5 +19,13 @@ describe('FooterComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should have currentDate set to current UTC year', () => {
+    expect(component.currentDate).toBe(new Date().getUTCFullYear());
+  });
+
+  it('should not throw when sendEmail is called', () => {
+    expect(() => component.sendEmail('user', 'email@test.com', 'message')).not.toThrow();
   });
 });
