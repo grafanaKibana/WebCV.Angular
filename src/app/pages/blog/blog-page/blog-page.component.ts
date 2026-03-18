@@ -1,7 +1,7 @@
 import { AsyncPipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, inject, signal, type OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import type { Observable } from 'rxjs';
-import { take } from 'rxjs/operators';
 import { BlogItemComponent } from '../blog-item/blog-item.component';
 import type { ArticleModel } from '../interfaces/articleModel';
 import { BlogDataService } from '../services/blog-data.service';
@@ -13,19 +13,11 @@ import { BlogDataService } from '../services/blog-data.service';
     styleUrls: ['./blog-page.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BlogPageComponent implements OnInit {
-  articles$!: Observable<ArticleModel[]>;
-  readonly articlesReady = signal(false);
+export class BlogPageComponent {
   private readonly blogDataService = inject(BlogDataService);
-
-  ngOnInit(): void {
-    this.articles$ = this.blogDataService.getArticles();
-    this.articles$
-      .pipe(take(1))
-      .subscribe(() => {
-        this.articlesReady.set(true);
-      });
-  }
+  readonly articles$: Observable<ArticleModel[]> = this.blogDataService.getArticles();
+  private readonly articlesSignal = toSignal(this.articles$);
+  readonly articlesReady = computed(() => this.articlesSignal() !== undefined);
 
   trackById(_index: number, article: ArticleModel): number {
     return article.id;
