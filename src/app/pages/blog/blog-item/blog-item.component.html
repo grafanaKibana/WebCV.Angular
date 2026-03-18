@@ -2,7 +2,7 @@
   <div class="blog-card__media">
     <img
       class="blog-card__image"
-      [class.is-loaded]="imageLoaded"
+      [class.is-loaded]="imageLoaded()"
       [src]="article().imagePath"
       [alt]="article().headline"
       loading="lazy"
