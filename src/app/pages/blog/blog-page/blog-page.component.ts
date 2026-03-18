@@ -8,24 +8,23 @@ import { ArticleModel } from '../interfaces/articleModel';
 import { BlogItemComponent } from '../blog-item/blog-item.component';
 
 @Component({
-  selector: 'app-blog-page',
-  standalone: true,
-  imports: [BlogItemComponent, AsyncPipe],
-  templateUrl: './blog-page.component.html',
-  styleUrls: ['./blog-page.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  animations: [
-    trigger('blogItemsAnimation', [
-      transition('* => *', [
-        query('app-blog-item', [
-          style({ transform: 'translateY(16px)' }),
-          stagger(90, [
-            animate('420ms cubic-bezier(0.22, 0.61, 0.36, 1)', style({ transform: 'translateY(0)' }))
-          ])
-        ], { optional: true })
-      ])
-    ])
-  ]
+    selector: 'app-blog-page',
+    imports: [BlogItemComponent, AsyncPipe],
+    templateUrl: './blog-page.component.html',
+    styleUrls: ['./blog-page.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    animations: [
+        trigger('blogItemsAnimation', [
+            transition('* => *', [
+                query('app-blog-item', [
+                    style({ transform: 'translateY(16px)' }),
+                    stagger(90, [
+                        animate('420ms cubic-bezier(0.22, 0.61, 0.36, 1)', style({ transform: 'translateY(0)' }))
+                    ])
+                ], { optional: true })
+            ])
+        ])
+    ]
 })
 export class BlogPageComponent implements OnInit {
   articles$!: Observable<ArticleModel[]>;
