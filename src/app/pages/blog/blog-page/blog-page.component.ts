@@ -1,4 +1,3 @@
-import { animate, query, stagger, style, transition, trigger } from '@angular/animations';
 import { AsyncPipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject, signal, type OnInit } from '@angular/core';
 import type { Observable } from 'rxjs';
@@ -13,23 +12,10 @@ import { BlogDataService } from '../services/blog-data.service';
     templateUrl: './blog-page.component.html',
     styleUrls: ['./blog-page.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    animations: [
-        trigger('blogItemsAnimation', [
-            transition('* => *', [
-                query('app-blog-item', [
-                    style({ transform: 'translateY(16px)' }),
-                    stagger(90, [
-                        animate('420ms cubic-bezier(0.22, 0.61, 0.36, 1)', style({ transform: 'translateY(0)' }))
-                    ])
-                ], { optional: true })
-            ])
-        ])
-    ]
 })
 export class BlogPageComponent implements OnInit {
   articles$!: Observable<ArticleModel[]>;
   readonly articlesReady = signal(false);
-  readonly listAnimationTick = signal(0);
   private readonly blogDataService = inject(BlogDataService);
 
   ngOnInit(): void {
@@ -38,9 +24,6 @@ export class BlogPageComponent implements OnInit {
       .pipe(take(1))
       .subscribe(() => {
         this.articlesReady.set(true);
-        setTimeout(() => {
-          this.listAnimationTick.update((value) => value + 1);
-        }, 0);
       });
   }
 

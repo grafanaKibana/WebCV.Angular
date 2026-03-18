@@ -1,4 +1,3 @@
-import { animate, state, style, transition, trigger } from '@angular/animations';
 import { ChangeDetectionStrategy, Component, inject, linkedSignal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { catchError, of } from 'rxjs';
@@ -13,37 +12,6 @@ import type { ExperienceModel } from '../interfaces/experienceModel';
     templateUrl: './experience-section.component.html',
     styleUrls: ['./experience-section.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    animations: [
-        trigger('slideInOut', [
-            state('false', style({
-                height: '0',
-                opacity: 0,
-                overflow: 'hidden',
-                marginTop: '0',
-                paddingTop: '0',
-                paddingBottom: '0',
-                transform: 'translateZ(0)',
-                willChange: 'height, opacity, margin-top, padding-top, padding-bottom'
-            })),
-            state('true', style({
-                height: '*',
-                opacity: 1,
-                overflow: 'visible',
-                transform: 'translateZ(0)',
-                willChange: 'auto'
-            })),
-            transition('false => true', [
-                animate('350ms cubic-bezier(0.4, 0.0, 0.2, 1)')
-            ]),
-            transition('true => false', [
-                style({
-                    overflow: 'hidden',
-                    willChange: 'height, opacity, margin-top, padding-top, padding-bottom'
-                }),
-                animate('300ms cubic-bezier(0.4, 0.0, 0.2, 1)')
-            ])
-        ])
-    ]
 })
 export class ExperienceSectionComponent {
   private readonly homeDataService = inject(HomeDataService);

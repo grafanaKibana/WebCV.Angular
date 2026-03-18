@@ -21,25 +21,27 @@
             <span class="section-item-duration">{{experience.startMonth | duration: experience.startYear : experience.endMonth : experience.endYear}}</span>
           </div>
         </div>
-        <div class="section-item-content" [@slideInOut]="allToggles()[i].toString()">
-          @if (experience.description.aboutProject) {
-            <h5>About project:</h5>
-            <p>{{experience.description.aboutProject}}</p>
-          }
+        <div class="section-item-content" [class.is-open]="allToggles()[i]">
+          <div class="section-item-content__inner">
+            @if (experience.description.aboutProject) {
+              <h5>About project:</h5>
+              <p>{{experience.description.aboutProject}}</p>
+            }
 
-          @if (experience.description.responsibilities) {
-            <h5>Responsibilities:</h5>
-            <ul>
-              @for (responsibility of experience.description.responsibilities; track $index) {
-                <li><p>{{responsibility}}</p></li>
-              }
-            </ul>
-          }
+            @if (experience.description.responsibilities) {
+              <h5>Responsibilities:</h5>
+              <ul>
+                @for (responsibility of experience.description.responsibilities; track $index) {
+                  <li><p>{{responsibility}}</p></li>
+                }
+              </ul>
+            }
 
-          @if (experience.description.toolsAndTechnologies) {
-            <h5>Tools & Technologies:</h5>
-            <p>{{experience.description.toolsAndTechnologies}}</p>
-          }
+            @if (experience.description.toolsAndTechnologies) {
+              <h5>Tools & Technologies:</h5>
+              <p>{{experience.description.toolsAndTechnologies}}</p>
+            }
+          </div>
         </div>
       </li>
     }

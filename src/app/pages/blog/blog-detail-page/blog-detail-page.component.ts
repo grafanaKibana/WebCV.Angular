@@ -1,11 +1,3 @@
-import {
-	animate,
-	query,
-	stagger,
-	style,
-	transition,
-	trigger,
-} from "@angular/animations";
 import { DatePipe, isPlatformBrowser } from "@angular/common";
 import {
 	type AfterViewChecked,
@@ -50,31 +42,11 @@ interface ShareLink {
 	templateUrl: "./blog-detail-page.component.html",
 	styleUrls: ["./blog-detail-page.component.scss"],
 	changeDetection: ChangeDetectionStrategy.OnPush,
-	animations: [
-		trigger("sectionAnimation", [
-			transition("* => *", [
-				query(
-					".blog-hero, .blog-content",
-					[
-						style({ transform: "translateY(16px)" }),
-						stagger(80, [
-							animate(
-								"420ms cubic-bezier(0.22, 0.61, 0.36, 1)",
-								style({ transform: "translateY(0)" }),
-							),
-						]),
-					],
-					{ optional: true },
-				),
-			]),
-		]),
-	],
 })
 export class BlogDetailPageComponent implements AfterViewChecked {
 	readonly contentBodyRef = viewChild<ElementRef<HTMLElement>>("contentBody");
 	readonly article = signal<ArticleModel | undefined>(undefined);
 	readonly articleLoaded = signal(false);
-	readonly sectionAnimationTick = signal(0);
 	readonly contentHtml = signal<SafeHtml | null>(null);
 	readonly tocItems = signal<TocItem[]>([]);
 	readonly readingTimeMinutes = signal(0);
@@ -129,14 +101,10 @@ export class BlogDetailPageComponent implements AfterViewChecked {
 				);
 				this.shareLinks.set(this.buildShareLinks(article, this.currentUrl()));
 
-				if (!isPlatformBrowser(this.platformId)) {
-					return;
-				}
-
-				requestAnimationFrame(() => {
-					this.sectionAnimationTick.update((value) => value + 1);
-				});
-			});
+			if (!isPlatformBrowser(this.platformId)) {
+				return;
+			}
+		});
 	}
 
 	ngAfterViewChecked(): void {

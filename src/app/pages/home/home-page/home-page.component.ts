@@ -1,11 +1,3 @@
-import {
-	animate,
-	query,
-	stagger,
-	style,
-	transition,
-	trigger,
-} from "@angular/animations";
 import { isPlatformBrowser } from "@angular/common";
 import {
 	ChangeDetectionStrategy,
@@ -36,29 +28,9 @@ import { SkillsSectionComponent } from "../skills-section/skills-section.compone
 	templateUrl: "./home-page.component.html",
 	styleUrls: ["./home-page.component.scss"],
 	changeDetection: ChangeDetectionStrategy.OnPush,
-	animations: [
-		trigger("sectionAnimation", [
-			transition("* => *", [
-				query(
-					"app-profile-section, app-about-me-section, app-education-section, app-experience-section, app-skills-section",
-					[
-						style({ transform: "translateY(16px)" }),
-						stagger(80, [
-							animate(
-								"420ms cubic-bezier(0.22, 0.61, 0.36, 1)",
-								style({ transform: "translateY(0)" }),
-							),
-						]),
-					],
-					{ optional: true },
-				),
-			]),
-		]),
-	],
 })
 export class HomePageComponent {
 	readonly homeReady = signal(false);
-	readonly sectionAnimationTick = signal(0);
 
 	private readonly destroyRef = inject(DestroyRef);
 	private readonly homeDataService = inject(HomeDataService);
@@ -82,12 +54,8 @@ export class HomePageComponent {
 					document.documentElement.classList.remove("home-prehide");
 				}),
 			)
-			.subscribe(() => {
-				this.homeReady.set(true);
-				if (!isPlatformBrowser(this.platformId)) return;
-				requestAnimationFrame(() => {
-					this.sectionAnimationTick.update((value) => value + 1);
-				});
-			});
+		.subscribe(() => {
+			this.homeReady.set(true);
+		});
 	}
 }

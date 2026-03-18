@@ -1,10 +1,3 @@
-import {
-	animate,
-	query,
-	style,
-	transition,
-	trigger,
-} from "@angular/animations";
 import { isPlatformBrowser } from "@angular/common";
 import {
 	ChangeDetectionStrategy,
@@ -15,7 +8,6 @@ import {
 } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import {
-	ChildrenOutletContexts,
 	NavigationEnd,
 	NavigationStart,
 	Router,
@@ -31,7 +23,7 @@ import { WebGLBackgroundComponent } from "./shared/webgl-background/webgl-backgr
 
 const ROUTE_META: Record<string, PageMeta> = {
 	"/": {
-		title: "Nikita Reshetnik — Senior AI Engineer",
+		title: "Nikita Reshetnik | Senior AI Engineer",
 		path: "/",
 	},
 	"/blog": {
@@ -54,40 +46,11 @@ const ROUTE_META: Record<string, PageMeta> = {
 	templateUrl: "./app.component.html",
 	styleUrls: ["./app.component.scss"],
 	changeDetection: ChangeDetectionStrategy.OnPush,
-	animations: [
-		trigger("routeAnimations", [
-			transition("* <=> *", [
-				query(
-					":leave",
-					[
-						style({
-							display: "none",
-						}),
-					],
-					{ optional: true },
-				),
-				query(
-					":enter",
-					[
-						style({
-							transform: "translateY(20px)",
-						}),
-						animate(
-							"350ms cubic-bezier(0.4, 0.0, 0.2, 1)",
-							style({ transform: "translateY(0)" }),
-						),
-					],
-					{ optional: true },
-				),
-			]),
-		]),
-	],
 })
 export class AppComponent {
 	title = "webcv-angular";
 	private readonly destroyRef = inject(DestroyRef);
 	private readonly router = inject(Router);
-	private readonly contexts = inject(ChildrenOutletContexts);
 	private readonly dynamicReflectionService = inject(DynamicReflectionService);
 	private readonly seoService = inject(SeoService);
 	private readonly platformId = inject(PLATFORM_ID);
@@ -131,19 +94,11 @@ export class AppComponent {
 					this.seoService.updatePageMeta(meta);
 				} else if (path.startsWith("/blog/")) {
 					this.seoService.updatePageMeta({
-						title: "Blog | Nikita Reshetnik",
+		title: "Nikita Reshetnik | Blog",
 						path,
 					});
 				}
 			});
-	}
-
-	getRouteAnimationData(): string {
-		return (
-			this.contexts.getContext("primary")?.route?.snapshot?.data?.[
-				"animation"
-			] || "HomePage"
-		);
 	}
 
 	onRouteActivate(): void {
