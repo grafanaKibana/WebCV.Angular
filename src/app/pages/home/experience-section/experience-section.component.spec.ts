@@ -51,30 +51,30 @@ describe('ExperienceSectionComponent', () => {
   });
 
   it('should load experience data on init', () => {
-    expect(component.experienceList).toEqual(mockExperience);
-    expect(component.allToggles).toEqual([false, false]);
+    expect(component.experienceList()).toEqual(mockExperience);
+    expect(component.allToggles()).toEqual([false, false]);
   });
 
   describe('toggleShow', () => {
     it('should open an item when toggled', () => {
       component.toggleShow(0);
-      expect(component.allToggles[0]).toBe(true);
-      expect(component.allToggles[1]).toBe(false);
+      expect(component.allToggles()[0]).toBe(true);
+      expect(component.allToggles()[1]).toBe(false);
     });
 
     it('should close an item when toggled again', () => {
       component.toggleShow(0);
       component.toggleShow(0);
-      expect(component.allToggles[0]).toBe(false);
+      expect(component.allToggles()[0]).toBe(false);
     });
 
     it('should close previous item when opening a new one', () => {
       component.toggleShow(0);
-      expect(component.allToggles[0]).toBe(true);
+      expect(component.allToggles()[0]).toBe(true);
 
       component.toggleShow(1);
-      expect(component.allToggles[0]).toBe(false);
-      expect(component.allToggles[1]).toBe(true);
+      expect(component.allToggles()[0]).toBe(false);
+      expect(component.allToggles()[1]).toBe(true);
     });
   });
 

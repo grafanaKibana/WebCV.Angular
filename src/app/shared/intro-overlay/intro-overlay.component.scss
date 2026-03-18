@@ -105,6 +105,8 @@
   }
 
   @include respond-tablet {
+    margin-top: 12px;
+
     .hint-desktop {
       display: none;
     }

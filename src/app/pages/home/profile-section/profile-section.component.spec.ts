@@ -46,8 +46,8 @@ describe('ProfileSectionComponent', () => {
   });
 
   it('should load sidebar info on init', () => {
-    expect(component.profileReady).toBe(true);
-    expect(component.sidebarInfo).toEqual(mockSidebarInfo);
-    expect(component.links).toEqual(mockSidebarInfo.links);
+    expect(component.profileReady()).toBe(true);
+    expect(component.sidebarInfo()).toEqual(mockSidebarInfo);
+    expect(component.links()).toEqual(mockSidebarInfo.links);
   });
 });

@@ -28,6 +28,6 @@ describe('AboutMeSectionComponent', () => {
   });
 
   it('should load about me data on init', () => {
-    expect(component.aboutMe.content).toBe('Test about me content');
+    expect(component.aboutMe().content).toBe('Test about me content');
   });
 });

@@ -53,8 +53,8 @@ describe('HeaderComponent', () => {
   });
 
   it('should load header config on init', () => {
-    expect(component.headerReady).toBe(true);
-    expect(component.isBlogDone).toBe(true);
-    expect(component.isDownloadCVDone).toBe(true);
+    expect(component.headerReady()).toBe(true);
+    expect(component.isBlogDone()).toBe(true);
+    expect(component.isDownloadCVDone()).toBe(true);
   });
 });

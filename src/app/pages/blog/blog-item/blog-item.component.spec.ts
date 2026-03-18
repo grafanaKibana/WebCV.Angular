@@ -30,7 +30,7 @@ describe('BlogItemComponent', () => {
 
     fixture = TestBed.createComponent(BlogItemComponent);
     component = fixture.componentInstance;
-    component.article = mockArticle;
+    fixture.componentRef.setInput('article', mockArticle);
     fixture.detectChanges();
   });
 

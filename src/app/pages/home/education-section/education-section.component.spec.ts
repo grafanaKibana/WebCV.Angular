@@ -39,6 +39,6 @@ describe('EducationSectionComponent', () => {
   });
 
   it('should load education data on init', () => {
-    expect(component.educationList).toEqual(mockEducation);
+    expect(component.educationList()).toEqual(mockEducation);
   });
 });

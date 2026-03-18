@@ -191,7 +191,12 @@ $download-progress-glass-blur: rem(24px);
       }
 
       &:not(.soon):active {
-        background: rgba(255, 255, 255, 0.05);
+        background: transparent;
+        box-shadow: none;
+
+        i {
+          text-shadow: 0 0 12px var(--color-dark-neon-glow), 0 0 6px var(--color-dark-accent-tint);
+        }
       }
 
       i {
