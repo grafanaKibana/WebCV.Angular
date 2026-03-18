@@ -80,18 +80,6 @@ export class WebGLGradientService {
   }
 
   /**
-   * Get color scheme by index (for backward compatibility)
-   */
-  getColorSchemeByIndex(index: number): number[][] {
-    const themeNames = this.getThemeNames();
-    if (index >= 0 && index < themeNames.length) {
-      const scheme = getColorScheme(themeNames[index]);
-      return scheme || getDefaultColorScheme();
-    }
-    return getDefaultColorScheme();
-  }
-
-  /**
    * Get the next theme name in the order defined in `webglConfig.background.colorSchemes`.
    * Falls back to the default theme (or the first theme) when the current theme is missing/invalid.
    */
@@ -141,18 +129,6 @@ export class WebGLGradientService {
   /**
    * Generate random colors (kept for backward compatibility)
    */
-  private generateRandomColors(count: number = 4): number[][] {
-    const colors: number[][] = [];
-    for (let i = 0; i < count; i++) {
-      colors.push([
-        Math.floor(Math.random() * 255),
-        Math.floor(Math.random() * 255),
-        Math.floor(Math.random() * 255)
-      ]);
-    }
-    return colors;
-  }
-
   /**
    * Apply a WebGL gradient to a container element
    */
@@ -325,14 +301,6 @@ export class WebGLGradientService {
   /**
    * Remove all gradients and clean up
    */
-  destroyAll(): void {
-    if (!isPlatformBrowser(this.platformId)) return;
-
-    this.gradients.forEach((gradient) => {
-      gradient.destroy();
-    });
-    this.gradients.clear();
-  }
 }
 
 /**
