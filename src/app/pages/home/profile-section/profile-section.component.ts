@@ -1,7 +1,7 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, OnDestroy, inject } from '@angular/core';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
-import { HomeDataService, SidebarInfo } from '../../../services/home-data.service';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { catchError, of } from 'rxjs';
+import { HomeDataService } from '../../../services/home-data.service';
 
 @Component({
   selector: 'app-profile-section',
@@ -10,54 +10,20 @@ import { HomeDataService, SidebarInfo } from '../../../services/home-data.servic
   styleUrls: ['./profile-section.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ProfileSectionComponent implements OnInit, OnDestroy {
-  profileReady = false;
-  sidebarInfo: SidebarInfo = {
-    firstName: '',
-    lastName: '',
-    positionTitle: '',
-    city: '',
-    country: '',
-    email: '',
-    phone: '',
-    telegram: '',
-    links: {
-      gitHubLink: '',
-      linkedInLink: '',
-      repositoryLink: ''
-    }
-  };
-
-  links = {
+export class ProfileSectionComponent {
+  private readonly homeDataService = inject(HomeDataService);
+  readonly sidebarInfo = toSignal(
+    this.homeDataService.getSidebarInfo().pipe(
+      catchError((error) => {
+        console.error('Error loading profile data:', error);
+        return of(null);
+      })
+    )
+  );
+  readonly profileReady = computed(() => this.sidebarInfo() !== undefined);
+  readonly links = computed(() => this.sidebarInfo()?.links ?? {
     gitHubLink: '',
     linkedInLink: '',
     repositoryLink: ''
-  };
-
-  private readonly destroy$ = new Subject<void>();
-  private readonly homeDataService = inject(HomeDataService);
-  private readonly cdr = inject(ChangeDetectorRef);
-
-  ngOnInit(): void {
-    this.homeDataService.getSidebarInfo()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: (data: SidebarInfo) => {
-          this.profileReady = true;
-          this.sidebarInfo = data;
-          this.links = data.links;
-          this.cdr.markForCheck();
-        },
-        error: (error) => {
-          this.profileReady = true;
-          console.error('Error loading profile data:', error);
-          this.cdr.markForCheck();
-        }
-      });
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
+  });
 }

@@ -1,12 +1,12 @@
-@if (visible) {
+@if (visible()) {
   <div
     class="intro"
-    [class.is-exiting]="isExiting"
+    [class.is-exiting]="isExiting()"
     (click)="skip()"
     role="presentation"
   >
     <div class="intro-inner">
-      <div class="intro-line" [class.is-on]="lineVisible">{{ lineText }}</div>
+      <div class="intro-line" [class.is-on]="lineVisible()" [textContent]="lineText()"></div>
       <div class="intro-hint">
         <span class="hint-desktop">Click to skip or press Space / Esc</span>
         <span class="hint-touch">Touch to skip</span>

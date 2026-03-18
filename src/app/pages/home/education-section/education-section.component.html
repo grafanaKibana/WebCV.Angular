@@ -1,7 +1,7 @@
 <section class="glass-medium">
   <h2 class="numbered-heading"><span class="section-number">03.</span> Education</h2>
   <ol class="section-item-body" aria-label="Education">
-    @for (education of educationList; track $index) {
+    @for (education of educationList(); track $index) {
       <li class="section-item">
         <div class="section-item-head">
           <div>
