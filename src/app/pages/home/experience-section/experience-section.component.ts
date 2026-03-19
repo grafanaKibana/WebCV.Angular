@@ -4,6 +4,7 @@ import { catchError, of } from 'rxjs';
 import { HomeDataService } from '../../../services/home-data.service';
 import { DurationPipe } from '../../../shared/pipes/duration.pipe';
 import { MonthShortPipe } from '../../../shared/pipes/month-short.pipe';
+import { MONTH_TO_ISO } from '../../../shared/constants/months';
 import type { ExperienceModel } from '../interfaces/experienceModel';
 
 @Component({
@@ -26,12 +27,6 @@ export class ExperienceSectionComponent {
   );
   readonly allToggles = linkedSignal(() => new Array(this.experienceList().length).fill(false) as boolean[]);
 
-  private static readonly MONTH_ISO: Record<string, string> = {
-    'January': '01', 'February': '02', 'March': '03', 'April': '04',
-    'May': '05', 'June': '06', 'July': '07', 'August': '08',
-    'September': '09', 'October': '10', 'November': '11', 'December': '12'
-  };
-
   toggleShow(index: number): void {
     const current = this.allToggles();
     if (!current[index]) {
@@ -45,6 +40,6 @@ export class ExperienceSectionComponent {
 
   toIsoDate(year: string, month?: string | null): string {
     if (!month) return year;
-    return `${year}-${ExperienceSectionComponent.MONTH_ISO[month] ?? '01'}`;
+    return `${year}-${MONTH_TO_ISO[month] ?? '01'}`;
   }
 }
