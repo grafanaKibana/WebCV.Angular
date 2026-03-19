@@ -170,38 +170,46 @@ export class BlogDataService {
       const trimmed = line.trim();
 
       if (indent === 0) {
-        const match = trimmed.match(/^([A-Za-z0-9_-]+):\s*(.*)$/);
-        if (!match) {
-          currentKey = null;
-          continue;
-        }
-
-        const key = match[1];
-        const rawValue = match[2];
-
-        if (!rawValue) {
-          currentKey = key;
-          result[key] = {};
-          continue;
-        }
-
-        result[key] = this.parseScalarValue(rawValue);
-        currentKey = null;
-        continue;
-      }
-
-      if (!currentKey) {
-        continue;
-      }
-
-      const nestedMatch = trimmed.match(/^([A-Za-z0-9_-]+):\s*(.*)$/);
-      if (nestedMatch && result[currentKey] && typeof result[currentKey] === 'object') {
-        (result[currentKey] as Record<string, unknown>)[nestedMatch[1]] =
-          this.parseScalarValue(nestedMatch[2]);
+        currentKey = this.parseTopLevelFrontMatterKey(trimmed, result);
+      } else if (currentKey) {
+        this.parseNestedFrontMatterKey(trimmed, currentKey, result);
       }
     }
 
     return result;
+  }
+
+  private parseTopLevelFrontMatterKey(
+    trimmed: string,
+    result: Record<string, unknown>
+  ): string | null {
+    const match = trimmed.match(/^([A-Za-z0-9_-]+):\s*(.*)$/);
+    if (!match) {
+      return null;
+    }
+
+    const key = match[1];
+    const rawValue = match[2];
+
+    if (!rawValue) {
+      result[key] = {};
+      return key;
+    }
+
+    result[key] = this.parseScalarValue(rawValue);
+    return null;
+  }
+
+  private parseNestedFrontMatterKey(
+    trimmed: string,
+    currentKey: string,
+    result: Record<string, unknown>
+  ): void {
+    const nestedMatch = trimmed.match(/^([A-Za-z0-9_-]+):\s*(.*)$/);
+    if (nestedMatch && result[currentKey] && typeof result[currentKey] === 'object') {
+      (result[currentKey] as Record<string, unknown>)[nestedMatch[1]] =
+        this.parseScalarValue(nestedMatch[2]);
+    }
   }
 
   private parseScalarValue(value: string): unknown {
