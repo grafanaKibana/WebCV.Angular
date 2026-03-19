@@ -15,7 +15,7 @@
 
           <div class="blog-hero__meta">
             <div class="blog-author">
-              <img class="blog-author__avatar" [src]="authorAvatarUrl" [alt]="authorName()">
+              <img class="blog-author__avatar" [ngSrc]="authorAvatarUrl" [alt]="authorName()" width="48" height="48">
               <div>
                 <p class="blog-author__name" [textContent]="authorName()"></p>
                 <p class="blog-author__title" [textContent]="authorTitle()"></p>
@@ -25,7 +25,7 @@
         </div>
 
         <div class="blog-hero__media">
-          <img class="blog-hero__image" [src]="article()?.imagePath" [alt]="article()?.headline">
+          <img class="blog-hero__image" [ngSrc]="article()?.imagePath ?? ''" [alt]="article()?.headline" priority width="800" height="400">
         </div>
 
         <div class="blog-hero__pills">

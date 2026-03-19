@@ -1,4 +1,4 @@
-import { DatePipe, isPlatformBrowser } from "@angular/common";
+import { DatePipe, isPlatformBrowser, NgOptimizedImage } from "@angular/common";
 import {
 	type AfterViewChecked,
 	ChangeDetectionStrategy,
@@ -41,7 +41,7 @@ interface ShareLink {
 
 @Component({
 	selector: "app-blog-detail-page",
-	imports: [RouterLink, CopyButtonComponent, DatePipe],
+	imports: [RouterLink, CopyButtonComponent, DatePipe, NgOptimizedImage],
 	templateUrl: "./blog-detail-page.component.html",
 	styleUrls: ["./blog-detail-page.component.scss"],
 	changeDetection: ChangeDetectionStrategy.OnPush,
