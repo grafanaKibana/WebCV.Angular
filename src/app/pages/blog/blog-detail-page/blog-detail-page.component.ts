@@ -64,6 +64,7 @@ export class BlogDetailPageComponent implements AfterViewChecked, OnDestroy {
 	);
 	authorAvatarUrl = "assets/images/my-portrait.png";
 
+	private readonly COPY_FEEDBACK_MS = 2000;
 	private copyButtonsInitialized = false;
 	private readonly copyButtonHandlers = new Map<HTMLButtonElement, (e: Event) => void>();
 	private readonly feedbackTimeoutIds = new Set<ReturnType<typeof setTimeout>>();
@@ -158,7 +159,7 @@ export class BlogDetailPageComponent implements AfterViewChecked, OnDestroy {
 				const tid = setTimeout(() => {
 					button.classList.remove("copy-button--success");
 					this.feedbackTimeoutIds.delete(tid);
-				}, 2000);
+				}, this.COPY_FEEDBACK_MS);
 				this.feedbackTimeoutIds.add(tid);
 			},
 			error: () => {
@@ -166,7 +167,7 @@ export class BlogDetailPageComponent implements AfterViewChecked, OnDestroy {
 				const tid = setTimeout(() => {
 					button.classList.remove("copy-button--error");
 					this.feedbackTimeoutIds.delete(tid);
-				}, 2000);
+				}, this.COPY_FEEDBACK_MS);
 				this.feedbackTimeoutIds.add(tid);
 			},
 		});
