@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, forkJoin, of } from 'rxjs';
 import { catchError, map, shareReplay, switchMap } from 'rxjs/operators';
+import { slugify } from '../../../shared/utils/slugify';
 import {
   ArticleAuthor,
   ArticleData,
@@ -268,19 +269,12 @@ export class BlogDataService {
     if (base) {
       return base;
     }
-    const fallback = this.slugify(headline);
+    const fallback = slugify(headline);
     return fallback || `post-${id}`;
   }
 
   private normalizeSlug(slug: string): string {
     return decodeURIComponent(slug).trim().toLowerCase();
-  }
-
-  private slugify(value: string): string {
-    return value
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, '-')
-      .replace(/(^-|-$)/g, '');
   }
 
 }
