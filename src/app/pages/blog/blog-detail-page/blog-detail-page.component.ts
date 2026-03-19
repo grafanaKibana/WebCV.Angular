@@ -22,6 +22,7 @@ import { from } from "rxjs";
 import { switchMap } from "rxjs/operators";
 import { HomeDataService } from "../../../services/home-data.service";
 import { CopyButtonComponent } from "../../../shared/components/copy-button/copy-button.component";
+import { slugify } from "../../../shared/utils/slugify";
 import type { ArticleModel } from "../interfaces/articleModel";
 import { BlogDataService } from "../services/blog-data.service";
 
@@ -186,7 +187,7 @@ export class BlogDetailPageComponent implements AfterViewChecked, OnDestroy {
 
 		renderer.heading = (token) => {
 			const normalizedLevel = this.normalizeHeadingLevel(token.depth);
-			const base = this.slugify(token.text) || "section";
+			const base = slugify(token.text) || "section";
 			const count = (slugCounts.get(base) ?? 0) + 1;
 			slugCounts.set(base, count);
 			const anchor = count > 1 ? `${base}-${count}` : base;
@@ -275,12 +276,7 @@ export class BlogDetailPageComponent implements AfterViewChecked, OnDestroy {
 		return level as 2 | 3 | 4 | 5 | 6;
 	}
 
-	private slugify(value: string): string {
-		return value
-			.toLowerCase()
-			.replace(/[^a-z0-9]+/g, "-")
-			.replace(/(^-|-$)/g, "");
-	}
+
 
 	private stripHtml(value: string): string {
 		return value.replace(/<[^>]*>/g, " ");
