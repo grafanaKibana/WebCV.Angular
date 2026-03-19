@@ -304,6 +304,19 @@ export class WebGLGradientService {
 }
 
 /**
+ * WebGL uniform locations interface
+ */
+interface WebGLUniforms {
+  u_time: WebGLUniformLocation | null;
+  u_resolution: WebGLUniformLocation | null;
+  u_amplitude: WebGLUniformLocation | null;
+  u_darker_top: WebGLUniformLocation | null;
+  u_scroll_offset: WebGLUniformLocation | null;
+  u_parallax_enabled: WebGLUniformLocation | null;
+  u_colors: (WebGLUniformLocation | null)[];
+}
+
+/**
  * The core gradient implementation class, based on the Stripe WebGL gradient
  */
 class GradientInstance {
@@ -319,7 +332,7 @@ class GradientInstance {
   private animationTime: number = 0;
   private smoothedDelta: number = 0;
   private initTimeoutId: number | null = null;
-  private uniforms: any = {};
+  private uniforms: WebGLUniforms = {} as WebGLUniforms;
   private program!: WebGLProgram;
   private amplitudeValue: number;
   private playing: boolean = true;
@@ -823,21 +836,21 @@ class GradientInstance {
     this.gl.enableVertexAttribArray(positionLocation);
     this.gl.vertexAttribPointer(positionLocation, 2, this.gl.FLOAT, false, 0, 0);
 
-    // Setup uniforms
-    this.uniforms = {
-      u_time: this.gl.getUniformLocation(this.program, 'u_time'),
-      u_resolution: this.gl.getUniformLocation(this.program, 'u_resolution'),
-      u_amplitude: this.gl.getUniformLocation(this.program, 'u_amplitude'),
-      u_darker_top: this.gl.getUniformLocation(this.program, 'u_darker_top'),
-      u_scroll_offset: this.gl.getUniformLocation(this.program, 'u_scroll_offset'),
-      u_parallax_enabled: this.gl.getUniformLocation(this.program, 'u_parallax_enabled')
-    };
+     // Setup uniforms
+     this.uniforms = {
+       u_time: this.gl.getUniformLocation(this.program, 'u_time'),
+       u_resolution: this.gl.getUniformLocation(this.program, 'u_resolution'),
+       u_amplitude: this.gl.getUniformLocation(this.program, 'u_amplitude'),
+       u_darker_top: this.gl.getUniformLocation(this.program, 'u_darker_top'),
+       u_scroll_offset: this.gl.getUniformLocation(this.program, 'u_scroll_offset'),
+       u_parallax_enabled: this.gl.getUniformLocation(this.program, 'u_parallax_enabled'),
+       u_colors: []
+     };
 
-    // Setup uniform locations for colors
-    this.uniforms.u_colors = [];
-    for (let i = 0; i < 4; i++) {
-      this.uniforms.u_colors[i] = this.gl.getUniformLocation(this.program, `u_colors[${i}]`);
-    }
+     // Setup uniform locations for colors
+     for (let i = 0; i < 4; i++) {
+       this.uniforms.u_colors[i] = this.gl.getUniformLocation(this.program, `u_colors[${i}]`);
+     }
   }
 
   private setColors(): void {
