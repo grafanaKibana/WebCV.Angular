@@ -22,6 +22,7 @@ import { from } from "rxjs";
 import { switchMap } from "rxjs/operators";
 import { HomeDataService } from "../../../services/home-data.service";
 import { CopyButtonComponent } from "../../../shared/components/copy-button/copy-button.component";
+import { escapeHtml, unescapeHtml } from "../../../shared/utils/html-escape";
 import { slugify } from "../../../shared/utils/slugify";
 import type { ArticleModel } from "../interfaces/articleModel";
 import { BlogDataService } from "../services/blog-data.service";
@@ -135,7 +136,7 @@ export class BlogDetailPageComponent implements AfterViewChecked, OnDestroy {
 				e.preventDefault();
 				e.stopPropagation();
 				const code = btn.getAttribute("data-code") ?? "";
-				const decodedCode = this.unescapeHtml(code);
+				const decodedCode = unescapeHtml(code);
 				this.copyCodeToClipboard(decodedCode, btn);
 			};
 			btn.addEventListener("click", handler);
@@ -171,15 +172,6 @@ export class BlogDetailPageComponent implements AfterViewChecked, OnDestroy {
 		});
 	}
 
-	private unescapeHtml(value: string): string {
-		return value
-			.replace(/&amp;/g, "&")
-			.replace(/&lt;/g, "<")
-			.replace(/&gt;/g, ">")
-			.replace(/&quot;/g, '"')
-			.replace(/&#039;/g, "'");
-	}
-
 	private renderMarkdown(markdown: string): void {
 		const tocItems: TocItem[] = [];
 		const slugCounts = new Map<string, number>();
@@ -212,7 +204,7 @@ export class BlogDetailPageComponent implements AfterViewChecked, OnDestroy {
 				? `language-${language}`
 				: "language-plaintext";
 			const displayLang = language || "code";
-			const escapedCode = this.escapeHtml(token.text);
+			const escapedCode = escapeHtml(token.text);
 			// Generate animation-ready HTML with dual-icon structure
 			return `<details class="code-block"${isOpen ? " open" : ""}>
         <summary class="code-block__header">
@@ -280,15 +272,6 @@ export class BlogDetailPageComponent implements AfterViewChecked, OnDestroy {
 
 	private stripHtml(value: string): string {
 		return value.replace(/<[^>]*>/g, " ");
-	}
-
-	private escapeHtml(value: string): string {
-		return value
-			.replace(/&/g, "&amp;")
-			.replace(/</g, "&lt;")
-			.replace(/>/g, "&gt;")
-			.replace(/"/g, "&quot;")
-			.replace(/'/g, "&#039;");
 	}
 
 	ngOnDestroy(): void {
