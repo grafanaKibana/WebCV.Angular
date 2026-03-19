@@ -34,12 +34,6 @@ export class BlogDataService {
     return this.articles$;
   }
 
-  getArticleById(articleId: number): Observable<ArticleModel | undefined> {
-    return this.getArticles().pipe(
-      map(articles => articles.find(article => article.id === articleId))
-    );
-  }
-
   getArticleBySlug(slug: string): Observable<ArticleModel | undefined> {
     const normalizedSlug = this.normalizeSlug(slug);
     return this.getArticles().pipe(
