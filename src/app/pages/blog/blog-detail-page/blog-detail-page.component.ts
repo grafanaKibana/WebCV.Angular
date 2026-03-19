@@ -62,6 +62,11 @@ export class BlogDetailPageComponent implements AfterViewChecked, OnDestroy {
 	readonly authorTitle = computed(
 		() => this.sidebarInfo()?.positionTitle ?? "",
 	);
+	readonly articleState = computed<'loading' | 'notFound' | 'loaded'>(() => {
+		if (!this.articleLoaded()) return 'loading';
+		if (!this.article()) return 'notFound';
+		return 'loaded';
+	});
 	authorAvatarUrl = "assets/images/my-portrait.png";
 
 	private readonly COPY_FEEDBACK_MS = 2000;

@@ -1,5 +1,5 @@
-@if (articleLoaded()) {
-  @if (article()) {
+@switch (articleState()) {
+  @case ('loaded') {
     <div>
       <section class="blog-hero">
         <div class="blog-hero__content">
@@ -75,8 +75,8 @@
         <div #contentBody class="blog-content__body" [innerHTML]="contentHtml()"></div>
       </section>
     </div>
-
-  } @else {
+  }
+  @case ('notFound') {
     <section class="blog-intro">
       <p class="blog-intro__eyebrow">Blog</p>
       <h1 class="blog-intro__title">Article not found</h1>
