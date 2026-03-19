@@ -54,4 +54,8 @@ describe('BlogDetailPageComponent', () => {
   it('should set articleLoaded to true after init', () => {
     expect(component.articleLoaded()).toBe(true);
   });
+
+  it('should have article signal undefined when slug is not found', () => {
+    expect(component.article()).toBeUndefined();
+  });
 });

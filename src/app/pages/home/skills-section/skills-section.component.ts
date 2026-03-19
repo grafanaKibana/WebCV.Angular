@@ -12,6 +12,12 @@ import type { SkillGroupModel } from '../interfaces/skillModel';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SkillsSectionComponent {
+  private readonly SKILL_LEVEL_NAMES: Record<number, string> = {
+    3: 'Advanced',
+    2: 'Intermediate',
+    1: 'Novice',
+  };
+
   readonly skills = toSignal(
     inject(HomeDataService).getSkills().pipe(
       catchError((error) => {
@@ -29,15 +35,6 @@ export class SkillsSectionComponent {
   }
 
   getSkillLevelName(level: number): string {
-    switch (level) {
-      case 3:
-        return 'Advanced'
-      case 2:
-        return 'Intermediate'
-      case 1:
-        return 'Novice'
-      default:
-        return 'Unknown'
-    }
+    return this.SKILL_LEVEL_NAMES[level] ?? 'Unknown';
   }
 }

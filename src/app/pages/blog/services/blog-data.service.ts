@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, forkJoin, of } from 'rxjs';
 import { catchError, map, shareReplay, switchMap } from 'rxjs/operators';
+import { slugify } from '../../../shared/utils/slugify';
 import {
   ArticleAuthor,
   ArticleData,
@@ -32,12 +33,6 @@ export class BlogDataService {
       );
     }
     return this.articles$;
-  }
-
-  getArticleById(articleId: number): Observable<ArticleModel | undefined> {
-    return this.getArticles().pipe(
-      map(articles => articles.find(article => article.id === articleId))
-    );
   }
 
   getArticleBySlug(slug: string): Observable<ArticleModel | undefined> {
@@ -176,38 +171,46 @@ export class BlogDataService {
       const trimmed = line.trim();
 
       if (indent === 0) {
-        const match = trimmed.match(/^([A-Za-z0-9_-]+):\s*(.*)$/);
-        if (!match) {
-          currentKey = null;
-          continue;
-        }
-
-        const key = match[1];
-        const rawValue = match[2];
-
-        if (!rawValue) {
-          currentKey = key;
-          result[key] = {};
-          continue;
-        }
-
-        result[key] = this.parseScalarValue(rawValue);
-        currentKey = null;
-        continue;
-      }
-
-      if (!currentKey) {
-        continue;
-      }
-
-      const nestedMatch = trimmed.match(/^([A-Za-z0-9_-]+):\s*(.*)$/);
-      if (nestedMatch && result[currentKey] && typeof result[currentKey] === 'object') {
-        (result[currentKey] as Record<string, unknown>)[nestedMatch[1]] =
-          this.parseScalarValue(nestedMatch[2]);
+        currentKey = this.parseTopLevelFrontMatterKey(trimmed, result);
+      } else if (currentKey) {
+        this.parseNestedFrontMatterKey(trimmed, currentKey, result);
       }
     }
 
     return result;
+  }
+
+  private parseTopLevelFrontMatterKey(
+    trimmed: string,
+    result: Record<string, unknown>
+  ): string | null {
+    const match = trimmed.match(/^([A-Za-z0-9_-]+):\s*(.*)$/);
+    if (!match) {
+      return null;
+    }
+
+    const key = match[1];
+    const rawValue = match[2];
+
+    if (!rawValue) {
+      result[key] = {};
+      return key;
+    }
+
+    result[key] = this.parseScalarValue(rawValue);
+    return null;
+  }
+
+  private parseNestedFrontMatterKey(
+    trimmed: string,
+    currentKey: string,
+    result: Record<string, unknown>
+  ): void {
+    const nestedMatch = trimmed.match(/^([A-Za-z0-9_-]+):\s*(.*)$/);
+    if (nestedMatch && result[currentKey] && typeof result[currentKey] === 'object') {
+      (result[currentKey] as Record<string, unknown>)[nestedMatch[1]] =
+        this.parseScalarValue(nestedMatch[2]);
+    }
   }
 
   private parseScalarValue(value: string): unknown {
@@ -266,19 +269,12 @@ export class BlogDataService {
     if (base) {
       return base;
     }
-    const fallback = this.slugify(headline);
+    const fallback = slugify(headline);
     return fallback || `post-${id}`;
   }
 
   private normalizeSlug(slug: string): string {
     return decodeURIComponent(slug).trim().toLowerCase();
-  }
-
-  private slugify(value: string): string {
-    return value
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, '-')
-      .replace(/(^-|-$)/g, '');
   }
 
 }

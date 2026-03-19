@@ -39,11 +39,15 @@ describe('BlogItemComponent', () => {
   });
 
   it('should start with imageLoaded as false', () => {
-    expect(component.imageLoaded).toBe(false);
+    expect(component.imageLoaded()).toBe(false);
   });
 
   it('should set imageLoaded to true when onImageLoaded is called', () => {
     component.onImageLoaded();
-    expect(component.imageLoaded).toBe(true);
+    expect(component.imageLoaded()).toBe(true);
+  });
+
+  it('should expose the article data from the required input', () => {
+    expect(component.article().headline).toBe('Test article');
   });
 });

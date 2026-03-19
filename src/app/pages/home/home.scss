@@ -65,6 +65,7 @@ section {
     @media (hover: hover) and (pointer: fine) {
       &:hover::before {
         filter: brightness(1.4);
+        box-shadow: 0 0 20px var(--color-dark-neon-glow), 0 0 10px var(--color-dark-accent-tint);
       }
     }
 
@@ -74,7 +75,6 @@ section {
 
     h3 {
       margin: 0;
-      color: var(--color-dark-heading);
     }
 
     span {

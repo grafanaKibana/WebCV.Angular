@@ -61,4 +61,8 @@ describe('HomePageComponent', () => {
   it('should set homeReady to true after data loads', () => {
     expect(component.homeReady()).toBe(true);
   });
+
+  it('should not throw when component is destroyed', () => {
+    expect(() => fixture.destroy()).not.toThrow();
+  });
 });

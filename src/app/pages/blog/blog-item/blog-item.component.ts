@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { ArticleModel } from '../interfaces/articleModel';
 
@@ -12,9 +12,9 @@ import { ArticleModel } from '../interfaces/articleModel';
 })
 export class BlogItemComponent {
   readonly article = input.required<ArticleModel>();
-  imageLoaded = false;
+  readonly imageLoaded = signal(false);
 
   onImageLoaded(): void {
-    this.imageLoaded = true;
+    this.imageLoaded.set(true);
   }
 }

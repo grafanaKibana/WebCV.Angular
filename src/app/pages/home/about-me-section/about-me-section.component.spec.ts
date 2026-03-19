@@ -30,4 +30,8 @@ describe('AboutMeSectionComponent', () => {
   it('should load about me data on init', () => {
     expect(component.aboutMe().content).toBe('Test about me content');
   });
+
+  it('should have non-empty content when data is provided', () => {
+    expect(component.aboutMe().content.length).toBeGreaterThan(0);
+  });
 });

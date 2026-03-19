@@ -1,4 +1,4 @@
-import { DatePipe, isPlatformBrowser } from "@angular/common";
+import { DatePipe, isPlatformBrowser, NgOptimizedImage } from "@angular/common";
 import {
 	type AfterViewChecked,
 	ChangeDetectionStrategy,
@@ -8,6 +8,7 @@ import {
 	DOCUMENT,
 	type ElementRef,
 	inject,
+	type OnDestroy,
 	PLATFORM_ID,
 	signal,
 	viewChild,
@@ -21,6 +22,8 @@ import { from } from "rxjs";
 import { switchMap } from "rxjs/operators";
 import { HomeDataService } from "../../../services/home-data.service";
 import { CopyButtonComponent } from "../../../shared/components/copy-button/copy-button.component";
+import { escapeHtml, unescapeHtml } from "../../../shared/utils/html-escape";
+import { slugify } from "../../../shared/utils/slugify";
 import type { ArticleModel } from "../interfaces/articleModel";
 import { BlogDataService } from "../services/blog-data.service";
 
@@ -38,12 +41,12 @@ interface ShareLink {
 
 @Component({
 	selector: "app-blog-detail-page",
-	imports: [RouterLink, CopyButtonComponent, DatePipe],
+	imports: [RouterLink, CopyButtonComponent, DatePipe, NgOptimizedImage],
 	templateUrl: "./blog-detail-page.component.html",
 	styleUrls: ["./blog-detail-page.component.scss"],
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BlogDetailPageComponent implements AfterViewChecked {
+export class BlogDetailPageComponent implements AfterViewChecked, OnDestroy {
 	readonly contentBodyRef = viewChild<ElementRef<HTMLElement>>("contentBody");
 	readonly article = signal<ArticleModel | undefined>(undefined);
 	readonly articleLoaded = signal(false);
@@ -59,9 +62,17 @@ export class BlogDetailPageComponent implements AfterViewChecked {
 	readonly authorTitle = computed(
 		() => this.sidebarInfo()?.positionTitle ?? "",
 	);
+	readonly articleState = computed<'loading' | 'notFound' | 'loaded'>(() => {
+		if (!this.articleLoaded()) return 'loading';
+		if (!this.article()) return 'notFound';
+		return 'loaded';
+	});
 	authorAvatarUrl = "assets/images/my-portrait.png";
 
+	private readonly COPY_FEEDBACK_MS = 2000;
 	private copyButtonsInitialized = false;
+	private readonly copyButtonHandlers = new Map<HTMLButtonElement, (e: Event) => void>();
+	private readonly feedbackTimeoutIds = new Set<ReturnType<typeof setTimeout>>();
 	private readonly route = inject(ActivatedRoute);
 	private readonly blogDataService = inject(BlogDataService);
 	private readonly homeDataService = inject(HomeDataService);
@@ -127,13 +138,15 @@ export class BlogDetailPageComponent implements AfterViewChecked {
 		const copyButtons =
 			container.querySelectorAll<HTMLButtonElement>(".code-block__copy");
 		copyButtons.forEach((btn) => {
-			btn.addEventListener("click", (e) => {
+			const handler = (e: Event) => {
 				e.preventDefault();
 				e.stopPropagation();
 				const code = btn.getAttribute("data-code") ?? "";
-				const decodedCode = this.unescapeHtml(code);
+				const decodedCode = unescapeHtml(code);
 				this.copyCodeToClipboard(decodedCode, btn);
-			});
+			};
+			btn.addEventListener("click", handler);
+			this.copyButtonHandlers.set(btn, handler);
 		});
 	}
 
@@ -148,26 +161,21 @@ export class BlogDetailPageComponent implements AfterViewChecked {
 		from(navigator.clipboard.writeText(code)).subscribe({
 			next: () => {
 				button.classList.add("copy-button--success");
-				setTimeout(() => {
+				const tid = setTimeout(() => {
 					button.classList.remove("copy-button--success");
-				}, 2000);
+					this.feedbackTimeoutIds.delete(tid);
+				}, this.COPY_FEEDBACK_MS);
+				this.feedbackTimeoutIds.add(tid);
 			},
 			error: () => {
 				button.classList.add("copy-button--error");
-				setTimeout(() => {
+				const tid = setTimeout(() => {
 					button.classList.remove("copy-button--error");
-				}, 2000);
+					this.feedbackTimeoutIds.delete(tid);
+				}, this.COPY_FEEDBACK_MS);
+				this.feedbackTimeoutIds.add(tid);
 			},
 		});
-	}
-
-	private unescapeHtml(value: string): string {
-		return value
-			.replace(/&amp;/g, "&")
-			.replace(/&lt;/g, "<")
-			.replace(/&gt;/g, ">")
-			.replace(/&quot;/g, '"')
-			.replace(/&#039;/g, "'");
 	}
 
 	private renderMarkdown(markdown: string): void {
@@ -177,7 +185,7 @@ export class BlogDetailPageComponent implements AfterViewChecked {
 
 		renderer.heading = (token) => {
 			const normalizedLevel = this.normalizeHeadingLevel(token.depth);
-			const base = this.slugify(token.text) || "section";
+			const base = slugify(token.text) || "section";
 			const count = (slugCounts.get(base) ?? 0) + 1;
 			slugCounts.set(base, count);
 			const anchor = count > 1 ? `${base}-${count}` : base;
@@ -202,7 +210,7 @@ export class BlogDetailPageComponent implements AfterViewChecked {
 				? `language-${language}`
 				: "language-plaintext";
 			const displayLang = language || "code";
-			const escapedCode = this.escapeHtml(token.text);
+			const escapedCode = escapeHtml(token.text);
 			// Generate animation-ready HTML with dual-icon structure
 			return `<details class="code-block"${isOpen ? " open" : ""}>
         <summary class="code-block__header">
@@ -266,23 +274,20 @@ export class BlogDetailPageComponent implements AfterViewChecked {
 		return level as 2 | 3 | 4 | 5 | 6;
 	}
 
-	private slugify(value: string): string {
-		return value
-			.toLowerCase()
-			.replace(/[^a-z0-9]+/g, "-")
-			.replace(/(^-|-$)/g, "");
-	}
+
 
 	private stripHtml(value: string): string {
 		return value.replace(/<[^>]*>/g, " ");
 	}
 
-	private escapeHtml(value: string): string {
-		return value
-			.replace(/&/g, "&amp;")
-			.replace(/</g, "&lt;")
-			.replace(/>/g, "&gt;")
-			.replace(/"/g, "&quot;")
-			.replace(/'/g, "&#039;");
+	ngOnDestroy(): void {
+		this.copyButtonHandlers.forEach((handler, btn) => {
+			btn.removeEventListener("click", handler);
+		});
+		this.copyButtonHandlers.clear();
+		this.feedbackTimeoutIds.forEach((id) => {
+			clearTimeout(id);
+		});
+		this.feedbackTimeoutIds.clear();
 	}
 }

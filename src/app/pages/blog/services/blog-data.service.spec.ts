@@ -216,29 +216,6 @@ Some text that is not a list
     flushArticles();
   });
 
-  it('should find article by id', (done) => {
-    service.getArticleById(1).subscribe({
-      next: (article) => {
-        expect(article).toBeTruthy();
-        expect(article!.headline).toBe('First Post');
-        done();
-      }
-    });
-
-    flushArticles();
-  });
-
-  it('should return undefined for non-existent id', (done) => {
-    service.getArticleById(999).subscribe({
-      next: (article) => {
-        expect(article).toBeUndefined();
-        done();
-      }
-    });
-
-    flushArticles();
-  });
-
   it('should find article by slug (case-insensitive)', (done) => {
     service.getArticleBySlug('First-Post').subscribe({
       next: (article) => {

@@ -116,7 +116,7 @@ $download-progress-glass-blur: rem(24px);
         margin-left: rem(8px);
         background-color: var(--color-dark-accent-tint);
         border-radius: var(--radius-4);
-            border: 1px solid rgba(var(--accent-r), var(--accent-g), var(--accent-b), 0.3);
+
         color: var(--color-dark-accent);
         }
       }
@@ -143,7 +143,20 @@ $download-progress-glass-blur: rem(24px);
     }
 
     &:not(.soon) {
-      @include interactive-glow();
+      transition: background var(--transition-fast) var(--transition-easing),
+        color var(--transition-fast) var(--transition-easing),
+        text-shadow var(--transition-fast) var(--transition-easing),
+        transform var(--transition-fast) var(--transition-easing);
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.04);
+        color: var(--color-dark-accent);
+      }
+
+      &:active {
+        transform: scale(0.97);
+        transition: transform 80ms ease-in;
+      }
     }
 
     i {
@@ -166,10 +179,17 @@ $download-progress-glass-blur: rem(24px);
         margin-right: 0;
         font-size: rem(18px);
         text-align: center;
+        transition: text-shadow var(--transition-fast) var(--transition-easing);
       }
 
       &:not(.soon) i:hover {
-        text-shadow: 0 0 10px var(--color-dark-neon-glow);
+        color: var(--color-dark-accent);
+      }
+
+      &:not(.soon):active i {
+        text-shadow:
+          0 0 20px var(--color-dark-neon-glow),
+          0 0 8px rgba(var(--accent-r), var(--accent-g), var(--accent-b), 0.45);
       }
     }
 
@@ -179,11 +199,6 @@ $download-progress-glass-blur: rem(24px);
       min-width: 44px;
       min-height: 44px;
 
-      // Remove interactive-glow hover effects on mobile
-      &:not(.soon)::before,
-      &:not(.soon)::after {
-        display: none;
-      }
 
       &:not(.soon):hover {
         background: transparent;
@@ -193,9 +208,13 @@ $download-progress-glass-blur: rem(24px);
       &:not(.soon):active {
         background: transparent;
         box-shadow: none;
+        transform: scale(0.93);
+        transition: transform 80ms ease-in;
 
         i {
-          text-shadow: 0 0 12px var(--color-dark-neon-glow), 0 0 6px var(--color-dark-accent-tint);
+          text-shadow:
+            0 0 20px var(--color-dark-neon-glow),
+            0 0 8px rgba(var(--accent-r), var(--accent-g), var(--accent-b), 0.45);
         }
       }
 
@@ -206,15 +225,13 @@ $download-progress-glass-blur: rem(24px);
   }
 
   .theme-button {
+    @include interactive-accent;
+
     i {
       display: block;
       margin-right: 0;
       font-size: rem(18px);
       text-align: center;
-    }
-
-    &:hover i {
-      text-shadow: 0 0 12px var(--color-dark-neon-glow), 0 0 6px var(--color-dark-accent-tint);
     }
   }
 }
@@ -526,6 +543,10 @@ $download-progress-glass-blur: rem(24px);
 .header-nav {
   flex: 1 1 auto;
   min-width: 0;
+
+  @include respond-tablet-sm {
+    flex: 4 1 0;
+  }
 }
 
 header {
@@ -569,53 +590,124 @@ header {
       }
     }
 
-    .header-download-mobile {
-      display: none;
 
-      @include respond-tablet-sm {
-        display: flex;
-      }
-    }
+  }
+}
+
+.header-download-pill {
+  flex: 0 0 auto;
+  align-self: stretch;
+  padding: var(--spacing-3);
+  position: relative;
+
+  .header-download {
+    border-radius: var(--radius-8);
+  }
+
+  @include respond-tablet-sm {
+    flex: 1 1 0;
+    padding: var(--spacing-2);
+    width: auto;
+  }
+
+  @include respond-mobile {
+    padding: var(--spacing-1);
   }
 }
 
 .header-download {
-  @extend .shadow-medium;
-  @include dark-block-base(
-    $bg: rgba(10, 15, 20, 0.55),
-    $blur: 24px
-  );
-  box-shadow:
-    0 8px 32px 0 rgba(0, 0, 0, 0.3),
-    inset 0 1px 0 0 rgba(255, 255, 255, 0.03);
-
-  flex: 0 0 auto;
-  align-self: stretch;
   display: flex;
+  width: 100%;
+  height: 100%;
   align-items: center;
   justify-content: center;
-  padding: var(--spacing-3);
-  border-radius: var(--radius-20);
+  padding: 0.6em 1.2em;
+  border-radius: var(--radius-surface);
+  color: var(--color-dark-heading);
+  background: transparent;
+  border: 0;
+  font: inherit;
+  font-weight: 500;
+  font-size: rem(15px);
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 
   .download-button-content {
-    padding: 0.5em 1em;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .download-button-border {
+    display: none;
+  }
+
+  .download-button-content i {
+    display: block;
+    font-size: rem(14px);
+    margin: 0;
+    transition: color var(--transition-fast) var(--transition-easing);
   }
 
   &:not(.soon):not(.is-downloading) {
-    @include interactive-glow(rgba(10, 15, 20, 0.55));
+    transition: background var(--transition-fast) var(--transition-easing),
+      color var(--transition-fast) var(--transition-easing),
+      text-shadow var(--transition-fast) var(--transition-easing),
+      transform var(--transition-fast) var(--transition-easing);
 
     &:hover {
-      box-shadow:
-        0 8px 32px 0 rgba(0, 0, 0, 0.3),
-        inset 0 1px 0 0 rgba(255, 255, 255, 0.03);
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--color-dark-accent);
+
+      i {
+        color: var(--color-dark-accent);
+      }
+    }
+
+    &:active {
+      transform: scale(0.97);
+      transition: transform 80ms ease-in;
     }
   }
 
   @include respond-tablet-sm {
-    display: none;
+    padding: var(--spacing-3);
+    min-width: 44px;
+    min-height: 44px;
+
+    .download-button-content {
+      gap: 0;
+
+      span {
+        display: none;
+      }
+    }
+
+    .download-button-content i {
+      font-size: rem(18px);
+    }
   }
 
   @include respond-mobile {
-    border-radius: var(--radius-12);
+    padding: var(--spacing-2);
+    min-width: 44px;
+    min-height: 44px;
+
+    .download-button-content i {
+      font-size: rem(16px);
+    }
+
+    &:not(.soon):not(.is-downloading):hover {
+      background: transparent;
+      box-shadow: none;
+    }
+
+    &:not(.soon):not(.is-downloading):active {
+      transform: scale(0.93);
+      transition: transform 80ms ease-in;
+    }
   }
 }

@@ -23,6 +23,7 @@ interface WorkflowRunsResponse {
   providedIn: 'root'
 })
 export class CvDownloadService {
+  private readonly IFRAME_CLEANUP_DELAY_MS = 5000;
   private readonly owner = 'grafanaKibana';
   private readonly repo = 'LatexCV';
   private readonly workflowFileName = 'main.yml';
@@ -54,7 +55,7 @@ export class CvDownloadService {
         // Clean up the iframe after download starts
         setTimeout(() => {
           document.body.removeChild(iframe);
-        }, 5000);
+        }, this.IFRAME_CLEANUP_DELAY_MS);
       }),
       map(() => undefined),
       catchError(error => {

@@ -9,7 +9,8 @@ import {
   signal,
   output
 } from '@angular/core';
-import { from } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { from, pipe } from 'rxjs';
 
 export type CopyState = 'idle' | 'success' | 'error';
 
@@ -92,10 +93,12 @@ export class CopyButtonComponent {
       return;
     }
 
-    from(navigator.clipboard.writeText(this.text())).subscribe({
-      next: () => this.handleSuccess(),
-      error: (err: Error) => this.handleError(err)
-    });
+    from(navigator.clipboard.writeText(this.text()))
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => this.handleSuccess(),
+        error: (err: Error) => this.handleError(err)
+      });
   }
 
   private handleSuccess(): void {
