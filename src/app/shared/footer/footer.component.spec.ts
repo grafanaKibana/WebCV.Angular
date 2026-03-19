@@ -19,7 +19,13 @@ describe('FooterComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
-});
+  });
 
+  it('should render a footer element in the DOM', () => {
+    expect(fixture.nativeElement.querySelector('footer')).toBeTruthy();
+  });
 
+  it('should render the credentials container', () => {
+    expect(fixture.nativeElement.querySelector('.credentials')).toBeTruthy();
+  });
 });

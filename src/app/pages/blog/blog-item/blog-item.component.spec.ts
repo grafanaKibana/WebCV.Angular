@@ -46,4 +46,8 @@ describe('BlogItemComponent', () => {
     component.onImageLoaded();
     expect(component.imageLoaded()).toBe(true);
   });
+
+  it('should expose the article data from the required input', () => {
+    expect(component.article().headline).toBe('Test article');
+  });
 });

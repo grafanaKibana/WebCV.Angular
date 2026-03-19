@@ -50,4 +50,8 @@ describe('ProfileSectionComponent', () => {
     expect(component.sidebarInfo()).toEqual(mockSidebarInfo);
     expect(component.links()).toEqual(mockSidebarInfo.links);
   });
+
+  it('should derive correct GitHub link from sidebar info', () => {
+    expect(component.links().gitHubLink).toBe('https://github.com/test');
+  });
 });

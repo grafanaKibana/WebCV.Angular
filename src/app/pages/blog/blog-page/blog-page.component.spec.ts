@@ -34,4 +34,9 @@ describe('BlogPageComponent', () => {
   it('should set articlesReady after articles load', () => {
     expect(component.articlesReady()).toBe(true);
   });
+
+  it('should return article id from trackById', () => {
+    const article = { id: 42, slug: 'test', headline: 'Test', content: '', publishDate: new Date(), imagePath: '', author: { name: '', title: '', avatarUrl: '' } } as any;
+    expect(component.trackById(0, article)).toBe(42);
+  });
 });

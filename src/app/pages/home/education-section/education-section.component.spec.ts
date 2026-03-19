@@ -41,4 +41,8 @@ describe('EducationSectionComponent', () => {
   it('should load education data on init', () => {
     expect(component.educationList()).toEqual(mockEducation);
   });
+
+  it('should have exactly one education item from the mock data', () => {
+    expect(component.educationList().length).toBe(1);
+  });
 });

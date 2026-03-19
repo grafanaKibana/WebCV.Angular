@@ -57,4 +57,8 @@ describe('HeaderComponent', () => {
     expect(component.isBlogDone()).toBe(true);
     expect(component.isDownloadCVDone()).toBe(true);
   });
+
+  it('should start with isDownloading as false', () => {
+    expect(component.isDownloading()).toBe(false);
+  });
 });

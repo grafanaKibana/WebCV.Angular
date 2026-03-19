@@ -80,5 +80,9 @@ describe('SkillsSectionComponent', () => {
       const result = component.getTagBasis(6);
       expect(result).toBe('calc((100% - 2 * var(--spacing-2)) / 3)');
     });
+
+    it('should return calc expression for 4 skills (2 per row)', () => {
+      expect(component.getTagBasis(4)).toBe('calc((100% - 1 * var(--spacing-2)) / 2)');
+    });
   });
 });

@@ -19,4 +19,12 @@ describe('HorizontalSeparatorComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should render a div element inside the component', () => {
+    expect(fixture.nativeElement.querySelector('div')).toBeTruthy();
+  });
+
+  it('should render with exactly one inner element', () => {
+    expect(fixture.nativeElement.children.length).toBe(1);
+  });
 });
