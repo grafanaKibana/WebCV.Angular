@@ -155,9 +155,7 @@
       "skills": [
         { "technology": ".NET / C#", "level": 3 },
         { "technology": "ASP.NET Web API", "level": 3 },
-        { "technology": "MediatR", "level": 2 },
         { "technology": "Entity Framework", "level": 2 },
-        { "technology": "T-SQL", "level": 2 },
         { "technology": "Python", "level": 1 }
       ]
     },
