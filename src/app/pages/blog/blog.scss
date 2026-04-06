@@ -361,6 +361,36 @@
     min-height: 0;
     pointer-events: none;
 
+    &::before,
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    &::before {
+      background:
+        linear-gradient(
+          145deg,
+          rgba(var(--reflection-r), var(--reflection-g), var(--reflection-b), 0.88) 0%,
+          rgba(var(--accent-r), var(--accent-g), var(--accent-b), 0.72) 46%,
+          rgba(8, 10, 16, 0.92) 100%
+        );
+      mix-blend-mode: color;
+    }
+
+    &::after {
+      background: linear-gradient(
+        160deg,
+        rgba(4, 6, 10, 0.12) 0%,
+        rgba(4, 6, 10, 0.4) 52%,
+        rgba(4, 6, 10, 0.82) 100%
+      );
+      mix-blend-mode: multiply;
+    }
+
     /* Alpha fade from the far right into the content edge (no color overlay). */
     -webkit-mask-image: linear-gradient(to left,
       rgba(0, 0, 0, 1) 0%,
@@ -389,17 +419,20 @@
       -webkit-mask-image: none;
       mask-image: none;
 
+      &::before,
       &::after {
-        content: '';
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        height: 50%;
-        background: linear-gradient(to top, rgba(0, 0, 0, 0.4) 0%, transparent 100%);
-        pointer-events: none;
-        z-index: 1;
-        border-radius: 0 0 var(--radius-12) var(--radius-12);
+        border-radius: var(--radius-12);
+      }
+
+      &::after {
+        background:
+          linear-gradient(to top, rgba(0, 0, 0, 0.45) 0%, transparent 52%),
+          linear-gradient(
+            160deg,
+            rgba(4, 6, 10, 0.14) 0%,
+            rgba(4, 6, 10, 0.38) 52%,
+            rgba(4, 6, 10, 0.78) 100%
+          );
       }
     }
   }
@@ -407,10 +440,14 @@
   &__image {
     position: absolute;
     inset: 0;
+    z-index: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
     display: block;
+    filter: grayscale(1) contrast(1.1) brightness(0.78);
+    transform: scale(1.01);
+    transform-origin: center;
   }
 
   // Pills wrapper — invisible on desktop/tablet via display:contents,
