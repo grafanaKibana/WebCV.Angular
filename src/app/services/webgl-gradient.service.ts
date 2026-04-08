@@ -113,6 +113,26 @@ export class WebGLGradientService {
     root.style.setProperty('--accent-r', rgb[0].toString());
     root.style.setProperty('--accent-g', rgb[1].toString());
     root.style.setProperty('--accent-b', rgb[2].toString());
+
+    this.updateFaviconColor(accent);
+  }
+
+  private updateFaviconColor(color: string): void {
+    const link = document.querySelector<HTMLLinkElement>('link[rel="icon"]');
+    if (!link) return;
+
+    const darkened = this.darkenHex(color, 0.45);
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><style>path{fill:${color}}@media(prefers-color-scheme:light){path{fill:${darkened}}}</style><path d="M18,8.293l-6-6-6,6-6-6V18.707a3,3,0,0,0,3,3H21a3,3,0,0,0,3-3V2.293Z"/></svg>`;
+    const blob = new Blob([svg], { type: 'image/svg+xml' });
+
+    URL.revokeObjectURL(link.href);
+    link.href = URL.createObjectURL(blob);
+  }
+
+  private darkenHex(hex: string, factor: number): string {
+    const rgb = this.hexToRgb(hex);
+    if (!rgb) return hex;
+    return '#' + rgb.map(c => Math.round(c * factor).toString(16).padStart(2, '0')).join('');
   }
 
   private hexToRgb(hex: string): number[] | null {

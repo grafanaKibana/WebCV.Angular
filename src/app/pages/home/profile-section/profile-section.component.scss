@@ -1,4 +1,4 @@
-@import "../home";
+@use '../home' as *;
 
 .profile {
   @include glass-effect(0.40);
@@ -35,7 +35,6 @@
     flex-direction: column;
     align-items: flex-end;
     gap: var(--spacing-3);
-    margin-right: var(--spacing-6);
 
     @include respond-tablet-sm {
       align-items: center;
@@ -85,14 +84,51 @@
   }
 
   &__socials {
+    --social-cell-size: #{rem(42px)};
+
+    position: relative;
     display: grid;
-    grid-template-columns: repeat(2, auto);
-    gap: var(--spacing-6) var(--spacing-5);
+    grid-template-columns: repeat(2, minmax(var(--social-cell-size), 1fr));
+    gap: 0;
+    width: fit-content;
+
+    &::before,
+    &::after {
+      content: "";
+      position: absolute;
+      pointer-events: none;
+    }
+
+    &::before {
+      top: 50%;
+      left: 25%;
+      right: 25%;
+      height: 1px;
+      background: linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.12) 50%,
+        rgba(255, 255, 255, 0) 100%
+      );
+      transform: translateY(-0.5px);
+    }
+
+    &::after {
+      top: 25%;
+      bottom: 25%;
+      left: 50%;
+      width: 1px;
+      background: linear-gradient(
+        180deg,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.12) 50%,
+        rgba(255, 255, 255, 0) 100%
+      );
+      transform: translateX(-0.5px);
+    }
 
     @include respond-tablet-sm {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
+      margin-inline: auto;
     }
 
     a {
@@ -101,10 +137,13 @@
       text-decoration: none;
       display: inline-flex;
       align-items: center;
-      gap: var(--spacing-2);
+      justify-content: center;
       line-height: 1;
       white-space: nowrap;
-      min-height: 44px;
+      width: var(--social-cell-size);
+      height: var(--social-cell-size);
+      aspect-ratio: 1;
+      transition: color 180ms ease, transform 180ms ease;
 
       i {
         font-size: rem(18px);

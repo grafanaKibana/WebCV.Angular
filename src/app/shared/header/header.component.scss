@@ -1,4 +1,4 @@
-@import '../../../assets/styles/utility';
+@use '../../../assets/styles/utility' as *;
 $download-progress-radius: rem(3px);
 $download-progress-glow-bleed: rem(8px);
 $download-progress-glow-color: color-mix(in srgb, var(--color-dark-neon-glow) 72%, #001018);

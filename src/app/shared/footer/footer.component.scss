@@ -1,4 +1,4 @@
-@import '../../../assets/styles/utility';
+@use '../../../assets/styles/utility' as *;
 
 footer {
   border-radius: var(--radius-20) var(--radius-20) 0 0;

@@ -1,4 +1,4 @@
-@import '../blog';
+@use '../blog' as *;
 
 :host {
   display: grid;

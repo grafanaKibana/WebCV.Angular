@@ -1,4 +1,4 @@
-@import '../assets/styles/utility';
+@use '../assets/styles/utility' as *;
 
 :host-context(html.intro-animate) .wrapper,
 :host-context(html.intro-animate) app-header,

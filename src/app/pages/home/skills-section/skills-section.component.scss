@@ -1,4 +1,4 @@
-@import "../home";
+@use '../home' as *;
 
 section {
   padding: var(--section-pad);

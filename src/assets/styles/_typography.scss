@@ -1,7 +1,4 @@
-@import 'variables/media';
-@import 'variables/mixins';
-@import 'variables/vars';
-@import "utility";
+@use 'utility' as *;
 
 body, button {
   color: var(--color-dark-paragraph);

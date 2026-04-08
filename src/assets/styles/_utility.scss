@@ -1,6 +1,10 @@
-@import 'variables/media';
-@import 'variables/mixins';
-@import 'variables/vars';
+@forward 'variables/media';
+@forward 'variables/mixins';
+@forward 'variables/vars';
+
+@use 'variables/media' as *;
+@use 'variables/mixins' as *;
+@use 'variables/vars' as *;
 
 // ===========================================
 // Dark Block Mixins (Composable)

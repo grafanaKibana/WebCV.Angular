@@ -1,9 +1,5 @@
-@import 'typography';
-@import 'utility';
-
-@import 'variables/media';
-@import 'variables/mixins';
-@import 'variables/vars';
+@use 'typography';
+@use 'utility' as *;
 
 :root {
   // Layout spacing tokens (responsive overrides)
