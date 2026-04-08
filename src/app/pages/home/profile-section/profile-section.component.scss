@@ -1,4 +1,4 @@
-@import "../home";
+@use '../home' as *;
 
 .profile {
   @include glass-effect(0.40);
