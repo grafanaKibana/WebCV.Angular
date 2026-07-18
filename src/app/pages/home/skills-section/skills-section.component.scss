@@ -4,7 +4,51 @@ section {
   padding: var(--section-pad);
 
   .skills-heading {
+    flex-wrap: wrap;
+    gap: rem(6px) 0;
     margin-bottom: var(--spacing-6);
+
+    // Replace the shared trailing line with an explicit element so the
+    // Signature Skill legend can sit at the far right of the heading.
+    &::after {
+      display: none;
+    }
+
+    &__line {
+      flex: 1;
+      min-width: rem(20px);
+      height: 1px;
+      margin: 0 var(--spacing-4);
+      background: linear-gradient(90deg, var(--color-dark-border), transparent);
+    }
+  }
+
+  .skills-legend {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: rem(5px);
+    padding: rem(3px) rem(9px);
+    border-radius: rem(6px);
+    font-family: var(--font-family-mono);
+    font-size: rem(11px);
+    font-weight: 400;
+    letter-spacing: 0;
+    text-transform: none;
+    white-space: nowrap;
+    color: var(--color-dark-accent);
+    -webkit-text-fill-color: var(--color-dark-accent);
+    text-shadow: none;
+    background: var(--color-dark-accent-tint);
+    border: rem(1px) solid rgba(var(--accent-r), var(--accent-g), var(--accent-b), 0.22);
+
+    &__dot {
+      flex-shrink: 0;
+      width: rem(5px);
+      height: rem(5px);
+      border-radius: 50%;
+      background: var(--color-dark-accent);
+    }
   }
 
   .skill-wrapper {
@@ -115,45 +159,54 @@ section {
       border-left: 1px solid var(--color-dark-border);
       padding-left: var(--spacing-3);
 
+      // Pill layout (flex-basis / wrap / sizing) is intentionally preserved.
+      // Only the visual styling changes to match the design, plus the
+      // Signature Skill variant with a leading accent dot.
       .skill-tag {
-        @include dark-block-base(
-          $bg: rgba(10, 15, 20, 0.10),
-          $radius: var(--radius-8),
-          $blur: 6px
-        );
-        @include interactive-accent;
-
-        &:active {
-          transform: none;
-        }
         box-sizing: border-box;
         flex: 1 1 var(--tag-basis, 33%);
-        padding: rem(6px) rem(12px);
-        font-family: var(--font-family-mono);
-        font-size: rem(12px);
-        font-weight: 400;
-        color: var(--color-dark-paragraph-bright);
-        border: 1px solid var(--color-dark-border);
-        cursor: default;
-        line-height: 1.4;
-        text-align: center;
-        white-space: nowrap;
         display: flex;
         align-items: center;
         justify-content: center;
+        gap: rem(6px);
+        padding: rem(6px) rem(12px);
+        border-radius: var(--radius-8);
+        font-family: var(--font-family-mono);
+        font-size: rem(12px);
+        font-weight: 400;
+        line-height: 1.4;
+        text-align: center;
+        white-space: nowrap;
+        cursor: default;
+        color: var(--color-dark-paragraph-bright);
+        background: rgba(255, 255, 255, 0.045);
+        border: rem(1px) solid transparent;
+        transition:
+          color var(--transition-normal) var(--transition-easing),
+          background var(--transition-normal) var(--transition-easing);
 
         &:hover {
-          cursor: default;
           color: var(--color-dark-accent);
-          background: rgba(10, 15, 20, 0.10);
-          box-shadow:
-            0 8px 32px 0 rgba(0, 0, 0, 0.2),
-            inset 0 1px 0 0 rgba(255, 255, 255, 0.05);
-          text-shadow: none;
+          background: rgba(255, 255, 255, 0.08);
+        }
 
-          &::after {
-            opacity: 0;
+        &--signature {
+          font-weight: 500;
+          color: var(--color-dark-accent);
+          background: rgba(var(--accent-r), var(--accent-g), var(--accent-b), 0.12);
+
+          &:hover {
+            color: var(--color-dark-accent);
+            background: rgba(var(--accent-r), var(--accent-g), var(--accent-b), 0.12);
           }
+        }
+
+        &__dot {
+          flex-shrink: 0;
+          width: rem(5px);
+          height: rem(5px);
+          border-radius: 50%;
+          background: var(--color-dark-accent);
         }
 
         @include respond-mobile {

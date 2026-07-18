@@ -5,6 +5,12 @@
         <img ngSrc="./assets/images/my-portrait-no-bg.png" alt="Character" priority width="400" height="400">
       </div>
       <div class="profile__identity">
+        @if (sidebarInfo()?.availability) {
+          <span class="profile__status">
+            <span class="profile__status-dot" aria-hidden="true"></span>
+            {{sidebarInfo()?.availability}}
+          </span>
+        }
         <h2 class="profile__name">{{sidebarInfo()?.firstName}} {{sidebarInfo()?.lastName}}</h2>
         <span class="profile__title">{{sidebarInfo()?.positionTitle}}</span>
       </div>
