@@ -3,24 +3,19 @@
 section {
   padding: var(--section-pad);
 
-  .skills-heading {
+  // Heading row: the <h2> and the Signature Skill legend are siblings so the
+  // legend text is not folded into the heading's accessible name.
+  .skills-header {
+    display: flex;
+    align-items: center;
     flex-wrap: wrap;
-    gap: rem(6px) 0;
+    gap: rem(6px) var(--spacing-4);
     margin-bottom: var(--spacing-6);
+  }
 
-    // Replace the shared trailing line with an explicit element so the
-    // Signature Skill legend can sit at the far right of the heading.
-    &::after {
-      display: none;
-    }
-
-    &__line {
-      flex: 1;
-      min-width: rem(20px);
-      height: 1px;
-      margin: 0 var(--spacing-4);
-      background: linear-gradient(90deg, var(--color-dark-border), transparent);
-    }
+  .skills-heading {
+    flex: 1 1 rem(200px);
+    margin-bottom: 0;
   }
 
   .skills-legend {
@@ -37,8 +32,6 @@ section {
     text-transform: none;
     white-space: nowrap;
     color: var(--color-dark-accent);
-    -webkit-text-fill-color: var(--color-dark-accent);
-    text-shadow: none;
     background: var(--color-dark-accent-tint);
     border: rem(1px) solid rgba(var(--accent-r), var(--accent-g), var(--accent-b), 0.22);
 
