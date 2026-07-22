@@ -30,15 +30,19 @@ section .section-item-content {
 
     li {
       margin-bottom: rem(8px);
-      padding-left: rem(20px);
+      padding-left: rem(18px);
       position: relative;
 
       &::before {
-        content: '—';
+        content: '';
         position: absolute;
         left: 0;
-        color: var(--color-dark-accent);
-        font-size: rem(14px);
+        top: rem(9px);
+        width: rem(5px);
+        height: rem(5px);
+        border-radius: rem(1px);
+        background: var(--color-dark-accent);
+        opacity: 0.7;
       }
 
       &:last-child {
@@ -50,6 +54,22 @@ section .section-item-content {
       }
     }
   }
+}
+
+// "Present" pill in the date column. Nested under `section .section-item`
+// to win specificity over the generic `section .section-item span` rule.
+section .section-item .section-item-present {
+  display: inline-block;
+  font-family: var(--font-family-mono);
+  font-size: rem(11px);
+  font-weight: 500;
+  line-height: 1.5;
+  letter-spacing: 0.01em;
+  padding: rem(2px) rem(9px);
+  border-radius: rem(6px);
+  color: var(--color-dark-accent);
+  background: var(--color-dark-accent-tint);
+  border: rem(1px) solid rgba(var(--accent-r), var(--accent-g), var(--accent-b), 0.22);
 }
 
 .section-item-content__inner {

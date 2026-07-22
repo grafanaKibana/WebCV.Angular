@@ -1,12 +1,24 @@
 <section>
-  <h2 class="numbered-heading skills-heading"><span class="section-number">04.</span> Skills & Technologies</h2>
+  <div class="skills-header">
+    <h2 class="numbered-heading skills-heading">
+      <span class="section-number">04.</span> Skills &amp; Technologies
+    </h2>
+    <span class="skills-legend" role="note" aria-label="Legend: accented pills mark signature skills">
+      <span class="skills-legend__dot" aria-hidden="true"></span>Signature Skill
+    </span>
+  </div>
   <div class="skill-wrapper">
     @for (skillGroup of skills(); track skillGroup.name) {
       <div class="skill-group">
         <h3 class="skill-group-title">{{skillGroup.name}}</h3>
         <div class="skill-tags" role="list" [attr.aria-label]="skillGroup.name + ' skills'" [style.--tag-basis]="getTagBasis(skillGroup.skills.length)">
           @for (skill of skillGroup.skills; track skill.technology) {
-            <span class="skill-tag" role="listitem">{{skill.technology}}</span>
+            <span class="skill-tag" [class.skill-tag--signature]="skill.signature" role="listitem">
+              @if (skill.signature) {
+                <span class="skill-tag__dot" aria-hidden="true"></span>
+              }
+              {{skill.technology}}
+            </span>
           }
         </div>
       </div>

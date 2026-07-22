@@ -15,7 +15,7 @@
               @if (experience.endMonth && experience.endYear) {
                 <time [attr.datetime]="toIsoDate(experience.endYear, experience.endMonth)">{{experience.endMonth | monthShort}} <span class="year-full">{{experience.endYear}}</span><span class="year-short">'{{experience.endYear.slice(-2)}}</span></time>
               } @else {
-                Present
+                <span class="section-item-present">Present</span>
               }
             </span>
             <span class="section-item-duration">{{experience.startMonth | duration: experience.startYear : experience.endMonth : experience.endYear}}</span>

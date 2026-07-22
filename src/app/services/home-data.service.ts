@@ -15,6 +15,7 @@ export interface SidebarInfo {
   email: string;
   phone: string;
   telegram: string;
+  availability?: string;
   links: {
     gitHubLink: string;
     linkedInLink: string;
