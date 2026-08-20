@@ -1,8 +1,8 @@
-# WebCV.Angular
+# web-portfolio-v1
 
 Personal CV / portfolio website built with Angular 18. Features an animated WebGL gradient background, a markdown-powered blog, and data-driven resume sections — all wrapped in a polished dark-themed UI.
 
-**Live**: [reshetnik.vercel.app](https://reshetnik.vercel.app) · **Repo**: [github.com/grafanaKibana/WebCV.Angular](https://github.com/grafanaKibana/WebCV.Angular)
+**Live**: [reshetnik.vercel.app](https://reshetnik.vercel.app) · **Repo**: [github.com/grafanaKibana/web-portfolio-v1](https://github.com/grafanaKibana/web-portfolio-v1)
 
 ![Screenshot](screenshot-full.png)
 
@@ -72,7 +72,7 @@ Open [http://localhost:4200](http://localhost:4200).
 ng build
 ```
 
-Production artifacts go to `dist/webcv-angular/`.
+Production artifacts go to `dist/web-portfolio-v1/`.
 
 ### Test
 

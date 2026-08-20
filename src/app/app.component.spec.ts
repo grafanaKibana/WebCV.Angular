@@ -67,10 +67,10 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it(`should have as title 'webcv-angular'`, () => {
+  it(`should have as title 'web-portfolio-v1'`, () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
-    expect(app.title).toEqual('webcv-angular');
+    expect(app.title).toEqual('web-portfolio-v1');
   });
 
   it('should render wrapper', () => {
