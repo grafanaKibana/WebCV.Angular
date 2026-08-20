@@ -10,7 +10,7 @@
     "links": {
       "gitHubLink": "https://github.com/grafanaKibana",
       "linkedInLink": "https://www.linkedin.com/in/nikitareshetnik/",
-      "repositoryLink": "https://github.com/grafanaKibana/WebCV.Angular"
+      "repositoryLink": "https://github.com/grafanaKibana/web-portfolio-v1"
     }
   },
   "aboutMe": {
@@ -219,4 +219,3 @@
     "isDownloadCVDone": true
   }
 }
-

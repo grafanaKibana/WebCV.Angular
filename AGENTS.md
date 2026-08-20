@@ -115,7 +115,7 @@ src/
 
 ```bash
 npm start              # ng serve (dev, http://localhost:4200)
-npm run build          # ng build (production → dist/webcv-angular/)
+npm run build          # ng build (production → dist/web-portfolio-v1/)
 npm test               # Jest (requires --experimental-vm-modules via node)
 npm run test:watch     # Jest watch mode
 ```

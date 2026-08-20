@@ -48,7 +48,7 @@ const ROUTE_META: Record<string, PageMeta> = {
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppComponent {
-	title = "webcv-angular";
+	title = "web-portfolio-v1";
 	private readonly destroyRef = inject(DestroyRef);
 	private readonly router = inject(Router);
 	private readonly dynamicReflectionService = inject(DynamicReflectionService);
